@@ -57,11 +57,11 @@ public abstract class BaseUser<M extends BaseUser<M>> extends Model<M> implement
 		return get("password");
 	}
 
-	public void setIsenable(java.lang.Boolean isenable) {
+	public void setIsenable(java.lang.String isenable) {
 		set("isenable", isenable);
 	}
 
-	public java.lang.Boolean getIsenable() {
+	public java.lang.String getIsenable() {
 		return get("isenable");
 	}
 

@@ -1,2 +1,4 @@
 /.settings/
 /WebRoot/WEB-INF/classes
+/target/
+*.log

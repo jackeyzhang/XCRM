@@ -33,4 +33,12 @@ public abstract class BaseBlog<M extends BaseBlog<M>> extends Model<M> implement
 		return get("content");
 	}
 
+	public void setStartdate(java.util.Date startdate) {
+		set("startdate", startdate);
+	}
+
+	public java.util.Date getStartdate() {
+		return get("startdate");
+	}
+
 }
