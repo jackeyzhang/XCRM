@@ -20,4 +20,6 @@
 
 根据数据库表生成model使用_JFinalDemoGenerator
 
-maven启动--在项目上点右键>>Debug As >>Maven build...>>Goals文本框添加exec:java -X -Dexec.mainClass="com.demo.common.config.DemoConfig"
+maven启动项目--在项目上点右键>>Debug As >>Maven build...>>Goals文本框添加exec:java -X -Dexec.mainClass="com.demo.common.config.DemoConfig"
+打war包 -- 在项目上点右键>>Debug As >>Maven build...>>Goals文本框添加package, 然后在target目录下会看到XCRM.war，将该war包放在tomcat下的webapps下。
+
