@@ -20,7 +20,18 @@ public class UserController extends Controller {
     WebRecord<User> record = new WebRecord<User>();
     record.setRows( users );
     record.setTotal( users.size() );
-    this.renderJson( record );
+    this.renderJson( users );
+  }
+  
+  public void save(){
+    this.getModel( User.class, "" ).save();
+  }
+  
+  public void update(){
+    this.getModel( User.class, "" ).update();
   }
 
+  public void remove(){
+    User.dao.deleteById( this.getParaToInt( 0 ) );
+  }
 }

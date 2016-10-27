@@ -5,116 +5,223 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>订单客户管理系统</title>
-<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.min.css" rel="stylesheet">
+<link
+	href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.min.css"
+	rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="../../css/layoutit.css">
 <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
-<script src="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
+<script
+	src="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
 <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.css">
+<link rel="stylesheet"
+	href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.css">
 <!-- Latest compiled and minified JavaScript -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.js"></script>
+<script
+	src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.js"></script>
 <!-- Latest compiled and minified Locales -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/locale/bootstrap-table-zh-CN.min.js"></script>
-
-<script type="text/javascript">            
-      function initTable() {  
-        //先销毁表格  
-        $('#cusTable').bootstrapTable('destroy');  
-        //初始化表格,动态从服务器加载数据  
-        $("#cusTable").bootstrapTable({  
-            method: "get",  //使用get请求到服务器获取数据  
-            url: "/user/listusers", //获取数据的Servlet地址  
-            striped: true,  //表格显示条纹  
-            pagination: true, //启动分页  
-            pageSize: 1,  //每页显示的记录数  
-            pageNumber:1, //当前第几页  
-            pageList: [5, 10, 15, 20, 25],  //记录数可选列表  
-            search: false,  //是否启用查询  
-            showColumns: true,  //显示下拉框勾选要显示的列  
-            showRefresh: true,  //显示刷新按钮  
-            sidePagination: "server", //表示服务端请求  
-            //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder  
-            //设置为limit可以获取limit, offset, search, sort, order  
-            queryParamsType : "undefined",   
-            queryParams: function queryParams(params) {   //设置查询参数  
-              var param = {    
-                  pageNumber: params.pageNumber,    
-                  pageSize: params.pageSize,  
-              };    
-              return param;                   
-            },  
-            onLoadSuccess: function(){  //加载成功时执行  
-                
-            },  
-            onLoadError: function(){  //加载失败时执行  
-              
-            }  
-          });  
-      }  
-  
-      $(document).ready(function () {          
-          //调用函数，初始化表格  
-          initTable();  
-  
-          //当点击查询按钮的时候执行  
-          $("#search").bind("click", initTable);  
-      });  
-</script>  
+<script
+	src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/locale/bootstrap-table-zh-CN.min.js"></script>
 
 </head>
 <body>
 	<div class="container">
-  <div class="row">
-    <div class="span12">
-      <div class="page-header">
-        <h1>
-          订单客户管理系统 <span>方便你的日常工作</span>
-        </h1>
-      </div>
-      <ul class="breadcrumb">
-        <li>
-          <a href="#">客户管理</a> <span class="divider">/</span>
-        </li>
-        <li>
-          <a href="#">用户管理</a> <span class="divider">/</span>
-        </li>
-        <li>
-          <a href="#">库存管理</a> <span class="divider">/</span>
-        </li>
-        <li>
-          <a href="#">订单管理</a> <span class="divider">/</span>
-        </li>
-        <li>
-          <a href="#">预约管理</a> <span class="divider">/</span>
-        </li>
-      </ul>
-      <table class="table table-hover" id="cusTable"  
-       data-pagination="true"  
-       data-show-refresh="true"  
-       data-show-toggle="true"  
-       data-showColumns="true">
-        <thead>
-          <tr>
-            <th data-field="nickname">
-              用户名
-            </th>
-            <th data-field="department">
-              部门
-            </th>
-            <th data-field="title">
-              职位
-            </th>
-            <th data-field="password">
-             密码
-            </th>
-          </tr>
-        </thead>
-      </table>
-      
-      <address> <strong>Twitter, Inc.</strong><br /> 795 Folsom Ave, Suite 600<br /> San Francisco, CA 94107<br /> <abbr title="Phone">P:</abbr> (123) 456-7890</address>
-    </div>
-  </div>
-</div>
+		<div class="row">
+			<div class="span12">
+
+				<div class="navbar navbar-inverse">
+					<div class="navbar-inner">
+						<div class="container-fluid">
+							<a class="btn btn-navbar"
+								data-target=".navbar-responsive-collapse" data-toggle="collapse">
+							</a> <a class="brand" contenteditable="true" href="#">订单管理系统</a>
+							<div class="nav-collapse collapse navbar-responsive-collapse">
+								<ul class="nav" contenteditable="true">
+									<li class="active"><a href="#">用户管理</a></li>
+									<li><a href="#">客户管理</a></li>
+									<li><a href="#">产品管理</a></li>
+									<li><a href="#">库存管理</a></li>
+									<li><a href="#">预约管理</a></li>
+								</ul>
+
+								<ul class="nav pull-right" contenteditable="true">
+									<li><a href="#">用户XX</a></li>
+									<li><a href="#">注销</a></li>
+									<li class="divider-vertical">&nbsp;</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="page-header">
+					<h1>订单客户管理系统</h1>
+				</div>
+
+				<p class="toolbar">
+            <a class="create btn btn-default" href="javascript:">创建</a>
+            <span class="alert"></span>
+        </p>
+        <table id="table"
+               data-show-refresh="true"
+               data-show-columns="true"
+               data-search="true"
+               data-query-params="queryParams"
+               data-toolbar=".toolbar"
+               data-pagination="true"
+               >
+            <thead>
+            <tr>
+                <th data-field="nickname">姓名</th>
+                <th data-field="title">职称</th>
+                <th data-field="department">部门</th>
+                <th data-field="username">用户名</th>
+                <th data-field="password">密码</th>
+                <th data-field="action"
+                    data-align="center"
+                    data-formatter="actionFormatter"
+                    data-events="actionEvents">Action</th>
+            </tr>
+            </thead>
+        </table>
+
+				<address>
+					<strong>西安 活跃网络.</strong><br /> 795 Folsom Ave, Suite 600<br />
+					San Francisco, CA 94107<br /> <abbr title="Phone">P:</abbr> (123)
+					456-7890
+				</address>
+			</div>
+		</div>
+	</div>
+	<div id="modal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                   <div class="form-group hidden">
+                        <label>ID</label>
+                        <input type="text" class="form-control" name="id" placeholder="id">
+                    </div>
+                    <div class="form-group">
+                        <label>昵称</label>
+                        <input type="text" class="form-control" name="nickname" placeholder="Name">
+                    </div>
+                    <div class="form-group">
+                        <label>部门</label>
+                        <input type="number" class="form-control" name="department" placeholder="Stars">
+                    </div>
+                    <div class="form-group">
+                        <label>职位</label>
+                        <input type="number" class="form-control" name="title" placeholder="Forks">
+                    </div>
+                    <div class="form-group">
+                        <label>用户名</label>
+                        <input type="text" class="form-control" name="username" placeholder="Description">
+                    </div>
+                    <div class="form-group">
+                        <label>密码</label>
+                        <input type="password" class="form-control" name="password" placeholder="password">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary submit">Submit</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+<script>
+
+    var API_URL = 'http://' + location.host + '/user/listusers/';
+    var ADD_API_URL = 'http://' + location.host + '/user/save/';
+    var UPDATE_API_URL = 'http://' + location.host + '/user/update/';
+    var REMOVE_API_URL = 'http://' + location.host + '/user/remove/';
+    var $table = $('#table').bootstrapTable({url: API_URL}),
+        $modal = $('#modal').modal({show: false}),
+        $alert = $('.alert').hide();
+    $(function () {
+        // create event
+        $('.create').click(function () {
+        	$modal.data('id');
+            showModal($(this).text());
+        });
+        $modal.find('.submit').click(function () {
+        	$modal.data('id') == "";
+            var row = {};
+            $modal.find('input[name]').each(function () {
+                row[$(this).attr('name')] = $(this).val();
+            });
+            $.ajax({
+                url: $modal.data('id') == "" ? ADD_API_URL : UPDATE_API_URL,
+                type: 'post',
+                data: row,
+                success: function () {
+                    $modal.modal('hide');
+                    $table.bootstrapTable('refresh');
+                    showAlert(($modal.data('id') ? 'Update' : 'Create') + ' item successful!', 'success');
+                },
+                error: function () {
+                    $modal.modal('hide');
+                    showAlert(($modal.data('id') ? 'Update' : 'Create') + ' item error!', 'danger');
+                }
+            });
+        });
+    });
+    function queryParams(params) {
+        return {};
+    }
+    function actionFormatter(value) {
+        return [
+            '<a class="update" href="javascript:" title="编辑">编辑</a>',
+            '<a class="remove" href="javascript:" title="删除">删除</a>',
+        ].join('   ');
+    }
+    // update and delete events
+    window.actionEvents = {
+        'click .update': function (e, value, row) {
+            showModal($(this).attr('title'), row);
+        },
+        'click .remove': function (e, value, row) {
+            if (confirm('Are you sure to delete this item?')) {
+                $.ajax({
+                    url: REMOVE_API_URL + row.id,
+                    type: 'delete',
+                    success: function () {
+                        $table.bootstrapTable('refresh');
+                        showAlert('Delete item successful!', 'success');
+                    },
+                    error: function () {
+                        showAlert('Delete item error!', 'danger');
+                    }
+                })
+            }
+        }
+    };
+    function showModal(title, row) {
+        row = row || {
+            id: '',
+            nickname: '',
+            department: 'yes',
+            title: 'CEO',
+            description: ''
+        }; // default row value
+        $modal.data('id', row.id);
+        $modal.find('.modal-title').text(title);
+        for (var name in row) {
+            $modal.find('input[name="' + name + '"]').val(row[name]);
+        }
+        $modal.modal('show');
+    }
+    function showAlert(title, type) {
+        $alert.attr('class', 'alert alert-' + type || 'success')
+              .html('<i class="glyphicon glyphicon-check"></i> ' + title).show();
+        setTimeout(function () {
+            $alert.hide();
+        }, 3000);
+    }
+</script>
 
 </body>
 </html>
