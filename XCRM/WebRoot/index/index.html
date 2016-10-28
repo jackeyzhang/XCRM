@@ -9,18 +9,21 @@
 <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.min.css" rel="stylesheet">  
 <link rel="stylesheet" type="text/css" href="../../css/layoutit.css">
 
-<script src="http://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>  
-<script src="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>  
-
+  <script src="../../js/jquery-3.1.1.min.js"></script>
+  <script src="../../js/bootstrap.min.js"></script>
 </head>
 <body>
 	<div class="container-fluid">
+
+    <div class="row-fluid">
+      <div class="span12">
+        <h3 class="text-center text-success">订单及库存管理系统</h3>
+      </div>
+    </div>
+
 		<div class="row-fluid">
-			<div class="span12">
-				<h3>欢迎使用订单及客户管理系统</h3>
+			<div class="span1">
 			</div>
-		</div>
-		<div class="row-fluid">
 			<div class="span6">
 				<div class="carousel slide" id="carousel-734343">
 					<ol class="carousel-indicators">
@@ -61,8 +64,8 @@
 						href="#carousel-734343" class="right carousel-control">›</a>
 				</div>
 			</div>
-			<div class="span6">
-				<form class="form-horizontal" action="/login/login">
+			<div class="span3">
+				<form class="form-horizontal" action="/login/login" method="post">
 					<div class="control-group">
 						<label class="control-label" for="inputEmail">邮箱</label>
 						<div class="controls">
@@ -84,9 +87,12 @@
 					</div>
 				</form>
 			</div>
+      <div class="span2">
+      </div>
 		</div>
+		
 		<div class="row-fluid">
-			<div class="span12">
+			<div class="span12 text-center" >
 				<address>
 					<strong>Twitter, Inc.</strong><br /> 795 Folsom Ave, Suite 600<br />
 					San Francisco, CA 94107<br /> <abbr title="Phone">P:</abbr> (123)
@@ -95,9 +101,5 @@
 			</div>
 		</div>
 	</div>
-	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-	<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
-	<!-- Include all compiled plugins (below), or include individual files as needed -->
-	<script src="../../js/bootstrap.min.js"></script>
 </body>
 </html>

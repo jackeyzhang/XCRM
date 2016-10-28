@@ -8,8 +8,13 @@ import com.xcrm.common.model.User;
 public class LoginController extends Controller {
 	
 	public void login(){
-	  this.getModel( User.class );
-	  this.forwardAction( "/user/index" );
+	  User user = this.getModel( User.class );
+	  User dbUser = User.dao.findFirst( "select * from user where username=?  and password=?", user.getStr( "username" ), user.getStr( "password" ) );
+	  if(dbUser!=null){
+	    this.forwardAction( "/user/index" );
+	  }else{
+	    this.forwardAction( "/index" );
+	  }
 	}
 	
 	

@@ -11,6 +11,7 @@ import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.xcrm.common.model._MappingKit;
+import com.xcrm.customer.CustomerController;
 import com.xcrm.index.IndexController;
 import com.xcrm.login.LoginController;
 import com.xcrm.user.UserController;
@@ -36,6 +37,7 @@ public class XCRMConfig extends JFinalConfig {
 		me.add("/", IndexController.class, "/index");	// 第三个参数为该Controller的视图存放路径
 		me.add( "/login", LoginController.class );
 		me.add( "/user", UserController.class );
+		me.add( "/customer", CustomerController.class );
 	}
 	
 	public static C3p0Plugin createC3p0Plugin() {

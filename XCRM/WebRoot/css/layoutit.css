@@ -195,3 +195,7 @@ body.devpreview { margin-left:0px;}
 #downloadModal textarea { width:100%;height:280px;resize: none;-moz-box-sizing: border-box;-webkit-box-sizing: border-box;box-sizing: border-box; }
 #editorModal {width:640px;}
 a.language-selected { font-style: italic; font-weight: bold; }
+
+.modal.fade{
+	top: -100%;
+}
