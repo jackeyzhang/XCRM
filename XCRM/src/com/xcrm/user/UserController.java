@@ -25,13 +25,16 @@ public class UserController extends Controller {
   
   public void save(){
     this.getModel( User.class, "" ).save();
+    this.forwardAction( "/user/index" );
   }
   
   public void update(){
     this.getModel( User.class, "" ).update();
+    this.forwardAction( "/user/index" );
   }
 
   public void remove(){
     User.dao.deleteById( this.getParaToInt( 0 ) );
+    this.forwardAction( "/user/index" );
   }
 }
