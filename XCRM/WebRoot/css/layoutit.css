@@ -161,7 +161,7 @@ body {
 }
 .column {
   background-color: #FFFFFF;
-  border: 1px solid #DDDDDD;
+  /* border: 1px solid #DDDDDD; */
   border-radius: 4px 4px 4px 4px;
   margin: 15px 0;
   padding: 39px 19px 24px;
@@ -199,3 +199,8 @@ a.language-selected { font-style: italic; font-weight: bold; }
 .modal.fade{
 	/* top: -100%;*/
 }
+
+/* footer */
+#footer{padding:15px 0;background:#fff; border-top:1px solid #ddd;text-align:center;}
+#footer .footerNav a{padding:0 5px;}
+#footer .copyRight{font-family:Arial; }

@@ -41,11 +41,11 @@
         </div>
 
         <div class="page-header">
-          <h1><span class="label label-warning">创建或修改客户相关信息</span></h1>
+          <h1><span class="label label-info">创建或修改产品相关信息</span></h1>
         </div>
 
 				<p class="toolbar">
-					<a class="create btn btn-primary" href="javascript:">创建新客户</a> <span
+					<a class="create btn btn-primary" href="javascript:">创建新产品</a> <span
 						class="alert"></span>
 				</p>
 				<table id="table" class="table table-hover" data-show-refresh="true"
@@ -54,15 +54,15 @@
 					data-pagination="true" data-show-toggle="true">
 					<thead>
 						<tr>
-							<th data-field="name">客户名称</th>
-							<th data-field="custAddr">客户地址</th>
-							<th data-field="contact">联系方式</th>
-							<th data-field="phone">电话</th>
-							<th data-field="email">邮箱</th>
-							<th data-field="cellphone">手机号码</th>
-							<th data-field="fax">传真</th>
-							<th data-field="shiptoAddr">邮寄地址</th>
-							<th data-field="custType">客户类型</th>
+							<th data-field="name">产品名称</th>
+							<th data-field="code">编码</th>
+							<th data-field="barCode">二维码</th>
+							<th data-field="cid">产品类型</th>
+							<th data-field="unit">单位</th>
+							<th data-field="period">日期</th>
+							<th data-field="department">部门</th>
+							<th data-field="point">点数</th>
+							<th data-field="remark">备注</th>
 							<th data-field="action" data-align="center"
 								data-formatter="actionFormatter" data-events="actionEvents">操作</th>
 						</tr>
@@ -85,7 +85,7 @@
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
-          <span class="glyphicon glyphicon-plane modal-title"></span>
+          <span class="glyphicon glyphicon-leaf modal-title"></span>
 				</div>
 				<div class="modal-body">
 					<div class="form-group hidden">
@@ -93,40 +93,40 @@
 							name="id" placeholder="id">
 					</div>
 					<div class="form-group">
-						<label>客户名称</label> <input type="text" class="form-control"
-							name="name" placeholder="客户名称">
+						<label>产品名称</label> <input type="text" class="form-control"
+							name="name" placeholder="产品名称">
 					</div>
 					<div class="form-group">
-						<label>客户地址</label> <input type="text" class="form-control"
-							name="custAddr" placeholder="客户地址">
+						<label>标识</label> <input type="text" class="form-control"
+							name="code" placeholder="标识">
 					</div>
 					<div class="form-group">
-						<label>联系方式</label> <input type="text" class="form-control"
-							name="contact" placeholder="联系方式">
+						<label>二维码标识</label> <input type="text" class="form-control"
+							name="barcode" placeholder="二维码标识">
 					</div>
 					<div class="form-group">
-						<label>电话</label> <input type="text" class="form-control"
-							name="phone" placeholder="电话">
+						<label>产品类型</label> <input type="text" class="form-control"
+							name="cid" placeholder="产品类型">
 					</div>
 					<div class="form-group">
-						<label>邮箱</label> <input type="email" class="form-control"
-							name="email" placeholder="邮箱">
+						<label>单位</label> <input type="text" class="form-control"
+							name="unit" placeholder="单位">
 					</div>
 					<div class="form-group">
-            <label>手机号码</label> <input type="text" class="form-control"
-              name="cellphone" placeholder="手机号码">
+            <label>日期</label> <input type="text" class="form-control"
+              name="period" placeholder="日期">
           </div>
           <div class="form-group">
-            <label>传真</label> <input type="text" class="form-control"
-              name="fax" placeholder="传真">
+            <label>部门</label> <input type="text" class="form-control"
+              name="department" placeholder="部门">
           </div>
           <div class="form-group">
-            <label>邮寄地址</label> <input type="text" class="form-control"
-              name="shiptoAddr" placeholder="邮寄地址">
+            <label>点数</label> <input type="text" class="form-control"
+              name="point" placeholder="点数">
           </div>
           <div class="form-group">
-            <label>客户类型</label> <input type="number" class="form-control"
-              name="custType" placeholder="客户类型">
+            <label>备注</label> <input type="text" class="form-control"
+              name="remark" placeholder="备注">
           </div>
 				</div>
 				<div class="modal-footer">
@@ -140,10 +140,10 @@
 	</div>
 	<!-- /.modal -->
 	<script>
-		var API_URL = 'http://' + location.host + '/customer/listcustomers/';
-		var ADD_API_URL = 'http://' + location.host + '/customer/save/';
-		var UPDATE_API_URL = 'http://' + location.host + '/customer/update/';
-		var REMOVE_API_URL = 'http://' + location.host + '/customer/remove/';
+		var API_URL = 'http://' + location.host + '/product/listproducts/';
+		var ADD_API_URL = 'http://' + location.host + '/product/save/';
+		var UPDATE_API_URL = 'http://' + location.host + '/product/update/';
+		var REMOVE_API_URL = 'http://' + location.host + '/product/remove/';
 		var $table = $('#table').bootstrapTable({
 			url : API_URL
 		}), $modal = $('#modal').modal({
