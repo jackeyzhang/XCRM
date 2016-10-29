@@ -12,10 +12,13 @@ import com.xcrm.common.model.WebRecord;
 public class UserController extends Controller {
 
   public void index() {
+	setAttr("model", "user");
+	setAttr("page_header", "创建或修改用户相关信息");
+	setAttr("toolbar_create", "创建用户");
     render( "user.html" );
   }
 
-  public void listusers() {
+  public void list() {
     List<User> users = User.dao.find( "select * from user" );
     WebRecord<User> record = new WebRecord<User>();
     record.setRows( users );
