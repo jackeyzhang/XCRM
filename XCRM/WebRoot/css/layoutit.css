@@ -197,5 +197,5 @@ body.devpreview { margin-left:0px;}
 a.language-selected { font-style: italic; font-weight: bold; }
 
 .modal.fade{
-	top: -100%;
+	/* top: -100%;*/
 }
