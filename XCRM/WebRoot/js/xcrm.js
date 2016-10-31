@@ -1,4 +1,5 @@
 $(function() {
+	isvalid = true;
 	xcpage = {
 		$modal : $('#modal').modal({
 			show : false
@@ -7,18 +8,25 @@ $(function() {
 		$table : $('#table').bootstrapTable({
 			url : API_URL
 		}),
+		
+		$form : $('#modal-form')
 	}
 	
 
 	$('.create').click(function() {
 		showModal($(this).text());
 	});
-	xcpage.$modal.find('.submit').click(
+	xcpage.$modal.find('.submit').click(																									
 			function() {
 				var row = {};
+				xcpage.$form.validator('validate');//fire validate
+				if(xcpage.$form.validator().data('bs.validator').hasErrors()){
+					return;
+				}
 				xcpage.$modal.find('input[name]').each(function() {
 					row[$(this).attr('name')] = $(this).val();
 				});
+				
 				$.ajax({
 					url : xcpage.$modal.data('id') == "" ? ADD_API_URL
 							: UPDATE_API_URL,
@@ -60,10 +68,10 @@ window.actionEvents = {
 				type : 'delete',
 				success : function() {
 					xcpage.$table.bootstrapTable('refresh');
-					showAlert('Delete item successful!', 'success');
+					showAlert('删除成功!', 'success');
 				},
 				error : function() {
-					showAlert('Delete item error!', 'danger');
+					showAlert('删除失败!', 'danger');
 				}
 			})
 		}
