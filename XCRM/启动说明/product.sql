@@ -1,11 +1,3 @@
-CREATE TABLE `prdpic` (
-  `idprdpic` int(11) NOT NULL AUTO_INCREMENT,
-  `fielname` varchar(45) NOT NULL,
-  `prdid` int(11) DEFAULT NULL,
-  PRIMARY KEY (`idprdpic`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
 CREATE TABLE `product` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
@@ -23,7 +15,15 @@ CREATE TABLE `product` (
   `createuser` int(11) DEFAULT NULL,
   `edituser` int(11) DEFAULT NULL,
   `picture` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  CONSTRAINT `picture` FOREIGN KEY (`id`) REFERENCES `prdpic` (`idprdpic`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
+
+CREATE TABLE `productpic` (
+  `id` int(11) NOT NULL,
+  `fielname` varchar(45) NOT NULL,
+  `productid` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `productfk_idx` (`productid`),
+  CONSTRAINT `productfk` FOREIGN KEY (`productid`) REFERENCES `product` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
