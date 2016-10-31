@@ -11,6 +11,7 @@ public class LoginController extends Controller {
 	  User user = this.getModel( User.class );
 	  User dbUser = User.dao.findFirst( "select * from user where username=?  and password=?", user.getStr( "username" ), user.getStr( "password" ) );
 	  if(dbUser!=null){
+	    this.getSession().setAttribute( "currentUser", user );
 	    this.forwardAction( "/user/index" );
 	  }else{
 	    this.forwardAction( "/index" );

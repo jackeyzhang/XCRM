@@ -15,6 +15,8 @@ public class UserController extends Controller {
 	setAttr("model", "user");
 	setAttr("page_header", "创建或修改用户相关信息");
 	setAttr("toolbar_create", "创建用户");
+	User user = (User)getSession().getAttribute( "currentUser" );
+	setAttr("login_user", "欢迎你, " + user.get( "username" ));
     render( "user.html" );
   }
 
