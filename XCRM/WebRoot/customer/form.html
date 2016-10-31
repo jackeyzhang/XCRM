@@ -4,7 +4,8 @@
 </div>
 <div class="form-group">
 	<label>客户名称</label> <input type="text" class="form-control" name="name"
-		placeholder="客户名称">
+		placeholder="客户名称" data-error="该字段不能为空" required>
+	<div class="help-block with-errors"></div>
 </div>
 <div class="form-group">
 	<label>客户地址</label> <input type="text" class="form-control"
@@ -20,7 +21,8 @@
 </div>
 <div class="form-group">
 	<label>邮箱</label> <input type="email" class="form-control" name="email"
-		placeholder="邮箱">
+		placeholder="邮箱" data-error="邮箱格式不对" required>
+	<div class="help-block with-errors"></div>
 </div>
 <div class="form-group">
 	<label>手机号码</label> <input type="text" class="form-control"

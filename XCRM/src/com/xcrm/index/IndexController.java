@@ -9,6 +9,9 @@ import com.jfinal.core.Controller;
 public class IndexController extends Controller {
 
   public void index() {
+    this.setAttr( "login_error", "" );
+    this.setAttr( "nameMsg", "" );
+    this.setAttr( "passMsg", "" );
     render( "index.html" );
   }
   

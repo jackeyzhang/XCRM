@@ -6,12 +6,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>订单客户管理系统</title>
 
-<link rel="stylesheet" href="../../css/bootstrap.min.css" >
-<link rel="stylesheet" href="../../css/bootstrap-theme.min.css" >
-<link rel="stylesheet" type="text/css" href="../../css/layoutit.css">
-
-<script src="../../js/jquery-3.1.1.min.js"></script>
-<script src="../../js/bootstrap.min.js"></script>
+<!-- css -->
+<link rel="stylesheet" href="/css/bootstrap.min.css" >
+<link rel="stylesheet" href="/css/bootstrap-theme.min.css" >
+<link rel="stylesheet" href="/css/layoutit.css" >
+<link rel="stylesheet" href="/css/bootstrap-table.min.css">
+<!-- js -->
+<script src="/js/jquery-3.1.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/bootstrap-table.min.js"></script>
+<script src="/js/bootstrap-table-zh-CN.min.js"></script>
 </head>
 <body>
 	
@@ -79,15 +83,15 @@
     <div class="col-md-5 column">
       <form class="form-horizontal" role="form" action="/login/login" method="post">
         <div class="form-group">
-           <label for="inputEmail3" class="col-sm-2 control-label">邮箱：</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" name="user.username" />
+           <label for="inputEmail3" class="col-sm-4 control-label">用户名：</label>
+          <div class="col-sm-8">
+            <input type="text" class="form-control" name="user.username" check-type="required"/>
           </div>
         </div>
         <div class="form-group">
-           <label for="inputPassword3" class="col-sm-2 control-label">密码：</label>
-          <div class="col-sm-10">
-            <input type="password" class="form-control" name="user.password" />
+           <label for="inputPassword3" class="col-sm-4 control-label">密码：</label>
+          <div class="col-sm-8">
+            <input type="password" class="form-control" name="user.password" check-type="required"/>
           </div>
         </div>
         <div class="form-group">
@@ -100,6 +104,7 @@
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">
              <button type="submit" class="btn btn-primary btn-lg">登录</button>
+             <span class="label label-danger">${login_error}</span>
           </div>
         </div>
       </form>

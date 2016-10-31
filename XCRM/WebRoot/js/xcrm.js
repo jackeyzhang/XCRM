@@ -6,8 +6,9 @@ $(function() {
 		$alert : $('.alert').hide(),
 		$table : $('#table').bootstrapTable({
 			url : API_URL
-		})
+		}),
 	}
+	
 
 	$('.create').click(function() {
 		showModal($(this).text());
@@ -26,15 +27,15 @@ $(function() {
 					success : function() {
 						xcpage.$modal.modal('hide');
 						xcpage.$table.bootstrapTable('refresh');
-						showAlert((xcpage.$modal.data('id') ? 'Update'
-								: 'Create')
-								+ ' item successful!', 'success');
+						showAlert((xcpage.$modal.data('id') ? '更新'
+								: '创建')
+								+ '成功', 'success');
 					},
 					error : function() {
-						xcpage.$modal.modal('hide');
-						showAlert((xcpage.$modal.data('id') ? 'Update'
-								: 'Create')
-								+ ' item error!', 'danger');
+//						xcpage.$modal.modal('hide');
+						showAlert((xcpage.$modal.data('id') ? '更新'
+								: '创建')
+								+ '失败!', 'danger');
 					}
 				});
 			});
