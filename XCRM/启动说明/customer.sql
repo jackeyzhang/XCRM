@@ -10,5 +10,6 @@ CREATE TABLE `customer` (
   `shiptoAddr` varchar(45) DEFAULT NULL,
   `custType` int(11) NOT NULL,
   `createDate` datetime DEFAULT NULL,
+  `gendar` int(2) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;

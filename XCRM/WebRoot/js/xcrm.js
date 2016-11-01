@@ -14,6 +14,7 @@ $(function() {
 	
 
 	$('.create').click(function() {
+		xcpage.$form[0].reset();//reset form
 		showModal($(this).text());
 	});
 	xcpage.$modal.find('.submit').click(																									
@@ -24,9 +25,12 @@ $(function() {
 					return;
 				}
 				xcpage.$modal.find('input[name]').each(function() {
-					row[$(this).attr('name')] = $(this).val();
+					if($(this).attr('type') == "radio" && $(this).is(":checked")){
+						row[$(this).attr('name')] = $(this).val();
+					}else{
+						row[$(this).attr('name')] = $(this).val();
+					}
 				});
-				
 				$.ajax({
 					url : xcpage.$modal.data('id') == "" ? ADD_API_URL
 							: UPDATE_API_URL,
@@ -62,7 +66,7 @@ window.actionEvents = {
 		showModal($(this).attr('title'), row);
 	},
 	'click .remove' : function(e, value, row) {
-		if (confirm('Are you sure to delete this item?')) {
+		if (confirm('确定删除?')) {
 			$.ajax({
 				url : REMOVE_API_URL + row.id,
 				type : 'delete',
@@ -80,15 +84,22 @@ window.actionEvents = {
 function showModal(title, row) {
 	row = row || {
 		id : '',
-		nickname : '',
-		department : 'yes',
-		title : 'CEO',
-		description : ''
 	}; // default row value
+	xcpage.$form[0].reset();//reset form
 	xcpage.$modal.data('id', row.id);
 	xcpage.$modal.find('.modal-title').text(title);
 	for ( var name in row) {
-		xcpage.$modal.find('input[name="' + name + '"]').val(row[name]);
+		if( xcpage.$modal.find('input[name="' + name + '"]').attr('type') == "radio"){
+			xcpage.$modal.find('input[name="' + name + '"]').each(function() {
+				if( $(this).val() == row[name]){
+					$(this).attr("checked", true);
+				}else{
+					$(this).removeAttr("checked");
+				}
+			});
+		}else{
+			xcpage.$modal.find('input[name="' + name + '"]').val(row[name]);
+		}
 	}
 	xcpage.$modal.modal('show');
 }

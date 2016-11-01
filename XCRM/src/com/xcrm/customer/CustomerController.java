@@ -1,5 +1,6 @@
 package com.xcrm.customer;
 
+import java.util.Date;
 import java.util.List;
 
 import com.jfinal.aop.Before;
@@ -30,12 +31,13 @@ public class CustomerController extends Controller {
   }
   
   public void save(){
-    this.getModel( Customer.class, "" ).save();
+    this.getModel( Customer.class, "", true ).set( "createDate", new Date() ).save();
     this.forwardAction( "/customer/index" );
   }
   
   public void update(){
-    this.getModel( Customer.class, "" ).update();
+    this.getAttr( "gendarradio" );
+    this.getModel( Customer.class, "", true ).update();
     this.forwardAction( "/customer/index" );
   }
 

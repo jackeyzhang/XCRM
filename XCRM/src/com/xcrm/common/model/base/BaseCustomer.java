@@ -97,4 +97,12 @@ public abstract class BaseCustomer<M extends BaseCustomer<M>> extends Model<M> i
 		return get("createDate");
 	}
 
+	public void setGendar(java.lang.Integer gendar) {
+		set("gendar", gendar);
+	}
+
+	public java.lang.Integer getGendar() {
+		return get("gendar");
+	}
+
 }
