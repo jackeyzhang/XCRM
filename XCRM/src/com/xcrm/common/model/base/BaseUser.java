@@ -17,12 +17,12 @@ public abstract class BaseUser<M extends BaseUser<M>> extends Model<M> implement
 		return get("id");
 	}
 
-	public void setNickname(java.lang.String nickname) {
-		set("nickname", nickname);
+	public void setContact(java.lang.String contact) {
+		set("contact", contact);
 	}
 
-	public java.lang.String getNickname() {
-		return get("nickname");
+	public java.lang.String getContact() {
+		return get("contact");
 	}
 
 	public void setDepartment(java.lang.String department) {
@@ -63,6 +63,14 @@ public abstract class BaseUser<M extends BaseUser<M>> extends Model<M> implement
 
 	public java.lang.Boolean getIsenable() {
 		return get("isenable");
+	}
+
+	public void setEmail(java.lang.String email) {
+		set("email", email);
+	}
+
+	public java.lang.String getEmail() {
+		return get("email");
 	}
 
 }
