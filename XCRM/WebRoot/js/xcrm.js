@@ -20,17 +20,26 @@ $(function() {
 	xcpage.$modal.find('.submit').click(																									
 			function() {
 				var row = {};
-				xcpage.$form.validator('validate');//fire validate
+				//fire validate
+				xcpage.$form.validator('validate');
 				if(xcpage.$form.validator().data('bs.validator').hasErrors()){
 					return;
 				}
+				// get input value to row
 				xcpage.$modal.find('input[name]').each(function() {
-					if($(this).attr('type') == "radio" && $(this).is(":checked")){
-						row[$(this).attr('name')] = $(this).val();
+					if($(this).attr('type') == "radio"){
+						if($(this).is(":checked")){
+							row[$(this).attr('name')] = $(this).val();
+						}
 					}else{
 						row[$(this).attr('name')] = $(this).val();
 					}
 				});
+				// get select value to row
+				xcpage.$modal.find('select[name]').each(function() {
+						row[$(this).attr('name')] = $(this).val();
+				});
+				// submit row
 				$.ajax({
 					url : xcpage.$modal.data('id') == "" ? ADD_API_URL
 							: UPDATE_API_URL,
@@ -89,6 +98,7 @@ function showModal(title, row) {
 	xcpage.$modal.data('id', row.id);
 	xcpage.$modal.find('.modal-title').text(title);
 	for ( var name in row) {
+		//set value to dialog for radio input
 		if( xcpage.$modal.find('input[name="' + name + '"]').attr('type') == "radio"){
 			xcpage.$modal.find('input[name="' + name + '"]').each(function() {
 				if( $(this).val() == row[name]){
@@ -98,7 +108,10 @@ function showModal(title, row) {
 				}
 			});
 		}else{
+			//set value to dialog for input
 			xcpage.$modal.find('input[name="' + name + '"]').val(row[name]);
+			//set value to dialog for select
+			xcpage.$modal.find('select[name="' + name + '"]').val(row[name]);
 		}
 	}
 	xcpage.$modal.modal('show');
