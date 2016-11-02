@@ -9,6 +9,7 @@ import com.jfinal.core.Controller;
 public class IndexController extends Controller {
 
   public void index() {
+    setAttr("model", "index");
     this.setAttr( "login_error", "" );
     this.setAttr( "nameMsg", "" );
     this.setAttr( "passMsg", "" );
