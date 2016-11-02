@@ -6,7 +6,12 @@ $(function() {
 		}),
 		$alert : $('.alert').hide(),
 		$table : $('#table').bootstrapTable({
-			url : API_URL
+			url : API_URL,
+			pageNumber: 1,
+			pageList: [10, 25, 50, 100],
+			clickToSelect:true,
+			showExport: true,
+			exportDataType: "basic"
 		}),
 		
 		$form : $('#modal-form'),
