@@ -9,7 +9,20 @@ $(function() {
 			url : API_URL
 		}),
 		
-		$form : $('#modal-form')
+		$form : $('#modal-form'),
+		
+		$calendar : $('#calendar').fullCalendar({
+			locale: 'zh-cn',
+			header: {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'month,basicWeek,basicDay'
+			},
+			defaultDate: '2016-11-11',
+			navLinks: true, // can click day/week names to navigate views
+			editable: true,
+			eventLimit: true // allow "more" link when too many events
+		})
 	}
 	
 
@@ -130,4 +143,19 @@ function userenabelformatter(value, row){
 	}else{
 		return '<i class="glyphicon glyphicon-user" style="color:red"></i>';
 	}
+}
+
+function userdepartmentformatter(value, row ){
+	if(value == "1"){
+		return "化妆部";
+	}else if(value == "2"){
+		return "礼服部";
+	}else if(value == "3"){
+		return "销售部";
+	}else if(value == "4"){
+		return "财务部";
+	}else if(value == "5"){
+		return "办公室";
+	}
+	return "总公司";
 }
