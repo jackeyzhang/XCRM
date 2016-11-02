@@ -110,3 +110,11 @@ function showAlert(title, type) {
 		xcpage.$alert.hide();
 	}, 3000);
 }
+
+function userenabelformatter(value, row){
+	if(value){
+		return '<i class="glyphicon glyphicon-user" style="color:green"></i>';
+	}else{
+		return '<i class="glyphicon glyphicon-user" style="color:red"></i>';
+	}
+}
