@@ -1,15 +1,15 @@
 
 <link rel="stylesheet" href="/css/fileinput.min.css">
 <script src="/js/fileinput.min.js"></script>
-<div class="row" style="height: 500px">
-	<input id="file-Portrait" type="file">
+<div class="row">
+	<input id="file-Portrait" type="file" name="productpic">
 </div>
 
 <script>
 	$(function() {
 		//初始化fileinput控件（第一次初始化）
 		$('#file-Portrait').fileinput({
-			uploadUrl : "/biz_img/${model}/${id}/",
+			uploadUrl : "/${model}/upload",
 			uploadAsync : true,
 			minFileCount : 0,
 			maxFileCount : 5,
