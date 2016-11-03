@@ -6,7 +6,6 @@ import java.util.List;
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.xcrm.common.model.Customer;
-import com.xcrm.common.model.User;
 
 /**
  * 
@@ -20,8 +19,6 @@ public class CustomerController extends Controller {
     setAttr("model", "customer");
     setAttr("page_header", "创建或修改客户相关信息");
     setAttr("toolbar_create", "创建客户");
-    User user = (User)getSession().getAttribute( "currentUser" );
-    setAttr("login_user", "欢迎你, " + user.get( "username" ));
     render( "customer.html" );
   }
   

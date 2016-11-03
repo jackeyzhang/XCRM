@@ -14,6 +14,7 @@ import com.xcrm.common.model._MappingKit;
 import com.xcrm.customer.CustomerController;
 import com.xcrm.index.IndexController;
 import com.xcrm.login.LoginController;
+import com.xcrm.login.LoginInterceptor;
 import com.xcrm.product.ProductController;
 import com.xcrm.schedule.ScheduleController;
 import com.xcrm.user.UserController;
@@ -30,7 +31,7 @@ public class XCRMConfig extends JFinalConfig {
 		// 加载少量必要配置，随后可用PropKit.get(...)获取值
 		PropKit.use("a_little_config.txt");
 		me.setDevMode(PropKit.getBoolean("devMode", false));
-		me.setBaseUploadPath("biz_img");
+		me.setBaseUploadPath("temp_img/");
 	}
 	
 	/**
@@ -69,7 +70,7 @@ public class XCRMConfig extends JFinalConfig {
 	 * 配置全局拦截器
 	 */
 	public void configInterceptor(Interceptors me) {
-		
+		me.add(new LoginInterceptor());
 	}
 	
 	/**
