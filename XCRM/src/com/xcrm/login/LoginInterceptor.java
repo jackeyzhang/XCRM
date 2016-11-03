@@ -2,7 +2,6 @@ package com.xcrm.login;
 
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
-import com.xcrm.common.model.User;
 import com.xcrm.common.util.Constant;
 
 /**
