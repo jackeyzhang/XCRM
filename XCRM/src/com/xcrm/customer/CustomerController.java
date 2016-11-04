@@ -33,7 +33,6 @@ public class CustomerController extends Controller {
   }
   
   public void update(){
-    this.getAttr( "gendarradio" );
     this.getModel( Customer.class, "", true ).update();
     this.forwardAction( "/customer/index" );
   }

@@ -16,7 +16,7 @@ $(function() {
                 $.ajax({
                     type: "post",
                     url: UPDATE_API_URL,
-                    data: { strJson: JSON.stringify(row) },
+                    data: row,
                     success: function (data, status) {
                         if (status == "success") {
                             alert("编辑成功");
