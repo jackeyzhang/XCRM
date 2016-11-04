@@ -17,6 +17,7 @@ public class IndexController extends Controller {
   }
   
   public void logout(){
-    this.forwardAction( "/index" );
+    this.getSession().invalidate();
+    this.redirect( "/index" );
   }
 }
