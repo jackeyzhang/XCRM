@@ -11,5 +11,7 @@ CREATE TABLE `customer` (
   `custType` int(11) NOT NULL,
   `createDate` datetime DEFAULT NULL,
   `gendar` int(2) NOT NULL,
+  `heartlevel` int(2) DEFAULT '5',
+  `heartinfo` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;

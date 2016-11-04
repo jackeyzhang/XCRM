@@ -105,4 +105,20 @@ public abstract class BaseCustomer<M extends BaseCustomer<M>> extends Model<M> i
 		return get("gendar");
 	}
 
+	public void setHeartlevel(java.lang.Integer heartlevel) {
+		set("heartlevel", heartlevel);
+	}
+
+	public java.lang.Integer getHeartlevel() {
+		return get("heartlevel");
+	}
+
+	public void setHeartinfo(java.lang.String heartinfo) {
+		set("heartinfo", heartinfo);
+	}
+
+	public java.lang.String getHeartinfo() {
+		return get("heartinfo");
+	}
+
 }

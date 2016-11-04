@@ -11,7 +11,26 @@ $(function() {
 			pageList: [10, 25, 50, 100],
 			clickToSelect:true,
 			showExport: true,
-			exportDataType: "basic"
+			exportDataType: "basic",
+            onEditableSave: function (field, row, oldValue, $el) {
+                $.ajax({
+                    type: "post",
+                    url: UPDATE_API_URL,
+                    data: { strJson: JSON.stringify(row) },
+                    success: function (data, status) {
+                        if (status == "success") {
+                            alert("编辑成功");
+                        }
+                    },
+                    error: function () {
+                        alert("Error");
+                    },
+                    complete: function () {
+
+                    }
+
+                });
+             }
 		}),
 		
 		$form : $('#modal-form'),
@@ -163,4 +182,14 @@ function userdepartmentformatter(value, row ){
 		return "办公室";
 	}
 	return "总公司";
+}
+
+
+function customernameformatter(value, row){
+	if(row['heartlevel'] == '5'){
+		return '<i class="fa fa-heart" aria-hidden="true" style="color:green">&nbsp;&nbsp; </i>' + value;
+	} else if(row['heartlevel'] == '4'){
+		return '<i class="fa fa-heart" aria-hidden="true" style="color:orange">&nbsp;&nbsp; </i>' + value;
+	}
+	return '<i class="fa fa-heart" aria-hidden="true" style="color:red">&nbsp;&nbsp; </i>' + value;
 }
