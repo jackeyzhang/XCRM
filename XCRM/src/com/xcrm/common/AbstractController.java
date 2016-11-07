@@ -63,5 +63,4 @@ public abstract class AbstractController extends Controller {
     return userId;
   }
 
-
 }

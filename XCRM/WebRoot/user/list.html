@@ -1,5 +1,44 @@
+<script>
+var storeList;
+// get store list
+$.get('/store/list/', function(data){
+	storeList = data;
+});
+
+function userenabelformatter(value, row){
+  if(value){
+    return '<a href="javascript:logout('+row['id']+')" title="注销"><i class="glyphicon glyphicon-user" style="color:green"></i>注销</a>';
+  }else{
+    return '<i class="glyphicon glyphicon-user" style="color:red"></i>';
+  }
+}
+
+function userdepartmentformatter(value, row ){
+  if(value == "1"){
+    return "化妆部";
+  }else if(value == "2"){
+    return "礼服部";
+  }else if(value == "3"){
+    return "销售部";
+  }else if(value == "4"){
+    return "财务部";
+  }else if(value == "5"){
+    return "办公室";
+  }
+  return "未指定";
+}
+
+function userstoreidformatter( value, row ){
+    for( d in storeList){
+    	if(storeList[d].id == value)
+    		  return storeList[d].name;
+    }
+    return "未指定";
+}
+</script>
 <th data-field="username">用户名</th>
 <th data-field="email" data-editable="true">邮箱</th>
 <th data-field="title">职位</th>
+<th data-field="storeid" data-formatter="userstoreidformatter">所属门店</th>
 <th data-field="department" data-formatter="userdepartmentformatter">部门</th>
 <th data-field="isenable" data-formatter="userenabelformatter" data-align="center">状态</th>

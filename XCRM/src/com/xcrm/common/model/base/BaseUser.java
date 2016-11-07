@@ -73,4 +73,12 @@ public abstract class BaseUser<M extends BaseUser<M>> extends Model<M> implement
 		return get("email");
 	}
 
+	public void setStoreid(java.lang.Integer storeid) {
+		set("storeid", storeid);
+	}
+
+	public java.lang.Integer getStoreid() {
+		return get("storeid");
+	}
+
 }

@@ -98,6 +98,7 @@ $(function() {
 					}
 				});
 			});
+	
 });
 function queryParams(params) {
 	return {};
@@ -176,29 +177,6 @@ function logout(row){
 			showAlert('注销失败!', 'danger');
 		}
 	})
-}
-
-function userenabelformatter(value, row){
-	if(value){
-		return '<a href="javascript:logout('+row['id']+')" title="注销"><i class="glyphicon glyphicon-user" style="color:green"></i>注销</a>';
-	}else{
-		return '<i class="glyphicon glyphicon-user" style="color:red"></i>';
-	}
-}
-
-function userdepartmentformatter(value, row ){
-	if(value == "1"){
-		return "化妆部";
-	}else if(value == "2"){
-		return "礼服部";
-	}else if(value == "3"){
-		return "销售部";
-	}else if(value == "4"){
-		return "财务部";
-	}else if(value == "5"){
-		return "办公室";
-	}
-	return "未指定";
 }
 
 function custTypeformatter( value, row ){
