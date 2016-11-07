@@ -49,6 +49,7 @@ $(function() {
 		})
 	}
 	
+	$("[data-toggle='tooltip']").tooltip();
 
 	$('.create').click(function() {
 		xcpage.$form[0].reset();//reset form
@@ -103,9 +104,10 @@ function queryParams(params) {
 }
 function actionFormatter(value) {
 	return [ '<a class="update" href="javascript:" title="编辑">编辑</a>',
-			'<a class="remove" href="javascript:" title="删除">删除</a>', ]
+			'<a class="remove" href="javascript:" title="删除">删除</a>']
 			.join('   ');
 }
+
 // update and delete events
 window.actionEvents = {
 	'click .update' : function(e, value, row) {
@@ -161,9 +163,23 @@ function showAlert(title, type) {
 	}, 3000);
 }
 
+function logout(row){
+	$.ajax({
+		url : '/user/logoff/' + row,
+		type : 'get',
+		data : row,
+		success : function() {
+			showAlert('注销成功!', 'success');
+		},
+		error : function() {
+			showAlert('注销失败!', 'danger');
+		}
+	})
+}
+
 function userenabelformatter(value, row){
 	if(value){
-		return '<i class="glyphicon glyphicon-user" style="color:green"></i>';
+		return '<a href="javascript:logout('+row['id']+')" title="注销"><i class="glyphicon glyphicon-user" style="color:green"></i>注销</a>';
 	}else{
 		return '<i class="glyphicon glyphicon-user" style="color:red"></i>';
 	}
@@ -181,15 +197,44 @@ function userdepartmentformatter(value, row ){
 	}else if(value == "5"){
 		return "办公室";
 	}
-	return "总公司";
+	return "未指定";
+}
+
+function custTypeformatter( value, row ){
+	if(value == "1"){
+		return "先生";
+	}else if(value == "2"){
+		return "女士";
+	}else if(value == "3"){
+		return "长子";
+	}else if(value == "4"){
+		return "次子";
+	}else if(value == "5"){
+		return "长女";
+	}else if(value == "6"){
+		return "次女";
+	}else if(value == "7"){
+		return "儿子";
+	}else if(value == "8"){
+		return "女儿";
+	}else if(value == "9"){
+		return "供应商";
+	}
+	return "未指定";
 }
 
 
 function customernameformatter(value, row){
-	if(row['heartlevel'] == '5'){
-		return '<i class="fa fa-heart" aria-hidden="true" style="color:green">&nbsp;&nbsp; </i>' + value;
-	} else if(row['heartlevel'] == '4'){
-		return '<i class="fa fa-heart" aria-hidden="true" style="color:orange">&nbsp;&nbsp; </i>' + value;
+	if( row['heartinfo'] == null){
+		hearinfo = '未设定';
+	}else{
+		hearinfo = row['heartinfo'];
 	}
-	return '<i class="fa fa-heart" aria-hidden="true" style="color:red">&nbsp;&nbsp; </i>' + value;
+	
+	if(row['heartlevel'] == '5'){
+		return '<i class="fa fa-heart" aria-hidden="true" style="color:green" data-toggle="tooltip" title="'+ hearinfo +'">&nbsp;&nbsp;</i>' + value;
+	} else if(row['heartlevel'] == '4'){
+		return '<i class="fa fa-heart" aria-hidden="true" style="color:orange" data-toggle="tooltip" title="'+ hearinfo +'">&nbsp;&nbsp;</i>' + value;
+	}
+	return '<i class="fa fa-heart" aria-hidden="true" style="color:red" data-toggle="tooltip" title="'+ hearinfo +'">&nbsp;&nbsp;</i>' + value;
 }

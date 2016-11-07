@@ -89,22 +89,6 @@ public abstract class BaseCustomer<M extends BaseCustomer<M>> extends Model<M> i
 		return get("custType");
 	}
 
-	public void setCreateDate(java.util.Date createDate) {
-		set("createDate", createDate);
-	}
-
-	public java.util.Date getCreateDate() {
-		return get("createDate");
-	}
-
-	public void setGendar(java.lang.Integer gendar) {
-		set("gendar", gendar);
-	}
-
-	public java.lang.Integer getGendar() {
-		return get("gendar");
-	}
-
 	public void setHeartlevel(java.lang.Integer heartlevel) {
 		set("heartlevel", heartlevel);
 	}
@@ -119,6 +103,38 @@ public abstract class BaseCustomer<M extends BaseCustomer<M>> extends Model<M> i
 
 	public java.lang.String getHeartinfo() {
 		return get("heartinfo");
+	}
+
+	public void setCreateUser(java.lang.Integer createUser) {
+		set("createUser", createUser);
+	}
+
+	public java.lang.Integer getCreateUser() {
+		return get("createUser");
+	}
+
+	public void setCreateDate(java.util.Date createDate) {
+		set("createDate", createDate);
+	}
+
+	public java.util.Date getCreateDate() {
+		return get("createDate");
+	}
+
+	public void setUpdateUser(java.lang.Integer updateUser) {
+		set("updateUser", updateUser);
+	}
+
+	public java.lang.Integer getUpdateUser() {
+		return get("updateUser");
+	}
+
+	public void setUpdateDate(java.util.Date updateDate) {
+		set("updateDate", updateDate);
+	}
+
+	public java.util.Date getUpdateDate() {
+		return get("updateDate");
 	}
 
 }

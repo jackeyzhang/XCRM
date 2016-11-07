@@ -1,11 +1,13 @@
 package com.xcrm.customer;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.xcrm.common.model.Customer;
+import com.xcrm.common.util.Constant;
 
 /**
  * 
@@ -27,13 +29,19 @@ public class CustomerController extends Controller {
     this.renderJson( Customers );
   }
   
+  @SuppressWarnings("rawtypes")
   public void save(){
-    this.getModel( Customer.class, "", true ).set( "createDate", new Date() ).save();
+    Object user = getSessionAttr(Constant.CUR_USER);
+    int userId = (int)((HashMap)user).get( "id" );
+    this.getModel( Customer.class, "", true ).set( "createDate", new Date() ).set( "createUser", userId ).save();
     this.forwardAction( "/customer/index" );
   }
   
+  @SuppressWarnings("rawtypes")
   public void update(){
-    this.getModel( Customer.class, "", true ).update();
+    Object user = getSessionAttr(Constant.CUR_USER);
+    int userId = (int)((HashMap)user).get( "id" );
+    this.getModel( Customer.class, "", true ).set( "updateDate", new Date() ).set( "updateUser", userId ).update();
     this.forwardAction( "/customer/index" );
   }
 

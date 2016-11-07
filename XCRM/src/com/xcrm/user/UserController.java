@@ -40,4 +40,9 @@ public class UserController extends Controller {
     User.dao.deleteById( this.getParaToInt( 0 ) );
     this.forwardAction( "/user/index" );
   }
+  
+  public void logoff(){
+    User.dao.findById( this.getPara(0) ).set( "isenable", false ).update();
+    this.forwardAction(  "/user/index"  );
+  }
 }

@@ -18,6 +18,7 @@ public class LoginController extends Controller {
 			this.redirect("/user/index");
 		} else {
 			this.setAttr("login_error", "用户名或密码错误,请重新输入!");
+			this.setAttr("model", "login");
 			render("/index/index.html");
 		}
 	}
