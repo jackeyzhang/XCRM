@@ -2,13 +2,14 @@ package com.xcrm.product;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.upload.UploadFile;
 import com.xcrm.common.model.Product;
-import com.xcrm.common.model.User;
 import com.xcrm.common.model.WebRecord;
+import com.xcrm.common.util.Constant;
 
 @Before(ProductInterceptor.class)
 public class ProductController extends Controller {
@@ -33,19 +34,29 @@ public class ProductController extends Controller {
 		this.forwardAction("/product/index");
 	}
 
+	public void delupload() {
+		System.out.println(333);
+	}
+
 	public void upload() {
 		UploadFile uploadFile = this.getFile();
-		File file = uploadFile.getFile();
-		String destDir = uploadFile.getUploadPath()
-				+ ((User) this.getSession().getAttribute("currentUser")).getInt("id") + "/";
-		File destDirFile = new File(destDir);
-		if (!destDirFile.exists()) {
-			destDirFile.mkdirs();
+		String filename = null;
+		if (uploadFile != null) {
+			File file = uploadFile.getFile();
+			File dest = new File(file.getAbsolutePath() + Constant.UNDER_LINE
+					+ ((Map) this.getSession().getAttribute("currentUser")).get("id"));
+			if (dest.exists()) {
+				dest.delete();
+			}
+			file.renameTo(dest);
+			file.delete();
+			filename = file.getName();
 		}
-		File dest = new File(destDir + uploadFile.getOriginalFileName());
-		file.renameTo(dest);
-		// file.delete();
-		this.renderJson();
+		if (filename == null) {
+			this.renderJson();
+		} else {
+			this.renderJson("[\"" + filename + "\"]");
+		}
 	}
 
 	public void update() {

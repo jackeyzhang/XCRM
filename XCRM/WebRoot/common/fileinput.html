@@ -1,44 +1,57 @@
 
 <link rel="stylesheet" href="/css/fileinput.min.css">
+<script src="/js/sortable.min.js"></script>
 <script src="/js/fileinput.min.js"></script>
+<script src="/js/zh.js"></script>
+
 <div class="row">
-	<input id="file-Portrait" type="file" name="productpic">
+	<input id="file-Portrait" multiple="true" type="file"
+		class="file-loading" name="productpic"> <input type="hidden"
+		name="imgs" id="imgs">
 </div>
 
 <script>
 	$(function() {
-		//初始化fileinput控件（第一次初始化）
 		$('#file-Portrait').fileinput({
+			language : "zh",
 			uploadUrl : "/${model}/upload",
+			deleteUrl : "/${model}/delupload",
 			uploadAsync : true,
-			minFileCount : 0,
-			maxFileCount : 5,
-			allowedFileExtensions : [ 'jpg', 'png', 'gif' ],
+			showUpload : true,
+			showRemove : true,
 			overwriteInitial : false,
-
-			initialPreviewAsData : true, // identify if you are sending preview data only and not the raw markup
-			initialPreviewFileType : 'image', // image is the default and can be overridden in config below
-			initialPreviewConfig : [ {
-				caption : "Desert.jpg",
-				size : 827000,
-				width : "120px",
-				url : "/file-upload-batch/2",
-				key : 1
-			}, {
-				caption : "Lighthouse.jpg",
-				size : 549000,
-				width : "120px",
-				url : "/file-upload-batch/2",
-				key : 2
-			} ],
-			uploadExtraData : {
-				img_key : "1000",
-				img_keywords : "happy, places",
-			}
+			previewSettings : {
+				image : {
+					height : "80px",
+					width : "auto"
+				}
+			},
+			msgFilesTooMany : "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
+			browseClass : "btn btn-primary",
+			minFileCount : 0,
+			maxFileCount : 3,
+			validateInitialCount : true,
+			maxFileSize : 1000,
+			maxFilesNum : 2,
+			initialPreviewCount : 2,
+			initialCaption : "请上传图片...",
+			allowedFileExtensions : [ 'jpg', 'png', 'gif' ],
+			overwriteInitial : true,
+			initialPreviewFileType : 'image'
 		}).on('filesorted', function(e, params) {
 			console.log('File sorted params', params);
-		}).on('fileuploaded', function(e, params) {
-			console.log('File uploaded params', params);
-		});
+		}).on('change', function(event) {
+			console.log("change");
+		}).on('fileclear', function(event) {
+		    console.log("fileclear");
+		}).on('filepredelete', function(event, key) {
+		    console.log('Key = ' + key);
+		}).on(
+				'fileuploaded',
+				function(e, params) {
+					$('#imgs').val(
+							($('#imgs').val() ? $('#imgs').val() + ',' : '')
+									+ params.response[0]);
+				});
 	});
 </script>

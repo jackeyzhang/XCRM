@@ -1,0 +1,11 @@
+#product .modal-lg {
+	width: 600px;
+	margin: 0px;
+}
+
+#product .modal-backdrop {
+	left: -1000px;
+	right: -1000px;
+	top: -1000px;
+	bottom: -1000px;
+}
