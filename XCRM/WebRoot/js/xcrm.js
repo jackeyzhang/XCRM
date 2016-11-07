@@ -19,11 +19,11 @@ $(function() {
                     data: row,
                     success: function (data, status) {
                         if (status == "success") {
-                            alert("编辑成功");
+                        	showAlert("编辑成功");
                         }
                     },
                     error: function () {
-                        alert("Error");
+                    	showAlert("编辑失败");
                     },
                     complete: function () {
 

@@ -17,6 +17,7 @@ import com.xcrm.login.LoginController;
 import com.xcrm.login.LoginInterceptor;
 import com.xcrm.product.ProductController;
 import com.xcrm.schedule.ScheduleController;
+import com.xcrm.store.StoreController;
 import com.xcrm.user.UserController;
 
 /**
@@ -44,6 +45,7 @@ public class XCRMConfig extends JFinalConfig {
 		me.add( "/customer", CustomerController.class );
 		me.add( "/product", ProductController.class );
 		me.add( "/schedule", ScheduleController.class );
+		me.add( "/store", StoreController.class );
 	}
 	
 	public static C3p0Plugin createC3p0Plugin() {

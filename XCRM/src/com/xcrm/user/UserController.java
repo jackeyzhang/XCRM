@@ -3,19 +3,12 @@ package com.xcrm.user;
 import java.util.List;
 
 import com.jfinal.aop.Before;
-import com.jfinal.core.Controller;
+import com.xcrm.common.AbstractController;
 import com.xcrm.common.model.User;
 
 
 @Before(UserInterceptor.class)
-public class UserController extends Controller {
-
-  public void index() {
-	setAttr("model", "user");
-	setAttr("page_header", "创建或修改用户相关信息");
-	setAttr("toolbar_create", "创建用户");
-    render( "user.html" );
-  }
+public class UserController extends AbstractController {
 
   public void list() {
     List<User> users = User.dao.find( "select * from user" );
@@ -25,17 +18,17 @@ public class UserController extends Controller {
   
   public void save(){
     this.getModel( User.class, "" ).save();
-    this.forwardAction( "/user/index" );
+    forwardIndex();
   }
   
   public void update(){
     this.getModel( User.class, "" ).update();
-    this.forwardAction( "/user/index" );
+    forwardIndex();
   }
 
   public void remove(){
     User.dao.deleteById( this.getParaToInt( 0 ) );
-    this.forwardAction( "/user/index" );
+    forwardIndex();
   }
   
   public void logoff(){
@@ -43,5 +36,25 @@ public class UserController extends Controller {
     if(user == null ) return;
     user.set( "isenable", false ).update();
     this.forwardAction( "/user/index" );
+  }
+
+  @Override
+  public String getModalName() {
+    return "user";
+  }
+
+  @Override
+  public String getPageHeader() {
+    return "创建或修改用户相关信息";
+  }
+
+  @Override
+  public String getToolBarAddButtonTitle() {
+    return "创建用户";
+  }
+
+  @Override
+  public String getIndexHtml() {
+    return "user.html";
   }
 }
