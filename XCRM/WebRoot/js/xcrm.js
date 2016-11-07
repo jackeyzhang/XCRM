@@ -170,6 +170,7 @@ function logout(row){
 		data : row,
 		success : function() {
 			showAlert('注销成功!', 'success');
+			xcpage.$table.bootstrapTable('refresh');
 		},
 		error : function() {
 			showAlert('注销失败!', 'danger');

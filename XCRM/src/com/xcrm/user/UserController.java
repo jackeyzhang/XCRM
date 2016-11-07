@@ -5,7 +5,6 @@ import java.util.List;
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.xcrm.common.model.User;
-import com.xcrm.common.model.WebRecord;
 
 
 @Before(UserInterceptor.class)
@@ -20,9 +19,7 @@ public class UserController extends Controller {
 
   public void list() {
     List<User> users = User.dao.find( "select * from user" );
-    WebRecord<User> record = new WebRecord<User>();
-    record.setRows( users );
-    record.setTotal( users.size() );
+//    users.stream().forEach(  c->c.set( "isenable", true ).update() );
     this.renderJson( users );
   }
   
@@ -42,7 +39,9 @@ public class UserController extends Controller {
   }
   
   public void logoff(){
-    User.dao.findById( this.getPara(0) ).set( "isenable", false ).update();
-    this.forwardAction(  "/user/index"  );
+    User user = User.dao.findById( this.getPara(0) );
+    if(user == null ) return;
+    user.set( "isenable", false ).update();
+    this.forwardAction( "/user/index" );
   }
 }
