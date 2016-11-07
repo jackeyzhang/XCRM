@@ -2,4 +2,4 @@
 /WebRoot/WEB-INF/classes
 /target/
 *.log
-/temp_img/
+/WebRoot/temp_img/
