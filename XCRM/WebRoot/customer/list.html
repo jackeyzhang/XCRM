@@ -1,4 +1,47 @@
-<th data-field="name" data-formatter="customernameformatter" >客户姓名</th>
+<script>
+	function custTypeformatter(value, row) {
+		if (value == "1") {
+			return "先生";
+		} else if (value == "2") {
+			return "女士";
+		} else if (value == "3") {
+			return "长子";
+		} else if (value == "4") {
+			return "次子";
+		} else if (value == "5") {
+			return "长女";
+		} else if (value == "6") {
+			return "次女";
+		} else if (value == "7") {
+			return "儿子";
+		} else if (value == "8") {
+			return "女儿";
+		} else if (value == "9") {
+			return "供应商";
+		}
+		return "未指定";
+	}
+
+	function customernameformatter(value, row) {
+		if (row['heartinfo'] == null) {
+			hearinfo = '未设定';
+		} else {
+			hearinfo = row['heartinfo'];
+		}
+
+		if (row['heartlevel'] == '5') {
+			return '<i class="fa fa-heart" aria-hidden="true" style="color:green" data-toggle="tooltip" title="'+ hearinfo +'">&nbsp;&nbsp;</i>'
+					+ value;
+		} else if (row['heartlevel'] == '4') {
+			return '<i class="fa fa-heart" aria-hidden="true" style="color:orange" data-toggle="tooltip" title="'+ hearinfo +'">&nbsp;&nbsp;</i>'
+					+ value;
+		}
+		return '<i class="fa fa-heart" aria-hidden="true" style="color:red" data-toggle="tooltip" title="'+ hearinfo +'">&nbsp;&nbsp;</i>'
+				+ value;
+	}
+</script>
+
+<th data-field="name" data-formatter="customernameformatter">客户姓名</th>
 <th data-field="custType" data-formatter="custTypeformatter">客户类型</th>
 <th data-field="contact" data-editable="true">联系方式</th>
 <th data-field="custAddr" data-editable="true">客户地址</th>

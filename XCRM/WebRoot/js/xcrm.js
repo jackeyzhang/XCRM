@@ -165,55 +165,18 @@ function showAlert(title, type) {
 }
 
 function logout(row){
-	$.ajax({
-		url : '/user/logoff/' + row,
-		type : 'get',
-		data : row,
-		success : function() {
-			showAlert('注销成功!', 'success');
-			xcpage.$table.bootstrapTable('refresh');
-		},
-		error : function() {
-			showAlert('注销失败!', 'danger');
-		}
-	})
-}
-
-function custTypeformatter( value, row ){
-	if(value == "1"){
-		return "先生";
-	}else if(value == "2"){
-		return "女士";
-	}else if(value == "3"){
-		return "长子";
-	}else if(value == "4"){
-		return "次子";
-	}else if(value == "5"){
-		return "长女";
-	}else if(value == "6"){
-		return "次女";
-	}else if(value == "7"){
-		return "儿子";
-	}else if(value == "8"){
-		return "女儿";
-	}else if(value == "9"){
-		return "供应商";
+	if (confirm('确定注销该用户?')) {
+		$.ajax({
+			url : '/user/logoff/' + row,
+			type : 'get',
+			data : row,
+			success : function() {
+				showAlert('注销成功!', 'success');
+				xcpage.$table.bootstrapTable('refresh');
+			},
+			error : function() {
+				showAlert('注销失败!', 'danger');
+			}
+		})
 	}
-	return "未指定";
-}
-
-
-function customernameformatter(value, row){
-	if( row['heartinfo'] == null){
-		hearinfo = '未设定';
-	}else{
-		hearinfo = row['heartinfo'];
-	}
-	
-	if(row['heartlevel'] == '5'){
-		return '<i class="fa fa-heart" aria-hidden="true" style="color:green" data-toggle="tooltip" title="'+ hearinfo +'">&nbsp;&nbsp;</i>' + value;
-	} else if(row['heartlevel'] == '4'){
-		return '<i class="fa fa-heart" aria-hidden="true" style="color:orange" data-toggle="tooltip" title="'+ hearinfo +'">&nbsp;&nbsp;</i>' + value;
-	}
-	return '<i class="fa fa-heart" aria-hidden="true" style="color:red" data-toggle="tooltip" title="'+ hearinfo +'">&nbsp;&nbsp;</i>' + value;
 }
