@@ -1,7 +1,5 @@
 <script>
 $(function() {
-	$('#scopevalue').hide();
-	
   // get store list
   $.get('/attributeid/list/', function(data){
     for( d in attributeidList){
@@ -29,6 +27,7 @@ $(function() {
      for(d in attributeidList){
        if( '1' == $(this).children('option:selected').val() ){
           $('#scopevalue').hide();
+          $('#scopevalueselect').children('option:selected').val('');
        }else if( '2' == $(this).children('option:selected').val() ){
     	   $('#scopevalue').show();
        }
