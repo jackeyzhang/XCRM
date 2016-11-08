@@ -1,25 +1,28 @@
 package com.xcrm.schedule;
 
-import com.jfinal.core.Controller;
+import com.xcrm.common.AbstractController;
 
 
-public class ScheduleController extends Controller {
+public class ScheduleController extends AbstractController {
 
-  public void index() {
-	setAttr("model", "schedule");
-	setAttr("page_header", "管理您的预约信息");
-    render( "schedule.html" );
+
+  @Override
+  public String getModalName() {
+    return "schedule";
   }
 
-  public void list() {
-  }
-  
-  public void save(){
-  }
-  
-  public void update(){
+  @Override
+  public String getPageHeader() {
+    return "管理您的预约信息";
   }
 
-  public void remove(){
+  @Override
+  public String getToolBarAddButtonTitle() {
+    return "";
+  }
+
+  @Override
+  public String getIndexHtml() {
+    return "schedule.html";
   }
 }

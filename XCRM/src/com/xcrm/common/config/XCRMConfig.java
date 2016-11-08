@@ -10,6 +10,8 @@ import com.jfinal.core.JFinal;
 import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
+import com.xcrm.attribute.AttributeController;
+import com.xcrm.attribute.AttributeidController;
 import com.xcrm.common.model._MappingKit;
 import com.xcrm.customer.CustomerController;
 import com.xcrm.index.IndexController;
@@ -46,6 +48,8 @@ public class XCRMConfig extends JFinalConfig {
 		me.add( "/product", ProductController.class );
 		me.add( "/schedule", ScheduleController.class );
 		me.add( "/store", StoreController.class );
+		me.add( "/attributeid", AttributeidController.class );
+		me.add( "/attribute", AttributeController.class );
 	}
 	
 	public static C3p0Plugin createC3p0Plugin() {

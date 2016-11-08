@@ -1,0 +1,56 @@
+<script>
+	var attributeidList;
+	//get attributeid list
+	$.get('/attributeid/list/', function(data) {
+		attributeidList = data;
+	});
+	
+	var storeList;
+	// get store list
+	$.get('/store/list/', function(data){
+	  storeList = data;
+	});
+
+	function attributeidformatter(value, row) {
+		for (d in attributeidList) {
+			if (attributeidList[d].id == value)
+				return attributeidList[d].name;
+		}
+		return "未指定";
+	}
+
+	function categoryformatter(value, row) {
+		if (value == "1") {
+			return "产品";
+		} else if (value == "2") {
+			return "客户";
+		} else if (value == "3") {
+			return "用户";
+		} else if (value == "4") {
+			return "门店";
+		}
+		return "未指定";
+	}
+
+	function scopetypeformatter(value, row) {
+		if (value == "1") {
+			return "所有门店";
+		} else if (value == "2") {
+			return "单个站点";
+		}
+		return "未指定";
+	}
+	
+	function scopevalueformatter( value, row ){
+	    for( d in storeList){
+	      if(storeList[d].id == value)
+	          return storeList[d].name;
+	    }
+	    return "未指定";
+	}
+</script>
+<th data-field="attributeid" data-formatter="attributeidformatter">属性模板</th>
+<th data-field="category" data-formatter="categoryformatter">分类</th>
+<th data-field="value">属性值</th>
+<th data-field="scopetype" data-formatter="scopetypeformatter">范围</th>
+<th data-field="scopevalue" data-formatter="scopevalueformatter">门店</th>

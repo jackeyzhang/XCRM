@@ -16,11 +16,9 @@
 <script>
 $(function() {
 	// get store list
-	$.get('/store/list/', function(data){
-		for( d in data){
-		  $('#storeselect').append("<option value='" + data[d].id + "'>" + data[d].name + "</option>");
-		}
-	});
+	for( d in storeList){
+	  $('#storeselect').append("<option value='" + storeList[d].id + "'>" + storeList[d].name + "</option>");
+	}
 });
 </script>
 
