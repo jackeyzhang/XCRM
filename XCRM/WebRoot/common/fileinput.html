@@ -12,7 +12,7 @@
 
 <script>
 	$(function() {
-		$('#file-Portrait').fileinput({
+		xcpage.fileinput = $('#file-Portrait').fileinput({
 			language : "zh",
 			uploadUrl : "/${model}/upload",
 			deleteUrl : "/${model}/delupload",
@@ -30,7 +30,7 @@
 			msgFilesTooMany : "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
 			browseClass : "btn btn-primary",
 			minFileCount : 0,
-			maxFileCount : 3,
+			maxFileCount : ${imgMaxCount},
 			validateInitialCount : true,
 			maxFileSize : 1000,
 			maxFilesNum : 2,

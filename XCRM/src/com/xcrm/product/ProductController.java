@@ -26,6 +26,7 @@ public class ProductController extends AbstractController {
 
 	public void index() {
 		super.index();
+		this.setAttr("imgMaxCount", PropertiesUtil.getProductImgMaxSize());
 	}
 
 	public void save() {

@@ -97,6 +97,9 @@ $(function() {
 					success : function() {
 						xcpage.$modal.modal('hide');
 						xcpage.$table.bootstrapTable('refresh');
+						if(xcpage.fileinput){
+							$(xcpage.fileinput).fileinput('clear');
+						}
 						showAlert((xcpage.$modal.data('id') ? '更新'
 								: '创建')
 								+ '成功', 'success');
