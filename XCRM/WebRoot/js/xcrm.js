@@ -55,6 +55,17 @@ $(function() {
 		xcpage.$form[0].reset();//reset form
 		showModal($(this).text());
 	});
+	xcpage.$modal.find('.submit').click(
+			function(){
+				var imgs = '';
+				$('.file-thumbnail-footer').each(function(){
+					if($(this).find('.progress-bar-success').html().trim()=='100%'){
+						imgs += $(this).find('.file-footer-caption').attr('title')+',';
+					}
+				});
+				$('#imgs').val(imgs);
+			}
+	);
 	xcpage.$modal.find('.submit').click(																									
 			function() {
 				var row = {};

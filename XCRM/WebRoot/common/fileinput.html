@@ -6,7 +6,7 @@
 
 <div class="row">
 	<input id="file-Portrait" multiple="true" type="file"
-		class="file-loading" name="productpic"> <input type="hidden"
+		class="file-loading"> <input type="hidden"
 		name="imgs" id="imgs">
 </div>
 
@@ -18,6 +18,7 @@
 			deleteUrl : "/${model}/delupload",
 			uploadAsync : true,
 			showUpload : true,
+			showCaption : false,
 			showRemove : true,
 			overwriteInitial : false,
 			previewSettings : {
@@ -38,20 +39,6 @@
 			allowedFileExtensions : [ 'jpg', 'png', 'gif' ],
 			overwriteInitial : true,
 			initialPreviewFileType : 'image'
-		}).on('filesorted', function(e, params) {
-			console.log('File sorted params', params);
-		}).on('change', function(event) {
-			console.log("change");
-		}).on('fileclear', function(event) {
-		    console.log("fileclear");
-		}).on('filepredelete', function(event, key) {
-		    console.log('Key = ' + key);
-		}).on(
-				'fileuploaded',
-				function(e, params) {
-					$('#imgs').val(
-							($('#imgs').val() ? $('#imgs').val() + ',' : '')
-									+ params.response[0]);
-				});
+		});
 	});
 </script>
