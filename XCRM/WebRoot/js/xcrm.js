@@ -53,6 +53,9 @@ $(function() {
 
 	$('.create').click(function() {
 		xcpage.$form[0].reset();//reset form
+		if($('#file-Portrait')){
+			createFileinput(defaultFileinput());
+		}
 		showModal($(this).text());
 	});
 	xcpage.$modal.find('.submit').click(
@@ -126,6 +129,20 @@ function actionFormatter(value) {
 // update and delete events
 window.actionEvents = {
 	'click .update' : function(e, value, row) {
+		if($('#changepic')){
+			$('#changepic').css('display','block');
+			$('#changepic').click(function(){
+				createEditfileinput([
+				               'http://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/FullMoon2010.jpg/631px-FullMoon2010.jpg',
+				               'http://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Earth_Eastern_Hemisphere.jpg/600px-Earth_Eastern_Hemisphere.jpg'
+				           ],[
+				              {caption: "Moon.jpg", size: 930321, width: "120px", key: 1},
+				              {caption: "Earth.jpg", size: 1218822, width: "120px", key: 2}
+				          ]);
+				$('.file-input').css('display','block');
+			});
+			$('.file-input').css('display','none');
+		}
 		showModal($(this).attr('title'), row);
 	},
 	'click .remove' : function(e, value, row) {

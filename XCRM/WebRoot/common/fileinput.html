@@ -4,18 +4,23 @@
 <script src="/js/fileinput.min.js"></script>
 <script src="/js/zh.js"></script>
 
-<div class="row">
+<div>
+	<button id="changepic" type="button" style="display: none"
+		class="btn btn-info btn-block">修改图片</button>
 	<input id="file-Portrait" multiple="true" type="file"
-		class="file-loading"> <input type="hidden"
-		name="imgs" id="imgs">
+		class="file-loading"> <input type="hidden" name="imgs"
+		id="imgs">
 </div>
 
 <script>
-	$(function() {
-		xcpage.fileinput = $('#file-Portrait').fileinput({
+	function createFileinput(obj){
+		xcpage.fileinput = $('#file-Portrait').fileinput(obj);
+	}
+	
+	function defaultFileinput(){
+		return {
 			language : "zh",
 			uploadUrl : "/${model}/upload",
-			deleteUrl : "/${model}/delupload",
 			uploadAsync : true,
 			showUpload : true,
 			showCaption : false,
@@ -39,6 +44,14 @@
 			allowedFileExtensions : [ 'jpg', 'png', 'gif' ],
 			overwriteInitial : true,
 			initialPreviewFileType : 'image'
-		});
-	});
+		};
+	}
+	
+	function createEditfileinput(initialList,initialConfigList){
+		var fileinput = defaultFileinput();
+		fileinput['initialPreviewAsData']=true;
+		fileinput['initialPreview']=initialList;
+		fileinput['initialPreviewConfig']=initialConfigList;
+		createFileinput(fileinput);
+	}
 </script>
