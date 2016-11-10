@@ -54,7 +54,7 @@ $(function() {
 	$('.create').click(function() {
 		xcpage.$form[0].reset();//reset form
 		if($('#file-Portrait')){
-			createFileinput(defaultFileinput());
+//			createFileinput(defaultFileinput());
 		}
 		showModal($(this).text());
 	});
@@ -207,6 +207,23 @@ function logout(row){
 			},
 			error : function() {
 				showAlert('注销失败!', 'danger');
+			}
+		})
+	}
+}
+
+function active(row){
+	if (confirm('确定激活该用户?')) {
+		$.ajax({
+			url : '/user/active/' + row,
+			type : 'get',
+			data : row,
+			success : function() {
+				showAlert('激活成功!', 'success');
+				xcpage.$table.bootstrapTable('refresh');
+			},
+			error : function() {
+				showAlert('激活失败!', 'danger');
 			}
 		})
 	}

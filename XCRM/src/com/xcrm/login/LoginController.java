@@ -11,7 +11,7 @@ public class LoginController extends Controller {
 	@Before(LoginValidator.class)
 	public void login() {
 		User user = this.getModel(User.class);
-		User dbUser = User.dao.findFirst("select * from user where username=? or email=? and password=?",
+		User dbUser = User.dao.findFirst("select * from user where (username=? or email=?) and password=? and isenable = true",
 				user.getStr("username").trim(), user.getStr("username").trim(), user.getStr("password"));
 		if (dbUser != null) {
 			this.setSessionAttr(Constant.CUR_USER, dbUser.getAttrs());

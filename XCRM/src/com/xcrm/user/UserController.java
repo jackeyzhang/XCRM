@@ -35,7 +35,14 @@ public class UserController extends AbstractController {
     User user = User.dao.findById( this.getPara(0) );
     if(user == null ) return;
     user.set( "isenable", false ).update();
-    this.forwardAction( "/user/index" );
+    forwardIndex();
+  }
+  
+  public void active(){
+    User user = User.dao.findById( this.getPara(0) );
+    if(user == null ) return;
+    user.set( "isenable",  true).update();
+    forwardIndex();
   }
 
   @Override
