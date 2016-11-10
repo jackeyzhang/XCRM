@@ -15,9 +15,11 @@ $(function() {
   //set attribute value from attributeidList
   $('#attributeidselect').change(function(){ 
 	  $('#attributevalue').val('');
+	  $('#displayname').val('');
 	   for(d in attributeidList){
 		   if( attributeidList[d].id == $(this).children('option:selected').val()){
 			   $('#attributevalue').val(attributeidList[d].value);
+			   $('#displayname').val(attributeidList[d].name);
 		   }
 	   }
   });
@@ -42,6 +44,11 @@ $(function() {
     <select class="form-control selector" name="attributeid" id="attributeidselect">
        <option value="">请选择...</option>
    </select>
+</div>
+
+<div class="form-group">
+  <label>属性显示名称</label> <input type="text" class="form-control"
+    name="displayname" id="displayname" placeholder="属性显示名称">
 </div>
 
 <div class="form-group">

@@ -179,7 +179,9 @@ function showModal(title, row) {
 	row = row || {
 		id : '',
 	}; // default row value
-	xcpage.$form[0].reset();//reset form
+	if(xcpage.$form[0]){
+		xcpage.$form[0].reset();//reset form
+	}
 	xcpage.$modal.data('id', row.id);
 	xcpage.$modal.find('.modal-title').text(title);
 	for ( var name in row) {

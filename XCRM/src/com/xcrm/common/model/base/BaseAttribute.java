@@ -25,6 +25,14 @@ public abstract class BaseAttribute<M extends BaseAttribute<M>> extends Model<M>
 		return get("attributeid");
 	}
 
+	public void setDisplayname(java.lang.String displayname) {
+		set("displayname", displayname);
+	}
+
+	public java.lang.String getDisplayname() {
+		return get("displayname");
+	}
+
 	public void setCategory(java.lang.Integer category) {
 		set("category", category);
 	}

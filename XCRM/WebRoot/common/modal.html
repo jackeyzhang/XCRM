@@ -16,6 +16,21 @@
 							name="id" placeholder="id">
 					</div>
 					<#include "../${model}/form.html"/>
+					  <!-- attribute load -->
+          <#if attriutes?size != 0>
+            <#list attriutes as attr>
+              <div class="form-group">
+               <label>${attr.displayname}</label> 
+               <select class="form-control selector" name="attribute-${attr.attributeid}">
+                <#list attr.value?split(",") as val>
+                  <option value="${val}">${val}</option>
+                 </#list>
+               </select>
+              </div>
+            </#list>
+          <#else>
+           <span>this is else</span>
+          </#if>
 				</form>
 			</div>
 			<div class="modal-footer">
