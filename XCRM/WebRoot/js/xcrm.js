@@ -122,8 +122,7 @@ function queryParams(params) {
 }
 function actionFormatter(value) {
 	return [ '<a class="update" href="javascript:" title="编辑">编辑</a>',
-			'<a class="remove" href="javascript:" title="删除">删除</a>',
-			'<a class="attributes" href="javascript:" title="属性">属性</a>']
+			'<a class="remove" href="javascript:" title="删除">删除</a>']
 			.join('   ');
 }
 

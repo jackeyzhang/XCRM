@@ -1,7 +1,5 @@
 package com.xcrm.store;
 
-import java.util.List;
-
 import com.xcrm.common.AbstractController;
 import com.xcrm.common.model.Store;
 import com.xcrm.common.util.Constant;
@@ -9,11 +7,6 @@ import com.xcrm.common.util.Constant;
 
 public class StoreController extends AbstractController {
 
-  public void list() {
-    List<Store> Stores = Store.dao.find( "select * from Store" );
-    this.renderJson( Stores );
-  }
-  
   public void save(){
     this.getModel( Store.class, "" ).save();
     this.forwardIndex();

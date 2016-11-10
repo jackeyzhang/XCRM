@@ -1,7 +1,6 @@
 package com.xcrm.customer;
 
 import java.util.Date;
-import java.util.List;
 
 import com.jfinal.aop.Before;
 import com.xcrm.common.AbstractController;
@@ -15,11 +14,6 @@ import com.xcrm.common.util.Constant;
  */
 @Before(CustomerInterceptor.class)
 public class CustomerController extends AbstractController {
-  
-  public void list() {
-    List<Customer> Customers = Customer.dao.find( "select * from customer" );
-    this.renderJson( Customers );
-  }
   
   public void save(){
     this.getModel( Customer.class, "", true ).set( "createDate", new Date() ).set( "createUser", getCurrentUserId() ).save();

@@ -2,7 +2,6 @@ package com.xcrm.product;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
@@ -18,11 +17,6 @@ import com.xcrm.common.util.PropertiesUtil;
 
 @Before(ProductInterceptor.class)
 public class ProductController extends AbstractController {
-
-	public void list() {
-		List<Product> Products = Product.dao.find("select * from product");
-		this.renderJson(Products);
-	}
 
 	public void index() {
 		super.index();
