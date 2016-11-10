@@ -35,6 +35,14 @@ function userstoreidformatter( value, row ){
     }
     return "未指定";
 }
+
+function userattributesformatter( value, row ){
+    for( d in storeList){
+      if(storeList[d].id == value)
+          return storeList[d].name;
+    }
+    return "未指定";
+}
 </script>
 <th data-field="username">用户名</th>
 <th data-field="email" data-editable="true">邮箱</th>

@@ -30,7 +30,8 @@ public class AttributeID {
   /**
    * from 201, extend for script-in attribute
    */
-
+  public static final AttributeID DEPARTMENT = new AttributeID(201, "部门", TYPE_LIST_SINGLE);
+  
   private int id;
   private String name;
   private int type;

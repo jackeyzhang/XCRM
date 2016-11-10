@@ -8,4 +8,8 @@ import com.xcrm.common.model.base.BaseAttribute;
 @SuppressWarnings("serial")
 public class Attribute extends BaseAttribute<Attribute> {
 	public static final Attribute dao = new Attribute();
+	
+	public Attributeid getAttributeId(){
+	  return Attributeid.dao.findFirst( "select * from Attributeid where id= " + this.getAttributeid() );
+	}
 }

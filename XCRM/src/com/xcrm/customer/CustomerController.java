@@ -6,6 +6,7 @@ import java.util.List;
 import com.jfinal.aop.Before;
 import com.xcrm.common.AbstractController;
 import com.xcrm.common.model.Customer;
+import com.xcrm.common.util.Constant;
 
 /**
  * 
@@ -55,4 +56,8 @@ public class CustomerController extends AbstractController {
     return "customer.html";
   }
 
+  @Override
+  public int getCategory() {
+    return Constant.CATEGORY_CUSTOMER;
+  }
 }

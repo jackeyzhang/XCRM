@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.xcrm.common.AbstractController;
 import com.xcrm.common.model.Store;
+import com.xcrm.common.util.Constant;
 
 
 public class StoreController extends AbstractController {
@@ -46,5 +47,10 @@ public class StoreController extends AbstractController {
   @Override
   public String getIndexHtml() {
     return "store.html";
+  }
+  
+  @Override
+  public int getCategory() {
+    return Constant.CATEGORY_STORE;
   }
 }

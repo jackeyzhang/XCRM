@@ -48,5 +48,11 @@ public class AttributeidController extends AbstractController {
   public String getIndexHtml() {
     return "attributeid.html";
   }
+
+  @Override
+  public int getCategory() {
+    // TODO Auto-generated method stub
+    return 0;
+  }
   
 }

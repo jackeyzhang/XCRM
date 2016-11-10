@@ -140,4 +140,9 @@ public class ProductController extends AbstractController {
 	public String getIndexHtml() {
 		return "product.html";
 	}
+
+  @Override
+  public int getCategory() {
+    return Constant.CATEGORY_PRODUCT;
+  }
 }

@@ -1,6 +1,7 @@
 package com.xcrm.schedule;
 
 import com.xcrm.common.AbstractController;
+import com.xcrm.common.util.Constant;
 
 
 public class ScheduleController extends AbstractController {
@@ -24,5 +25,10 @@ public class ScheduleController extends AbstractController {
   @Override
   public String getIndexHtml() {
     return "schedule.html";
+  }
+  
+  @Override
+  public int getCategory() {
+    return Constant.CATEGORY_SCHEDULE;
   }
 }

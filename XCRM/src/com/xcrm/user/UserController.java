@@ -5,6 +5,7 @@ import java.util.List;
 import com.jfinal.aop.Before;
 import com.xcrm.common.AbstractController;
 import com.xcrm.common.model.User;
+import com.xcrm.common.util.Constant;
 
 
 @Before(UserInterceptor.class)
@@ -12,36 +13,40 @@ public class UserController extends AbstractController {
 
   public void list() {
     List<User> users = User.dao.find( "select * from user" );
-//    users.stream().forEach(  c->c.set( "isenable", true ).update() );
+    for(User user : users){
+      user.put( "attriutes", User.afinder.getAllAttributeList( Constant.CATEGORY_USER ) );
+    }
     this.renderJson( users );
   }
-  
-  public void save(){
+
+  public void save() {
     this.getModel( User.class, "" ).save();
     forwardIndex();
   }
-  
-  public void update(){
+
+  public void update() {
     this.getModel( User.class, "" ).update();
     forwardIndex();
   }
 
-  public void remove(){
+  public void remove() {
     User.dao.deleteById( this.getParaToInt( 0 ) );
     forwardIndex();
   }
-  
-  public void logoff(){
-    User user = User.dao.findById( this.getPara(0) );
-    if(user == null ) return;
+
+  public void logoff() {
+    User user = User.dao.findById( this.getPara( 0 ) );
+    if ( user == null )
+      return;
     user.set( "isenable", false ).update();
     forwardIndex();
   }
-  
-  public void active(){
-    User user = User.dao.findById( this.getPara(0) );
-    if(user == null ) return;
-    user.set( "isenable",  true).update();
+
+  public void active() {
+    User user = User.dao.findById( this.getPara( 0 ) );
+    if ( user == null )
+      return;
+    user.set( "isenable", true ).update();
     forwardIndex();
   }
 
@@ -63,5 +68,10 @@ public class UserController extends AbstractController {
   @Override
   public String getIndexHtml() {
     return "user.html";
+  }
+  
+  @Override
+  public int getCategory() {
+    return Constant.CATEGORY_USER;
   }
 }

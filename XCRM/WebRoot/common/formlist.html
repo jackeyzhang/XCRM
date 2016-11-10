@@ -6,6 +6,11 @@
 	<thead>
 		<tr>
 			<#include "../${model}/list.html"/>
+			<#if attriutes?size != 0>
+			<#list attriutes as e>
+			<th data-field="attribute-${e.attributeid}" data-align="center">${e.name}</th>
+			</#list>
+			</#if>
 			<th data-field="action" data-align="center"
 				data-formatter="actionFormatter" data-events="actionEvents">操作</th>
 		</tr>

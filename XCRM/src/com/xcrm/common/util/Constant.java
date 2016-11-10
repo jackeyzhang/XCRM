@@ -9,4 +9,14 @@ public class Constant {
 	public static final String TEMP_IMG = "temp_img";
 	public static final String EMPTY = "";
 	public static final String COMMA = ",";
+	
+	
+	/**
+	 * category constant
+	 */
+	public static final int CATEGORY_PRODUCT   = 1;
+	public static final int CATEGORY_CUSTOMER  = 2;
+	public static final int CATEGORY_USER      = 3;
+	public static final int CATEGORY_STORE     = 4;
+	public static final int CATEGORY_SCHEDULE  = 5;
 }

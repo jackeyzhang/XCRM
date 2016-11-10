@@ -48,5 +48,11 @@ public class AttributeController extends AbstractController {
   public String getIndexHtml() {
     return "attribute.html";
   }
+
+  @Override
+  public int getCategory() {
+    // TODO Auto-generated method stub
+    return 0;
+  }
   
 }

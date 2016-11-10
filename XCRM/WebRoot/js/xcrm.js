@@ -122,7 +122,8 @@ function queryParams(params) {
 }
 function actionFormatter(value) {
 	return [ '<a class="update" href="javascript:" title="编辑">编辑</a>',
-			'<a class="remove" href="javascript:" title="删除">删除</a>']
+			'<a class="remove" href="javascript:" title="删除">删除</a>',
+			'<a class="attributes" href="javascript:" title="属性">属性</a>']
 			.join('   ');
 }
 
@@ -159,6 +160,19 @@ window.actionEvents = {
 				}
 			})
 		}
+	},
+	'click .attributes' : function(e, value, row) {
+		$.ajax({
+			url : REMOVE_API_URL + row.id,
+			type : 'delete',
+			success : function() {
+				xcpage.$table.bootstrapTable('refresh');
+				showAlert('删除成功!', 'success');
+			},
+			error : function() {
+				showAlert('删除失败!', 'danger');
+			}
+		});
 	}
 };
 function showModal(title, row) {

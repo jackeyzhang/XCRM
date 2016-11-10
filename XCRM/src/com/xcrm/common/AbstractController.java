@@ -24,6 +24,7 @@ public abstract class AbstractController extends Controller {
     setAttr( "model", getModalName() );
     setAttr( "page_header", getPageHeader() );
     setAttr( "toolbar_create", getToolBarAddButtonTitle() );
+    setAttr( "attriutes", AttributeFinder.getInstance().getAllAttributeIDList( getCategory()) );
     render( getIndexHtml() );
   }
 
@@ -34,6 +35,8 @@ public abstract class AbstractController extends Controller {
   public abstract String getToolBarAddButtonTitle();
 
   public abstract String getIndexHtml();
+  
+  public abstract int getCategory();
 
   
   public void list() {
