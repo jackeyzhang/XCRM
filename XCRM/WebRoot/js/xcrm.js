@@ -207,7 +207,8 @@ function showModal(title, row) {
 				if(row[name]){
 					xcpage.$modal.find('select[name="' + name + '"]').multiselect('select', row[name].split(","));
 				}else{
-					xcpage.$modal.find('select[name="' + name + '"]').multiselect('deselectAll');
+					xcpage.$modal.find('select[name="' + name + '"]').multiselect('deselectAll',false);
+					xcpage.$modal.find('select[name="' + name + '"]').multiselect('updateButtonText');
 				}
 			}
 		}
