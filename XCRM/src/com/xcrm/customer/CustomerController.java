@@ -16,8 +16,9 @@ import com.xcrm.common.util.Constant;
 public class CustomerController extends AbstractController {
   
   public void save(){
-    this.getModel( Customer.class, "", true ).set( "createDate", new Date() ).set( "createUser", getCurrentUserId() ).save();
-    forwardIndex();
+    Customer customer = this.getModel( Customer.class, "", true ).set( "createDate", new Date() ).set( "createUser", getCurrentUserId() );
+    customer.save();
+    forwardIndex(customer);
   }
   
   public void update(){

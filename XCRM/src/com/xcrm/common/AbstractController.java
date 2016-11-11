@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Record;
 import com.xcrm.common.model.Attribute;
 import com.xcrm.common.model.Attributevalue;
@@ -69,6 +70,11 @@ public abstract class AbstractController extends Controller {
   }
 
   public void forwardIndex() {
+    this.forwardAction( "/" + getModalName() + "/index" );
+  }
+  
+  public void forwardIndex(Model<?> model) {
+    this.setSessionAttr( Constant.CUR_OBJ, model );
     this.forwardAction( "/" + getModalName() + "/index" );
   }
 

@@ -27,7 +27,7 @@ public class ProductController extends AbstractController {
 		Product product = this.getModel(Product.class, "", true);
 		product.save();
 		saveImgs(product.getId());
-		forwardIndex();
+		forwardIndex(product);
 	}
 
 	public void saveImgs(int prdid) {

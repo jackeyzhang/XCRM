@@ -8,8 +8,9 @@ import com.xcrm.common.util.Constant;
 public class StoreController extends AbstractController {
 
   public void save(){
-    this.getModel( Store.class, "" ).save();
-    this.forwardIndex();
+    Store store =  this.getModel( Store.class, "" );
+    store.save();
+    this.forwardIndex(store);
   }
   
   public void update(){

@@ -6,6 +6,7 @@ import java.util.Map;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
 import com.jfinal.core.Controller;
+import com.jfinal.plugin.activerecord.Model;
 import com.xcrm.common.model.Attributevalue;
 import com.xcrm.common.util.Constant;
 
@@ -16,11 +17,11 @@ import com.xcrm.common.util.Constant;
 public class AttributeInterceptor implements Interceptor {
 
   public void intercept( Invocation inv ) {
+    inv.invoke();
     if(inv.getController().getRequest().getMethod().equalsIgnoreCase( "post" )){
       Map<String, String[]> paraMap =  inv.getController().getRequest().getParameterMap();
-      updateAttribute(filterAttributeNames(paraMap),getObjectId(paraMap), getCategoryId(inv.getController()));
+      updateAttribute(filterAttributeNames(paraMap),getObjectId(paraMap,inv.getController()), getCategoryId(inv.getController()));
     }
-    inv.invoke();
   }
 
   private Map<String, String[]> filterAttributeNames( Map<String, String[]> params ) {
@@ -35,12 +36,16 @@ public class AttributeInterceptor implements Interceptor {
     return map;
   }
 
-  private int getObjectId( Map<String, String[]> params ) {
+  private int getObjectId( Map<String, String[]> params,  Controller controller  ) {
     if ( params.size() == 0 )
       return 0;
     for ( String key : params.keySet() ) {
-      if ( key.equalsIgnoreCase( "id" ) &&  params.get( key )[0].length() > 0 ) {
-        return Integer.parseInt( params.get( key )[0] );
+      if ( key.equalsIgnoreCase( "id" ) ) {
+        if(params.get( key )[0].length() > 0){
+          return Integer.parseInt( params.get( key )[0] );
+        }else if(controller.getSessionAttr( Constant.CUR_OBJ ) != null){
+           return ((Model<?>)controller.getSessionAttr( Constant.CUR_OBJ )).getInt( "id" );
+        }
       }
     }
     return 0;

@@ -23,8 +23,9 @@ public class UserController extends AbstractController {
 //  }
 
   public void save() {
-    this.getModel( User.class, "" , true).save();
-    forwardIndex();
+    User user = this.getModel( User.class, "" , true);
+    user.save();
+    forwardIndex(user);
   }
 
   public void update() {
