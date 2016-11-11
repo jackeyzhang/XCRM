@@ -7,11 +7,6 @@ $(function() {
     }
   });
   
-  //get store list
-  for( d in storeList){
-    $('#scopevalueselect').append("<option value='" + storeList[d].id + "'>" + storeList[d].name + "</option>");
-  }
-  
   //set attribute value from attributeidList
   $('#attributeidselect').change(function(){ 
 	  $('#attributevalue').val('');
@@ -34,6 +29,17 @@ $(function() {
     	   $('#scopevalue').show();
        }
      }
+  });
+  
+  //get store list
+  for( d in storeList){
+    $('#scopevalueselect').append("<option value='" + storeList[d].id + "'>" + storeList[d].name + "</option>");
+  }
+  $('#scopevalueselect').multiselect({
+	  nSelectedText: '个门店已经选择!',
+	  allSelectedText: '已经选择所有门店',
+	  delimiterText: ',',
+	  enableFiltering: true
   });
   
 });
@@ -72,13 +78,12 @@ $(function() {
   <select class="form-control selector" name="scopetype" id="scopetype">
       <option value="">请选择...</option>
       <option value="1">所有门店</option>
-      <option value="2">单个门店</option>
+      <option value="2">指定门店</option>
    </select>
 </div>
 
 <div class="form-group" id="scopevalue">
-  <label>门店</label> 
-    <select class="form-control selector" name="scopevalue" id="scopevalueselect">
-       <option value="">请选择门店...</option>
+    <label>选择指定门店</label>
+    <select class="form-control selector" name="scopevalue" id="scopevalueselect" multiple="multiple">
    </select>
 </div>

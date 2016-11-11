@@ -89,7 +89,11 @@ $(function() {
 				});
 				// get select value to row
 				xcpage.$modal.find('select[name]').each(function() {
+					if($(this).val() instanceof Array){
+						row[$(this).attr('name')] = $(this).val().join(',');
+					}else{
 						row[$(this).attr('name')] = $(this).val();
+					}
 				});
 				// submit row
 				$.ajax({
@@ -198,6 +202,14 @@ function showModal(title, row) {
 			xcpage.$modal.find('input[name="' + name + '"]').val(row[name]);
 			//set value to dialog for select
 			xcpage.$modal.find('select[name="' + name + '"]').val(row[name]);
+			// set value for dialog for multiple select
+			if(xcpage.$modal.find('select[name="' + name + '"]').attr('multiple') == "multiple"){
+				if(row[name]){
+					xcpage.$modal.find('select[name="' + name + '"]').multiselect('select', row[name].split(","));
+				}else{
+					xcpage.$modal.find('select[name="' + name + '"]').multiselect('deselectAll');
+				}
+			}
 		}
 	}
 	xcpage.$modal.modal('show');

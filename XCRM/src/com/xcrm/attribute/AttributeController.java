@@ -19,7 +19,8 @@ public class AttributeController extends AbstractController {
   }
   
   public void update(){
-    this.getModel( Attribute.class, "" ).update();
+    this.getPara( "scopevalue[]" );
+    this.getModel( Attribute.class, "", true ).update();
     this.forwardIndex();
   }
 

@@ -36,15 +36,26 @@
 		if (value == "1") {
 			return "所有门店";
 		} else if (value == "2") {
-			return "单个站点";
+			return "指定门店";
 		}
 		return "未指定";
 	}
 	
 	function scopevalueformatter( value, row ){
-	    for( d in storeList){
-	      if(storeList[d].id == value)
-	          return storeList[d].name;
+		if(!value) return;
+		  var storestr="";
+	    var stores = value.split(',');
+	    for( store in stores){
+		    for (d in storeList) {
+		      if ( storeList[d].id == stores[store] )
+		    	  storestr += storeList[d].name +",";
+		    }
+    	}
+	    if(storestr.length > 0){
+	    	if(storestr.length > 30){
+	    		 return storestr.substring(0, 30) + "...";
+	    	}
+	      return storestr.substring(0,storestr.length-1);
 	    }
 	    return "未指定";
 	}
