@@ -20,7 +20,7 @@ CREATE TABLE `product` (
 
 
 CREATE TABLE `productpic` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `fielname` varchar(45) NOT NULL,
   `productid` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
