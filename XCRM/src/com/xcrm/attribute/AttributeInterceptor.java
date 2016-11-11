@@ -39,7 +39,7 @@ public class AttributeInterceptor implements Interceptor {
     if ( params.size() == 0 )
       return 0;
     for ( String key : params.keySet() ) {
-      if ( key.equalsIgnoreCase( "id" ) ) {
+      if ( key.equalsIgnoreCase( "id" ) &&  params.get( key )[0].length() > 0 ) {
         return Integer.parseInt( params.get( key )[0] );
       }
     }
