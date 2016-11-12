@@ -53,24 +53,20 @@ $(function() {
 
 	$('.create').click(function() {
 		xcpage.$form[0].reset();//reset form
-		if($('#file-Portrait')){
-//			createFileinput(defaultFileinput());
+		if(xcpage.precreate){
+			xcpage.precreate(xcpage.precreate.args);
 		}
 		showModal($(this).text());
+		if(xcpage.aftercreate){
+			xcpage.aftercreate(xcpage.aftercreate.args);
+		}
 	});
-	xcpage.$modal.find('.submit').click(
-			function(){
-				var imgs = '';
-				$('.file-thumbnail-footer').each(function(){
-					if($(this).find('.progress-bar-success').html().trim()=='100%'){
-						imgs += $(this).find('.file-footer-caption').attr('title')+',';
-					}
-				});
-				$('#imgs').val(imgs);
-			}
-	);
+
 	xcpage.$modal.find('.submit').click(																									
 			function() {
+				if(xcpage.presubmit){
+					xcpage.presubmit(xcpage.presubmit.args);
+				}
 				var row = {};
 				//fire validate
 				xcpage.$form.validator('validate');
@@ -133,19 +129,8 @@ function actionFormatter(value) {
 // update and delete events
 window.actionEvents = {
 	'click .update' : function(e, value, row) {
-		if($('#changepic')){
-			$('#changepic').css('display','block');
-			$('#changepic').click(function(){
-				createEditfileinput([
-				               'http://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/FullMoon2010.jpg/631px-FullMoon2010.jpg',
-				               'http://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Earth_Eastern_Hemisphere.jpg/600px-Earth_Eastern_Hemisphere.jpg'
-				           ],[
-				              {caption: "Moon.jpg", size: 930321, width: "120px", key: 1},
-				              {caption: "Earth.jpg", size: 1218822, width: "120px", key: 2}
-				          ]);
-				$('.file-input').css('display','block');
-			});
-			$('.file-input').css('display','none');
+		if(xcpage.preupdate){
+			xcpage.preupdate(e, value, row,xcpage.preupdate.args);
 		}
 		showModal($(this).attr('title'), row);
 	},

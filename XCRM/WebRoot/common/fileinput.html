@@ -1,20 +1,34 @@
 
 <link rel="stylesheet" href="/css/fileinput.min.css">
 <script src="/js/sortable.min.js"></script>
-<script src="/js/fileinput.min.js"></script>
+<script src="/js/fileinput.js"></script>
 <script src="/js/zh.js"></script>
 
 <div>
 	<button id="changepic" type="button" style="display: none"
-		class="btn btn-info btn-block">修改图片</button>
-	<input id="file-Portrait" multiple="true" type="file"
-		class="file-loading"> <input type="hidden" name="imgs"
-		id="imgs">
+		class="btn btn-info btn-block"></button>
+	<input id="file-Portrait" multiple="true" type="file"> <input
+		type="hidden" name="imgs" id="imgs">
 </div>
 
 <script>
-	function createFileinput(obj){
-		xcpage.fileinput = $('#file-Portrait').fileinput(obj);
+	function fileinput(obj){
+		if($('#file-Portrait').data('fileinput')){
+			$('#file-Portrait').fileinput('destroy');
+		}
+		$('#file-Portrait').fileinput(obj).on('filezoomshown', function(event, params) {
+			$('.kv-zoom-actions .btn-close,.file-zoom-dialog .modal-backdrop').on('click',function(e){
+				$('#kvFileinputModal.file-zoom-dialog').modal('hide');
+				$('#modal').css('overflow','auto');
+				e.stopPropagation();
+			});
+		});
+	}
+	function fi4create(obj){
+		$('#changepic').css('display','none');
+		downfileinput();
+		fileinput(obj);
+
 	}
 	
 	function defaultFileinput(){
@@ -42,16 +56,83 @@
 			initialPreviewCount : 2,
 			initialCaption : "请上传图片...",
 			allowedFileExtensions : [ 'jpg', 'png', 'gif' ],
-			overwriteInitial : true,
 			initialPreviewFileType : 'image'
 		};
 	}
 	
-	function createEditfileinput(initialList,initialConfigList){
-		var fileinput = defaultFileinput();
-		fileinput['initialPreviewAsData']=true;
-		fileinput['initialPreview']=initialList;
-		fileinput['initialPreviewConfig']=initialConfigList;
-		createFileinput(fileinput);
+	function downfileinput(){
+		$('#changepic').html('收起图片');
+		$('.file-input').slideDown();
+		$('#file-Portrait').css('display','block');
 	}
+	
+	function upfileinput(){
+		$('#changepic').html('展开图片');
+		$('.file-input').slideUp();
+		$('#file-Portrait').css('display','none');
+	}
+	
+	function fi4edit(prdid){
+		$.ajax({
+			   type: "POST",
+			   url: "loadimgs",
+			   dataType:"json",
+			   data: "prdid="+prdid,
+			   success: function(msg){
+					var obj = defaultFileinput();
+					obj['initialPreviewAsData']=true;
+					var imgUrl=[];
+					var conf=[];
+					if(msg.imgs){
+						var imgs = msg.imgs.split(',');
+						for(var i=0;i<imgs.length;i++){
+							if(imgs[i]){
+								imgUrl.push('/temp_img/${user.id}/'+imgs[i]);
+								conf.push({caption:imgs[i]});
+							}
+						}
+					}
+					obj['initialPreview']=imgUrl;
+					obj['initialPreviewConfig']=conf;
+					fileinput(obj);
+			   },
+			   error:function(){
+			   }
+
+			});
+
+	}
+	
+	$(function(){
+		xcpage.precreate=function(){
+			fi4create(defaultFileinput());
+		};
+		
+		xcpage.aftercreate=function(){
+		}
+		
+		xcpage.preupdate=function(e, value, row){
+			upfileinput();
+			$('#changepic').unbind('click');
+			$('#changepic').css('display','block').click(function(){
+				if($(this).html()=='展开图片'){
+					fi4edit(row.id);
+					downfileinput();
+				}else{
+					upfileinput();
+				}
+			});
+		};
+		
+		xcpage.presubmit=function(){
+			var imgs = '';
+			$('.file-thumbnail-footer').each(function(){
+				if($(this).find('.progress-bar-success').html().trim()=='100%'||0==$(this).find('.file-footer-buttons .glyphicon-upload').length){
+					imgs += $(this).find('.file-footer-caption').attr('title')+',';
+				}
+			});
+			$('#imgs').val(imgs);
+		}
+	});
+	
 </script>

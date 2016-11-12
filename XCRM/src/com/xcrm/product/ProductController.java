@@ -3,6 +3,8 @@ package com.xcrm.product;
 import java.io.File;
 import java.io.IOException;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -17,7 +19,6 @@ import com.xcrm.common.util.PropertiesUtil;
 
 @Before(ProductInterceptor.class)
 public class ProductController extends AbstractController {
-
 	public void index() {
 		super.index();
 		this.setAttr("imgMaxCount", PropertiesUtil.getProductImgMaxSize());
@@ -30,17 +31,48 @@ public class ProductController extends AbstractController {
 		forwardIndex(product);
 	}
 
+	public void loadimgs() {
+		String destDirPath = getTempPath(getRequest());
+		File destDir = getFileByStr(destDirPath);
+		if (destDir.exists()) {
+			try {
+				FileUtils.deleteDirectory(destDir);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		destDir.mkdirs();
+		String prdid = this.getPara("prdid");
+		File srcDir = getFileByStr(getDir(PropertiesUtil.getProductImgPath()) + prdid + Constant.SLASH);
+		String imgs = "";
+		if (srcDir.exists()) {
+			for (File record : srcDir.listFiles()) {
+				try {
+					FileUtils.copyFile(record, getFileByStr(destDirPath + record.getName()));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				imgs += record.getName() + ",";
+
+			}
+		}
+		this.renderJson("{\"imgs\":\"" + imgs + "\"}");
+	}
+
 	public void saveImgs(int prdid) {
 		String imgs = this.getPara("imgs");
 		if (!StringUtils.isEmpty(imgs)) {
 			String[] imgArray = imgs.split(Constant.COMMA);
 			Db.update("delete from productpic where productid=" + prdid);
-			String srcDirPath = getTempPath(
-					getRequest().getServletContext().getRealPath("/") + Constant.SLASH + Constant.TEMP_IMG);
+			String srcDirPath = getTempPath(getRequest());
 			String destDirPath = getDir(PropertiesUtil.getProductImgPath()) + prdid + Constant.SLASH;
 			File destDir = getFileByStr(destDirPath);
 			if (destDir.exists()) {
-				destDir.delete();
+				try {
+					FileUtils.deleteDirectory(destDir);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 			destDir.mkdir();
 			for (String img : imgArray) {
@@ -59,7 +91,6 @@ public class ProductController extends AbstractController {
 			try {
 				FileUtils.deleteDirectory(getFileByStr(srcDirPath));
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -77,8 +108,9 @@ public class ProductController extends AbstractController {
 		}
 	}
 
-	public String getTempPath(String tempPath) {
-		return tempPath + Constant.SLASH + getCurrentUserId() + Constant.SLASH;
+	public String getTempPath(HttpServletRequest request) {
+		return request.getServletContext().getRealPath("/") + Constant.SLASH + Constant.TEMP_IMG + Constant.SLASH
+				+ getCurrentUserId() + Constant.SLASH;
 	}
 
 	private File getFileByStr(String str) {
@@ -88,7 +120,7 @@ public class ProductController extends AbstractController {
 	public void upload() {
 		UploadFile uploadFile = this.getFile();
 		if (uploadFile != null) {
-			String destDir = getTempPath(uploadFile.getFile().getParent());
+			String destDir = getTempPath(getRequest());
 			synchronized (Integer.valueOf(getCurrentUserId())) {
 				getFileByStr(destDir).mkdirs();
 			}
@@ -106,7 +138,9 @@ public class ProductController extends AbstractController {
 	}
 
 	public void update() {
-		this.getModel(Product.class, "").update();
+		Product product = this.getModel(Product.class, "", true);
+		product.update();
+		saveImgs(product.getId());
 		forwardIndex();
 	}
 
@@ -135,8 +169,8 @@ public class ProductController extends AbstractController {
 		return "product.html";
 	}
 
-  @Override
-  public int getCategory() {
-    return Constant.CATEGORY_PRODUCT;
-  }
+	@Override
+	public int getCategory() {
+		return Constant.CATEGORY_PRODUCT;
+	}
 }
