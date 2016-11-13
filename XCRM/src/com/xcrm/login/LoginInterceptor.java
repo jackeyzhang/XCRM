@@ -1,7 +1,10 @@
 package com.xcrm.login;
 
+import java.util.HashMap;
+
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
+import com.xcrm.common.model.Store;
 import com.xcrm.common.util.Constant;
 
 /**
@@ -17,6 +20,10 @@ public class LoginInterceptor implements Interceptor {
 		} else {
 			if (user != null) {
 				inv.getController().setAttr("user", user);
+				int storeid = (int) ( (HashMap<?,?>)user ).get( "storeid" );
+				Store currentStore = Store.dao.findById( storeid );
+				if(currentStore!= null)
+				inv.getController().setAttr("storename", currentStore.getStr( "name" ));
 				inv.invoke();
 			} else {
 				if (uri.equals(Constant.LOGIN_ACTION) || uri.equals(Constant.SLASH)) {
