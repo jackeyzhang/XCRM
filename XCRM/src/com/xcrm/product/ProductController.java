@@ -12,6 +12,7 @@ import com.jfinal.aop.Before;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.upload.UploadFile;
 import com.xcrm.common.AbstractController;
+import com.xcrm.common.barcode.QRCodeUtil;
 import com.xcrm.common.model.Product;
 import com.xcrm.common.model.Productpic;
 import com.xcrm.common.util.Constant;
@@ -28,6 +29,7 @@ public class ProductController extends AbstractController {
 		Product product = this.getModel(Product.class, "", true);
 		product.save();
 		saveImgs(product.getId());
+		QRCodeUtil.generator(product.getId(), this.getRequest().getServletContext().getRealPath("/"));
 		forwardIndex(product);
 	}
 
