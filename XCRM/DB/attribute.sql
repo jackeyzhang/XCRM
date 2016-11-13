@@ -11,12 +11,14 @@ INSERT INTO `attributeid`(`id`,`name`,`type`,`value`) VALUES(101,'颜色',2,'红
 CREATE TABLE `attribute` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `attributeid` int(11) NOT NULL,
+  `displayname` varchar(500) NOT NULL,
   `category` int(11) NOT NULL COMMENT '1 product\n2 customer\n3 user\n4 store\n5...',
   `value` varchar(5000) NOT NULL,
   `scopetype` int(11) NOT NULL COMMENT '1 site\n2 store\n3 mutiple stores',
   `scopevalue` varchar(5000) DEFAULT 'null' COMMENT 'store id and combin with comma. if scope is site, should be null',
+  `visiable` tinyint(2) DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `attributevalue` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

@@ -59,6 +59,14 @@
 	    }
 	    return "未指定";
 	}
+	
+	function attributevisiableformatter(value, row){
+		if(value == '1'){
+			return "可见";
+		}else{
+			return "隐藏";
+		}
+	}
 </script>
 <th data-field="scopetype" data-formatter="scopetypeformatter">范围</th>
 <th data-field="scopevalue" data-formatter="scopevalueformatter">门店</th>
@@ -66,3 +74,4 @@
 <th data-field="attributeid" data-formatter="attributeidformatter">属性模板</th>
 <th data-field="displayname">属性显示名称</th>
 <th data-field="value">属性值</th>
+<th data-field="visiable" data-formatter="attributevisiableformatter">是否可见</th>

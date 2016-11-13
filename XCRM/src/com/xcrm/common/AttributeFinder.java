@@ -27,11 +27,11 @@ public class AttributeFinder {
   private AttributeFinder() {}
   
   public List<Attribute> getAllAttributeList( int category ){
-    return Attribute.dao.find( "select * from Attribute where category = " + category );
+    return Attribute.dao.find( "select * from Attribute where category = " + category  +" and visiable=1");
   }
   
   public List<Attribute> getAttributeList( int category, int storeid ){
-    return Attribute.dao.find( "select * from Attribute where category = " + category + " and scopetype=2 and scopevalue = " + storeid );
+    return Attribute.dao.find( "select * from Attribute where visiable=1 and category = " + category + " and scopetype=2 and scopevalue = " + storeid );
   }
   
   public Attribute getAttribute(int category, int attributeid ){

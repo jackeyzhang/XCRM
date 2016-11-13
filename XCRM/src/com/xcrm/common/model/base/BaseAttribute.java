@@ -65,4 +65,12 @@ public abstract class BaseAttribute<M extends BaseAttribute<M>> extends Model<M>
 		return get("scopevalue");
 	}
 
+	public void setVisiable(java.lang.Integer visiable) {
+		set("visiable", visiable);
+	}
+
+	public java.lang.Integer getVisiable() {
+		return get("visiable");
+	}
+
 }
