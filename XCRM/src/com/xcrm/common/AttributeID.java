@@ -10,7 +10,7 @@ package com.xcrm.common;
  */
 public class AttributeID {
   
-  public static final int TYPE_NUMBER = 1, TYPE_LIST_SINGLE = 2, TYPE_LIST_MULTIPLE = 3;
+  public static final int TYPE_NUMBER = 1, TYPE_LIST_SINGLE = 2, TYPE_LIST_MULTIPLE = 3, TYPE_TEXT = 4;
 
   /**
    * 0 - 100 预留for与业务无关的attribute

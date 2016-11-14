@@ -67,11 +67,22 @@
 			return "隐藏";
 		}
 	}
+	
+	function attributeidtype(value, row) {
+	    if (value == "1") {
+	      return "数值";
+	    } else if (value == "2") {
+	      return "单选列表";
+	    } else if (value == "3") {
+	      return "多选列表";
+	    }
+	  }
 </script>
 <th data-field="scopetype" data-formatter="scopetypeformatter">范围</th>
 <th data-field="scopevalue" data-formatter="scopevalueformatter">门店</th>
 <th data-field="category" data-formatter="categoryformatter">分类</th>
 <th data-field="attributeid" data-formatter="attributeidformatter">属性模板</th>
 <th data-field="displayname">属性显示名称</th>
+<th data-field="type" data-formatter="attributeidtype">属性类型</th>
 <th data-field="value">属性值</th>
 <th data-field="visiable" data-formatter="attributevisiableformatter">是否可见</th>

@@ -33,6 +33,14 @@ public abstract class BaseAttribute<M extends BaseAttribute<M>> extends Model<M>
 		return get("displayname");
 	}
 
+	public void setType(java.lang.Integer type) {
+		set("type", type);
+	}
+
+	public java.lang.Integer getType() {
+		return get("type");
+	}
+
 	public void setCategory(java.lang.Integer category) {
 		set("category", category);
 	}

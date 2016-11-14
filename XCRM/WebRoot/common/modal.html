@@ -21,11 +21,25 @@
             <#list attriutes as attr>
               <div class="form-group">
                <label>${attr.displayname}</label> 
-               <select class="form-control selector" name="attribute-${attr.attributeid}">
-                <#list attr.value?split(",") as val>
-                  <option value="${val}">${val}</option>
-                 </#list>
-               </select>
+               <#if attr.type??>
+		               <#if attr.type==1>
+		                 <input type="number" class="form-control" name="attribute-${attr.attributeid}" id="attribute-${attr.attributeid}" placeholder="${attr.displayname}">
+		               <#elseif attr.type==2>
+			               <select class="form-control selector" name="attribute-${attr.attributeid}">
+			                <#list attr.value?split(",") as val>
+			                  <option value="${val}">${val}</option>
+			                 </#list>
+			               </select>  
+		               <#elseif attr.type==3>
+			                 <select class="form-control selector" name="attribute-${attr.attributeid}" id="attribute-${attr.attributeid}" multiple="multiple">
+			                   <#list attr.value?split(",") as val>
+                          <option value="${val}">${val}</option>
+                         </#list>
+			                 </select>
+		               <#else>
+		                    <input type="text" class="form-control" name="attribute-${attr.attributeid}" id="attribute-${attr.attributeid}" placeholder="${attr.displayname}">
+		               </#if>
+               </#if>
               </div>
             </#list>
           <#else>

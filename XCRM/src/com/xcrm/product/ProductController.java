@@ -2,6 +2,7 @@ package com.xcrm.product;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,7 +27,7 @@ public class ProductController extends AbstractController {
 	}
 
 	public void save() {
-		Product product = this.getModel(Product.class, "", true);
+		Product product = this.getModel(Product.class, "", true).set( "barcode", UUID.randomUUID() );
 		product.save();
 		saveImgs(product.getId());
 		QRCodeUtil.generator(product.getId(), this.getRequest().getServletContext().getRealPath("/"));
