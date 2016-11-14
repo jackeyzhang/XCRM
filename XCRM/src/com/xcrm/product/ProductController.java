@@ -2,7 +2,7 @@ package com.xcrm.product;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.UUID;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,6 +17,7 @@ import com.xcrm.common.barcode.QRCodeUtil;
 import com.xcrm.common.model.Product;
 import com.xcrm.common.model.Productpic;
 import com.xcrm.common.util.Constant;
+import com.xcrm.common.util.MD5Util;
 import com.xcrm.common.util.PropertiesUtil;
 
 @Before(ProductInterceptor.class)
@@ -27,7 +28,7 @@ public class ProductController extends AbstractController {
 	}
 
 	public void save() {
-		Product product = this.getModel(Product.class, "", true).set( "barcode", UUID.randomUUID() );
+		Product product = this.getModel(Product.class, "", true).set( "barcode", MD5Util.getSystemKey()).set( "createuser", this.getCurrentUserId() ).set( "createdate", new Date() );
 		product.save();
 		saveImgs(product.getId());
 		QRCodeUtil.generator(product.getId(), this.getRequest().getServletContext().getRealPath("/"));
@@ -141,7 +142,10 @@ public class ProductController extends AbstractController {
 	}
 
 	public void update() {
-		Product product = this.getModel(Product.class, "", true);
+		Product product = this.getModel(Product.class, "", true).set( "edituser", this.getCurrentUserId() ).set( "editdate", new Date() );
+		if(product.getStr( "barcode" ).isEmpty()){
+		  product.set( "barcode", MD5Util.getSystemKey() );
+		}
 		product.update();
 		saveImgs(product.getId());
 		forwardIndex();

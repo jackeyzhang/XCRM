@@ -18,7 +18,10 @@
 					<#include "../${model}/form.html"/>
 					  <!-- attribute load -->
           <#if attriutes?size != 0>
+          <div class="container-fluid">
+					  <div class="row">
             <#list attriutes as attr>
+              <div class="col-md-6">
               <div class="form-group">
                <label>${attr.displayname}</label> 
                <#if attr.type??>
@@ -31,6 +34,15 @@
 			                 </#list>
 			               </select>  
 		               <#elseif attr.type==3>
+		               <script>
+		                $('#attribute-${attr.attributeid}').multiselect({
+		            	    nSelectedText: '项已经选择!',
+		            	    allSelectedText: '已经选择所有项',
+		            	    nonSelectedText: '尚未选择',
+		            	    delimiterText: ',',
+		            	    enableFiltering: true
+		            	  });
+		               </script>
 			                 <select class="form-control selector" name="attribute-${attr.attributeid}" id="attribute-${attr.attributeid}" multiple="multiple">
 			                   <#list attr.value?split(",") as val>
                           <option value="${val}">${val}</option>
@@ -41,8 +53,10 @@
 		               </#if>
                </#if>
               </div>
+              </div>
             </#list>
-          <#else>
+            </div>
+            </div>          
           </#if>
 				</form>
 			</div>
