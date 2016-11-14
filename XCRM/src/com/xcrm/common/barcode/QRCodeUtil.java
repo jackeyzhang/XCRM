@@ -1,4 +1,4 @@
-﻿package com.xcrm.common.barcode;
+package com.xcrm.common.barcode;
 
 import java.awt.BasicStroke;
 import java.awt.Graphics;
