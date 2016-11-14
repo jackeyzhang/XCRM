@@ -35,6 +35,7 @@
 			               </select>  
 		               <#elseif attr.type==3>
 		               <script>
+		               $(function() {
 		                $('#attribute-${attr.attributeid}').multiselect({
 		            	    nSelectedText: '项已经选择!',
 		            	    allSelectedText: '已经选择所有项',
@@ -42,6 +43,7 @@
 		            	    delimiterText: ',',
 		            	    enableFiltering: true
 		            	  });
+		               });
 		               </script>
 			                 <select class="form-control selector" name="attribute-${attr.attributeid}" id="attribute-${attr.attributeid}" multiple="multiple">
 			                   <#list attr.value?split(",") as val>

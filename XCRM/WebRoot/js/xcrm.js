@@ -169,6 +169,8 @@ function showModal(title, row) {
 	}; // default row value
 	if(xcpage.$form[0]){
 		xcpage.$form[0].reset();//reset form
+		xcpage.$modal.find("[multiple='multiple']").multiselect('deselectAll',false);
+		xcpage.$modal.find("[multiple='multiple']").multiselect('updateButtonText');
 	}
 	xcpage.$modal.data('id', row.id);
 	xcpage.$modal.find('.modal-title').text(title);
