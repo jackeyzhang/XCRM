@@ -81,14 +81,14 @@ public abstract class AbstractController extends Controller {
   @SuppressWarnings("rawtypes")
   public int getCurrentUserId() {
     Object user = getSessionAttr( Constant.CUR_USER );
-    int userId = (int) ( (HashMap)user ).get( "id" );
+    int userId = (Integer) ( (HashMap)user ).get( "id" );
     return userId;
   }
 
   @SuppressWarnings("rawtypes")
   public int getCurrentStoreId() {
     Object user = getSessionAttr( Constant.CUR_USER );
-    int storeid = (int) ( (HashMap)user ).get( "storeid" );
+    int storeid = (Integer) ( (HashMap)user ).get( "storeid" );
     return storeid;
   }
 
