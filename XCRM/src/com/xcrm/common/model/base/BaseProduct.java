@@ -25,60 +25,28 @@ public abstract class BaseProduct<M extends BaseProduct<M>> extends Model<M> imp
 		return get("name");
 	}
 
-	public void setCode(java.lang.String code) {
-		set("code", code);
+	public void setBarcode(java.lang.String barcode) {
+		set("barcode", barcode);
 	}
 
-	public java.lang.String getCode() {
-		return get("code");
+	public java.lang.String getBarcode() {
+		return get("barcode");
 	}
 
-	public void setBarCode(java.lang.String barCode) {
-		set("barCode", barCode);
+	public void setCount(java.lang.Integer count) {
+		set("count", count);
 	}
 
-	public java.lang.String getBarCode() {
-		return get("barCode");
+	public java.lang.Integer getCount() {
+		return get("count");
 	}
 
-	public void setCid(java.lang.Integer cid) {
-		set("cid", cid);
-	}
-
-	public java.lang.Integer getCid() {
-		return get("cid");
-	}
-
-	public void setUnit(java.lang.String unit) {
-		set("unit", unit);
-	}
-
-	public java.lang.String getUnit() {
-		return get("unit");
-	}
-
-	public void setPeriod(java.lang.String period) {
+	public void setPeriod(java.lang.Integer period) {
 		set("period", period);
 	}
 
-	public java.lang.String getPeriod() {
+	public java.lang.Integer getPeriod() {
 		return get("period");
-	}
-
-	public void setDepartment(java.lang.String department) {
-		set("department", department);
-	}
-
-	public java.lang.String getDepartment() {
-		return get("department");
-	}
-
-	public void setPoint(java.lang.String point) {
-		set("point", point);
-	}
-
-	public java.lang.String getPoint() {
-		return get("point");
 	}
 
 	public void setRemark(java.lang.String remark) {
@@ -87,14 +55,6 @@ public abstract class BaseProduct<M extends BaseProduct<M>> extends Model<M> imp
 
 	public java.lang.String getRemark() {
 		return get("remark");
-	}
-
-	public void setTtt(java.util.Date ttt) {
-		set("ttt", ttt);
-	}
-
-	public java.util.Date getTtt() {
-		return get("ttt");
 	}
 
 	public void setCreatedate(java.util.Date createdate) {
@@ -127,14 +87,6 @@ public abstract class BaseProduct<M extends BaseProduct<M>> extends Model<M> imp
 
 	public java.lang.Integer getEdituser() {
 		return get("edituser");
-	}
-
-	public void setPicture(java.lang.String picture) {
-		set("picture", picture);
-	}
-
-	public java.lang.String getPicture() {
-		return get("picture");
 	}
 
 }

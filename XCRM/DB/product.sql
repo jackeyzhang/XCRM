@@ -1,22 +1,17 @@
 CREATE TABLE `product` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
-  `code` varchar(45) NOT NULL,
-  `barCode` varchar(45) DEFAULT NULL,
-  `cid` int(11) NOT NULL,
-  `unit` varchar(45) DEFAULT NULL,
-  `period` varchar(45) DEFAULT NULL,
-  `department` varchar(45) DEFAULT NULL,
-  `point` varchar(45) DEFAULT NULL,
+  `barcode` varchar(45) DEFAULT NULL,
+  `count` int(11) DEFAULT NULL COMMENT '数量',
+  `period` int(11) DEFAULT NULL COMMENT '交货期',
   `remark` longtext,
-  `ttt` datetime DEFAULT NULL,
   `createdate` datetime DEFAULT NULL,
   `editdate` datetime DEFAULT NULL,
   `createuser` int(11) DEFAULT NULL,
   `edituser` int(11) DEFAULT NULL,
-  `picture` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+
 
 
 CREATE TABLE `productpic` (
