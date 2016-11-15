@@ -74,7 +74,7 @@ CREATE TABLE `productpic` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-DROP TABLE IF EXISTS 'attributeid';
+DROP TABLE IF EXISTS attributeid;
 CREATE TABLE `attributeid` (
   `id` int(11) NOT NULL,
   `name` varchar(45) NOT NULL,
