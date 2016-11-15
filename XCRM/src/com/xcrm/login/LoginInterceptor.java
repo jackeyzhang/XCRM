@@ -20,7 +20,7 @@ public class LoginInterceptor implements Interceptor {
 		} else {
 			if (user != null) {
 				inv.getController().setAttr("user", user);
-				if(( (HashMap<?,?>)user ).get( "storeid" ) != null){
+				if(null != ( (HashMap<?,?>)user ).get( "storeid" )){
 				    int storeid = (Integer) ( (HashMap<?,?>)user ).get( "storeid" );
 	                Store currentStore = Store.dao.findById( storeid );
 	                if(currentStore!= null)
