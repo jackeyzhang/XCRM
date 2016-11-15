@@ -1,3 +1,8 @@
+DROP DATABASE IF EXISTS xcrm;
+CREATE DATABASE IF NOT EXISTS xcrm;
+use xcrm;
+
+DROP TABLE  IF EXISTS user;
 CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `contact` varchar(45) DEFAULT NULL,
@@ -13,6 +18,7 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`id`, `contact`, `department`, `title`, `username`, `password`, `isenable`, `email`) VALUES
 	(1, 'root', 'it', 'dev', 'root', 'root', b'1', 'lewis@gmail.com');
 
+DROP TABLE  IF EXISTS store;
 CREATE TABLE `store` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
@@ -20,6 +26,7 @@ CREATE TABLE `store` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='门店表';
 
+DROP TABLE  IF EXISTS customer;
 CREATE TABLE `customer` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
@@ -40,6 +47,7 @@ CREATE TABLE `customer` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
+DROP TABLE  IF EXISTS product;
 CREATE TABLE `product` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
@@ -55,7 +63,7 @@ CREATE TABLE `product` (
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 
-
+DROP TABLE  IF EXISTS productpic;
 CREATE TABLE `productpic` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `fielname` varchar(45) NOT NULL,
@@ -65,6 +73,8 @@ CREATE TABLE `productpic` (
   CONSTRAINT `productfk` FOREIGN KEY (`productid`) REFERENCES `product` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+DROP TABLE IF EXISTS 'attributeid';
 CREATE TABLE `attributeid` (
   `id` int(11) NOT NULL,
   `name` varchar(45) NOT NULL,
@@ -73,8 +83,21 @@ CREATE TABLE `attributeid` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `attributeid`(`id`,`name`,`type`,`value`) VALUES(101,'颜色',2,'红色,蓝色,绿色,白色,紫色,卡其色');
 
+INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (101,'颜色',2,'红色,蓝色,绿色,白色,紫色,卡其色');
+INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (102,'型号',2,'XXL,XL,L,M,S');
+INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (103,'数量单位',2,'件,个');
+INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (104,'时间单位',2,'天,小时');
+INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (105,'数量',1,NULL);
+INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (106,'交货期',1,NULL);
+INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (201,'部门',2,'礼服部,摄像部,化妆部,选片部,设计部,取件部,客服部');
+INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (202,'工作部门',3,'礼服部,摄像部,化妆部,选片部,设计部,取件部,客服部');
+INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (203,'产品类型',2,'婚纱,礼服');
+INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (204,'产品面料',2,'白沙,蕾丝');
+INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (205,'产品颜色',3,'红色,黄色,蓝色,白色,粉色,紫色');
+INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (206,'产品尺码',2,'S,M,L,XL,XXL');
+
+DROP TABLE  IF EXISTS attribute;
 CREATE TABLE `attribute` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `attributeid` int(11) NOT NULL,
@@ -88,7 +111,7 @@ CREATE TABLE `attribute` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
-
+DROP TABLE  IF EXISTS attributevalue;
 CREATE TABLE `attributevalue` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `category` int(11) NOT NULL,
