@@ -19,6 +19,7 @@ import com.xcrm.customer.CustomerController;
 import com.xcrm.index.IndexController;
 import com.xcrm.login.LoginController;
 import com.xcrm.login.LoginInterceptor;
+import com.xcrm.product.PackageController;
 import com.xcrm.product.ProductController;
 import com.xcrm.schedule.ScheduleController;
 import com.xcrm.store.StoreController;
@@ -49,6 +50,7 @@ public class XCRMConfig extends JFinalConfig {
     me.add( "/user", UserController.class );
     me.add( "/customer", CustomerController.class );
     me.add( "/product", ProductController.class );
+    me.add( "/package", PackageController.class );
     me.add( "/schedule", ScheduleController.class );
     me.add( "/store", StoreController.class );
     me.add( "/attributeid", AttributeidController.class );
