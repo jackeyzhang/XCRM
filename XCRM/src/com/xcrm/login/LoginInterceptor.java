@@ -20,10 +20,14 @@ public class LoginInterceptor implements Interceptor {
 		} else {
 			if (user != null) {
 				inv.getController().setAttr("user", user);
-				int storeid = (Integer) ( (HashMap<?,?>)user ).get( "storeid" );
-				Store currentStore = Store.dao.findById( storeid );
-				if(currentStore!= null)
-				inv.getController().setAttr("storename", currentStore.getStr( "name" ));
+				if(( (HashMap<?,?>)user ).get( "storeid" ) != null){
+				    int storeid = (Integer) ( (HashMap<?,?>)user ).get( "storeid" );
+	                Store currentStore = Store.dao.findById( storeid );
+	                if(currentStore!= null)
+	                inv.getController().setAttr("storename", currentStore.getStr( "name" ));
+				}else{
+				  inv.getController().setAttr("storename", "尚未选择门店");
+				}
 				inv.invoke();
 			} else {
 				if (uri.equals(Constant.LOGIN_ACTION) || uri.equals(Constant.SLASH)) {

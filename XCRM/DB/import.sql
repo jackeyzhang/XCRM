@@ -2,6 +2,14 @@ DROP DATABASE IF EXISTS xcrm;
 CREATE DATABASE IF NOT EXISTS xcrm;
 use xcrm;
 
+DROP TABLE  IF EXISTS store;
+CREATE TABLE `store` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `city` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='门店表';
+
 DROP TABLE  IF EXISTS user;
 CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -12,19 +20,17 @@ CREATE TABLE `user` (
   `password` varchar(45) NOT NULL,
   `isenable` bit(1) DEFAULT b'1',
   `email` varchar(45) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+  `storeid` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `storeFk_idx` (`storeid`),
+  CONSTRAINT `storeFk` FOREIGN KEY (`storeid`) REFERENCES `store` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+
 
 INSERT INTO `user` (`id`, `contact`, `department`, `title`, `username`, `password`, `isenable`, `email`) VALUES
-	(1, 'root', 'it', 'dev', 'root', 'root', b'1', 'lewis@gmail.com');
+  (1, 'root', 'it', 'dev', 'root', 'root', b'1', 'lewis@gmail.com');
 
-DROP TABLE  IF EXISTS store;
-CREATE TABLE `store` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  `city` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='门店表';
+
 
 DROP TABLE  IF EXISTS customer;
 CREATE TABLE `customer` (
@@ -122,9 +128,3 @@ CREATE TABLE `attributevalue` (
   KEY `fk_attributeid_idx` (`attributeid`),
   CONSTRAINT `fk_attributeid` FOREIGN KEY (`attributeid`) REFERENCES `attributeid` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
-
-
-
-
-
-
