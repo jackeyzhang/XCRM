@@ -1,7 +1,7 @@
 <script>
 $(function() {
 	$('#productCarousel').carousel({
-		interval : 4000
+		interval : 5000
 	});
 
 	$('[id^=carousel-selector-]').click(function() {
@@ -25,10 +25,9 @@ $(function() {
 <style>
 .selected img {
       opacity:0.5;
-      border: 1px solid orange;
+      border: 2px solid orange;
     }
 </style>
-<div class="container">
 <div class="row">
 	<div class="col-md-6" id="carousel-bounding-box">
 		<div id="productCarousel" class="carousel slide">
@@ -38,23 +37,27 @@ $(function() {
 					<#list prdimages as prdimg>
 							 <#if x==0>
 								<div class="active item" data-slide-number="${x}">
-									<img src="/img/${prdimg.productid}/${prdimg.fielname}" class="img-responsive">
+									<img src="/img/${prdimg.productid}/${prdimg.fielname}" class="img-responsive img-thumbnail" style="height:400px;">
 								</div>
 								<#else>
 								<div class="item" data-slide-number="${x}">
-                  <img src="/img/${prdimg.productid}/${prdimg.fielname}" class="img-responsive">
+                  <img src="/img/${prdimg.productid}/${prdimg.fielname}" class="img-responsive img-thumbnail" style="height:400px;">
                 </div>
 						   </#if>
 					  <#assign x=x+1/>
           </#list>
 					</div>
-			<a class="carousel-control left" href="#productCarousel"
-				data-slide="prev">‹</a> <a class="carousel-control right"
-				href="#productCarousel" data-slide="next">›</a>
 		</#if>
 		</div>
 	</div>
-	<div class="col-md-6"></div>
+	<div class="col-md-6">
+	     <h1>${product.name}<small>${product.barcode}</small></h1>
+	     <p class="lead">${product_color}</p>
+	     <p class="lead">${product_size}</p>
+	     <p class="lead">${product_depatment}</p>
+	     <p class="lead">${product_material}</p>
+	     
+	</div>
 </div>
 
 <#if prdimages?size != 0>
@@ -65,13 +68,13 @@ $(function() {
 			<#list prdimages as prdimg>
 				<li><a id="carousel-selector-${y}" class="selected"> <img
 						src="/img/${prdimg.productid}/${prdimg.fielname}"
-						class="img-responsive" style="width:100px;">
+						class="img-responsive" style="width:80px;">
 				</a></li>
 				<#assign y=y+1/>
 				</#list>
 			</ul>
 		</div>
-		<div class="col-md-6"></div>
-</div>
+		<div class="col-md-6">
+		</div>
 </#if>
 </div>

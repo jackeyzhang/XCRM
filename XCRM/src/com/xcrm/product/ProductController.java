@@ -14,7 +14,9 @@ import com.jfinal.aop.Before;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.upload.UploadFile;
 import com.xcrm.common.AbstractController;
+import com.xcrm.common.AttributeID;
 import com.xcrm.common.barcode.QRCodeUtil;
+import com.xcrm.common.model.Attributevalue;
 import com.xcrm.common.model.Product;
 import com.xcrm.common.model.Productpic;
 import com.xcrm.common.util.Constant;
@@ -32,9 +34,15 @@ public class ProductController extends AbstractController {
 	  setAttribute();
 	  Product product = Product.dao.findFirst( "select * from product where barcode =?", this.getPara("barcode" ) );
 	  List<Productpic> pics = Productpic.dao.find( "select * from productpic where productid=?", product.getId() );
-	  setAttr( "page_header", product.getName() );
-	  this.setAttr( "prdimages", pics );
-	  this.render( "productdetail.html" );
+	  List<Attributevalue> attributevalues = Attributevalue.dao.find( "select * from attributevalue where objectid=?", product.getId() );
+	  setAttr( "page_header", "产品详细信息" );
+	  setAttr( "product_color", AttributeID.getValue( attributevalues, AttributeID.PRD_COLOR ) );
+	  setAttr( "product_size", AttributeID.getValue( attributevalues, AttributeID.PRD_SIZE ) );
+	  setAttr( "product_depatment", AttributeID.getValue( attributevalues, AttributeID.PRD_DEPARTMENT ) );
+	  setAttr( "product_material", AttributeID.getValue( attributevalues, AttributeID.PRD_MATERIAL ) );
+	  setAttr( "prdimages", pics );
+	  setAttr( "product", product );
+	  render( "productdetail.html" );
 	}
 
 	public void save() {
