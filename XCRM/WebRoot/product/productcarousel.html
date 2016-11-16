@@ -1,0 +1,77 @@
+<script>
+$(function() {
+	$('#productCarousel').carousel({
+		interval : 4000
+	});
+
+	$('[id^=carousel-selector-]').click(function() {
+		var id_selector = $(this).attr("id");
+		var id = id_selector.substr(id_selector.length - 1);
+		id = parseInt(id);
+		$('#productCarousel').carousel(id);
+		$('[id^=carousel-selector-]').removeClass('selected');
+		$(this).addClass('selected');
+	});
+
+	$('#productCarousel').on('slid', function(e) {
+		var id = $('.item.active').data('slide-number');
+		id = parseInt(id);
+		$('[id^=carousel-selector-]').removeClass('selected');
+		$('[id=carousel-selector-' + id + ']').addClass('selected');
+	});
+	
+});
+</script>
+<style>
+.selected img {
+      opacity:0.5;
+      border: 1px solid orange;
+    }
+</style>
+<div class="container">
+<div class="row">
+	<div class="col-md-6" id="carousel-bounding-box">
+		<div id="productCarousel" class="carousel slide">
+		  <#if prdimages?size != 0>
+					<div class="carousel-inner">
+					<#assign x=0/>
+					<#list prdimages as prdimg>
+							 <#if x==0>
+								<div class="active item" data-slide-number="${x}">
+									<img src="/img/${prdimg.productid}/${prdimg.fielname}" class="img-responsive">
+								</div>
+								<#else>
+								<div class="item" data-slide-number="${x}">
+                  <img src="/img/${prdimg.productid}/${prdimg.fielname}" class="img-responsive">
+                </div>
+						   </#if>
+					  <#assign x=x+1/>
+          </#list>
+					</div>
+			<a class="carousel-control left" href="#productCarousel"
+				data-slide="prev">‹</a> <a class="carousel-control right"
+				href="#productCarousel" data-slide="next">›</a>
+		</#if>
+		</div>
+	</div>
+	<div class="col-md-6"></div>
+</div>
+
+<#if prdimages?size != 0>
+<div class="row">
+		<div class="col-md-6 hidden-sm hidden-xs" id="slider-thumbs">
+			<ul class="list-inline">
+			<#assign y=0/>
+			<#list prdimages as prdimg>
+				<li><a id="carousel-selector-${y}" class="selected"> <img
+						src="/img/${prdimg.productid}/${prdimg.fielname}"
+						class="img-responsive" style="width:100px;">
+				</a></li>
+				<#assign y=y+1/>
+				</#list>
+			</ul>
+		</div>
+		<div class="col-md-6"></div>
+</div>
+</#if>
+</div>

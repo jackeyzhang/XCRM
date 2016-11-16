@@ -1,4 +1,15 @@
-<th data-field="name">产品名称</th>
+<script>
+
+function productnameformmater( value, row ){
+	if(row['id']){
+		return '<a href="/product/detail?barcode='+row['barcode']+'">'+value+'</a>';
+	}
+	return value;
+}
+
+</script>
+
+<th data-field="name" data-formatter="productnameformmater">产品名称</th>
 <th data-field="barcode">产品标识码</th>
 <!-- <th data-field="count">数量</th>
 <th data-field="period">交货期限</th> -->

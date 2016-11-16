@@ -3,6 +3,7 @@ package com.xcrm.product;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,6 +26,15 @@ public class ProductController extends AbstractController {
 	public void index() {
 		super.index();
 		this.setAttr("imgMaxCount", PropertiesUtil.getProductImgMaxSize());
+	}
+	
+	public void detail(){
+	  setAttribute();
+	  Product product = Product.dao.findFirst( "select * from product where barcode =?", this.getPara("barcode" ) );
+	  List<Productpic> pics = Productpic.dao.find( "select * from productpic where productid=?", product.getId() );
+	  setAttr( "page_header", product.getName() );
+	  this.setAttr( "prdimages", pics );
+	  this.render( "productdetail.html" );
 	}
 
 	public void save() {
