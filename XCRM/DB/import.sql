@@ -58,6 +58,8 @@ CREATE TABLE `product` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   `barcode` varchar(45) DEFAULT NULL,
+  `level1category` int(11) DEFAULT NULL,
+  `level2category` int(11) DEFAULT NULL,
   `count` int(11) DEFAULT NULL COMMENT '数量',
   `period` int(11) DEFAULT NULL COMMENT '交货期',
   `remark` longtext,
@@ -65,8 +67,10 @@ CREATE TABLE `product` (
   `editdate` datetime DEFAULT NULL,
   `createuser` int(11) DEFAULT NULL,
   `edituser` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`),
+  KEY `fk_category_idx` (`level1category`,`level2category`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+
 
 
 DROP TABLE  IF EXISTS productpic;
@@ -77,6 +81,16 @@ CREATE TABLE `productpic` (
   PRIMARY KEY (`id`),
   KEY `productfk_idx` (`productid`),
   CONSTRAINT `productfk` FOREIGN KEY (`productid`) REFERENCES `product` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE  IF EXISTS productcategory;
+CREATE TABLE `productcategory` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `level` int(11) NOT NULL COMMENT '1  产品大类\n2  产品小类',
+  `pid` int(11) DEFAULT NULL,
+  `name` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

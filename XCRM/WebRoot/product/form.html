@@ -1,3 +1,29 @@
+ <script>
+  $(function() {
+      var level1;
+      $.get('/productcategory/listtoplevel/', function(data){
+        level1 = data;
+        for( d in data){
+          $('#level1category').append("<option value='" + data[d].id + "'>" + data[d].name + "</option>");
+        }
+      });
+      
+      var level2;
+      $.get('/productcategory/listsecondlevel/', function(data){
+       level2 =data;
+      });
+      
+       $('#level1category').change(function() {
+           $('#level2category').empty();
+           for( c in level2){
+	           if(level2[c].pid == $(this).children('option:selected').val()){
+	              $('#level2category').append("<option value='" + level2[c].id + "'>" + level2[c].name + "</option>");
+	           }
+           }
+      });
+      
+  });
+  </script>
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-6">
@@ -13,6 +39,26 @@
 			</div>
 		</div>
 	</div>
+</div>
+<div class="container-fluid">
+<div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label>产品大类</label> 
+           <select class="form-control selector" name="level1category" id="level1category">
+            <option value="">请选择分类</option>
+            </select>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label>产品小类</label> 
+         <select class="form-control selector" name="level2category" id="level2category">
+            <option value="">请选择分类</option>
+            </select>
+      </div>
+    </div>
+  </div>
 </div>
 <!-- <div class="container-fluid">
 	<div class="row">

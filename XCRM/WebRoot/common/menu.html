@@ -2,27 +2,34 @@
 <div class="navbar navbar-inverse" role="navigation">
 	<div class="container-fluid">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="#"><span
-				class=" aria-hidden="true"
+			<a class="navbar-brand" href="#"><span class=" aria-hidden="
+				true"
 				style="color: orange"></span>嘉豪集团信息系统</a>
 		</div>
 		<ul class="nav navbar-nav">
 			<li class="active"><a href="/customer/">客户管理</a></li>
-			<li class="active"><a href="/package/">套餐及价格</a></li>
-			<li class="active"><a href="/product/">产品管理</a></li>
-			<li class="active"><a href="/store/">门店管理</a></li>
-			<li class="active"><a href="/schedule/">预约管理</a></li>
+			<li class="active dropdown"><a href="/product/"
+				class="active dropdown-toggle" data-toggle="dropdown">产品管理 <span
+					class="active caret"></span></a>
+				<ul class="active dropdown-menu" role="menu">
+				  <li><a href="/product/">产品列表</a></li>
+					<li><a href="/productcategory/">产品分类</a></li>
+				</ul></li>
+
 			<li class="active"><a href="/user/">用户管理</a></li>
-			<li class="active dropdown"><a href="#" class="active dropdown-toggle"
-				data-toggle="dropdown">属性管理 <span class="active caret"></span></a>
+			<li class="active"><a href="/store/">门店管理</a></li>
+			<li class="active"><a href="/package/">套餐及价格</a></li>
+			<li class="active"><a href="/schedule/">预约管理</a></li>
+			<li class="active dropdown"><a href="#"
+				class="active dropdown-toggle" data-toggle="dropdown">属性管理 <span
+					class="active caret"></span></a>
 				<ul class="active dropdown-menu" role="menu">
 					<li><a href="/attributeid/">属性模板设置</a></li>
 					<li><a href="/attribute/">属性值设置</a></li>
-				</ul>
-			</li>
+				</ul></li>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
-		  <li><a href="#" id="storename">${storename}</a></li>
+			<li><a href="#" id="storename">${storename}</a></li>
 			<li><a href="#" id="userinfo">Hi,${user.username}</a></li>
 			<li class="active"><a href="/logout">注销</a></li>
 		</ul>

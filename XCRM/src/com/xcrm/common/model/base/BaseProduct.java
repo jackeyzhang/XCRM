@@ -33,6 +33,22 @@ public abstract class BaseProduct<M extends BaseProduct<M>> extends Model<M> imp
 		return get("barcode");
 	}
 
+	public void setLevel1category(java.lang.Integer level1category) {
+		set("level1category", level1category);
+	}
+
+	public java.lang.Integer getLevel1category() {
+		return get("level1category");
+	}
+
+	public void setLevel2category(java.lang.Integer level2category) {
+		set("level2category", level2category);
+	}
+
+	public java.lang.Integer getLevel2category() {
+		return get("level2category");
+	}
+
 	public void setCount(java.lang.Integer count) {
 		set("count", count);
 	}
