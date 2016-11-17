@@ -13,6 +13,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.xcrm.common.model.Attribute;
 import com.xcrm.common.model.Attributevalue;
 import com.xcrm.common.util.Constant;
+import com.xcrm.common.util.PropertiesUtil;
 
 
 /**
@@ -35,6 +36,7 @@ public abstract class AbstractController extends Controller {
     setAttr( "page_header", getPageHeader() );
     setAttr( "toolbar_create", getToolBarAddButtonTitle() );
     setAttr( "attriutes", AttributeFinder.getInstance().getAllAttributeList( getCategory() ) );
+    setAttr("imgMaxCount", PropertiesUtil.getProductImgMaxSize());
   }
 
   public abstract String getModalName();
