@@ -1,17 +1,11 @@
 package com.xcrm.attribute;
 
-import java.util.List;
-
 import com.xcrm.common.AbstractController;
 import com.xcrm.common.model.Attribute;
 
 
 public class AttributeController extends AbstractController {
   
-  public void list() {
-    List<Attribute> Attributes = Attribute.dao.find( "select * from attribute" );
-    this.renderJson( Attributes );
-  }
   
   public void save(){
     this.getModel( Attribute.class, "" ).save();
