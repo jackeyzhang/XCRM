@@ -11,6 +11,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.jfinal.aop.Before;
+import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.upload.UploadFile;
 import com.xcrm.common.AbstractController;
@@ -21,32 +22,33 @@ import com.xcrm.common.model.Product;
 import com.xcrm.common.model.Productpic;
 import com.xcrm.common.util.Constant;
 import com.xcrm.common.util.MD5Util;
-import com.xcrm.common.util.PropertiesUtil;
 
 @Before(ProductInterceptor.class)
 public class ProductController extends AbstractController {
 	public void index() {
 		super.index();
-		this.setAttr("imgMaxCount", PropertiesUtil.getProductImgMaxSize());
+		this.setAttr("imgMaxCount", PropKit.get("product.img.maxsize"));
 	}
-	
-	public void detail(){
-	  setAttribute();
-	  Product product = Product.dao.findFirst( "select * from product where barcode =?", this.getPara("barcode" ) );
-	  List<Productpic> pics = Productpic.dao.find( "select * from productpic where productid=?", product.getId() );
-	  List<Attributevalue> attributevalues = Attributevalue.dao.find( "select * from attributevalue where objectid=?", product.getId() );
-	  setAttr( "page_header", "产品详细信息" );
-	  setAttr( "product_color", AttributeID.getValue( attributevalues, AttributeID.PRD_COLOR ) );
-	  setAttr( "product_size", AttributeID.getValue( attributevalues, AttributeID.PRD_SIZE ) );
-	  setAttr( "product_depatment", AttributeID.getValue( attributevalues, AttributeID.PRD_DEPARTMENT ) );
-	  setAttr( "product_material", AttributeID.getValue( attributevalues, AttributeID.PRD_MATERIAL ) );
-	  setAttr( "prdimages", pics );
-	  setAttr( "product", product );
-	  render( "productdetail.html" );
+
+	public void detail() {
+		setAttribute();
+		Product product = Product.dao.findFirst("select * from product where barcode =?", this.getPara("barcode"));
+		List<Productpic> pics = Productpic.dao.find("select * from productpic where productid=?", product.getId());
+		List<Attributevalue> attributevalues = Attributevalue.dao.find("select * from attributevalue where objectid=?",
+				product.getId());
+		setAttr("page_header", "产品详细信息");
+		setAttr("product_color", AttributeID.getValue(attributevalues, AttributeID.PRD_COLOR));
+		setAttr("product_size", AttributeID.getValue(attributevalues, AttributeID.PRD_SIZE));
+		setAttr("product_depatment", AttributeID.getValue(attributevalues, AttributeID.PRD_DEPARTMENT));
+		setAttr("product_material", AttributeID.getValue(attributevalues, AttributeID.PRD_MATERIAL));
+		setAttr("prdimages", pics);
+		setAttr("product", product);
+		render("productdetail.html");
 	}
 
 	public void save() {
-		Product product = this.getModel(Product.class, "", true).set( "barcode", MD5Util.getSystemKey()).set( "createuser", this.getCurrentUserId() ).set( "createdate", new Date() );
+		Product product = this.getModel(Product.class, "", true).set("barcode", MD5Util.getSystemKey())
+				.set("createuser", this.getCurrentUserId()).set("createdate", new Date());
 		product.save();
 		saveImgs(product.getId());
 		QRCodeUtil.generator(product.getId(), this.getRequest().getServletContext().getRealPath("/"));
@@ -65,7 +67,7 @@ public class ProductController extends AbstractController {
 		}
 		destDir.mkdirs();
 		String prdid = this.getPara("prdid");
-		File srcDir = getFileByStr(getDir(PropertiesUtil.getProductImgPath()) + prdid + Constant.SLASH);
+		File srcDir = getFileByStr(getDir(PropKit.get("product.img.path")) + prdid + Constant.SLASH);
 		String imgs = "";
 		if (srcDir.exists()) {
 			for (File record : srcDir.listFiles()) {
@@ -87,7 +89,7 @@ public class ProductController extends AbstractController {
 			String[] imgArray = imgs.split(Constant.COMMA);
 			Db.update("delete from productpic where productid=" + prdid);
 			String srcDirPath = getTempPath(getRequest());
-			String destDirPath = getDir(PropertiesUtil.getProductImgPath()) + prdid + Constant.SLASH;
+			String destDirPath = getDir(PropKit.get("product.img.path")) + prdid + Constant.SLASH;
 			File destDir = getFileByStr(destDirPath);
 			if (destDir.exists()) {
 				try {
@@ -160,9 +162,10 @@ public class ProductController extends AbstractController {
 	}
 
 	public void update() {
-		Product product = this.getModel(Product.class, "", true).set( "edituser", this.getCurrentUserId() ).set( "editdate", new Date() );
-		if(product.getStr( "barcode" ).isEmpty()){
-		  product.set( "barcode", MD5Util.getSystemKey() );
+		Product product = this.getModel(Product.class, "", true).set("edituser", this.getCurrentUserId())
+				.set("editdate", new Date());
+		if (product.getStr("barcode").isEmpty()) {
+			product.set("barcode", MD5Util.getSystemKey());
 		}
 		product.update();
 		saveImgs(product.getId());
