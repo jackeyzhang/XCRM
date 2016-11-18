@@ -12,10 +12,15 @@ import org.apache.commons.lang.StringUtils;
 
 import com.jfinal.aop.Before;
 import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.upload.UploadFile;
 import com.xcrm.common.AbstractController;
+import com.xcrm.common.AttributeFinder;
 import com.xcrm.common.AttributeID;
+import com.xcrm.common.Pager;
 import com.xcrm.common.barcode.QRCodeUtil;
+import com.xcrm.common.model.Attribute;
 import com.xcrm.common.model.Attributevalue;
 import com.xcrm.common.model.Product;
 import com.xcrm.common.model.Productpic;
@@ -28,6 +33,31 @@ public class ProductController extends AbstractController {
 	public void index() {
 		super.index();
 	}
+	
+	public void list() {
+	    Pager pager = new Pager();
+	    if(this.getPara("pageNumber") != null){
+	      int pagenumber = Integer.parseInt(this.getPara("pageNumber"));
+	      int pagesize = Integer.parseInt(this.getPara("pageSize"));
+	      int level1 = this.getParaToInt( "level1", 0 );
+	      int level2 = this.getParaToInt( "level2", 0 );
+	      Page<Record> page = Db.paginate(pagenumber, pagesize, "select * ", " from product " + ( level1 > 0? "where level1category= "+level1 : "") + ( level2 > 0? " and level2category= "+level2 : ""));
+	      pager = new Pager(page.getTotalRow(), page.getList());
+	    }else{
+	      List<Record> records = Db.find( "select * from " + getModalName() );
+	      pager = new Pager(records.size(), records);
+	    }
+	    List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList( getCategory() );
+	    for(Record record : pager.getRows()){
+	      for(Attribute attribute : attributes){
+	        Attributevalue av = Attributevalue.dao.findFirst( "select * from attributevalue where attributeid=? and objectid=? and category=?", attribute.getAttributeid(),record.getInt( "id" ), getCategory() );
+	        if(av == null) continue;
+	        record.set( "attribute-" + av.getAttributeid(), av.getValue() );
+	      }
+	    }
+	    this.renderJson( pager );
+	  
+	  }
 	
 	public void detail(){
 	  setAttribute();
