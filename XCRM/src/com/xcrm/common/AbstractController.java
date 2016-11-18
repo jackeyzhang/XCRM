@@ -14,6 +14,7 @@ import com.xcrm.common.model.Attribute;
 import com.xcrm.common.model.Attributevalue;
 import com.xcrm.common.util.Constant;
 import com.xcrm.common.util.PropertiesUtil;
+import com.jfinal.plugin.activerecord.Page;
 
 
 /**
@@ -40,6 +41,10 @@ public abstract class AbstractController extends Controller {
   }
 
   public abstract String getModalName();
+  
+  public Model getModel(){
+    return null;
+  }
 
   public abstract String getPageHeader();
 
@@ -50,16 +55,25 @@ public abstract class AbstractController extends Controller {
   public abstract int getCategory();
 
   public void list() {
-    List<Record> records = Db.find( "select * from " + getModalName() );
+    Pager pager = new Pager();
+    if(this.getPara("pageNumber") != null){
+      int pagenumber = Integer.parseInt(this.getPara("pageNumber"));
+      int pagesize = Integer.parseInt(this.getPara("pageSize"));
+      Page<Record> page = Db.paginate(pagenumber, pagesize, "select * ", "from " + getModalName() +"");
+      pager = new Pager(page.getTotalRow(), page.getList());
+    }else{
+      List<Record> records = Db.find( "select * from " + getModalName() );
+      pager = new Pager(records.size(), records);
+    }
     List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList( getCategory() );
-    for(Record record : records){
+    for(Record record : pager.getRows()){
       for(Attribute attribute : attributes){
         Attributevalue av = Attributevalue.dao.findFirst( "select * from attributevalue where attributeid=? and objectid=? and category=?", attribute.getAttributeid(),record.getInt( "id" ), getCategory() );
         if(av == null) continue;
         record.set( "attribute-" + av.getAttributeid(), av.getValue() );
       }
     }
-    this.renderJson( records );
+    this.renderJson( pager );
   
   }
 
