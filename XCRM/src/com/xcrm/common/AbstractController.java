@@ -4,6 +4,7 @@
 package com.xcrm.common;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import com.jfinal.core.Controller;
@@ -62,7 +63,14 @@ public abstract class AbstractController extends Controller {
       Page<Record> page = Db.paginate(pagenumber, pagesize, "select * ", "from " + getModalName() +"");
       pager = new Pager(page.getTotalRow(), page.getList());
       List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList( getCategory() );
-      for(Record record : pager.getRows()){
+      String searchword = this.getPara( "searchword" );
+      Iterator<Record> iter = pager.getRows().iterator();
+      for(;iter.hasNext();){
+        Record record = iter.next();
+        if(record.getStr( "name" ) != null && searchword != null && !record.getStr( "name" ).contains( searchword )){
+          iter.remove();
+          continue;
+        }
         for(Attribute attribute : attributes){
           Attributevalue av = Attributevalue.dao.findFirst( "select * from attributevalue where attributeid=? and objectid=? and category=?", attribute.getAttributeid(),record.getInt( "id" ), getCategory() );
           if(av == null) continue;

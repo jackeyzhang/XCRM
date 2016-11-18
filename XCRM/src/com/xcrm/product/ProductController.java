@@ -3,6 +3,7 @@ package com.xcrm.product;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,6 +43,15 @@ public class ProductController extends AbstractController {
 	      int level1 = this.getParaToInt( "level1", 0 );
 	      int level2 = this.getParaToInt( "level2", 0 );
 	      Page<Record> page = Db.paginate(pagenumber, pagesize, "select * ", " from product " + ( level1 > 0? "where level1category= "+level1 : "") + ( level2 > 0? " and level2category= "+level2 : ""));
+	      String searchword = this.getPara( "searchword" );
+	      Iterator<Record> iter = page.getList().iterator();
+	      for(;iter.hasNext();){
+	        Record record = iter.next();
+	        if(record.getStr( "name" ) != null && searchword != null && !record.getStr( "name" ).contains( searchword )){
+	          iter.remove();
+	          continue;
+	        }
+	      }
 	      pager = new Pager(page.getTotalRow(), page.getList());
 	    }else{
 	      List<Record> records = Db.find( "select * from " + getModalName() );

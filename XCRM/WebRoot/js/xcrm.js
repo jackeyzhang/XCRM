@@ -56,7 +56,8 @@ $(function() {
 	      pageSize: params.limit,   //页面大小  
 	      pageNumber: params.offset/params.limit + 1,  //页码  
 	      level1: $("#level1searchcategory").val(),  
-	      level2: $("#level2searchcategory").val()
+	      level2: $("#level2searchcategory").val(),
+	      searchword:params.search
 	    };  
 	    return temp; 
 	}

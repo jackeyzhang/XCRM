@@ -15,12 +15,18 @@
       
        $('#level1searchcategory').change(function() {
            $('#level2searchcategory').empty();
+           $('#level2searchcategory').append("<option value=''>请选择产品小类...</option>");
            for( c in level2){
              if(level2[c].pid == $(this).children('option:selected').val()){
                 $('#level2searchcategory').append("<option value='" + level2[c].id + "'>" + level2[c].name + "</option>");
              }
            }
+           $('#table').bootstrapTable('refresh');
       });
+       
+       $('#level2searchcategory').change(function() {
+    	   $('#table').bootstrapTable('refresh');
+       });
       
   });
   </script>
