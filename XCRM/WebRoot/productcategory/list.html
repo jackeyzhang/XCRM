@@ -1,0 +1,30 @@
+<script>
+	var toplevellist;
+	$.get('/productcategory/listtoplevel/', function(data) {
+		toplevellist = data;
+	});
+
+	function levelformmater(value, row) {
+		if (value == '1') {
+			return '产品大类';
+		} else if (value == '2') {
+			return '产品小类';
+		}
+		return "未分类";
+	}
+	
+	function parentformmater(value, row){
+		for(d in toplevellist){
+			if(value == toplevellist[d].id){
+				return toplevellist[d].name;
+			}
+		}
+		return "不存在上级";
+	}
+	
+	
+</script>
+
+<th data-field="level" data-formatter="levelformmater">分类级别</th>
+<th data-field="pid" data-formatter="parentformmater">上级分类</th>
+<th data-field="name">分类名称</th>

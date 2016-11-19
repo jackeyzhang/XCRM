@@ -1,0 +1,48 @@
+<script>
+  $(function() {
+      var level1;
+      $.get('/productcategory/listtoplevel/', function(data){
+        level1 = data;
+        for( d in data){
+          $('#level1searchcategory').append("<option value='" + data[d].id + "'>" + data[d].name + "</option>");
+        }
+      });
+      
+      var level2;
+      $.get('/productcategory/listsecondlevel/', function(data){
+       level2 =data;
+      });
+      
+       $('#level1searchcategory').change(function() {
+           $('#level2searchcategory').empty();
+           $('#level2searchcategory').append("<option value=''>请选择产品小类...</option>");
+           for( c in level2){
+             if(level2[c].pid == $(this).children('option:selected').val()){
+                $('#level2searchcategory').append("<option value='" + level2[c].id + "'>" + level2[c].name + "</option>");
+             }
+           }
+           $('#table').bootstrapTable('refresh');
+      });
+       
+       $('#level2searchcategory').change(function() {
+    	   $('#table').bootstrapTable('refresh');
+       });
+      
+  });
+  </script>
+<p class="toolbar">
+<div class="col-md-1" style="margin-top: 10px; padding-left: 0px;">
+	<a class="create btn btn-primary" href="javascript:">${toolbar_create}</a>
+</div>
+<div class="col-md-2" style="margin-top: 10px;">
+	<select class="form-control selector" name="level1category" id="level1searchcategory">
+		<option value="">请选择产品大类...</option>
+	</select>
+</div>
+<div class="col-md-2" style="margin-top: 10px;">
+	<select class="form-control selector" name="level2category" id="level2searchcategory">
+		<option value="">请选择产品小类...</option>
+	</select>
+</div>
+<span class="alert"></span>
+</p>

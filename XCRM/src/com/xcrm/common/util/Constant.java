@@ -15,6 +15,7 @@ public class Constant {
 	/**
 	 * category constant
 	 */
+	public static final int CATEGORY_OTHER     = 0;
 	public static final int CATEGORY_PRODUCT   = 1;
 	public static final int CATEGORY_CUSTOMER  = 2;
 	public static final int CATEGORY_USER      = 3;

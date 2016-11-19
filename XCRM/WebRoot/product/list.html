@@ -7,10 +7,40 @@ function productnameformmater( value, row ){
 	return value;
 }
 
+var toplevellist;
+$.get('/productcategory/listtoplevel/', function(data) {
+  toplevellist = data;
+});
+
+var secondlevellist;
+$.get('/productcategory/listsecondlevel/', function(data) {
+	secondlevellist = data;
+});
+
+function level1categoryformmater(value, row){
+  for(d in toplevellist){
+    if(value == toplevellist[d].id){
+      return toplevellist[d].name;
+    }
+  }
+  return "";
+}
+
+function level2categoryformmater(value, row){
+	  for(d in secondlevellist){
+	    if(value == secondlevellist[d].id){
+	      return secondlevellist[d].name;
+	    }
+	  }
+	  return "";
+	}
+
 </script>
 
 <th data-field="name" data-formatter="productnameformmater">产品名称</th>
-<th data-field="barcode">产品标识码</th>
+<!-- <th data-field="barcode">产品标识码</th> -->
+<th data-field="level1category" data-formatter="level1categoryformmater">产品大类</th>
+<th data-field="level2category" data-formatter="level2categoryformmater">产品小类</th>
 <!-- <th data-field="count">数量</th>
 <th data-field="period">交货期限</th> -->
 <th data-field="remark">备注</th>

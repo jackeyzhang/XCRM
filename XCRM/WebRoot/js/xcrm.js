@@ -7,11 +7,14 @@ $(function() {
 		$alert : $('.alert').hide(),
 		$table : $('#table').bootstrapTable({
 			url : API_URL,
+			queryParams: queryParams,
+			queryParamsType: "limit",
 			pageNumber: 1,
 			pageList: [10, 25, 50, 100],
 			clickToSelect:true,
 			showExport: true,
 			exportDataType: "basic",
+			sidePagination: "server",//表格分页的位置  
             onEditableSave: function (field, row, oldValue, $el) {
                 $.ajax({
                     type: "post",
@@ -28,7 +31,6 @@ $(function() {
                     complete: function () {
 
                     }
-
                 });
              }
 		}),
@@ -47,6 +49,17 @@ $(function() {
 			editable: true,
 			eventLimit: true // allow "more" link when too many events
 		})
+	}
+	
+	function queryParams(params){
+	    var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的  
+	      pageSize: params.limit,   //页面大小  
+	      pageNumber: params.offset/params.limit + 1,  //页码  
+	      level1: $("#level1searchcategory").val(),  
+	      level2: $("#level2searchcategory").val(),
+	      searchword:params.search
+	    };  
+	    return temp; 
 	}
 	
 	$("[data-toggle='tooltip']").tooltip();
@@ -243,3 +256,4 @@ function active(row){
 		})
 	}
 }
+
