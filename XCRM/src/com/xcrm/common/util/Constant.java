@@ -21,4 +21,5 @@ public class Constant {
 	public static final int CATEGORY_USER      = 3;
 	public static final int CATEGORY_STORE     = 4;
 	public static final int CATEGORY_SCHEDULE  = 5;
+	public static final int CATEGORY_PRICE     = 6;
 }
