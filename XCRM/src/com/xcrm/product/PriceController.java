@@ -5,7 +5,7 @@ import com.xcrm.common.AbstractController;
 import com.xcrm.common.util.Constant;
 
 @Before(ProductInterceptor.class)
-public class PackageController extends AbstractController {
+public class PriceController extends AbstractController {
   
 	public void index() {
 		super.index();
@@ -14,12 +14,12 @@ public class PackageController extends AbstractController {
 
 	@Override
 	public String getModalName() {
-		return "package";
+		return "price";
 	}
 
 	@Override
 	public String getPageHeader() {
-		return "套餐设置";
+		return "价格设置";
 	}
 
 	@Override
@@ -29,7 +29,7 @@ public class PackageController extends AbstractController {
 
 	@Override
 	public String getIndexHtml() {
-		return "package.html";
+		return "price.html";
 	}
 
 	@Override
