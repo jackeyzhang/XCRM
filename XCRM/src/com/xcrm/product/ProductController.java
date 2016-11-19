@@ -33,25 +33,7 @@ import com.xcrm.common.util.MD5Util;
 public class ProductController extends AbstractController {
 	public void index() {
 		super.index();
-<<<<<<< HEAD
 		this.setAttr("imgMaxCount", PropKit.get("product.img.maxsize"));
-	}
-
-	public void detail() {
-		setAttribute();
-		Product product = Product.dao.findFirst("select * from product where barcode =?", this.getPara("barcode"));
-		List<Productpic> pics = Productpic.dao.find("select * from productpic where productid=?", product.getId());
-		List<Attributevalue> attributevalues = Attributevalue.dao.find("select * from attributevalue where objectid=?",
-				product.getId());
-		setAttr("page_header", "产品详细信息");
-		setAttr("product_color", AttributeID.getValue(attributevalues, AttributeID.PRD_COLOR));
-		setAttr("product_size", AttributeID.getValue(attributevalues, AttributeID.PRD_SIZE));
-		setAttr("product_depatment", AttributeID.getValue(attributevalues, AttributeID.PRD_DEPARTMENT));
-		setAttr("product_material", AttributeID.getValue(attributevalues, AttributeID.PRD_MATERIAL));
-		setAttr("prdimages", pics);
-		setAttr("product", product);
-		render("productdetail.html");
-=======
 	}
 	
 	public void list() {
@@ -101,7 +83,6 @@ public class ProductController extends AbstractController {
 	  setAttr( "prdimages", pics );
 	  setAttr( "product", product );
 	  render( "productdetail.html" );
->>>>>>> de65cc6e17c0d53992bb7f8a2fc44469f76636e2
 	}
 
 	public void save() {
