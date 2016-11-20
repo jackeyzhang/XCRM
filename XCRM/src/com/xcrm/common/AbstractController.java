@@ -10,12 +10,12 @@ import java.util.List;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
+import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.xcrm.common.model.Attribute;
 import com.xcrm.common.model.Attributevalue;
 import com.xcrm.common.util.Constant;
-import com.xcrm.common.util.PropertiesUtil;
-import com.jfinal.plugin.activerecord.Page;
+import com.xcrm.common.util.PropUtil;
 
 
 /**
@@ -38,7 +38,6 @@ public abstract class AbstractController extends Controller {
     setAttr( "page_header", getPageHeader() );
     setAttr( "toolbar_create", getToolBarAddButtonTitle() );
     setAttr( "attriutes", AttributeFinder.getInstance().getAllAttributeList( getCategory() ) );
-    setAttr("imgMaxCount", PropertiesUtil.getProductImgMaxSize());
   }
 
   public abstract String getModalName();
@@ -126,6 +125,35 @@ public abstract class AbstractController extends Controller {
     Object user = getSessionAttr( Constant.CUR_USER );
     int storeid = (Integer) ( (HashMap)user ).get( "storeid" );
     return storeid;
+  }
+  
+  public String getRealPath() {
+    return this.getRequest().getServletContext().getRealPath("/") + Constant.SLASH ;
+  }
+  
+  public String getTempImgPath() {
+    return this.getRealPath() + Constant.TEMP_IMG + Constant.SLASH
+            + getCurrentUserId() + Constant.SLASH;
+  }
+  
+  public String getPrdImgPath(String prdid){
+    String path =  PropUtil.getPrdImgPath() + Constant.SLASH + prdid + Constant.SLASH;
+    if(PropUtil.isDevMode()){
+      path =  this.getRealPath() + path;
+    }
+    return path;
+  }
+  
+  public String getPrdImgBaseUrl(){
+    String url = PropUtil.getPrdImgPath() + Constant.SLASH;
+    if(PropUtil.isDevMode()){
+      url =  Constant.SLASH + url;
+    }else{
+      //TODO:if product env is stand alone image server, 
+      //need provide the image domain, now devMode and prdMode use the same url. 
+      url =  Constant.SLASH + url;
+    }
+    return url;
   }
 
 }

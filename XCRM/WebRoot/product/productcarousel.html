@@ -35,12 +35,12 @@
 			<div class="carousel-inner">
 				<#assign x=0/> <#list prdimages as prdimg> <#if x==0>
 				<div class="active item" data-slide-number="${x}">
-					<img src="/img/${prdimg.productid}/${prdimg.fielname}"
+					<img src="${prdimg_path}/${prdimg.productid}/${prdimg.fielname}"
 						class="img-responsive img-thumbnail" style="height: 400px;">
 				</div>
 				<#else>
 				<div class="item" data-slide-number="${x}">
-					<img src="/img/${prdimg.productid}/${prdimg.fielname}"
+					<img src="${prdimg_path}/${prdimg.productid}/${prdimg.fielname}"
 						class="img-responsive img-thumbnail" style="height: 400px;">
 				</div>
 				</#if> <#assign x=x+1/> </#list>
@@ -69,7 +69,7 @@
 			<ul class="list-inline">
 				<#assign y=0/> <#list prdimages as prdimg>
 				<li><a id="carousel-selector-${y}" class="selected"> <img
-						src="/img/${prdimg.productid}/${prdimg.fielname}"
+						src="${prdimg_path}/${prdimg.productid}/${prdimg.fielname}"
 						class="img-responsive" style="width: 80px;">
 				</a></li> <#assign y=y+1/> </#list>
 			</ul>

@@ -1,6 +1,8 @@
+.classpath
 /.settings/
 /WebRoot/WEB-INF/classes
 /target/
 *.log
 /WebRoot/temp_img/
-/img/
+/WebRoot/biz_img/
+/WebRoot/barcode/

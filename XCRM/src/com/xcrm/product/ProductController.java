@@ -6,13 +6,10 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.jfinal.aop.Before;
-import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
@@ -28,12 +25,13 @@ import com.xcrm.common.model.Product;
 import com.xcrm.common.model.Productpic;
 import com.xcrm.common.util.Constant;
 import com.xcrm.common.util.MD5Util;
+import com.xcrm.common.util.PropUtil;
 
 @Before(ProductInterceptor.class)
 public class ProductController extends AbstractController {
 	public void index() {
 		super.index();
-		this.setAttr("imgMaxCount", PropKit.get("product.img.maxsize"));
+		this.setAttr("imgMaxCount", PropUtil.getPrdImgMaxSize());
 	}
 	
 	public void list() {
@@ -75,16 +73,18 @@ public class ProductController extends AbstractController {
 	  Product product = Product.dao.findFirst( "select * from product where barcode =?", this.getPara("barcode" ) );
 	  List<Productpic> pics = Productpic.dao.find( "select * from productpic where productid=?", product.getId() );
 	  List<Attributevalue> attributevalues = Attributevalue.dao.find( "select * from attributevalue where objectid=?", product.getId() );
+	  
 	  setAttr( "page_header", "产品详细信息" );
 	  setAttr( "product_color", AttributeID.getValue( attributevalues, AttributeID.PRD_COLOR ) );
 	  setAttr( "product_size", AttributeID.getValue( attributevalues, AttributeID.PRD_SIZE ) );
 	  setAttr( "product_depatment", AttributeID.getValue( attributevalues, AttributeID.PRD_DEPARTMENT ) );
 	  setAttr( "product_material", AttributeID.getValue( attributevalues, AttributeID.PRD_MATERIAL ) );
+	  setAttr( "prdimg_path", getPrdImgBaseUrl() );
 	  setAttr( "prdimages", pics );
 	  setAttr( "product", product );
 	  render( "productdetail.html" );
 	}
-
+	
 	public void save() {
 		Product product = this.getModel(Product.class, "", true).set("barcode", MD5Util.getSystemKey())
 				.set("createuser", this.getCurrentUserId()).set("createdate", new Date());
@@ -95,7 +95,7 @@ public class ProductController extends AbstractController {
 	}
 
 	public void loadimgs() {
-		String destDirPath = getTempPath(getRequest());
+		String destDirPath = getTempImgPath();
 		File destDir = getFileByStr(destDirPath);
 		if (destDir.exists()) {
 			try {
@@ -106,7 +106,7 @@ public class ProductController extends AbstractController {
 		}
 		destDir.mkdirs();
 		String prdid = this.getPara("prdid");
-		File srcDir = getFileByStr(getDir(PropKit.get("product.img.path")) + prdid + Constant.SLASH);
+		File srcDir = getFileByStr(getPrdImgPath(prdid));
 		String imgs = "";
 		if (srcDir.exists()) {
 			for (File record : srcDir.listFiles()) {
@@ -121,14 +121,15 @@ public class ProductController extends AbstractController {
 		}
 		this.renderJson("{\"imgs\":\"" + imgs + "\"}");
 	}
-
+	
 	public void saveImgs(int prdid) {
 		String imgs = this.getPara("imgs");
+		System.out.println(this.getClass().getResource("/").getFile());
 		if (!StringUtils.isEmpty(imgs)) {
 			String[] imgArray = imgs.split(Constant.COMMA);
 			Db.update("delete from productpic where productid=" + prdid);
-			String srcDirPath = getTempPath(getRequest());
-			String destDirPath = getDir(PropKit.get("product.img.path")) + prdid + Constant.SLASH;
+			String srcDirPath = getTempImgPath();
+			String destDirPath = getPrdImgPath(String.valueOf(prdid));
 			File destDir = getFileByStr(destDirPath);
 			if (destDir.exists()) {
 				try {
@@ -159,23 +160,6 @@ public class ProductController extends AbstractController {
 		}
 	}
 
-	public String getDir(String path) {
-		if (StringUtils.isEmpty(path)) {
-			throw new RuntimeException("path is empty");
-		} else {
-			if (!path.endsWith(Constant.SLASH)) {
-				return path + Constant.SLASH;
-			} else {
-				return path;
-			}
-		}
-	}
-
-	public String getTempPath(HttpServletRequest request) {
-		return request.getServletContext().getRealPath("/") + Constant.SLASH + Constant.TEMP_IMG + Constant.SLASH
-				+ getCurrentUserId() + Constant.SLASH;
-	}
-
 	private File getFileByStr(String str) {
 		return new File(str);
 	}
@@ -183,7 +167,7 @@ public class ProductController extends AbstractController {
 	public void upload() {
 		UploadFile uploadFile = this.getFile();
 		if (uploadFile != null) {
-			String destDir = getTempPath(getRequest());
+			String destDir = getTempImgPath();
 			synchronized (Integer.valueOf(getCurrentUserId())) {
 				getFileByStr(destDir).mkdirs();
 			}
@@ -199,7 +183,7 @@ public class ProductController extends AbstractController {
 		}
 		this.renderJson();
 	}
-
+	
 	public void update() {
 		Product product = this.getModel(Product.class, "", true).set("edituser", this.getCurrentUserId())
 				.set("editdate", new Date());
