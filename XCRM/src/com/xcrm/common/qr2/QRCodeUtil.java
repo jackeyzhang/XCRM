@@ -1,4 +1,4 @@
-package com.xcrm.common.barcode;
+package com.xcrm.common.qr2;
 
 import java.awt.BasicStroke;
 import java.awt.Graphics;
@@ -242,10 +242,10 @@ public class QRCodeUtil {
     return QRCodeUtil.decode(new File(path));
   }
 
-  public static void generator(int prdid, String basePath) {
+  public static void generator(int prdid, String basePath, String qr2Path) {
     String text = "http://baidu.com?prdid=" + prdid;
     String logo = basePath + Constant.SLASH + "favicon.ico";
-    String barcode = basePath + Constant.SLASH + "barcode";
+    String barcode = basePath + Constant.SLASH + qr2Path + Constant.SLASH;
     try {
       QRCodeUtil.encode(text, logo, barcode, String.valueOf(prdid), true);
     } catch (Exception e) {

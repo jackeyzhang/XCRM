@@ -12,8 +12,16 @@ public class PropUtil {
     return PropKit.get("product.img.path");
   }
 
+  public static String getPrdQr2Path() {
+    return PropKit.get("product.qr2.path");
+  }
+
   public static boolean isDevMode() {
     return PropKit.getBoolean("devMode");
+  }
+
+  public static String getImgDomain() {
+    return PropKit.get("img.domain");
   }
 
 }
