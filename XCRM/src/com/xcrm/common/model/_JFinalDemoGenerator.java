@@ -14,7 +14,7 @@ import com.xcrm.common.config.XCRMConfig;
 public class _JFinalDemoGenerator {
 	
 	public static DataSource getDataSource() {
-		PropKit.use("a_little_config.txt");
+		PropKit.use("xcrm.properties");
 		C3p0Plugin c3p0Plugin = XCRMConfig.createC3p0Plugin();
 		c3p0Plugin.start();
 		return c3p0Plugin.getDataSource();

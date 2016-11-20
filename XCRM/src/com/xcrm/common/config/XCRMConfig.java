@@ -43,6 +43,7 @@ public class XCRMConfig extends JFinalConfig {
     PropKit.use("xcrm.properties");
     me.setDevMode(PropKit.getBoolean("devMode", false));
     me.setBaseUploadPath(Constant.TEMP_IMG);
+    me.setEncoding("gbk");
   }
 
   /**
