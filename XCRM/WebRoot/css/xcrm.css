@@ -13,3 +13,8 @@
 	top: -1000px;
 	bottom: -1000px;
 }
+
+.selected img {
+	opacity: 0.5;
+	border: 2px solid orange;
+}

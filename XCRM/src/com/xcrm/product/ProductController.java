@@ -25,15 +25,9 @@ import com.xcrm.common.model.Product;
 import com.xcrm.common.model.Productpic;
 import com.xcrm.common.util.Constant;
 import com.xcrm.common.util.MD5Util;
-import com.xcrm.common.util.PropUtil;
 
 @Before(ProductInterceptor.class)
 public class ProductController extends AbstractController {
-	public void index() {
-		super.index();
-		this.setAttr("imgMaxCount", PropUtil.getPrdImgMaxSize());
-	}
-	
 	public void list() {
 	    Pager pager = new Pager();
 	    if(this.getPara("pageNumber") != null){
@@ -90,7 +84,7 @@ public class ProductController extends AbstractController {
 				.set("createuser", this.getCurrentUserId()).set("createdate", new Date());
 		product.save();
 		saveImgs(product.getId());
-		QRCodeUtil.generator(product.getId(), this.getRequest().getServletContext().getRealPath("/"));
+		QRCodeUtil.generator(product.getId(), getRealPath());
 		forwardIndex(product);
 	}
 
@@ -124,7 +118,6 @@ public class ProductController extends AbstractController {
 	
 	public void saveImgs(int prdid) {
 		String imgs = this.getPara("imgs");
-		System.out.println(this.getClass().getResource("/").getFile());
 		if (!StringUtils.isEmpty(imgs)) {
 			String[] imgArray = imgs.split(Constant.COMMA);
 			Db.update("delete from productpic where productid=" + prdid);

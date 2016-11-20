@@ -38,6 +38,7 @@ public abstract class AbstractController extends Controller {
     setAttr( "page_header", getPageHeader() );
     setAttr( "toolbar_create", getToolBarAddButtonTitle() );
     setAttr( "attriutes", AttributeFinder.getInstance().getAllAttributeList( getCategory() ) );
+    setAttr( "imgMaxCount", PropUtil.getPrdImgMaxSize());
   }
 
   public abstract String getModalName();

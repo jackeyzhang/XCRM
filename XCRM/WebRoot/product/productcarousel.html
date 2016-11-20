@@ -20,60 +20,84 @@
 			$('[id=carousel-selector-' + id + ']').addClass('selected');
 		});
 
+		$("#print").click(function() {
+			$('.printarea').printArea({
+				mode : 'popup',
+				popClose : 'false',
+				extraCss : '',
+				retainAttr : '',
+				extraHead : ''
+			});
+		});
+
 	});
 </script>
-<style>
-.selected img {
-	opacity: 0.5;
-	border: 2px solid orange;
-}
-</style>
 <div class="row">
-	<div class="col-md-6" id="carousel-bounding-box">
-		<div id="productCarousel" class="carousel slide">
-			<#if prdimages?size != 0>
-			<div class="carousel-inner">
-				<#assign x=0/> <#list prdimages as prdimg> <#if x==0>
-				<div class="active item" data-slide-number="${x}">
-					<img src="${prdimg_path}/${prdimg.productid}/${prdimg.fielname}"
-						class="img-responsive img-thumbnail" style="height: 400px;">
-				</div>
-				<#else>
-				<div class="item" data-slide-number="${x}">
-					<img src="${prdimg_path}/${prdimg.productid}/${prdimg.fielname}"
-						class="img-responsive img-thumbnail" style="height: 400px;">
-				</div>
-				</#if> <#assign x=x+1/> </#list>
+	<div id="productCarousel" class="carousel slide col-md-4">
+		<#if prdimages?size !=0>
+		<div class="carousel-inner">
+			<#assign x=0 />
+			<#list prdimages as prdimg> <#if x==0>
+			<div class="active item" data-slide-number="${x}">
+				<img src="${prdimg_path}/${prdimg.productid}/${prdimg.fielname}"
+					class="img-responsive img-thumbnail">
 			</div>
-			</#if>
+			<#else>
+			<div class="item" data-slide-number="${x}">
+				<img src="${prdimg_path}/${prdimg.productid}/${prdimg.fielname}"
+					class="img-responsive img-thumbnail">
+			</div></#if> <#assign x=x+1 /> </#list>
 		</div>
-	</div>
-	<div class="col-md-6">
-		<div class="panel panel-success">
-			<div class="panel-heading"><h2>${product.name}  <!-- <small><a class="update"
-        href="javascript:showModal('编辑-${product.name}','${product}')"
-        title="编辑">编辑</a></small> --></h2>
-			</div>
-			<div class="panel-body">
-				<p class="lead"><b>颜色:  </b>${product_color}</small></p>
-				<p class="lead"><b>尺寸:  </b>${product_size}</p>
-				<p class="lead"><b>工作部门: </b>${product_depatment}</p>
-				<p class="lead"><b>材质:  </b>${product_material}</p>
-			</div>
-		</div>
-	</div>
-</div>
-	<#if prdimages?size != 0>
-	<div class="row">
-		<div class="col-md-6 hidden-sm hidden-xs" id="slider-thumbs">
+		<div class="hidden-sm hidden-xs" id="slider-thumbs">
 			<ul class="list-inline">
-				<#assign y=0/> <#list prdimages as prdimg>
+				<#assign y=0 />
+				<#list prdimages as prdimg>
 				<li><a id="carousel-selector-${y}" class="selected"> <img
 						src="${prdimg_path}/${prdimg.productid}/${prdimg.fielname}"
 						class="img-responsive" style="width: 80px;">
-				</a></li> <#assign y=y+1/> </#list>
+				</a></li>
+				<#assign y=y+1 /> </#list>
 			</ul>
-		</div>
-		<div class="col-md-6"></div>
 		</#if>
 	</div>
+</div>
+<div class="col-md-8">
+	<div class="panel panel-success">
+		<div class="panel-heading">
+			<h2>
+				${product.name}
+				<!-- <small><a class="update"
+        href="javascript:showModal('编辑-${product.name}','${product}')"
+        title="编辑">编辑</a></small> -->
+			</h2>
+		</div>
+		<div class="panel-body">
+			<p class="lead">
+				<b>颜色: </b>${product_color}</small>
+			</p>
+			<p class="lead">
+				<b>尺寸: </b>${product_size}
+			</p>
+			<p class="lead">
+				<b>工作部门: </b>${product_depatment}
+			</p>
+			<p class="lead">
+				<b>材质: </b>${product_material}
+			</p>
+			<p class="lead">
+				<b style="float: left">二维码: </b>
+			<div style="float: left;">
+				<div class="printarea">
+					<div>
+						<img alt="" width="100px" src="/barcode/${product.id}.jpg" />
+						<div style="text-align: left">名称:${product.name}</div>
+					</div>
+				</div>
+				<button id="print" style="width: 100%" type="button"
+					class="btn btn-primary btn-xs">打印</button>
+			</div>
+			</p>
+		</div>
+	</div>
+</div>
+</div>
