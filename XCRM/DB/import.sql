@@ -159,7 +159,12 @@ CREATE TABLE `price` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
-
+DROP TABLE  IF EXISTS contract;
+CREATE TABLE `contract` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+   `path` varchar(200) ,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='合同表';
 
 

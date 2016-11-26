@@ -65,6 +65,7 @@ $(function() {
 	$("[data-toggle='tooltip']").tooltip();
 
 	$('.create').click(function() {
+		if(!xcpage.$form[0])return;
 		xcpage.$form[0].reset();//reset form
 		if(xcpage.precreate){
 			xcpage.precreate(xcpage.precreate.args);

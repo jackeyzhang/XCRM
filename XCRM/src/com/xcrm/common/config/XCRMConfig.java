@@ -18,6 +18,7 @@ import com.xcrm.attribute.AttributeInterceptor;
 import com.xcrm.attribute.AttributeidController;
 import com.xcrm.common.model._MappingKit;
 import com.xcrm.common.util.Constant;
+import com.xcrm.contract.ContractController;
 import com.xcrm.customer.CustomerController;
 import com.xcrm.index.IndexController;
 import com.xcrm.login.LoginController;
@@ -61,6 +62,7 @@ public class XCRMConfig extends JFinalConfig {
     me.add("/attributeid", AttributeidController.class);
     me.add("/attribute", AttributeController.class);
     me.add("/productcategory", ProductcategoryController.class);
+    me.add("/contract", ContractController.class);
   }
 
   public static C3p0Plugin createC3p0Plugin() {

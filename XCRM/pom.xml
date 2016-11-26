@@ -76,6 +76,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-jsp</artifactId>
+			<version>8.1.8.v20121106</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-webapp</artifactId>
 			<version>8.1.8.v20121106</version>
 		</dependency>
@@ -119,5 +124,16 @@
 			<artifactId>core</artifactId>
 			<version>3.3.0</version>
 		</dependency>
+		<dependency>
+			<groupId>cn.songxinqiang</groupId>
+			<artifactId>com.baidu.ueditor</artifactId>
+			<version>1.1.2-offical</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>2.2</version>
+		</dependency>
+
 	</dependencies>
 </project>
