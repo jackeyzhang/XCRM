@@ -151,13 +151,14 @@ CREATE TABLE `price` (
   `store` int(11) DEFAULT NULL,
   `enable` int(2) DEFAULT NULL COMMENT '0 false\n1 true',
   `default` int(2) DEFAULT '1' COMMENT '0 false\n1 true',
-  `price` decimal(10,0) DEFAULT NULL,
+  `price` float DEFAULT NULL,
   `createtime` datetime DEFAULT NULL,
   `createuser` int(11) DEFAULT NULL,
   `updatetime` datetime DEFAULT NULL,
   `updateuser` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
 
 
 

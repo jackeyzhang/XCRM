@@ -57,11 +57,11 @@ public abstract class BasePrice<M extends BasePrice<M>> extends Model<M> impleme
 		return get("default");
 	}
 
-	public void setPrice(java.math.BigDecimal price) {
+	public void setPrice(java.lang.Float price) {
 		set("price", price);
 	}
 
-	public java.math.BigDecimal getPrice() {
+	public java.lang.Float getPrice() {
 		return get("price");
 	}
 
