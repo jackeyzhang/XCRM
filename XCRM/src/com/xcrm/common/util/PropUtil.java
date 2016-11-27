@@ -11,6 +11,10 @@ public class PropUtil {
   public static String getPrdImgPath() {
     return PropKit.get("product.img.path");
   }
+  
+  public static String getContractTemplatePath() {
+	    return PropKit.get("contract.template.path");
+	  }
 
   public static String getPrdQr2Path() {
     return PropKit.get("product.qr2.path");

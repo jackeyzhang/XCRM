@@ -26,6 +26,7 @@ public class _MappingKit {
 		arp.addMapping("productpic", "id", Productpic.class);
 		arp.addMapping("store", "id", Store.class);
 		arp.addMapping("user", "id", User.class);
+		arp.addMapping("contract", "id", Contract.class);
 	}
 }
 

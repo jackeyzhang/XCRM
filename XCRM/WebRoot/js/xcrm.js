@@ -15,6 +15,10 @@ $(function() {
 			showExport: true,
 			exportDataType: "basic",
 			sidePagination: "server",//表格分页的位置  
+			onLoadSuccess:function(data){
+				if(xcpage.tableInitHandler)
+					xcpage.tableInitHandler(data);
+			},
             onEditableSave: function (field, row, oldValue, $el) {
                 $.ajax({
                     type: "post",
