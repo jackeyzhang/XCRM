@@ -14,14 +14,22 @@ $(function() {
 
 <div class="form-group">
   <label>产品</label> 
-    <select class="form-control selector" name="product" id="productselect">
+    <select class="form-control selector" name="product" id="productselect" required>
        <option value="">请选择...</option>
    </select>
+   <div class="help-block with-errors"></div>
 </div>
 
 <div class="form-group">
-	<label>价格设置</label> <input type="text" class="form-control"
-		name="price" placeholder="">
+	<label>价格</label> <input type="text" class="form-control"
+		name="price" placeholder="" required>
+		<div class="help-block with-errors"></div>
+</div>
+
+<div class="form-group">
+  <label>库存</label> <input type="number" class="form-control"
+    name="count" placeholder="" required>
+    <div class="help-block with-errors"></div>
 </div>
 
 <div class="form-group">

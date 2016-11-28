@@ -41,12 +41,12 @@ public abstract class BasePrice<M extends BasePrice<M>> extends Model<M> impleme
 		return get("store");
 	}
 
-	public void setEnable(java.lang.Integer enable) {
-		set("enable", enable);
+	public void setPrice(java.lang.Float price) {
+		set("price", price);
 	}
 
-	public java.lang.Integer getEnable() {
-		return get("enable");
+	public java.lang.Float getPrice() {
+		return get("price");
 	}
 
 	public void setDefault(java.lang.Integer _default) {
@@ -57,12 +57,12 @@ public abstract class BasePrice<M extends BasePrice<M>> extends Model<M> impleme
 		return get("default");
 	}
 
-	public void setPrice(java.lang.Float price) {
-		set("price", price);
+	public void setEnable(java.lang.Integer enable) {
+		set("enable", enable);
 	}
 
-	public java.lang.Float getPrice() {
-		return get("price");
+	public java.lang.Integer getEnable() {
+		return get("enable");
 	}
 
 	public void setCreatetime(java.util.Date createtime) {
@@ -95,6 +95,14 @@ public abstract class BasePrice<M extends BasePrice<M>> extends Model<M> impleme
 
 	public java.lang.Integer getUpdateuser() {
 		return get("updateuser");
+	}
+
+	public void setCount(java.lang.Integer count) {
+		set("count", count);
+	}
+
+	public java.lang.Integer getCount() {
+		return get("count");
 	}
 
 }

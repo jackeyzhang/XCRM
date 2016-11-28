@@ -149,15 +149,17 @@ CREATE TABLE `price` (
   `name` varchar(45) NOT NULL,
   `product` int(11) DEFAULT NULL,
   `store` int(11) DEFAULT NULL,
-  `enable` int(2) DEFAULT NULL COMMENT '0 false\n1 true',
-  `default` int(2) DEFAULT '1' COMMENT '0 false\n1 true',
   `price` float DEFAULT NULL,
+  `default` int(2) DEFAULT '1' COMMENT '0 false\n1 true',
+  `enable` int(2) DEFAULT NULL COMMENT '0 false\n1 true',
   `createtime` datetime DEFAULT NULL,
   `createuser` int(11) DEFAULT NULL,
   `updatetime` datetime DEFAULT NULL,
   `updateuser` int(11) DEFAULT NULL,
+  `count` int(11) DEFAULT NULL COMMENT '库存',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
 
 
 DROP TABLE  IF EXISTS contract;
