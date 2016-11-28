@@ -1,9 +1,50 @@
+<script>
+$(function() {
+  // get product list
+  for( d in productList){
+    $('#productselect').append("<option value='" + productList[d].id + "'>" + productList[d].name + "</option>");
+  }
+});
+</script>
 <div class="form-group">
 	<label>名称</label> <input type="text" class="form-control"
 		name="name" placeholder="名称" data-required-error="名称不能为空" required>
 	<div class="help-block with-errors"></div>
 </div>
+
+<div class="form-group">
+  <label>产品</label> 
+    <select class="form-control selector" name="product" id="productselect">
+       <option value="">请选择...</option>
+   </select>
+</div>
+
 <div class="form-group">
 	<label>价格设置</label> <input type="text" class="form-control"
 		name="price" placeholder="">
 </div>
+
+<div class="form-group">
+    <label>设置有效</label>
+    <div>
+      <label class="checkbox-inline">
+        <input type="radio" id="inlineCheckbox1" value="1" name="enable">生效
+      </label>
+      <label class="checkbox-inline">
+        <input type="radio" id="inlineCheckbox2" value="0" name="enable">失效
+      </label>
+     </div>
+</div>
+
+<div class="form-group">
+    <label>是否默认价格表</label>
+    <div>
+      <label class="checkbox-inline">
+        <input type="radio" id="inlineCheckbox3" value="1" name="default">是
+      </label>
+      <label class="checkbox-inline">
+        <input type="radio" id="inlineCheckbox4" value="0" name="default">否
+      </label>
+     </div>
+</div>
+

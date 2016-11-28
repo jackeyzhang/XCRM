@@ -1,2 +1,36 @@
+<script>
+var productList;
+//get product list
+$.get('/product/list/', function(data){
+productList = data.rows;
+});
+
+function enableformatter( value, row ){
+	if(value == "1"){
+	    return "有效";
+	  }else{
+	    return "失效";
+	  }
+}
+
+function defaultformatter( value, row ){
+	 if(value == "1"){
+	      return "是";
+	    }else{
+	      return "否";
+	    }
+}
+
+function productformatter( value, row ){
+	for( d in productList){
+	      if(productList[d].id == value)
+	          return productList[d].name;
+	    }
+	    return "未指定";
+}
+</script>
 <th data-field="name">名称</th>
 <th data-field="price">价格</th>
+<th data-field="product" data-formatter="productformatter">产品</th>
+<th data-field="enable" data-formatter="enableformatter">是否有效</th>
+<th data-field="default" data-formatter="defaultformatter">是否默认价格</th>

@@ -22,7 +22,7 @@ public class PriceController extends AbstractController {
   }
   
   public void update(){
-    this.getModel( Price.class, "" ).update();
+    this.getModel( Price.class, "", true ).update();
     this.forwardIndex();
   }
   
