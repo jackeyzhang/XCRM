@@ -66,6 +66,9 @@ public class AttributeInterceptor implements Interceptor {
     }
     else if ( controller.getRequest().getRequestURI().contains( "/store/" ) ) {
       return Constant.CATEGORY_STORE;
+    } 
+    else if ( controller.getRequest().getRequestURI().contains( "/price/" ) ) {
+      return Constant.CATEGORY_PRICE;
     }
     return 0;
   }

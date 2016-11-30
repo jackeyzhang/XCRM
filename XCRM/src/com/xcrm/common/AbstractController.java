@@ -3,6 +3,7 @@
  */
 package com.xcrm.common;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -22,6 +23,8 @@ import com.xcrm.common.util.PropUtil;
  *
  */
 public abstract class AbstractController extends Controller {
+  
+    public static final int[] USED_FOR_PRICE_FROM_PRODUCT = { AttributeID.PRD_MATERIAL.getId(), AttributeID.PRD_COLOR.getId(),  AttributeID.PRD_SIZE.getId()  };
 
 	public AbstractController() {
 		super();
@@ -36,7 +39,21 @@ public abstract class AbstractController extends Controller {
 		setAttr("model", getModalName());
 		setAttr("page_header", getPageHeader());
 		setAttr("toolbar_create", getToolBarAddButtonTitle());
-		setAttr("attriutes", AttributeFinder.getInstance().getAllAttributeList(getCategory()));
+		if(getModalName().equalsIgnoreCase( "price" )){
+		  List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList(Constant.CATEGORY_PRODUCT, Constant.CATEGORY_PRICE);
+		  Iterator<Attribute> iter = attributes.iterator();
+          for ( ; iter.hasNext(); ) {
+            Attribute attribute = iter.next();
+            if ( attribute.getCategory() == Constant.CATEGORY_PRODUCT ) {
+              if ( Arrays.binarySearch( USED_FOR_PRICE_FROM_PRODUCT, attribute.getAttributeid().intValue() ) < 0 ) {
+                iter.remove();
+              }
+            }
+          }
+		  setAttr("attriutes", attributes);
+		}else{
+		  setAttr("attriutes", AttributeFinder.getInstance().getAllAttributeList(getCategory()));
+		}
 		setAttr("imgMaxCount", PropUtil.getPrdImgMaxSize());
 	}
 
@@ -79,6 +96,7 @@ public abstract class AbstractController extends Controller {
 						continue;
 					record.set("attribute-" + av.getAttributeid(), av.getValue());
 				}
+				preRenderJsonForList(record);
 			}
 			this.renderJson(pager);
 		} else {
@@ -94,11 +112,15 @@ public abstract class AbstractController extends Controller {
 						continue;
 					record.set("attribute-" + av.getAttributeid(), av.getValue());
 				}
+				preRenderJsonForList(record);
 			}
 			this.renderJson(records);
 		}
 	}
-
+	
+	
+	protected void preRenderJsonForList(Record record){}
+	
 	public void save() {
 		this.renderHtml("not implementation");
 	}
