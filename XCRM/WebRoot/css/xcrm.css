@@ -19,3 +19,12 @@
 	opacity: 0.5;
 	border: 2px solid orange;
 }
+
+.first-clear{
+	clear:both;
+}
+
+.required:after {
+    content: ' *';
+    color: red;
+}
