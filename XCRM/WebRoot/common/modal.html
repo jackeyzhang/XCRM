@@ -46,13 +46,13 @@
 		            	  });
 		               });
 		               </script>
-			                 <select class="form-control selector" name="attribute-${attr.attributeid}" id="attribute-${attr.attributeid}" multiple="multiple">
+			                 <select class="form-control selector" name="attribute-${attr.category}-${attr.attributeid}" id="attribute-${attr.category}-${attr.attributeid}" multiple="multiple">
 			                   <#list attr.value?split(",") as val>
                           <option value="${val}">${val}</option>
                          </#list>
 			                 </select>
 		               <#else>
-		                    <input type="text" class="form-control" name="attribute-${attr.attributeid}" id="attribute-${attr.attributeid}" placeholder="${attr.displayname}">
+		                    <input type="text" class="form-control" name="attribute-${attr.category}-${attr.attributeid}" id="attribute-${attr.category}-${attr.attributeid}" placeholder="${attr.displayname}">
 		               </#if>
                </#if>
               </div>

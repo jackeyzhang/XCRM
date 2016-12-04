@@ -40,11 +40,16 @@ public abstract class AbstractController extends Controller {
 		setAttr("page_header", getPageHeader());
 		setAttr("toolbar_create", getToolBarAddButtonTitle());
 		if(getModalName().equalsIgnoreCase( "price" )){
-		  List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList(Constant.CATEGORY_PRODUCT, Constant.CATEGORY_PRICE);
+		  List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList(Constant.CATEGORY_PRICE);
 		  Iterator<Attribute> iter = attributes.iterator();
           for ( ; iter.hasNext(); ) {
             Attribute attribute = iter.next();
             if ( attribute.getCategory() == Constant.CATEGORY_PRODUCT ) {
+              if ( Arrays.binarySearch( USED_FOR_PRICE_FROM_PRODUCT, attribute.getAttributeid().intValue() ) < 0 ) {
+                iter.remove();
+              }
+            }
+            if ( attribute.getCategory() == Constant.CATEGORY_PRICE ) {
               if ( Arrays.binarySearch( USED_FOR_PRICE_FROM_PRODUCT, attribute.getAttributeid().intValue() ) < 0 ) {
                 iter.remove();
               }
@@ -94,7 +99,7 @@ public abstract class AbstractController extends Controller {
 							attribute.getAttributeid(), record.getInt("id"), getCategory());
 					if (av == null)
 						continue;
-					record.set("attribute-" + av.getAttributeid(), av.getValue());
+					record.set("attribute-" + getCategory() + "-"+av.getAttributeid(), av.getValue());
 				}
 				preRenderJsonForList(record);
 			}
@@ -110,7 +115,7 @@ public abstract class AbstractController extends Controller {
 							attribute.getAttributeid(), record.getInt("id"), getCategory());
 					if (av == null)
 						continue;
-					record.set("attribute-" + av.getAttributeid(), av.getValue());
+					record.set("attribute-" + getCategory() + av.getAttributeid(), av.getValue());
 				}
 				preRenderJsonForList(record);
 			}

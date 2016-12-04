@@ -28,9 +28,9 @@ public class PriceController extends AbstractController {
     record.set( "level1category", p.getLevel1category() );
     record.set( "level2category", p.getLevel2category() );
     
-    List<Attributevalue> avs = AttributeFinder.getInstance().getAttributeValueList( Constant.CATEGORY_PRODUCT, p.getId());
+    List<Attributevalue> avs = AttributeFinder.getInstance().getAttributeValueList( getCategory(), record.getInt( "id" ));
     for (Attributevalue av : avs) {
-      record.set("attribute-" + av.getAttributeid(), av.getValue());
+      record.set("attribute-"+ getCategory() + "-" + av.getAttributeid(), av.getValue());
     }
     
   }
