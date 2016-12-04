@@ -76,13 +76,14 @@ public class AttributeInterceptor implements Interceptor {
   private void updateAttribute( Map<String, String[]> attributeMap, int objectid, int category ) {
     if ( attributeMap == null ||  attributeMap.isEmpty())
       return;
-    for ( String attributeid : attributeMap.keySet() ) {
+    for ( String attributecategoryAndid : attributeMap.keySet() ) {
+      String attributeid = attributecategoryAndid.split( "-" )[1];
       Attributevalue value = Attributevalue.dao.findFirst( "select * from Attributevalue where attributeid = ?  and objectid= ? and category=?", attributeid, objectid, category );
       if ( value == null ) {
-        new Attributevalue().set( "attributeid", attributeid ).set( "objectid", objectid ).set( "category", category ).set( "value", attributeMap.get( attributeid )[0] ).save();
+        new Attributevalue().set( "attributeid", attributeid ).set( "objectid", objectid ).set( "category", category ).set( "value", attributeMap.get( attributecategoryAndid )[0] ).save();
       }
       else {
-        value.set( "value", attributeMap.get( attributeid )[0] ).update();
+        value.set( "value", attributeMap.get( attributecategoryAndid )[0] ).update();
       }
     }
   }
