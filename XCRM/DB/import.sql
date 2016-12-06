@@ -36,6 +36,7 @@ DROP TABLE  IF EXISTS customer;
 CREATE TABLE `customer` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
+   `regionId` int(11) DEFAULT NULL,
   `custAddr` varchar(45) NOT NULL,
   `contact` varchar(45) DEFAULT NULL,
   `phone` varchar(45) DEFAULT NULL,
