@@ -3,10 +3,15 @@ package com.xcrm.product;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.NumberUtils;
+import org.apache.commons.lang.StringUtils;
+
 import com.jfinal.aop.Before;
+import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.xcrm.common.AbstractController;
 import com.xcrm.common.AttributeFinder;
+import com.xcrm.common.model.Attribute;
 import com.xcrm.common.model.Attributevalue;
 import com.xcrm.common.model.Price;
 import com.xcrm.common.model.Product;
@@ -18,6 +23,31 @@ public class PriceController extends AbstractController {
 
   public void index() {
     super.index();
+  }
+  
+  public void preadd(){
+    String pid = getPara("pid");
+    this.setAttribute();
+    if (!StringUtils.isEmpty(pid)) {
+      this.refreshAttributeforPrice( NumberUtils.stringToInt( pid ) );
+    }
+    render("/price/add.html");
+  }
+  
+  public void loadingAddData(){
+    String id= getPara("id");
+    Price price = Price.dao.findById( id );
+    Record record = Db.findById( "price", id );
+    List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList(getCategory());
+      for (Attribute attribute : attributes) {
+        Attributevalue av = Attributevalue.dao.findFirst(
+            "select * from attributevalue where attributeid=? and objectid=? and category=?",
+            attribute.getAttributeid(), id, getCategory());
+        if (av == null)
+          continue;
+        record.set("attribute-" + getCategory() + "-"+av.getAttributeid(), av.getValue());
+      }
+    renderJson(record);
   }
   
 
@@ -34,8 +64,6 @@ public class PriceController extends AbstractController {
     }
     
   }
-
-
 
   public void save() {
     Price price = this.getModel( Price.class, "", true ).set( "store", this.getCurrentStoreId() ).set( "createuser", this.getCurrentUserId() ).set( "createtime", new Date() );

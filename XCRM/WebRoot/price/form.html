@@ -27,18 +27,8 @@
 									"<option value='" + level2[c].id + "'>"
 											+ level2[c].name + "</option>");
 						}
-					}2
+					}
 				});
-
-		//get product list
-		$.get('/product/list/', function(data) {
-			productList = data.rows;
-			for (d in productList) {
-				$('#productselect').append(
-						"<option value='" + productList[d].id + "'>"
-								+ productList[d].name + "</option>");
-			}
-		});
 	});
 </script>
 

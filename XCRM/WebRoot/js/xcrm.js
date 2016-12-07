@@ -52,7 +52,11 @@ $(function() {
 			navLinks: true, // can click day/week names to navigate views
 			editable: true,
 			eventLimit: true // allow "more" link when too many events
-		})
+		}),
+		
+		preupdate : function(e, value, row){
+			//showAlert( row );
+		}
 	}
 	
 	function queryParams(params){

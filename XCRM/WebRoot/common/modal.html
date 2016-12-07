@@ -26,9 +26,9 @@
                <label>${attr.displayname}</label> 
                <#if attr.type??>
 		               <#if attr.type==1>
-		                 <input type="number" class="form-control" name="attribute-${attr.attributeid}" id="attribute-${attr.attributeid}" placeholder="${attr.displayname}">
+		                 <input type="number" class="form-control" name="attribute-${attr.category}-${attr.attributeid}" id="attribute-${attr.category}-${attr.attributeid}" placeholder="${attr.displayname}">
 		               <#elseif attr.type==2>
-			               <select class="form-control selector" name="attribute-${attr.attributeid}">
+			               <select class="form-control selector" name="attribute-${attr.category}-${attr.attributeid}">
 			                <#list attr.value?split(",") as val>
 			                  <option value="${val}">${val}</option>
 			                 </#list>
@@ -37,7 +37,7 @@
 		               <div></div>
 		               <script>
 		               $(function() {
-		                $('#attribute-${attr.attributeid}').multiselect({
+		                $('#attribute-${attr.category}-${attr.attributeid}').multiselect({
 		            	    nSelectedText: '项已经选择!',
 		            	    allSelectedText: '已经选择所有项',
 		            	    nonSelectedText: '尚未选择',

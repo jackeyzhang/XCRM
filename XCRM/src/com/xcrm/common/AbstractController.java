@@ -3,7 +3,6 @@
  */
 package com.xcrm.common;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -40,22 +39,7 @@ public abstract class AbstractController extends Controller {
 		setAttr("page_header", getPageHeader());
 		setAttr("toolbar_create", getToolBarAddButtonTitle());
 		if(getModalName().equalsIgnoreCase( "price" )){
-		  List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList(Constant.CATEGORY_PRICE);
-		  Iterator<Attribute> iter = attributes.iterator();
-          for ( ; iter.hasNext(); ) {
-            Attribute attribute = iter.next();
-            if ( attribute.getCategory() == Constant.CATEGORY_PRODUCT ) {
-              if ( Arrays.binarySearch( USED_FOR_PRICE_FROM_PRODUCT, attribute.getAttributeid().intValue() ) < 0 ) {
-                iter.remove();
-              }
-            }
-            if ( attribute.getCategory() == Constant.CATEGORY_PRICE ) {
-              if ( Arrays.binarySearch( USED_FOR_PRICE_FROM_PRODUCT, attribute.getAttributeid().intValue() ) < 0 ) {
-                iter.remove();
-              }
-            }
-          }
-		  setAttr("attriutes", attributes);
+		  refreshAttributeforPrice( null );
 		}else{
 		  setAttr("attriutes", AttributeFinder.getInstance().getAllAttributeList(getCategory()));
 		}
@@ -67,6 +51,21 @@ public abstract class AbstractController extends Controller {
 	public Model getModel() {
 		return null;
 	}
+	
+    protected void refreshAttributeforPrice( Integer productid ) {
+      List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList( Constant.CATEGORY_PRICE );
+      List<Attributevalue> attributesForProduct = AttributeFinder.getInstance().getAttributeValueList( Constant.CATEGORY_PRODUCT, productid == null? 0: productid, USED_FOR_PRICE_FROM_PRODUCT );
+      Iterator<Attribute> iter = attributes.iterator();
+      for ( ; iter.hasNext(); ) {
+        Attribute attribute = iter.next();
+        for ( Attributevalue productAttr : attributesForProduct ) {
+          if ( productAttr.getAttributeid().equals( attribute.getAttributeid() ) ) {
+            attribute.setValue( productAttr.getValue() );
+          }
+        }
+      }
+      setAttr("attriutes", attributes);
+    }
 
 	public abstract String getPageHeader();
 

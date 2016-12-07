@@ -1,0 +1,64 @@
+<script src="/js/price.js"></script>
+</head>
+<body>
+	<div id="${model}">
+		<form data-toggle="validator" role="form" id="modal-form">
+			<div class="form-group hidden">
+				<label>ID</label> <input type="text" class="form-control" name="id"
+					placeholder="id">
+			</div>
+			<#include "form.html"/>
+			<!-- attribute load -->
+			<#if attriutes?size != 0>
+			<div class="container-fluid">
+				<div class="row">
+					<#list attriutes as attr>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>${attr.displayname}</label> <#if attr.type??> <#if
+							attr.type==1> <input type="number" class="form-control"
+								name="attribute-${attr.category}-${attr.attributeid}"
+								id="attribute-${attr.category}-${attr.attributeid}"
+								placeholder="${attr.displayname}"> <#elseif
+							attr.type==2> <select class="form-control selector"
+								name="attribute-${attr.category}-${attr.attributeid}">
+								<#list attr.value?split(",") as val>
+								<option value="${val}">${val}</option> </#list>
+							</select> <#elseif attr.type==3>
+							<div></div>
+							<script>
+								$(function() {
+									$(
+											'#attribute-${attr.category}-${attr.attributeid}')
+											.multiselect({
+												nSelectedText : '项已经选择!',
+												allSelectedText : '已经选择所有项',
+												nonSelectedText : '尚未选择',
+												delimiterText : ',',
+												enableFiltering : true
+											});
+								});
+							</script>
+							<select class="form-control selector"
+								name="attribute-${attr.category}-${attr.attributeid}"
+								id="attribute-${attr.category}-${attr.attributeid}"
+								multiple="multiple"> <#list attr.value?split(",") as
+								val>
+								<option value="${val}">${val}</option> </#list>
+							</select> <#else> <input type="text" class="form-control"
+								name="attribute-${attr.category}-${attr.attributeid}"
+								id="attribute-${attr.category}-${attr.attributeid}"
+								placeholder="${attr.displayname}"> </#if> </#if>
+						</div>
+					</div>
+					</#list>
+				</div>
+			</div>
+			</#if>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				<button type="submit" class="btn btn-primary submit">提交</button>
+			</div>
+		</form>
+	</div>
+</body>
