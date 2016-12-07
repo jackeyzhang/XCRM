@@ -1,9 +1,9 @@
 <link rel="stylesheet" href="/js/region/bootstrap-chinese-region.css">
 <div class="bs-chinese-region flat dropdown" data-min-level="1"
-	data-max-level="3" data-def-val="[name=address]">
-	<input type="text" class="form-control" id="address"
+	data-max-level="3" data-def-val="[name=regionId]">
+	<input type="text" class="form-control" id="regionId"
 		placeholder="选择你的地区" data-toggle="dropdown" readonly=""> <input
-		type="hidden" class="form-control" name="address" value="440103">
+		type="hidden" class="form-control" name="regionId" value="">
 	<div class="dropdown-menu" role="menu" aria-labelledby="dLabel">
 		<div>
 			<ul class="nav nav-tabs" role="tablist">
@@ -41,8 +41,24 @@
 		$('.bs-chinese-region').chineseRegion('source', data).on(
 				'completed.bs.chinese-region',
 				function(e, areas) {
-					$(this).find('[name=address]').val(
+					$(this).find('[name=regionId]').val(
 							areas[areas.length - 1].id);
 				});
 	});
+
+	$('#modal').on(
+			'show.bs.modal',
+			function() {
+				var region = $('.bs-chinese-region');
+				var regionId = region.find('[name=regionId]').val();
+				if (regionId) {
+					var regions = region.data('bsChineseRegion')
+							.getCurrentAreas(regionId);
+					var regionName = '';
+					for (var i = 0; i < regions.length; i++) {
+						regionName += regions[i].name + ' ';
+					}
+					$('#regionId').val(regionName);
+				}
+			})
 </script>
