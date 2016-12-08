@@ -1,8 +1,9 @@
 $(function() {
 	$('.create.btn.btn-primary').click(function() {
+		var index = $(this).parents('tr').attr('data-index');
 		$.ajax({
 			type : "get",
-			url : "/price/preadd?pid="+$('#table').data()['bootstrap.table'].data[index].product,
+			url : "/price/preadd?pid=0",
 			success : function(data, status) {
 				if (status == "success") {
 					$('.bootstrap-table').html(data);
@@ -44,7 +45,42 @@ $(function() {
 	});
 
 	$('.modal-footer .btn.btn-primary.submit').click(function() {
-		$('#modal-form').submit();
+		form = $('#modal-form');
+		var row = {};
+		//fire validate
+		form.validator('validate');
+		if(form.validator().data('bs.validator').hasErrors()){
+			return;
+		}
+		// get input value to row
+		form.find('input[name]').each(function() {
+			if($(this).attr('type') == "radio"){
+				if($(this).is(":checked")){
+					row[$(this).attr('name')] = $(this).val();
+				}
+			}else{
+				row[$(this).attr('name')] = $(this).val();
+			}
+		});
+		// get select value to row
+		form.find('select[name]').each(function() {
+			if($(this).val() instanceof Array){
+				row[$(this).attr('name')] = $(this).val().join(',');
+			}else{
+				row[$(this).attr('name')] = $(this).val();
+			}
+		});
+		// submit row
+		$.ajax({
+			url : $('#id') == "" ? "/price/add"
+					: "/price/update",
+			type : 'post',
+			data : row,
+			success :function(indata, status) {
+				if (status == "success") {
+				}
+			}
+		});
 	});
 	
 	//get product list

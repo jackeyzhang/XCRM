@@ -2,10 +2,10 @@
 </head>
 <body>
 	<div id="${model}">
-		<form data-toggle="validator" role="form" id="modal-form">
+		<form data-toggle="validator" role="form" id="modal-form" method="post">
 			<div class="form-group hidden">
 				<label>ID</label> <input type="text" class="form-control" name="id"
-					placeholder="id">
+					placeholder="id" value="${id!}">
 			</div>
 			<#include "form.html"/>
 			<!-- attribute load -->

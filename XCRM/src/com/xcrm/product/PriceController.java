@@ -36,7 +36,6 @@ public class PriceController extends AbstractController {
   
   public void loadingAddData(){
     String id= getPara("id");
-    Price price = Price.dao.findById( id );
     Record record = Db.findById( "price", id );
     List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList(getCategory());
       for (Attribute attribute : attributes) {
@@ -47,6 +46,7 @@ public class PriceController extends AbstractController {
           continue;
         record.set("attribute-" + getCategory() + "-"+av.getAttributeid(), av.getValue());
       }
+    this.setAttr( "id", id );
     renderJson(record);
   }
   
