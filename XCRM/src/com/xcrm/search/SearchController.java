@@ -11,7 +11,6 @@ import com.jfinal.plugin.activerecord.Record;
 import com.xcrm.common.AbstractController;
 import com.xcrm.common.model.Product;
 import com.xcrm.common.model.Productcategory;
-import com.xcrm.common.model.Productpic;
 import com.xcrm.common.util.Constant;
 
 public class SearchController extends AbstractController {
