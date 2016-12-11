@@ -1,0 +1,53 @@
+<style>
+.nav-pills a {
+	color: white;
+}
+</style>
+<script>
+	$(function() {
+		$('.grid_prd .prd_img,.grid_prd .prd_name').on('click', function() {
+			location.href = "/book?id="+$(this).siblings('.prd_id').html();
+		});
+	});
+</script>
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<h3 class="panel-title">
+			<ul class="nav nav-pills">
+				<li class="active"><a href="#">综合排序</a></li>
+				<li><a href="#">销量</a></li>
+				<li><a href="#">价格</a></li>
+				<li><a href="#">评论数</a></li>
+				<li><a href="#">上架时间</a></li>
+			</ul>
+		</h3>
+	</div>
+	<div class="panel-body">
+		<div class="col-md-12">
+			<#if page.list?exists> <#list page.list as prd> <#if (0
+			<prd_index )  && (prd_index % 4)==0>
+		</div>
+		<div class="col-md-12">
+			</#if>
+			<div class="col-md-3 grid_prd" style="text-align: center">
+				<span style="display: none" class="prd_id">${prd.id}</span> <img
+					width="180px" height="240px" class="prd_img" src='${(prd.filename??)?string((prdimg_path+"/"+prd.id+"/"+((prd.filename!"")?split(","))[0]),"/img/placehold.jpg")}' />
+				<div>
+					<a class="prd_name" href="javascript:void(0);">${prd.name}</a>
+				</div>
+			</div>
+			</#list> </#if>
+		</div>
+		<ul class="pagination">
+			<#if (page.totalPage > 0)>
+			<li><a href="javascript:void(0);">&laquo;</a></li> <#list
+			1..page.totalPage as t>
+			<li><a href="javascript:void(0);">${t}</a></li> </#list>
+			<li><a href="javascript:void(0);">&raquo;</a></li>
+			<span id="totalPage" style="display: none">${page.totalPage}</span>
+			<span id="pageNumber" style="display: none">${page.pageNumber}</span>
+			</#if>
+		</ul>
+	</div>
+</div>
+

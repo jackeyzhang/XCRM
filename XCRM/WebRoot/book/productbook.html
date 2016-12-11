@@ -1,0 +1,145 @@
+<script>
+	$(function() {
+		$('.spinner .btn:first-of-type').on(
+				'click',
+				function() {
+					$('.spinner input').val(
+							parseInt($('.spinner input').val(), 10) + 1);
+				});
+		$('.spinner .btn:last-of-type').on(
+				'click',
+				function() {
+					$('.spinner input').val(
+							parseInt($('.spinner input').val(), 10) - 1);
+				});
+	});
+</script>
+<style>
+.spinner {
+	width: 100px;
+}
+
+.spinner input {
+	text-align: right;
+}
+
+.input-group-btn-vertical {
+	position: relative;
+	white-space: nowrap;
+	width: 1%;
+	vertical-align: middle;
+	display: table-cell;
+}
+
+.input-group-btn-vertical>.btn {
+	display: block;
+	float: none;
+	width: 100%;
+	max-width: 100%;
+	padding: 8px;
+	margin-left: -1px;
+	position: relative;
+	border-radius: 0;
+}
+
+.input-group-btn-vertical>.btn:first-child {
+	border-top-right-radius: 4px;
+}
+
+.input-group-btn-vertical>.btn:last-child {
+	margin-top: -2px;
+	border-bottom-right-radius: 4px;
+}
+
+.input-group-btn-vertical i {
+	position: absolute;
+	top: 0;
+	left: 4px;
+}
+</style>
+<div class="col-md-4">
+	<div id="myCarousel" class="carousel slide">
+		<!-- 轮播（Carousel）指标 -->
+
+		<#if prdpics??>
+		<ol class="carousel-indicators">
+			<#list prdpics as prdpic >
+			<li data-target="#myCarousel" data-slide-to='${prdpic_index}'
+				class='${(prdpic_index==0)?string("active","")}'></li> </#list>
+		</ol>
+		<div class="carousel-inner">
+			<#list prdpics as prdpic >
+			<div class='item ${(prdpic_index==0)?string("active","")}'>
+				<img width="100%" height="480px"
+					src='${prdimg_path+"/"+prdpic.productid+"/"+(prdpic.fielname!"")}'
+					alt='${(prdpic_index==0)?string("First","")} slide'>
+			</div>
+			</#list>
+		</div>
+		<#else>
+		<ol class="carousel-indicators">
+			<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+
+		</ol>
+		<div class="carousel-inner">
+			<div class="item active">
+				<img src="/img/placehold.jpg" alt="First slide">
+			</div>
+		</div>
+		</#if>
+
+		<!-- 轮播（Carousel）导航 -->
+		<a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+		<a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+	</div>
+</div>
+<div class="col-md-8">
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+			<h2>${prd.name}</h2>
+		</div>
+		<div class="panel-body">
+			<div class="col-md-12" style="text-align: center;">
+				<div class="col-md-2">
+					<span>数量：</span>
+				</div>
+				<div class="col-md-8">
+					<div class="input-group spinner">
+						<input type="text" class="form-control" value="1">
+						<div class="input-group-btn-vertical">
+							<button class="btn btn-default" type="button">
+								<i class="fa fa-caret-up"></i>
+							</button>
+							<button class="btn btn-default" type="button">
+								<i class="fa fa-caret-down"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12" style="text-align: center;">
+				<div class="col-md-2">
+					<span>价格：</span>
+				</div>
+				<div class="col-md-8" style="text-align: left">
+					<span>$200</span>
+				</div>
+			</div>
+			<#list attrs as attr >
+			<div class="col-md-12" style="text-align: center;">
+				<div class="col-md-2">
+					<span>${attr.first.name}：</span>
+				</div>
+				<div class="col-md-8" style="text-align: left">
+					<#list attr.second as option>
+					<span style="border:1px solid;padding:2px;">${option}</span>
+					</#list>
+				</div>
+			</div>
+			</#list>
+			<div class="col-md-3" style="height:50px;font-size:18px;background-color:#df3033;text-align:center;">
+				<a style="font-weight:700;color:white;height:50px;line-height:50px">加入购物车</a>
+			</div>
+		</div>
+	</div>
+</div>

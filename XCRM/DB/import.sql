@@ -172,3 +172,12 @@ CREATE TABLE `contract` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='合同表';
 
 
+DROP TABLE  IF EXISTS book;
+CREATE TABLE `book` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  product int(11) NOT NULL,
+  price int(11) NOT NULL,
+  num int(11) NOT NULL,
+  prdattrs varchar(2000),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
