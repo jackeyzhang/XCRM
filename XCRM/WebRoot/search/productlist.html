@@ -6,7 +6,7 @@
 <script>
 	$(function() {
 		$('.grid_prd .prd_img,.grid_prd .prd_name').on('click', function() {
-			location.href = "/book?id="+$(this).siblings('.prd_id').html();
+			location.href = "/cart?pid="+$(this).siblings('.prd_id').html();
 		});
 	});
 </script>

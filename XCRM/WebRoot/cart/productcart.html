@@ -1,4 +1,30 @@
 <script>
+	$(function() {
+		$('.spinner .btn:first-of-type').on(
+				'click',
+				function() {
+					$('.spinner input').val(
+							parseInt($('.spinner input').val(), 10) + 1);
+				});
+		$('.spinner .btn:last-of-type').on(
+				'click',
+				function() {
+					$('.spinner input').val(
+							parseInt($('.spinner input').val(), 10) - 1);
+				});
+		$('.create.btn.btn-primary').on('click', function() {
+			location.href = '/search/';
+		});
+		$('.prd-attr').on('mouseover', function() {
+			$(this).css('border', '1px solid red')
+		});
+		$('.prd-attr').on('mouseleave', function() {
+			$(this).css('border', '1px solid')
+		});
+		$('.prd-attr').on('click', function() {
+			$(this).css('border', '1px solid red')
+		});
+	});
 </script>
 <div class="col-md-4" style="padding-left: 0px">
 	<div id="myCarousel" class="carousel slide">

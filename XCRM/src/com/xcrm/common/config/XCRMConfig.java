@@ -17,6 +17,7 @@ import com.xcrm.attribute.AttributeController;
 import com.xcrm.attribute.AttributeInterceptor;
 import com.xcrm.attribute.AttributeidController;
 import com.xcrm.book.BookController;
+import com.xcrm.cart.CartController;
 import com.xcrm.common.model._MappingKit;
 import com.xcrm.common.util.Constant;
 import com.xcrm.contract.ContractController;
@@ -66,6 +67,7 @@ public class XCRMConfig extends JFinalConfig {
     me.add("/productcategory", ProductcategoryController.class);
     me.add("/contract", ContractController.class);
     me.add("/search", SearchController.class);
+    me.add("/cart", CartController.class);
     me.add("/book", BookController.class);
   }
 

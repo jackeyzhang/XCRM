@@ -11,19 +11,19 @@ public class Constant {
 	public static final String TEMPLATE = "template";
 	public static final String EMPTY = "";
 	public static final String COMMA = ",";
-	
-	
+
 	/**
 	 * category constant
 	 */
-	public static final int CATEGORY_OTHER     = 0;
-	public static final int CATEGORY_PRODUCT   = 1;
-	public static final int CATEGORY_CUSTOMER  = 2;
-	public static final int CATEGORY_USER      = 3;
-	public static final int CATEGORY_STORE     = 4;
-	public static final int CATEGORY_SCHEDULE  = 5;
-	public static final int CATEGORY_PRICE     = 6;
-	public static final int CATEGORY_CONTRACT     = 7;
-	public static final int CATEGORY_SEARCH     = 8;
-	public static final int CATEGORY_BOOK     = 9;
+	public static final int CATEGORY_OTHER = 0;
+	public static final int CATEGORY_PRODUCT = 1;
+	public static final int CATEGORY_CUSTOMER = 2;
+	public static final int CATEGORY_USER = 3;
+	public static final int CATEGORY_STORE = 4;
+	public static final int CATEGORY_SCHEDULE = 5;
+	public static final int CATEGORY_PRICE = 6;
+	public static final int CATEGORY_CONTRACT = 7;
+	public static final int CATEGORY_SEARCH = 8;
+	public static final int CATEGORY_CART = 9;
+	public static final int CATEGORY_BOOK = 10;
 }
