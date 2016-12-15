@@ -15,9 +15,11 @@ $(function() {
 	xcpage.tableInitHandler = function(data) {
 		$('.update').click(function() {
 			var index = $(this).parents('tr').attr('data-index');
+			var pid = $('#table').data()['bootstrap.table'].data[index].product;
+			var id = $('#table').data()['bootstrap.table'].data[index].id;
 			$.ajax({
 				type : "get",
-				url : "/price/preadd?pid="+$('#table').data()['bootstrap.table'].data[index].product,
+				url : "/price/preadd?pid="+pid + "&id=" + id,
 				success : function(data, status) {
 					if (status == "success") {
 						$('.bootstrap-table').html(data);
@@ -25,7 +27,7 @@ $(function() {
 				}
 			});
 			
-			var urlhere = "/price/loadingAddData?id="+$('#table').data()['bootstrap.table'].data[index].id;
+			var urlhere = "/price/loadingAddData?id="+ id;
 			setTimeout(function() {
 				$.ajax({
 					type : "get",
@@ -39,6 +41,21 @@ $(function() {
 			}, 1000);
 		});
 	};
+	
+	var $table = $('#testtable');
+	
+    function randomData() {
+        var startId = ~~(Math.random() * 100),
+            rows = [];
+        for (var i = 0; i < 10; i++) {
+            rows.push({
+            	id: startId + i,
+            	name: 'test' + (startId + i),
+            	price: '$' + (startId + i)
+            });
+        }
+        return rows;
+    }
 	
 	$('.modal-footer .btn.btn-default').click(function() {
 		window.location.href = '/price/';

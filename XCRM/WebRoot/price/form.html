@@ -2,7 +2,7 @@
 	$(function() {
 
 		// get level1category list
-		var level1;
+/* 		var level1;
 		$.get('/productcategory/listtoplevel/', function(data) {
 			level1 = data;
 			for (d in data) {
@@ -15,9 +15,9 @@
 		var level2;
 		$.get('/productcategory/listsecondlevel/', function(data) {
 			level2 = data;
-		});
+		}); */
 
-		$('#level1category').change(
+/* 		$('#level1category').change(
 				function() {
 					$('#level2category').empty();
 					for (c in level2) {
@@ -28,7 +28,40 @@
 											+ level2[c].name + "</option>");
 						}
 					}
-				});
+				}); */
+		
+	    $('#productselect').change(
+          function() {
+            var productid = $(this).children('option:selected').val();
+            $.ajax({
+                type : "get",
+                url : "/price/preadd?pid=" + productid,
+                success : function(data, status) {
+                  if (status == "success") {
+                    $('.bootstrap-table').html(data);
+                  }
+                }
+              });
+            
+            setTimeout(function() {
+                $('#productselect').val(productid);
+               }, 500);
+       });
+				
+			$('#pricebutton').click(
+					function(){
+						var value = $("input[name='price']").val();
+						$("input[name='priceamount']").val( value );
+					}
+			);
+			
+			$('#countbutton').click(
+			          function(){
+			            var value = $("input[name='count']").val();
+			            $("input[name='inventory']").val( value );
+			          }
+			      );
+		
 	});
 </script>
 
@@ -78,16 +111,18 @@
 	<div class="row">
 		<div class="col-md-6">
 			<div class="form-group">
-				<label>价格</label> <input type="text" class="form-control"
+				<label>默认价格</label> <input type="text" class="form-control"
 					name="price" placeholder="" required>
 				<div class="help-block with-errors"></div>
+				<button type="button" class="btn btn-primary" id="pricebutton">应用到所有</button>
 			</div>
 		</div>
 		<div class="col-md-6">
 			<div class="form-group">
-				<label>初始库存</label> <input type="number" class="form-control"
+				<label>默认初始库存</label> <input type="number" class="form-control"
 					name="count" placeholder="" required>
 				<div class="help-block with-errors"></div>
+				<button type="button" class="btn btn-primary" id="countbutton">应用到所有</button>
 			</div>
 		</div>
 	</div>

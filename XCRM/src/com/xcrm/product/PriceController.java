@@ -1,7 +1,11 @@
 package com.xcrm.product;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.NumberUtils;
 import org.apache.commons.lang.StringUtils;
@@ -31,6 +35,8 @@ public class PriceController extends AbstractController {
     if (!StringUtils.isEmpty(pid)) {
       this.refreshAttributeforPrice( NumberUtils.stringToInt( pid ) );
     }
+    fillAttribute(pid);
+    setAttr( "id", getPara("id") );
     render("/price/add.html");
   }
   
@@ -38,17 +44,66 @@ public class PriceController extends AbstractController {
     String id= getPara("id");
     Record record = Db.findById( "price", id );
     List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList(getCategory());
-      for (Attribute attribute : attributes) {
-        Attributevalue av = Attributevalue.dao.findFirst(
-            "select * from attributevalue where attributeid=? and objectid=? and category=?",
-            attribute.getAttributeid(), id, getCategory());
-        if (av == null)
-          continue;
-        record.set("attribute-" + getCategory() + "-"+av.getAttributeid(), av.getValue());
-      }
-    this.setAttr( "id", id );
+    for (Attribute attribute : attributes) {
+      Attributevalue av = Attributevalue.dao.findFirst(
+          "select * from attributevalue where attributeid=? and objectid=? and category=?",
+          attribute.getAttributeid(), id, getCategory());
+      if (av == null || av.getAttributeid() > 200)
+        continue;
+      record.set("attribute-" + getCategory() + "-"+av.getAttributeid(), av.getValue());
+    }
+    setAttr( "id", id );
     renderJson(record);
   }
+  
+  private void fillAttribute(String productid){
+    List<Record> records = new ArrayList<Record>();
+    List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList(getCategory());
+    attributes.sort( new Comparator<Attribute>(){
+      public int compare( Attribute o1, Attribute o2 ) {
+        return o1.getAttributeid() - o2.getAttributeid();
+      }
+    });
+    Map<Attribute,String> valueMap = new HashMap<Attribute,String>();
+    for (Attribute attribute : attributes) {
+      Attributevalue av = Attributevalue.dao.findFirst(
+          "select * from attributevalue where attributeid=? and objectid=? and category=?",
+          attribute.getAttributeid(), productid, Constant.CATEGORY_PRODUCT);
+      if (av == null || av.getAttributeid() < 200)
+        continue;
+      valueMap.put( attribute, av.getValue() );
+    }
+    
+    String value1 = "",value2 ="",value3 ="";
+    if(valueMap.values().size() >= 1){
+      value1 = (String)valueMap.values().toArray()[0];
+    }
+    if(valueMap.values().size() >= 2){
+      value2 = (String)valueMap.values().toArray()[1];
+    }
+    if(valueMap.values().size() >= 3){
+      value3 = (String)valueMap.values().toArray()[2];
+    }
+    
+    if( !StringUtils.isEmpty( value1 ) && !StringUtils.isEmpty( value2 ) && !StringUtils.isEmpty( value3 )){
+     String[] v1 = value1.split( "," );
+     String[] v2 = value2.split( "," );
+     String[] v3 = value3.split( "," );
+     for( String vv1 : v1){
+       for(String vv2 : v2 ){
+         for(String vv3 : v3){
+           Record r = new Record();
+           r.set( "c1", vv1 );
+           r.set( "c2", vv2 );
+           r.set( "c3", vv3 );
+           records.add( r );
+         }
+       }
+     }
+    }
+    setAttr( "avs", records );
+  }
+  
   
 
   @Override

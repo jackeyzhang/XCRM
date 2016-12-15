@@ -2,14 +2,15 @@
 </head>
 <body>
 	<div id="${model}">
-		<form data-toggle="validator" role="form" id="modal-form" method="post">
+		<form data-toggle="validator" role="form" id="modal-form"
+			method="post">
 			<div class="form-group hidden">
 				<label>ID</label> <input type="text" class="form-control" name="id"
 					placeholder="id" value="${id!}">
 			</div>
 			<#include "form.html"/>
 			<!-- attribute load -->
-			<#if attriutes?size != 0>
+			<!-- <#if attriutes?size != 0>
 			<div class="container-fluid">
 				<div class="row">
 					<#list attriutes as attr>
@@ -54,7 +55,37 @@
 					</#list>
 				</div>
 			</div>
-			</#if>
+			</#if> -->
+
+			<div class="container">
+		    <div class="row" >
+            <div class="col-md-4">
+              <label>产品颜色-大小-材质</label>
+           </div>
+           <div class="col-md-4">
+             <label>价格</label>
+           </div>
+            <div class="col-md-4">
+             <label>库存</label>
+           </div>
+         </div>
+			  <#if avs?size != 0>
+			  <#list avs as attr>
+					<div class="row" >
+					   <div class="col-md-4">
+               <label>${attr.c1} - ${attr.c2} - ${attr.c3}</label>
+            </div>
+            <div class="col-md-4">
+               <input type="number" class="form-control" name="priceamount" placeholder="${attr.c1} - ${attr.c2} - ${attr.c3}" value="">
+            </div>
+            <div class="col-md-4">
+               <input type="number" class="form-control" name="inventory" placeholder="${attr.c1} - ${attr.c2} - ${attr.c3}" value="">
+            </div>
+					</div>
+				</#list>
+				</#if>
+			</div>
+
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
 				<button type="submit" class="btn btn-primary submit">提交</button>
