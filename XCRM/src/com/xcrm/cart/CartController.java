@@ -3,14 +3,18 @@ package com.xcrm.cart;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.jfinal.kit.JsonKit;
 import com.xcrm.common.AbstractController;
 import com.xcrm.common.AttributeID;
 import com.xcrm.common.model.Attributevalue;
 import com.xcrm.common.model.Bookitem;
+import com.xcrm.common.model.Priceinventoryvalue;
 import com.xcrm.common.model.Product;
 import com.xcrm.common.model.Productpic;
 import com.xcrm.common.util.Constant;
@@ -28,6 +32,7 @@ public class CartController extends AbstractController {
 		setAttr("prdimg_path", getPrdImgBaseUrl());
 		setAttr("attrs", getAttrs());
 		setAttr("count", count());
+		setAttr("prices", JsonKit.toJson(getPrice()));
 	}
 
 	private List<Tuple<AttributeID, List<String>>> getAttrs() {
@@ -43,6 +48,17 @@ public class CartController extends AbstractController {
 
 		}
 		return attrs;
+	}
+
+	private Map<String, Priceinventoryvalue> getPrice() {
+		List<Priceinventoryvalue> list = Priceinventoryvalue.dao.find(
+				"select * from priceinventoryvalue pi left join price pr on pi.priceid=pr.id  where pr.product=?",
+				this.getPara("pid"));
+		Map<String, Priceinventoryvalue> map = new HashMap<String, Priceinventoryvalue>();
+		for (Priceinventoryvalue priceinventoryvalue : list) {
+			map.put(priceinventoryvalue.getPricekey(), priceinventoryvalue);
+		}
+		return map;
 	}
 
 	public void save() {

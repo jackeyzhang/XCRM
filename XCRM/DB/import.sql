@@ -182,6 +182,23 @@ CREATE TABLE `bookitem` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
+DROP TABLE  IF EXISTS `order`;
+CREATE TABLE `order` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  orderno bigint(20) NOT NULL,
+  `date` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+DROP TABLE  IF EXISTS orderitem;
+CREATE TABLE `orderitem` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order` int(11) NOT NULL,
+   bookitem int(11) NOT NULL,
+  `date` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
 --default script in
 
 INSERT INTO `user` (`id`, `contact`, `department`, `title`, `username`, `password`, `isenable`, `email`) VALUES

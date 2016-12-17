@@ -16,22 +16,43 @@
 			location.href = '/search/';
 		});
 		$('.prd-attr').on('mouseover', function() {
-			$(this).css('border', '1px solid red')
+			$(this).css('border-color', 'red')
 		});
 		$('.prd-attr').on(
 				'mouseleave',
 				function() {
 					if (xcpage.cartprdattr[$(this).parent().attr('data')] != $(
 							this).html())
-						$(this).css('border', '1px solid')
+						$(this).css('border-color', 'black')
 				});
 		xcpage.cartprdattr = {};
+		xcpage.prices=${prices};
+		
 		$('.prd-attr').on('click', function() {
 			xcpage.cartprdattr[$(this).parent().attr('data')] = $(this).html();
-			$(this).parent().find('span').css('border', '1px solid');
-			$(this).css('border', '1px solid red');
+			$(this).parent().find('span').css('border-color', 'black');
+			$(this).css('border-color', 'red');
 			$('#prdattrs').val(JSON.stringify(xcpage.cartprdattr));
+			var material = xcpage.cartprdattr['204'];
+			var color= xcpage.cartprdattr['205'];
+			var size= xcpage.cartprdattr['206'];
+			var key = material+'-'+size+'-'+color;
+			if(xcpage.prices[key]){
+				var price = xcpage.prices[key].price;
+				$('#price').val(price);
+				$('#price-span').html(price);
+			}
+			
 		});
+		
+		$('.prd-attr-type').filter(function(index) {
+			var attrtype = $($('.prd-attr-type')[index])
+			var data = attrtype.attr('data');
+			if(data==204||data==205||data==206){
+				$(attrtype.find('span')[0]).click();
+			}
+		});
+		
 	});
 </script>
 <div class="col-md-4" style="padding-left: 0px">
@@ -79,7 +100,7 @@
 			</div>
 			<div class="panel-body">
 				<div class="col-md-12" style="text-align: left; padding: 10px">
-					<div class="col-md-1" style="padding: 0">
+					<div class="col-md-1" style="padding: 0; width: 70px">
 						<span>数量：</span>
 					</div>
 					<div class="col-md-8">
@@ -97,17 +118,17 @@
 					</div>
 				</div>
 				<div class="col-md-12" style="text-align: left; padding: 10px">
-					<div class="col-md-1" style="padding: 0">
-						<input type="hidden" name="price" value="111"> <span>价格：</span>
+					<div class="col-md-1" style="padding: 0; width: 70px">
+						<input type="hidden" name="price" id="price" value=""> <span>价格：</span>
 					</div>
 					<div class="col-md-8" style="text-align: left">
-						<span>$200</span>
+						<span id="price-span">0</span>
 					</div>
 				</div>
 				<input type="hidden" name="prdattrs" id="prdattrs" value="">
 				<#list attrs as attr >
 				<div class="col-md-12" style="text-align: left; padding: 10px">
-					<div class="col-md-1" style="padding: 0">
+					<div class="col-md-1" style="padding: 0; width: 70px">
 						<span>${attr.first.name}：</span>
 					</div>
 					<div class="col-md-8 prd-attr-type" style="text-align: left"
@@ -118,20 +139,20 @@
 				</div>
 				</#list>
 				<div class="col-md-12" style="text-align: left; padding: 10px">
-					<div class="col-md-1" style="padding: 0">
+					<div class="col-md-1" style="padding: 0; width: 70px">
 						<span>客户：</span>
 					</div>
-					<div class="col-md-8" style="text-align: left">
+					<div class="col-md-4" style="text-align: left">
 						<select class="form-control selector">
 							<option value="">请选择...</option>
 						</select>
 					</div>
 				</div>
 				<div class="col-md-12" style="text-align: left; padding: 10px">
-					<div class="col-md-1" style="padding: 0">
+					<div class="col-md-1" style="padding: 0; width: 70px">
 						<span>合同：</span>
 					</div>
-					<div class="col-md-8" style="text-align: left">
+					<div class="col-md-4" style="text-align: left">
 						<select class="form-control selector">
 							<option value="">请选择...</option>
 						</select>
@@ -140,7 +161,7 @@
 				<div class="col-md-12" style="text-align: left; padding: 10px">
 					<div class="col-md-3"
 						style="height: 50px; font-size: 18px; background-color: #df3033; text-align: center;">
-						<a class="sc-btn">加入购物车</a>
+						<a id="sc" class="sc-btn">加入购物车</a>
 					</div>
 				</div>
 			</div>

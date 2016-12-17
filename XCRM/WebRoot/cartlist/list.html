@@ -16,8 +16,11 @@
 				}
 			});
 		});
-		
-		$('.amount').val();
+		var amount = 0;
+		for (var i = 0; i < $('.sum').length; i++) {
+			amount += parseInt($($('.sum')[i]).html());
+		}
+		$('.amount').html(amount);
 	});
 </script>
 
@@ -36,13 +39,14 @@
 				data-formatter="actionFormatter" data-events="actionEvents">操作</th>
 			<#list list as item>
 		<tr>
+			<input type="hidden" value="${item.id}" class="itemid"/>
 			<td><img width="80px" height="80px"
 				src='${(item.filename??)?string((prdimg_path+"/"+item.pid+"/"+((item.filename!"")?split(","))[0]),"/img/placehold.jpg")}' />
 			</td>
 			<td>${item.name}</td>
 			<td>${item.num}</td>
 			<td>${item.price}</td>
-			<td>${item.price*item.num}</td>
+			<td class="sum">${item.price*item.num}</td>
 			<td><a class="del-item" data="${item.id}"
 				href="javascript:void(0);">删除</a></td>
 		</tr>
@@ -54,11 +58,12 @@
 	style="text-align: left; padding: 10px; height: 70px; border: 1px solid #ddd">
 	<div class="col-md-1"
 		style="float: right; font-size: 18px; background-color: #df3033; text-align: center;">
-		<a class="sc-btn">去结算</a>
+		<a id="payment" class="sc-btn">去结算</a>
 	</div>
 	<div class="col-md-2"
 		style="float: right; text-align: right; font-weight: bold">
-		<span>总价:</span><span class="amount" style="color: #df3033; font-size: 18px">$33000</span>
+		<span>总价:</span><span class="amount"
+			style="color: #df3033; font-size: 18px"></span>
 	</div>
 
 </div>

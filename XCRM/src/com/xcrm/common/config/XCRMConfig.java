@@ -16,7 +16,6 @@ import com.jfinal.render.FreeMarkerRender;
 import com.xcrm.attribute.AttributeController;
 import com.xcrm.attribute.AttributeInterceptor;
 import com.xcrm.attribute.AttributeidController;
-import com.xcrm.book.BookController;
 import com.xcrm.cart.CartController;
 import com.xcrm.cart.CartlistController;
 import com.xcrm.common.model._MappingKit;
@@ -26,6 +25,7 @@ import com.xcrm.customer.CustomerController;
 import com.xcrm.index.IndexController;
 import com.xcrm.login.LoginController;
 import com.xcrm.login.LoginInterceptor;
+import com.xcrm.order.OrderController;
 import com.xcrm.product.PriceController;
 import com.xcrm.product.ProductController;
 import com.xcrm.product.ProductcategoryController;
@@ -70,7 +70,7 @@ public class XCRMConfig extends JFinalConfig {
     me.add("/search", SearchController.class);
     me.add("/cart", CartController.class);
     me.add("/cartlist", CartlistController.class);
-    me.add("/book", BookController.class);
+    me.add("/order", OrderController.class);
   }
 
   public static C3p0Plugin createC3p0Plugin() {
