@@ -27,11 +27,6 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
 
-INSERT INTO `user` (`id`, `contact`, `department`, `title`, `username`, `password`, `isenable`, `email`) VALUES
-  (1, 'root', 'it', 'dev', 'root', 'root', b'1', 'lewis@gmail.com');
-
-
-
 DROP TABLE  IF EXISTS customer;
 CREATE TABLE `customer` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -105,18 +100,6 @@ CREATE TABLE `attributeid` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (101,'颜色',2,'红色,蓝色,绿色,白色,紫色,卡其色');
-INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (102,'型号',2,'XXL,XL,L,M,S');
-INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (103,'数量单位',2,'件,个');
-INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (104,'时间单位',2,'天,小时');
-INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (105,'数量',1,NULL);
-INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (106,'交货期',1,NULL);
-INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (201,'部门',2,'礼服部,摄像部,化妆部,选片部,设计部,取件部,客服部');
-INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (202,'工作部门',3,'礼服部,摄像部,化妆部,选片部,设计部,取件部,客服部');
-INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (203,'产品类型',2,'婚纱,礼服');
-INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (204,'产品面料',2,'白沙,蕾丝');
-INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (205,'产品颜色',3,'红色,黄色,蓝色,白色,粉色,紫色');
-INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (206,'产品尺码',2,'S,M,L,XL,XXL');
 
 DROP TABLE  IF EXISTS attribute;
 CREATE TABLE `attribute` (
@@ -131,6 +114,7 @@ CREATE TABLE `attribute` (
   `visiable` tinyint(2) DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+
 
 DROP TABLE  IF EXISTS attributevalue;
 CREATE TABLE `attributevalue` (
@@ -161,6 +145,17 @@ CREATE TABLE `price` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
+DROP TABLE  IF EXISTS priceinventoryvalue;
+CREATE TABLE `priceinventoryvalue` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `priceid` int(11) NOT NULL,
+  `pricekey` varchar(100) NOT NULL COMMENT 'key=priceid+valueKey\nvaluekey=value1+value2+value3+...',
+  `price` float NOT NULL,
+  `inventory` int(11) NOT NULL COMMENT '初始库存',
+  `count` int(11) NOT NULL COMMENT '剩余数量',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=utf8;
+
 
 
 DROP TABLE  IF EXISTS contract;
@@ -186,3 +181,35 @@ CREATE TABLE `bookitem` (
   contact int(11),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+--default script in
+
+INSERT INTO `user` (`id`, `contact`, `department`, `title`, `username`, `password`, `isenable`, `email`) VALUES
+  (1, 'root', 'it', 'dev', 'root', 'root', b'1', 'lewis@gmail.com');
+
+INSERT INTO `productcategory` VALUES (1,1,NULL,'商曼'),(2,2,1,'婚纱'),(3,2,1,'礼服');
+
+INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (101,'颜色',2,'红色,蓝色,绿色,白色,紫色,卡其色');
+INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (102,'型号',2,'XXL,XL,L,M,S');
+INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (103,'数量单位',2,'件,个');
+INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (104,'时间单位',2,'天,小时');
+INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (105,'数量',1,NULL);
+INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (106,'交货期',1,NULL);
+INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (201,'部门',2,'礼服部,摄像部,化妆部,选片部,设计部,取件部,客服部');
+INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (202,'工作部门',3,'礼服部,摄像部,化妆部,选片部,设计部,取件部,客服部');
+INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (203,'产品类型',2,'婚纱,礼服');
+INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (204,'产品面料',2,'白沙,蕾丝');
+INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (205,'产品颜色',3,'红色,黄色,蓝色,白色,粉色,紫色');
+INSERT INTO `attributeid` (`id`,`name`,`type`,`value`) VALUES (206,'产品尺码',2,'S,M,L,XL,XXL');
+
+INSERT INTO `attribute` VALUES (17,204,'产品面料',3,1,'白沙,蕾丝',1,NULL,1),(18,205,'产品颜色',3,1,'红色,黄色,蓝色,白色,粉色,紫色',1,NULL,1),(19,206,'产品尺码',3,1,'S,M,L,XL,XXL',1,NULL,1),(20,204,'产品面料',3,6,'白沙,蕾丝',1,NULL,1),(21,205,'产品颜色',3,6,'红色,黄色,蓝色,白色,粉色,紫色',1,NULL,1),(22,206,'产品尺码',3,6,'S,M,L,XL,XXL',1,NULL,1);
+
+INSERT INTO `attributevalue` VALUES (28,1,206,13,'S,M,L,XL,XXL'),(29,1,205,13,'红色,黄色,蓝色,白色,粉色,紫色'),(30,1,204,13,'白沙,蕾丝'),(31,1,206,14,'S,M,L'),(32,1,205,14,'红色,黄色,蓝色,白色'),(33,1,204,14,'白沙,蕾丝');
+
+INSERT INTO `product` VALUES (13,'婚纱-XF100','8d08159886413679a76ee01d3aea1345',1,2,NULL,NULL,NULL,'2016-12-17 16:29:48',NULL,1,NULL),(14,'礼服-LF200','5ded9b1cc86dfc4b3059ebfe9108ab31',1,3,NULL,NULL,NULL,'2016-12-17 16:30:31',NULL,1,NULL);
+
+INSERT INTO `productpic` VALUES (1,'20120312142458_FSyvu.jpg',13),(2,'lifu1.jpg',14),(3,'lifu2.jpg',14);
+
+INSERT INTO `price` VALUES (3,'婚纱-XF100',13,NULL,5000,1,1,NULL,1,'2016-12-17 16:37:09',1,100);
+
+INSERT INTO `priceinventoryvalue` VALUES (92,3,'白沙-L-粉色',5000,100,100),(93,3,'蕾丝-S-白色',5000,100,100),(94,3,'蕾丝-L-黄色',5000,100,100),(95,3,'蕾丝-XL-蓝色',5000,100,100),(96,3,'白沙-L-红色',5000,100,100),(97,3,'白沙-M-紫色',5000,100,100),(98,3,'白沙-M-白色',5000,100,100),(99,3,'白沙-XXL-蓝色',5000,100,100),(100,3,'蕾丝-L-红色',5000,100,100),(101,3,'白沙-S-白色',5000,100,100),(102,3,'白沙-L-黄色',5000,100,100),(103,3,'蕾丝-M-紫色',5000,100,100),(104,3,'蕾丝-L-粉色',5000,100,100),(105,3,'蕾丝-M-白色',5000,100,100),(106,3,'蕾丝-XL-粉色',5000,100,100),(107,3,'白沙-S-紫色',5000,100,100),(108,3,'蕾丝-XL-红色',5000,100,100),(109,3,'蕾丝-XXL-红色',5000,100,100),(110,3,'蕾丝-XXL-粉色',5000,100,100),(111,3,'白沙-L-蓝色',5000,100,100),(112,3,'白沙-M-红色',5000,100,100),(113,3,'蕾丝-S-蓝色',5000,100,100),(114,3,'蕾丝-XXL-黄色',5000,100,100),(115,3,'白沙-XL-紫色',5000,100,100),(116,3,'白沙-M-粉色',5000,100,100),(117,3,'白沙-XXL-紫色',5000,100,100),(118,3,'蕾丝-XL-黄色',5000,100,100),(119,3,'白沙-XXL-白色',5000,100,100),(120,3,'白沙-XL-白色',5000,100,100),(121,3,'白沙-XL-红色',5000,100,100),(122,3,'白沙-M-黄色',5000,100,100),(123,3,'蕾丝-L-紫色',5000,100,100),(124,3,'白沙-XL-粉色',5000,100,100),(125,3,'蕾丝-S-红色',5000,100,100),(126,3,'蕾丝-XXL-蓝色',5000,100,100),(127,3,'蕾丝-S-黄色',5000,100,100),(128,3,'蕾丝-S-粉色',5000,100,100),(129,3,'白沙-XL-黄色',5000,100,100),(130,3,'蕾丝-L-白色',5000,100,100),(131,3,'白沙-XL-蓝色',5000,100,100),(132,3,'白沙-L-紫色',5000,100,100),(133,3,'蕾丝-M-蓝色',5000,100,100),(134,3,'蕾丝-M-黄色',5000,100,100),(135,3,'白沙-S-粉色',5000,100,100),(136,3,'白沙-S-红色',5000,100,100),(137,3,'白沙-L-白色',5000,100,100),(138,3,'白沙-M-蓝色',5000,100,100),(139,3,'蕾丝-M-红色',5000,100,100),(140,3,'白沙-XXL-红色',5000,100,100),(141,3,'白沙-S-蓝色',5000,100,100),(142,3,'蕾丝-M-粉色',5000,100,100),(143,3,'白沙-S-黄色',5000,100,100),(144,3,'白沙-XXL-粉色',5000,100,100),(145,3,'白沙-XXL-黄色',5000,100,100),(146,3,'蕾丝-XXL-白色',5000,100,100),(147,3,'蕾丝-XL-白色',5000,100,100),(148,3,'蕾丝-S-紫色',5000,100,100),(149,3,'蕾丝-L-蓝色',5000,100,100),(150,3,'蕾丝-XL-紫色',5000,100,100),(151,3,'蕾丝-XXL-紫色',5000,100,100);

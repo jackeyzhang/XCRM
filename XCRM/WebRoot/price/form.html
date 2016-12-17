@@ -51,14 +51,14 @@
 			$('#pricebutton').click(
 					function(){
 						var value = $("input[name='price']").val();
-						$("input[name='priceamount']").val( value );
+						$("input[name^='price-']").val( value );
 					}
 			);
 			
 			$('#countbutton').click(
 			          function(){
 			            var value = $("input[name='count']").val();
-			            $("input[name='inventory']").val( value );
+			            $("input[name^='count']").val( value );
 			          }
 			      );
 		
