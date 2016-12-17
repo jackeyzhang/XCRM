@@ -20,6 +20,7 @@ public class SearchController extends AbstractController {
 		super.index();
 		this.setAttr("level1s", Productcategory.dao.find("select * from productcategory where level=1"));
 		this.setAttr("page", search(1, PAGE_SIZE));
+		setAttr("count", count());
 	}
 
 	private Page<Record> search(int pageNum, int pageSize) {

@@ -2,6 +2,7 @@ package com.xcrm.cart;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -9,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import com.xcrm.common.AbstractController;
 import com.xcrm.common.AttributeID;
 import com.xcrm.common.model.Attributevalue;
+import com.xcrm.common.model.Bookitem;
 import com.xcrm.common.model.Product;
 import com.xcrm.common.model.Productpic;
 import com.xcrm.common.util.Constant;
@@ -22,9 +24,10 @@ public class CartController extends AbstractController {
 		List<Productpic> productpics = Productpic.dao.find("select * from productpic where productid=?",
 				this.getPara("pid"));
 		this.setAttr("prd", product);
-		this.setAttr("prdpics", productpics.size()==0?null:productpics);
+		this.setAttr("prdpics", productpics.size() == 0 ? null : productpics);
 		setAttr("prdimg_path", getPrdImgBaseUrl());
 		setAttr("attrs", getAttrs());
+		setAttr("count", count());
 	}
 
 	private List<Tuple<AttributeID, List<String>>> getAttrs() {
@@ -40,6 +43,15 @@ public class CartController extends AbstractController {
 
 		}
 		return attrs;
+	}
+
+	public void save() {
+		Bookitem bookitem = this.getModel(Bookitem.class, "");
+		bookitem.setUser(getCurrentUserId());
+		bookitem.setStatus(false);
+		bookitem.setDate(new Date());
+		bookitem.save();
+		this.redirect("/cartlist/");
 	}
 
 	@Override

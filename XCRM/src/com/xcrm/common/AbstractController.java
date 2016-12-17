@@ -22,8 +22,9 @@ import com.xcrm.common.util.PropUtil;
  *
  */
 public abstract class AbstractController extends Controller {
-  
-    public static final int[] USED_FOR_PRICE_FROM_PRODUCT = { AttributeID.PRD_MATERIAL.getId(), AttributeID.PRD_COLOR.getId(),  AttributeID.PRD_SIZE.getId()  };
+
+	public static final int[] USED_FOR_PRICE_FROM_PRODUCT = { AttributeID.PRD_MATERIAL.getId(),
+			AttributeID.PRD_COLOR.getId(), AttributeID.PRD_SIZE.getId() };
 
 	public AbstractController() {
 		super();
@@ -38,10 +39,10 @@ public abstract class AbstractController extends Controller {
 		setAttr("model", getModalName());
 		setAttr("page_header", getPageHeader());
 		setAttr("toolbar_create", getToolBarAddButtonTitle());
-		if(getModalName().equalsIgnoreCase( "price" )){
-		  refreshAttributeforPrice( null );
-		}else{
-		  setAttr("attriutes", AttributeFinder.getInstance().getAllAttributeList(getCategory()));
+		if (getModalName().equalsIgnoreCase("price")) {
+			refreshAttributeforPrice(null);
+		} else {
+			setAttr("attriutes", AttributeFinder.getInstance().getAllAttributeList(getCategory()));
 		}
 		setAttr("imgMaxCount", PropUtil.getPrdImgMaxSize());
 	}
@@ -51,21 +52,22 @@ public abstract class AbstractController extends Controller {
 	public Model getModel() {
 		return null;
 	}
-	
-    protected void refreshAttributeforPrice( Integer productid ) {
-      List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList( Constant.CATEGORY_PRICE );
-      List<Attributevalue> attributesForProduct = AttributeFinder.getInstance().getAttributeValueList( Constant.CATEGORY_PRODUCT, productid == null? 0: productid, USED_FOR_PRICE_FROM_PRODUCT );
-      Iterator<Attribute> iter = attributes.iterator();
-      for ( ; iter.hasNext(); ) {
-        Attribute attribute = iter.next();
-        for ( Attributevalue productAttr : attributesForProduct ) {
-          if ( productAttr.getAttributeid().equals( attribute.getAttributeid() ) ) {
-            attribute.setValue( productAttr.getValue() );
-          }
-        }
-      }
-      setAttr("attriutes", attributes);
-    }
+
+	protected void refreshAttributeforPrice(Integer productid) {
+		List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList(Constant.CATEGORY_PRICE);
+		List<Attributevalue> attributesForProduct = AttributeFinder.getInstance().getAttributeValueList(
+				Constant.CATEGORY_PRODUCT, productid == null ? 0 : productid, USED_FOR_PRICE_FROM_PRODUCT);
+		Iterator<Attribute> iter = attributes.iterator();
+		for (; iter.hasNext();) {
+			Attribute attribute = iter.next();
+			for (Attributevalue productAttr : attributesForProduct) {
+				if (productAttr.getAttributeid().equals(attribute.getAttributeid())) {
+					attribute.setValue(productAttr.getValue());
+				}
+			}
+		}
+		setAttr("attriutes", attributes);
+	}
 
 	public abstract String getPageHeader();
 
@@ -98,7 +100,7 @@ public abstract class AbstractController extends Controller {
 							attribute.getAttributeid(), record.getInt("id"), getCategory());
 					if (av == null)
 						continue;
-					record.set("attribute-" + getCategory() + "-"+av.getAttributeid(), av.getValue());
+					record.set("attribute-" + getCategory() + "-" + av.getAttributeid(), av.getValue());
 				}
 				preRenderJsonForList(record);
 			}
@@ -121,10 +123,10 @@ public abstract class AbstractController extends Controller {
 			this.renderJson(records);
 		}
 	}
-	
-	
-	protected void preRenderJsonForList(Record record){}
-	
+
+	protected void preRenderJsonForList(Record record) {
+	}
+
 	public void save() {
 		this.renderHtml("not implementation");
 	}
@@ -198,4 +200,7 @@ public abstract class AbstractController extends Controller {
 		return url;
 	}
 
+	protected long count() {
+		return Db.queryLong("select count(0) from bookitem where status=0 and user=? ", getCurrentUserId());
+	}
 }

@@ -25,5 +25,6 @@ public class Constant {
 	public static final int CATEGORY_CONTRACT = 7;
 	public static final int CATEGORY_SEARCH = 8;
 	public static final int CATEGORY_CART = 9;
-	public static final int CATEGORY_BOOK = 10;
+	public static final int CATEGORY_CARTLIST = 10;
+	public static final int CATEGORY_BOOK = 11;
 }
