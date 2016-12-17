@@ -212,5 +212,17 @@ public class PriceController extends AbstractController {
     Priceinventoryvalue value = Priceinventoryvalue.dao.findFirst( "select * from Priceinventoryvalue where pricekey=? and priceid=?", key, priceid );
     return value;
   }
+  
+  /**
+   * key is "红色-M-白沙"
+   * 
+   * @param key
+   * @param productid
+   * @return Priceinventoryvalue price 单价, inventory 库存, count 现存
+   */
+  public Priceinventoryvalue getPriceInventory( String key, Integer productid ){
+    Priceinventoryvalue value = Priceinventoryvalue.dao.findFirst( "select * from Priceinventoryvalue pv, price pc where pv.priceid= pc.id and pv.pricekey=? and pc.product=?", key, productid );
+    return value;
+  }
 
 }
