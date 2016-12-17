@@ -31,4 +31,3 @@ public class _MappingKit {
 		arp.addMapping("user", "id", User.class);
 	}
 }
-
