@@ -48,4 +48,5 @@ public abstract class BaseBook<M extends BaseBook<M>> extends Model<M> implement
 	public java.lang.String getPrdattrs() {
 		return get("prdattrs");
 	}
+
 }

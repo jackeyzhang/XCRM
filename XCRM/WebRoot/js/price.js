@@ -42,22 +42,8 @@ $(function() {
 		});
 	};
 	
-	var $table = $('#testtable');
 	
-    function randomData() {
-        var startId = ~~(Math.random() * 100),
-            rows = [];
-        for (var i = 0; i < 10; i++) {
-            rows.push({
-            	id: startId + i,
-            	name: 'test' + (startId + i),
-            	price: '$' + (startId + i)
-            });
-        }
-        return rows;
-    }
-	
-	$('.modal-footer .btn.btn-default').click(function() {
+	$('#closebutton').click(function() {
 		window.location.href = '/price/';
 	});
 
@@ -116,11 +102,6 @@ $(function() {
 		row = row || {
 			id : '',
 		}; // default row value
-//		if(form){
-//			form.reset();//reset form
-//			form.find("[multiple='multiple']").multiselect('deselectAll',false);
-//			form.find("[multiple='multiple']").multiselect('updateButtonText');
-//		}
 		form.data('id', row.id);
 		form.find('.modal-title').text(title);
 		for ( var name in row) {

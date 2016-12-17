@@ -18,6 +18,7 @@ import com.xcrm.common.AttributeFinder;
 import com.xcrm.common.model.Attribute;
 import com.xcrm.common.model.Attributevalue;
 import com.xcrm.common.model.Price;
+import com.xcrm.common.model.Priceinventoryvalue;
 import com.xcrm.common.model.Product;
 import com.xcrm.common.util.Constant;
 
@@ -28,83 +29,88 @@ public class PriceController extends AbstractController {
   public void index() {
     super.index();
   }
-  
-  public void preadd(){
-    String pid = getPara("pid");
+
+  public void preadd() {
+    String pid = getPara( "pid" );
     this.setAttribute();
-    if (!StringUtils.isEmpty(pid)) {
+    if ( !StringUtils.isEmpty( pid ) ) {
       this.refreshAttributeforPrice( NumberUtils.stringToInt( pid ) );
     }
-    fillAttribute(pid);
-    setAttr( "id", getPara("id") );
-    render("/price/add.html");
+    fillAttribute( pid );
+    setAttr( "id", getPara( "id" ) );
+    render( "/price/add.html" );
   }
-  
-  public void loadingAddData(){
-    String id= getPara("id");
+
+  public void loadingAddData() {
+    String id = getPara( "id" );
     Record record = Db.findById( "price", id );
-    List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList(getCategory());
-    for (Attribute attribute : attributes) {
-      Attributevalue av = Attributevalue.dao.findFirst(
-          "select * from attributevalue where attributeid=? and objectid=? and category=?",
-          attribute.getAttributeid(), id, getCategory());
-      if (av == null || av.getAttributeid() > 200)
+    List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList( getCategory() );
+    for ( Attribute attribute : attributes ) {
+      Attributevalue av = Attributevalue.dao.findFirst( "select * from attributevalue where attributeid=? and objectid=? and category=?", attribute.getAttributeid(), id,
+          getCategory() );
+      if ( av == null || av.getAttributeid() > 200 )
         continue;
-      record.set("attribute-" + getCategory() + "-"+av.getAttributeid(), av.getValue());
+      record.set( "attribute-" + getCategory() + "-" + av.getAttributeid(), av.getValue() );
     }
     setAttr( "id", id );
-    renderJson(record);
+    renderJson( record );
   }
-  
-  private void fillAttribute(String productid){
+
+  private void fillAttribute( String productid ) {
     List<Record> records = new ArrayList<Record>();
-    List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList(getCategory());
-    attributes.sort( new Comparator<Attribute>(){
+    List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList( getCategory() );
+    attributes.sort( new Comparator<Attribute>() {
+
       public int compare( Attribute o1, Attribute o2 ) {
         return o1.getAttributeid() - o2.getAttributeid();
       }
-    });
-    Map<Attribute,String> valueMap = new HashMap<Attribute,String>();
-    for (Attribute attribute : attributes) {
-      Attributevalue av = Attributevalue.dao.findFirst(
-          "select * from attributevalue where attributeid=? and objectid=? and category=?",
-          attribute.getAttributeid(), productid, Constant.CATEGORY_PRODUCT);
-      if (av == null || av.getAttributeid() < 200)
+    } );
+    Map<Attribute, String> valueMap = new HashMap<Attribute, String>();
+    for ( Attribute attribute : attributes ) {
+      Attributevalue av = Attributevalue.dao.findFirst( "select * from attributevalue where attributeid=? and objectid=? and category=?", attribute.getAttributeid(), productid,
+          Constant.CATEGORY_PRODUCT );
+      if ( av == null || av.getAttributeid() < 200 )
         continue;
       valueMap.put( attribute, av.getValue() );
     }
-    
-    String value1 = "",value2 ="",value3 ="";
-    if(valueMap.values().size() >= 1){
+
+    String value1 = "", value2 = "", value3 = "";
+    if ( valueMap.values().size() >= 1 ) {
       value1 = (String)valueMap.values().toArray()[0];
     }
-    if(valueMap.values().size() >= 2){
+    if ( valueMap.values().size() >= 2 ) {
       value2 = (String)valueMap.values().toArray()[1];
     }
-    if(valueMap.values().size() >= 3){
+    if ( valueMap.values().size() >= 3 ) {
       value3 = (String)valueMap.values().toArray()[2];
     }
-    
-    if( !StringUtils.isEmpty( value1 ) && !StringUtils.isEmpty( value2 ) && !StringUtils.isEmpty( value3 )){
-     String[] v1 = value1.split( "," );
-     String[] v2 = value2.split( "," );
-     String[] v3 = value3.split( "," );
-     for( String vv1 : v1){
-       for(String vv2 : v2 ){
-         for(String vv3 : v3){
-           Record r = new Record();
-           r.set( "c1", vv1 );
-           r.set( "c2", vv2 );
-           r.set( "c3", vv3 );
-           records.add( r );
-         }
-       }
-     }
+
+    if ( !StringUtils.isEmpty( value1 ) && !StringUtils.isEmpty( value2 ) && !StringUtils.isEmpty( value3 ) ) {
+      String[] v1 = value1.split( "," );
+      String[] v2 = value2.split( "," );
+      String[] v3 = value3.split( "," );
+      for ( String vv1 : v1 ) {
+        for ( String vv2 : v2 ) {
+          for ( String vv3 : v3 ) {
+            Record r = new Record();
+            r.set( "c1", vv1 );
+            r.set( "c2", vv2 );
+            r.set( "c3", vv3 );
+            Priceinventoryvalue value = getPriceAndInventory( vv1 + "-"+ vv2 +  "-"+ vv3, this.getParaToInt("id"));
+            if(value!=null){
+              r.set( "count", value.getInventory());
+              r.set( "price", value.getPrice() );
+            }else{
+              r.set( "count", 0);
+              r.set( "price", 0 );
+            }
+            records.add( r );
+          }
+        }
+      }
     }
     setAttr( "avs", records );
   }
-  
-  
 
   @Override
   protected void preRenderJsonForList( Record record ) {
@@ -112,26 +118,29 @@ public class PriceController extends AbstractController {
     Product p = Product.dao.findById( product );
     record.set( "level1category", p.getLevel1category() );
     record.set( "level2category", p.getLevel2category() );
-    
-    List<Attributevalue> avs = AttributeFinder.getInstance().getAttributeValueList( getCategory(), record.getInt( "id" ));
-    for (Attributevalue av : avs) {
-      record.set("attribute-"+ getCategory() + "-" + av.getAttributeid(), av.getValue());
+
+    List<Attributevalue> avs = AttributeFinder.getInstance().getAttributeValueList( getCategory(), record.getInt( "id" ) );
+    for ( Attributevalue av : avs ) {
+      record.set( "attribute-" + getCategory() + "-" + av.getAttributeid(), av.getValue() );
     }
-    
+
   }
 
   public void save() {
     Price price = this.getModel( Price.class, "", true ).set( "store", this.getCurrentStoreId() ).set( "createuser", this.getCurrentUserId() ).set( "createtime", new Date() );
     price.save();
+    updatePriceAndInventory( price.getId() );
     forwardIndex( price );
   }
-  
-  public void update(){
-    this.getModel( Price.class, "", true ).set( "updateuser",  this.getCurrentUserId() ).set( "updatetime", new Date() ).update();
+
+  public void update() {
+    Price price = this.getModel( Price.class, "", true ).set( "updateuser", this.getCurrentUserId() ).set( "updatetime", new Date() );
+    price.update();
+    updatePriceAndInventory( price.getId() );
     this.forwardIndex();
   }
-  
-  public void remove(){
+
+  public void remove() {
     Price.dao.deleteById( this.getParaToInt( 0 ) );
     this.forwardIndex();
   }
@@ -160,4 +169,48 @@ public class PriceController extends AbstractController {
   public int getCategory() {
     return Constant.CATEGORY_PRICE;
   }
+
+  private void updatePriceAndInventory( int priceid ) {
+    for ( String key : getParaMap().keySet() ) {
+      String dbkey = null;
+      if ( key.startsWith( "price-" ) ) {
+        dbkey = key.replace( "price-", "" );
+      }
+      if ( key.startsWith( "count-" ) ) {
+        dbkey = key.replace( "count-", "" );
+      }
+      Priceinventoryvalue value = getPriceAndInventory(dbkey, priceid);
+      //update
+      if ( value != null && key.startsWith( "price-" ) ) {
+        value.set( "price", getParaMap().get( key )[0] );
+      }
+      if ( value != null && key.startsWith( "count-" ) ) {
+        value.set( "inventory", getParaMap().get( key )[0] );
+        value.set( "count", getParaMap().get( key )[0] );
+      }
+      if ( value != null ) {
+        value.update();
+        continue;
+      }
+      //insert
+      Priceinventoryvalue newvalue = new Priceinventoryvalue();
+      if ( key.startsWith( "price-" ) && getParaMap().get( key ) != null ) {
+        newvalue.setPriceid( priceid );
+        newvalue.setPricekey( dbkey );
+        newvalue.setPrice( Float.parseFloat( getParaMap().get( key )[0] ) );
+        String countKey = key.replace( "price-", "count-" );
+        if ( getParaMap().get( countKey ) != null ) {
+          newvalue.setCount( Integer.parseInt( getParaMap().get( countKey )[0] ) );
+          newvalue.setInventory( Integer.parseInt( getParaMap().get( countKey )[0] ) );
+        }
+        newvalue.save();
+      }
+    }
+  }
+  
+  public Priceinventoryvalue getPriceAndInventory( String key, Integer priceid ){
+    Priceinventoryvalue value = Priceinventoryvalue.dao.findFirst( "select * from Priceinventoryvalue where pricekey=? and priceid=?", key, priceid );
+    return value;
+  }
+
 }

@@ -25,14 +25,6 @@ public abstract class BaseCustomer<M extends BaseCustomer<M>> extends Model<M> i
 		return get("name");
 	}
 
-	public void setRegionId(java.lang.Integer regionId) {
-		set("regionId", regionId);
-	}
-
-	public java.lang.Integer getRegionId() {
-		return get("regionId");
-	}
-
 	public void setCustAddr(java.lang.String custAddr) {
 		set("custAddr", custAddr);
 	}
@@ -143,6 +135,14 @@ public abstract class BaseCustomer<M extends BaseCustomer<M>> extends Model<M> i
 
 	public java.util.Date getUpdateDate() {
 		return get("updateDate");
+	}
+
+	public void setRegionId(java.lang.Integer regionId) {
+		set("regionId", regionId);
+	}
+
+	public java.lang.Integer getRegionId() {
+		return get("regionId");
 	}
 
 }

@@ -161,6 +161,17 @@ CREATE TABLE `price` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
+DROP TABLE  IF EXISTS priceinventoryvalue;
+CREATE TABLE `priceinventoryvalue` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `priceid` int(11) NOT NULL,
+  `pricekey` varchar(100) NOT NULL COMMENT 'key=priceid+valueKey\nvaluekey=value1+value2+value3+...',
+  `price` float NOT NULL,
+  `inventory` int(11) NOT NULL COMMENT '初始库存',
+  `count` int(11) NOT NULL COMMENT '剩余数量',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=utf8;
+
 
 
 DROP TABLE  IF EXISTS contract;
