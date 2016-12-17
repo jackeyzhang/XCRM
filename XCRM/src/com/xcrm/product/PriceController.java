@@ -135,7 +135,12 @@ public class PriceController extends AbstractController {
 
   public void update() {
     Price price = this.getModel( Price.class, "", true ).set( "updateuser", this.getCurrentUserId() ).set( "updatetime", new Date() );
-    price.update();
+    if(price.getId() == null){
+      price.set( "createuser", this.getCurrentUserId() );
+      price.save();
+    }else{
+      price.update();
+    }
     updatePriceAndInventory( price.getId() );
     this.forwardIndex();
   }
