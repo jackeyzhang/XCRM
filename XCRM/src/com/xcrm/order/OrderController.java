@@ -1,16 +1,10 @@
 package com.xcrm.order;
 
-import java.util.Iterator;
-import java.util.List;
-
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.xcrm.common.AbstractController;
-import com.xcrm.common.AttributeFinder;
 import com.xcrm.common.Pager;
-import com.xcrm.common.model.Attribute;
-import com.xcrm.common.model.Attributevalue;
 import com.xcrm.common.util.Constant;
 
 public class OrderController extends AbstractController {
