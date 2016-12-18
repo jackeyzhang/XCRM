@@ -1,43 +1,46 @@
 package com.xcrm.order;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import com.jfinal.plugin.activerecord.Db;
-import com.jfinal.plugin.activerecord.Record;
 import com.xcrm.common.AbstractController;
-import com.xcrm.common.model.Order;
-import com.xcrm.common.model.Orderitem;
 import com.xcrm.common.util.Constant;
 
 public class OrderController extends AbstractController {
 	
-	public void index() {
-		super.index();
-		List<Record> list = Db.find("select bi.id, bi.num num,bi.price price,bi.product pid,p.name name,GROUP_CONCAT(pic.fielname) filename from bookitem bi left join product p on bi.product=p.id left join productpic pic on pic.productid=p.id where  bi.user=? and bi.status=0 group by bi.id, bi.num,bi.price,bi.product,p.name", getCurrentUserId());
-		setAttr("list", list);
-		setAttr("prdimg_path", getPrdImgBaseUrl());
-	}
 	
-	public void save() {
-		String ids = this.getPara("ids");
-		String[] idarray = ids.split(",");
-		Order order = new Order();
-		Date date = new Date();
-		order.setDate(date);
-		order.setOrderno(date.getTime());
-		order.save();
-		List<Orderitem> orderitems = new ArrayList<Orderitem>();
-		for (String id : idarray) {
-			Orderitem orderitem = new Orderitem();
-			orderitem.setBookitem(Integer.valueOf(id));
-			orderitem.setDate(date);
-			orderitem.setOrder(order.getId());
+	public void list(){/*
+		String sql = "select oi.id id,p.name name,o.orderno orderno,bi.price price,bi.num num,GROUP_CONCAT(pic.fielname) filename from orderitem oi left join bookitem bi on oi.bookitem=bi.id left join `order` o on o.id=oi.order left join product p on bi.product=p.id left join productpic pic on p.id=pic.productid where bi.user=? group by oi.id,p.name,o.orderno,bi.price,bi.num";
+		List<Record> records = Db.find(sql,getCurrentUserId());
+		Pager pager = new Pager(records.size(), records);
+		this.renderJson(records);
+
+		Pager pager = new Pager();
+		if (this.getPara("pageNumber") != null) {
+			int pagenumber = Integer.parseInt(this.getPara("pageNumber"));
+			int pagesize = Integer.parseInt(this.getPara("pageSize"));
+			Page<Record> page = Db.paginate(pagenumber, pagesize, "select * ", "from " + getModalName() + "");
+			pager = new Pager(page.getTotalRow(), page.getList());
+			List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList(getCategory());
+			String searchword = this.getPara("searchword");
+			Iterator<Record> iter = pager.getRows().iterator();
+			this.renderJson(pager);
+		} else {
+			List<Record> records = Db.find("select * from " + getModalName());
+			pager = new Pager(records.size(), records);
+			List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList(getCategory());
+			for (Record record : pager.getRows()) {
+				for (Attribute attribute : attributes) {
+					Attributevalue av = Attributevalue.dao.findFirst(
+							"select * from attributevalue where attributeid=? and objectid=? and category=?",
+							attribute.getAttributeid(), record.getInt("id"), getCategory());
+					if (av == null)
+						continue;
+					record.set("attribute-" + getCategory() + av.getAttributeid(), av.getValue());
+				}
+				preRenderJsonForList(record);
+			}
+			this.renderJson(records);
 		}
-		Db.batchSave(orderitems, orderitems.size());
-		this.forwardAction(getIndexHtml());
-	}
+	
+	*/}
 
 	@Override
 	public String getModalName() {

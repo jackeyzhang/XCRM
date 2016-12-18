@@ -12,15 +12,19 @@
 				success : function(data, status) {
 					if (status == "success") {
 						that.parents('tr').empty();
+						calc_amount();
 					}
 				}
 			});
 		});
-		var amount = 0;
-		for (var i = 0; i < $('.sum').length; i++) {
-			amount += parseInt($($('.sum')[i]).html());
-		}
-		$('.amount').html(amount);
+		var calc_amount = function() {
+			var amount = 0;
+			for (var i = 0; i < $('.sum').length; i++) {
+				amount += parseInt($($('.sum')[i]).html());
+			}
+			$('.amount').html(amount);
+		};
+		calc_amount();
 	});
 </script>
 
@@ -39,7 +43,7 @@
 				data-formatter="actionFormatter" data-events="actionEvents">操作</th>
 			<#list list as item>
 		<tr>
-			<input type="hidden" value="${item.id}" class="itemid"/>
+			<input type="hidden" value="${item.id}" class="itemid" />
 			<td><img width="80px" height="80px"
 				src='${(item.filename??)?string((prdimg_path+"/"+item.pid+"/"+((item.filename!"")?split(","))[0]),"/img/placehold.jpg")}' />
 			</td>
@@ -55,7 +59,7 @@
 	</thead>
 </table>
 <div class="col-md-12"
-	style="text-align: left; padding: 10px; height: 70px; border: 1px solid #ddd">
+	style="text-align: left; padding: 10px; height: 70px; border-top: 1px solid #ddd">
 	<div class="col-md-1"
 		style="float: right; font-size: 18px; background-color: #df3033; text-align: center;">
 		<a id="payment" class="sc-btn">去结算</a>
