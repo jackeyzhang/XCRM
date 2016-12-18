@@ -1,0 +1,16 @@
+
+<table id="table" class="table table-striped table-hover" data-show-refresh="true"
+	data-show-columns="true" data-search="true"
+	data-query-params="queryParams" data-toolbar=".toolbar"
+	data-pagination="true" data-show-toggle="true">
+	<thead>
+		<tr>
+			<#include "../${model}/list.html"/>
+			<#if attriutes?size != 0>
+				<#list attriutes as e>
+				  <th data-field="attribute-${e.category}-${e.attributeid}" data-align="center">${e.displayname}</th>
+				</#list>
+			</#if>
+		</tr>
+	</thead>
+</table>
