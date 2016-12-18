@@ -52,7 +52,7 @@ public class CartController extends AbstractController {
 
 	private Map<String, Priceinventoryvalue> getPrice() {
 		List<Priceinventoryvalue> list = Priceinventoryvalue.dao.find(
-				"select * from priceinventoryvalue pi left join price pr on pi.priceid=pr.id  where pr.product=?",
+				"select pi.* from priceinventoryvalue pi left join price pr on pi.priceid=pr.id  where pr.product=?",
 				this.getPara("pid"));
 		Map<String, Priceinventoryvalue> map = new HashMap<String, Priceinventoryvalue>();
 		for (Priceinventoryvalue priceinventoryvalue : list) {
