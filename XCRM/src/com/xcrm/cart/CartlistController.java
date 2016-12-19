@@ -32,6 +32,7 @@ public class CartlistController extends AbstractController {
 		  String[] commentArray = comments.split( "," );
 		  for( String comment : commentArray){
 		    String[] bookitmeIDAndComment = comment.split( "=" );
+		    if(bookitmeIDAndComment.length < 2) continue;
 		    String bookitemid = bookitmeIDAndComment[0].replace( "comments-", "" );
 		    Db.update("update bookitem set comments='"+ bookitmeIDAndComment[1] +"' where id = " + bookitemid);
 		  }
