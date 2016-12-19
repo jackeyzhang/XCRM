@@ -179,6 +179,7 @@ CREATE TABLE `bookitem` (
   prdattrs varchar(2000),
   contract int(11),
   contact int(11),
+  `comments` varchar(2000) DEFAULT NULL COMMENT '购买时备注',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 

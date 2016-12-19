@@ -54,6 +54,16 @@
 			<td><a class="del-item" data="${item.id}"
 				href="javascript:void(0);">删除</a></td>
 		</tr>
+		<tr>
+		 <td>
+		 </td>
+		  <td colspan="5">
+			  <div>
+			    <label class="required">备注</label>
+			    <textarea placeholder="请添加订单项说明" name="comments-${item.id}" value="${item.comments!'请添加订单项备注'}" class="form-control"  rows="2"></textarea>
+		    </div>
+	    </td>
+		</tr>
 		</#list>
 		</tr>
 	</thead>

@@ -89,4 +89,12 @@ public abstract class BaseBookitem<M extends BaseBookitem<M>> extends Model<M> i
 		return get("contact");
 	}
 
+	public void setComments(java.lang.String comments) {
+		set("comments", comments);
+	}
+
+	public java.lang.String getComments() {
+		return get("comments");
+	}
+
 }

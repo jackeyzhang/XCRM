@@ -17,7 +17,7 @@ public class CartlistController extends AbstractController {
 	public void index() {
 		super.index();
 		List<Record> list = Db.find(
-				"select bi.id, bi.num num,bi.price price,bi.product pid,p.name name,GROUP_CONCAT(pic.fielname) filename from bookitem bi left join product p on bi.product=p.id left join productpic pic on pic.productid=p.id where  bi.user=? and bi.status=0 group by bi.id, bi.num,bi.price,bi.product,p.name",
+				"select bi.id, bi.num num,bi.price price,bi.product pid,p.name name,bi.comments comments,GROUP_CONCAT(pic.fielname) filename from bookitem bi left join product p on bi.product=p.id left join productpic pic on pic.productid=p.id where  bi.user=? and bi.status=0 group by bi.id, bi.num,bi.price,bi.product,p.name",
 				getCurrentUserId());
 		setAttr("list", list);
 		setAttr("prdimg_path", getPrdImgBaseUrl());
@@ -26,6 +26,16 @@ public class CartlistController extends AbstractController {
 	public void save() {
 		String ids = this.getPara("ids");
 		Db.update("update bookitem set status=1 where id in (" + ids + ") ");
+		// add comment per book items
+		String comments = this.getPara("comments");
+		if(comments != null && !comments.isEmpty()){
+		  String[] commentArray = comments.split( "," );
+		  for( String comment : commentArray){
+		    String[] bookitmeIDAndComment = comment.split( "=" );
+		    String bookitemid = bookitmeIDAndComment[0].replace( "comments-", "" );
+		    Db.update("update bookitem set comments='"+ bookitmeIDAndComment[1] +"' where id = " + bookitemid);
+		  }
+		}
 		saveOrder();
 		this.redirect("/order/");
 	}
