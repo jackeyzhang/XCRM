@@ -47,6 +47,16 @@ public class CartlistController extends AbstractController {
 		Date date = new Date();
 		order.setDate(date);
 		order.setOrderno(date.getTime());
+	      // persist price
+        String price = this.getPara("price");
+        if( price != null && !price.isEmpty()){
+          order.setPrice( Float.parseFloat( price ) );
+        }
+        // persit amount
+        String amount = this.getPara("amount");
+        if( amount != null && !amount.isEmpty()){
+          order.setTotalprice(  Float.parseFloat( amount )  );
+        }
 		order.save();
 		List<Orderitem> orderitems = new ArrayList<Orderitem>();
 		for (String id : idarray) {

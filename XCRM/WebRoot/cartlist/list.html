@@ -17,13 +17,28 @@
 				}
 			});
 		});
+		
 		var calc_amount = function() {
 			var amount = 0;
 			for (var i = 0; i < $('.sum').length; i++) {
 				amount += parseInt($($('.sum')[i]).html());
 			}
 			$('.amount').html(amount);
+			var discount =$('#discount').val();
+			if(discount<=0 || discount > 100){
+				showAlert("输入的折扣值不能大于100小于0!!!");
+				$('#discount').val(100);
+				$('#price').val(amount*100/100);
+				return;
+			}
+			if(!discount) discount = 100;
+			$('#price').val(amount*discount/100);
 		};
+		
+		$("#discount").on('input',function(e){  
+			calc_amount();
+		});  
+		
 		calc_amount();
 	});
 </script>
@@ -74,10 +89,16 @@
 		style="float: right; font-size: 18px; background-color: #df3033; text-align: center;">
 		<a id="payment" class="sc-btn">去结算</a>
 	</div>
-	<div class="col-md-2"
-		style="float: right; text-align: right; font-weight: bold">
-		<span>总价:</span><span class="amount"
-			style="color: #df3033; font-size: 18px"></span>
+	<div class="col-md-2" style="float: right; text-align: right; font-weight: bold">
+		<span>总价:</span>
+		<span class="amount"	style="color: #df3033; font-size: 18px"></span>
+	  <br/>
+	  <label>成交价: </label>
+	  <input type="text" class="form-control" id="price"/>
 	</div>
+	 <div class="col-md-2" style="float: left;  font-weight: bold">
+    <span>输入折扣(百分比):</span>
+    <input type="number" class="form-control" id="discount" value="100" min="1" max="100"/>
+  </div>
 
 </div>

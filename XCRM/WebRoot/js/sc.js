@@ -20,6 +20,15 @@ $(function() {
 					row["comments"] += $("textarea[name^='comments-']")[i].name + "=" + $($("textarea[name^='comments-']")[i]).val() + (($("textarea[name^='comments-']").length-1==i)?'':',');
 				}
 			}
+			
+			if( $(".amount").length > 0 ){
+				row["amount"] = $($(".amount")[0]).html();
+			}
+			
+			if( $("#price").length > 0 ){
+				row["price"] = $("#price").val();
+			}
+			
 			// submit row
 			$.ajax({
 				url : "/cartlist/save?ids=" + ids,

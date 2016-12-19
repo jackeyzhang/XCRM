@@ -33,4 +33,20 @@ public abstract class BaseOrder<M extends BaseOrder<M>> extends Model<M> impleme
 		return get("date");
 	}
 
+	public void setTotalprice(java.lang.Float totalprice) {
+		set("totalprice", totalprice);
+	}
+
+	public java.lang.Float getTotalprice() {
+		return get("totalprice");
+	}
+
+	public void setPrice(java.lang.Float price) {
+		set("price", price);
+	}
+
+	public java.lang.Float getPrice() {
+		return get("price");
+	}
+
 }
