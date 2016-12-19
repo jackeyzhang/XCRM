@@ -1,0 +1,13 @@
+
+<table id="table" class="table table-striped table-hover" data-show-refresh="true"
+	data-show-columns="true" data-search="true"
+	data-query-params="queryParams" data-toolbar=".toolbar"
+	data-pagination="true" data-show-toggle="true">
+	<thead>
+		<tr>
+			<#include "../${model}/list.html"/>
+			<th data-field="action" data-align="center"
+				data-formatter="actionFormatter" data-events="actionEvents">操作</th>
+		</tr>
+	</thead>
+</table>
