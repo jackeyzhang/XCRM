@@ -92,11 +92,13 @@ public class PriceController extends AbstractController {
             r.set( "c3", vv3 );
             Priceinventoryvalue value = getPriceAndInventory( vv1 + "-"+ vv2 +  "-"+ vv3, this.getParaToInt("id"));
             if(value!=null){
-              r.set( "count", value.getInventory());
+              r.set( "count", value.getCount());
+              r.set( "inventory", value.getInventory());
               r.set( "price", value.getPrice() );
             }else{
               r.set( "count", 0);
               r.set( "price", 0 );
+              r.set( "inventory", 0);
             }
             records.add( r );
           }
@@ -178,14 +180,19 @@ public class PriceController extends AbstractController {
       if ( key.startsWith( "count-" ) ) {
         dbkey = key.replace( "count-", "" );
       }
+      if ( key.startsWith( "inventory-" ) ) {
+        dbkey = key.replace( "inventory-", "" );
+      }
       Priceinventoryvalue value = getPriceAndInventory(dbkey, priceid);
       //update
       if ( value != null && key.startsWith( "price-" ) ) {
         value.set( "price", getParaMap().get( key )[0] );
       }
       if ( value != null && key.startsWith( "count-" ) ) {
-        value.set( "inventory", getParaMap().get( key )[0] );
         value.set( "count", getParaMap().get( key )[0] );
+      }
+      if ( value != null && key.startsWith( "inventory-" ) ) {
+        value.set( "inventory", getParaMap().get( key )[0] );
       }
       if ( value != null ) {
         value.update();
@@ -200,7 +207,10 @@ public class PriceController extends AbstractController {
         String countKey = key.replace( "price-", "count-" );
         if ( getParaMap().get( countKey ) != null ) {
           newvalue.setCount( Integer.parseInt( getParaMap().get( countKey )[0] ) );
-          newvalue.setInventory( Integer.parseInt( getParaMap().get( countKey )[0] ) );
+        }
+        String inventoryKey = key.replace( "count-", "inventory-" );
+        if ( getParaMap().get( inventoryKey ) != null ) {
+          newvalue.setInventory( Integer.parseInt( getParaMap().get( inventoryKey )[0] ) );
         }
         newvalue.save();
       }

@@ -60,26 +60,32 @@
       
 			<div class="container">
 				<div class="row" >
-            <div class="col-md-4">
-              <label>产品颜色-大小-材质</label>
+            <div class="col-md-3">
+              <label>材质-大小-颜色</label>
            </div>
-           <div class="col-md-4">
+           <div class="col-md-3">
              <label>价格</label>
            </div>
-            <div class="col-md-4">
+           <div class="col-md-3">
+             <label>初始库存</label>
+           </div>
+           <div class="col-md-3">
              <label>库存</label>
            </div>
          </div>
 			  <#if avs?size != 0>
 			  <#list avs as attr>
 					<div class="row" >
-					   <div class="col-md-4">
+					   <div class="col-md-3">
                <label>${attr.c1} - ${attr.c2} - ${attr.c3}</label>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                <input type="number" class="form-control" name="price-${attr.c1}-${attr.c2}-${attr.c3}" id="price-${attr.c1}-${attr.c2}-${attr.c3}" placeholder="${attr.c1} - ${attr.c2} - ${attr.c3}" value="${attr.price}">
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
+               <input type="number" class="form-control" name="inventory-${attr.c1}-${attr.c2}-${attr.c3}" id="inventory-${attr.c1}-${attr.c2}-${attr.c3}" placeholder="${attr.c1} - ${attr.c2} - ${attr.c3}" value="${attr.inventory}">
+            </div>
+            <div class="col-md-3">
                <input type="number" class="form-control" name="count-${attr.c1}-${attr.c2}-${attr.c3}" id="count-${attr.c1}-${attr.c2}-${attr.c3}" placeholder="${attr.c1} - ${attr.c2} - ${attr.c3}" value="${attr.count}">
             </div>
 					</div>

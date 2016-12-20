@@ -39,8 +39,11 @@
 			var key = material+'-'+size+'-'+color;
 			if(xcpage.prices[key]){
 				var price = xcpage.prices[key].price;
+				var count = xcpage.prices[key].count;
 				$('#price').val(price);
 				$('#price-span').html(price);
+        $('#count').val(count);
+        $('#count-span').html(count);
 			}
 			
 		});
@@ -126,6 +129,16 @@
 						<span style="color:red;font-size:18px" id="price-span">0</span>
 					</div>
 				</div>
+				
+        <div class="col-md-12" style="text-align: left; padding: 10px">
+          <div class="col-md-1" style="padding: 0; width: 70px">
+            <input type="hidden" name="count" id="count" value=""> <span>库存：</span>
+          </div>
+          <div class="col-md-8" style="text-align: left">
+            <span style="color:red;font-size:18px" id="count-span">0</span>
+          </div>
+        </div>
+				
 				<input type="hidden" name="prdattrs" id="prdattrs" value="">
 				<#list attrs as attr >
 				<div class="col-md-12" style="text-align: left; padding: 10px">

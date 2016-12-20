@@ -92,7 +92,7 @@ public class CartlistController extends AbstractController {
 
 	@Override
 	public String getToolBarAddButtonTitle() {
-		return "Go Shopping";
+		return "继续购买";
 	}
 
 	@Override
