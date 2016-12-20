@@ -59,12 +59,12 @@ public class PriceController extends AbstractController {
   private void fillAttribute( String productid ) {
     List<Record> records = new ArrayList<Record>();
     List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList( getCategory() );
-    attributes.sort( new Comparator<Attribute>() {
+/*    attributes.sort( new Comparator<Attribute>() {
 
       public int compare( Attribute o1, Attribute o2 ) {
         return o1.getAttributeid() - o2.getAttributeid();
       }
-    } );
+    } );*/
     Map<Attribute, String> valueMap = new HashMap<Attribute, String>();
     for ( Attribute attribute : attributes ) {
       Attributevalue av = Attributevalue.dao.findFirst( "select * from attributevalue where attributeid=? and objectid=? and category=?", attribute.getAttributeid(), productid,
