@@ -190,6 +190,7 @@ CREATE TABLE `order` (
   `date` datetime NOT NULL,
   `totalprice` float NOT NULL COMMENT '总价',
   `price` float NOT NULL COMMENT '成交价',
+  `comments` varchar(2000) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 

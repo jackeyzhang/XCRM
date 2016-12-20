@@ -74,7 +74,7 @@
 		 </td>
 		  <td colspan="5">
 			  <div>
-			    <label class="required">备注</label>
+			    <label class="required">订单项备注</label>
 			    <textarea placeholder="请添加订单项说明" name="comments-${item.id}" value="${item.comments!'请添加订单项备注'}" class="form-control"  rows="2"></textarea>
 		    </div>
 	    </td>
@@ -83,6 +83,14 @@
 		</tr>
 	</thead>
 </table>
+
+<div class="col-md-12">
+    <div>
+         <label class="required">订单备注</label>
+         <textarea placeholder="请添加订单说明" id="ordercomments" class="form-control"  rows="2"></textarea>
+     </div>
+</div>
+
 <div class="col-md-12"
 	style="text-align: left; padding: 10px; height: 70px; border-top: 1px solid #ddd">
 	<div class="col-md-1"

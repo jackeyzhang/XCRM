@@ -29,6 +29,10 @@ $(function() {
 				row["price"] = $("#price").val();
 			}
 			
+			if( $("#ordercomments").length > 0 ){
+				row["ordercomments"] = $("#ordercomments").val();
+			}
+			
 			// submit row
 			$.ajax({
 				url : "/cartlist/save?ids=" + ids,

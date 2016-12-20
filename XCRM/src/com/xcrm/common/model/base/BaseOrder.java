@@ -49,4 +49,12 @@ public abstract class BaseOrder<M extends BaseOrder<M>> extends Model<M> impleme
 		return get("price");
 	}
 
+	public void setComments(java.lang.String comments) {
+		set("comments", comments);
+	}
+
+	public java.lang.String getComments() {
+		return get("comments");
+	}
+
 }
