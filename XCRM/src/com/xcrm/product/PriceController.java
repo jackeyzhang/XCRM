@@ -1,13 +1,12 @@
 package com.xcrm.product;
 
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.NumberUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.jfinal.aop.Before;
@@ -34,7 +33,7 @@ public class PriceController extends AbstractController {
     String pid = getPara( "pid" );
     this.setAttribute();
     if ( !StringUtils.isEmpty( pid ) ) {
-      this.refreshAttributeforPrice( NumberUtils.stringToInt( pid ) );
+      this.refreshAttributeforPrice( Integer.parseInt( pid ) );
     }
     fillAttribute( pid );
     setAttr( "id", getPara( "id" ) );
@@ -59,12 +58,7 @@ public class PriceController extends AbstractController {
   private void fillAttribute( String productid ) {
     List<Record> records = new ArrayList<Record>();
     List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList( getCategory() );
-/*    attributes.sort( new Comparator<Attribute>() {
-
-      public int compare( Attribute o1, Attribute o2 ) {
-        return o1.getAttributeid() - o2.getAttributeid();
-      }
-    } );*/
+    Collections.sort( attributes );
     Map<Attribute, String> valueMap = new HashMap<Attribute, String>();
     for ( Attribute attribute : attributes ) {
       Attributevalue av = Attributevalue.dao.findFirst( "select * from attributevalue where attributeid=? and objectid=? and category=?", attribute.getAttributeid(), productid,
