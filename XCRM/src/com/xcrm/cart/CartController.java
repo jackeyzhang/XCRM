@@ -62,7 +62,7 @@ public class CartController extends AbstractController {
 	}
 
 	public void save() {
-		Bookitem bookitem = this.getModel(Bookitem.class, "");
+		Bookitem bookitem = this.getModel(Bookitem.class, "", true);
 		bookitem.setUser(getCurrentUserId());
 		bookitem.setStatus(false);
 		bookitem.setDate(new Date());
