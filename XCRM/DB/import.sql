@@ -205,8 +205,7 @@ CREATE TABLE `orderitem` (
 
 --default script in
 
-INSERT INTO `user` (`id`, `contact`, `department`, `title`, `username`, `password`, `isenable`, `email`) VALUES
-  (1, 'root', 'it', 'dev', 'root', 'root', b'1', 'lewis@gmail.com');
+INSERT INTO `user` (`id`, `contact`, `department`, `title`, `username`, `password`, `isenable`, `email`) VALUES  (1, 'root', 'it', 'dev', 'root', 'root', b'1', 'lewis@gmail.com');
 
 INSERT INTO `productcategory` VALUES (1,1,NULL,'商曼'),(2,2,1,'婚纱'),(3,2,1,'礼服');
 
