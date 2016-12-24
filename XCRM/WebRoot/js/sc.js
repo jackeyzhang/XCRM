@@ -14,13 +14,6 @@ $(function() {
 //			location.href = "/cartlist/save?ids=" + ids;
 			
 			var row = {};
-			row["comments"] = "";
-			if( $("textarea[name^='comments-']").length > 0){
-				for (var i = 0; i < $("textarea[name^='comments-']").length; i++) {
-					row["comments"] += $("textarea[name^='comments-']")[i].name + "=" + $($("textarea[name^='comments-']")[i]).val() + (($("textarea[name^='comments-']").length-1==i)?'':',');
-				}
-			}
-			
 			if( $(".amount").length > 0 ){
 				row["amount"] = $($(".amount")[0]).html();
 			}

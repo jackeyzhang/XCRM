@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.xcrm.common.AbstractController;
@@ -28,17 +30,27 @@ public class CartlistController extends AbstractController {
 		Db.update("update bookitem set status=1 where id in (" + ids + ") ");
 		// add comment per book items
 		String comments = this.getPara("comments");
-		if(comments != null && !comments.isEmpty()){
-		  String[] commentArray = comments.split( "," );
-		  for( String comment : commentArray){
-		    String[] bookitmeIDAndComment = comment.split( "=" );
-		    if(bookitmeIDAndComment.length < 2) continue;
-		    String bookitemid = bookitmeIDAndComment[0].replace( "comments-", "" );
-		    Db.update("update bookitem set comments='"+ bookitmeIDAndComment[1] +"' where id = " + bookitemid);
-		  }
+		if (comments != null && !comments.isEmpty()) {
+			String[] commentArray = comments.split(",");
+			for (String comment : commentArray) {
+				String[] bookitmeIDAndComment = comment.split("=");
+				if (bookitmeIDAndComment.length < 2)
+					continue;
+				String bookitemid = bookitmeIDAndComment[0].replace("comments-", "");
+				Db.update("update bookitem set comments='" + bookitmeIDAndComment[1] + "' where id = " + bookitemid);
+			}
 		}
 		saveOrder();
 		this.redirect("/order/");
+	}
+
+	public void updatecomments() {
+		String id = this.getPara("id");
+		String comments = this.getPara("comments");
+		if (!StringUtils.isEmpty(id) && !StringUtils.isEmpty(id)) {
+			Db.update("update bookitem set comments=? where id =?", comments, id);
+		}
+		renderNull();
 	}
 
 	public void saveOrder() {
@@ -48,21 +60,21 @@ public class CartlistController extends AbstractController {
 		Date date = new Date();
 		order.setDate(date);
 		order.setOrderno(date.getTime());
-	    // persist price
-        String price = this.getPara("price");
-        if( price != null && !price.isEmpty()){
-          order.setPrice( Float.parseFloat( price ) );
-        }
-        // persist amount
-        String amount = this.getPara("amount");
-        if( amount != null && !amount.isEmpty()){
-          order.setTotalprice(  Float.parseFloat( amount )  );
-        }
-       // persist comments
-        String ordercomments = this.getPara("ordercomments");
-        if( ordercomments != null && !ordercomments.isEmpty()){
-          order.setComments( ordercomments );
-        }
+		// persist price
+		String price = this.getPara("price");
+		if (price != null && !price.isEmpty()) {
+			order.setPrice(Float.parseFloat(price));
+		}
+		// persist amount
+		String amount = this.getPara("amount");
+		if (amount != null && !amount.isEmpty()) {
+			order.setTotalprice(Float.parseFloat(amount));
+		}
+		// persist comments
+		String ordercomments = this.getPara("ordercomments");
+		if (ordercomments != null && !ordercomments.isEmpty()) {
+			order.setComments(ordercomments);
+		}
 		order.save();
 		List<Orderitem> orderitems = new ArrayList<Orderitem>();
 		for (String id : idarray) {
