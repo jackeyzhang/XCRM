@@ -41,7 +41,7 @@ public class CartlistController extends AbstractController {
 			}
 		}
 		saveOrder();
-		this.redirect("/order/");
+		renderNull();
 	}
 
 	public void updatecomments() {
