@@ -81,6 +81,14 @@ public abstract class BaseBookitem<M extends BaseBookitem<M>> extends Model<M> i
 		return get("contract");
 	}
 
+	public void setCustomer(java.lang.Integer customer) {
+		set("customer", customer);
+	}
+
+	public java.lang.Integer getCustomer() {
+		return get("customer");
+	}
+
 	public void setContact(java.lang.Integer contact) {
 		set("contact", contact);
 	}

@@ -178,6 +178,7 @@ CREATE TABLE `bookitem` (
   status tinyint(1) NOT NULL,
   prdattrs varchar(2000),
   contract int(11),
+  customer int(11),
   contact int(11),
   `comments` varchar(2000) DEFAULT NULL COMMENT '购买时备注',
   PRIMARY KEY (`id`)

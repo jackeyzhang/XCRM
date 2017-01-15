@@ -28,11 +28,11 @@
 			if(discount<=0 || discount > 100){
 				showAlert("输入的折扣值不能大于100小于0!!!");
 				$('#discount').val(100);
-				$('#price').html(amount*100/100);
+				$('#price').val(amount*100/100);
 				return;
 			}
 			if(!discount) discount = 100;
-			$('#price').html(amount*discount/100);
+			$('#price').val(amount*discount/100);
 		};
 		
 		$("#discount").on('input',function(e){  
@@ -125,33 +125,35 @@ table {
 
 </table>
 
-
+<div class="col-md-12"
+  style="text-align: left; padding: 10px; border-top: 1px solid #ddd">
+    <div>
+      <textarea placeholder="请添加订单说明" id="ordercomments"
+        class="form-control" rows="2"></textarea>
+    </div>
+</div>
 
 <div class="col-md-12"
 	style="text-align: left; padding: 10px; border-top: 1px solid #ddd">
-	<div class="col-md-6">
-		<div>
-			<label class="required">订单备注</label>
-			<textarea placeholder="请添加订单说明" id="ordercomments"
-				class="form-control" rows="2"></textarea>
-		</div>
-	</div>
+	
 	<div class="col-md-2" style="float: left; font-weight: bold">
 		<span>输入折扣(百分比):</span> <input type="number" class="form-control"
 			id="discount" value="100" min="1" max="100" />
 	</div>
-	<div class="col-md-2" style="text-align: right; font-weight: bold">
+	
+	<div class="col-md-2 col-md-offset-6" style="text-align: right; font-weight: bold">
 		<div>
 			<span>总价:</span> <span class="amount"
 				style="color: #df3033; font-size: 18px"></span>
 		</div>
-		<div>
-			<span>成交价: </span> <span style="color: #df3033; font-size: 18px" id="price"></span>
+		<div class="input-group">
+			<span class="input-group-addon">成交价: </span> 
+			<input type="text" class="form-control" id="price" name="price"/>
 		</div>
 	</div>
 
 	<div class="col-md-2"
-		style="font-size: 18px; background-color: #df3033; text-align: center;">
+		style="float: right;font-size: 18px; background-color: #df3033; text-align: center;">
 		<a id="payment" class="sc-btn">去结算</a>
 	</div>
 </div>
