@@ -10,7 +10,7 @@ import com.xcrm.common.util.Constant;
 public class OrderController extends AbstractController {
 
 	public void list() {
-		String sql = "select oi.id id,p.name name,o.orderno orderno,bi.price price,bi.num num,GROUP_CONCAT(pic.fielname) filename,oi.date date,bi.comments comments";
+		String sql = "select oi.id id,p.name name,o.orderno orderno,bi.price price,o.price dealprice,bi.num num,GROUP_CONCAT(pic.fielname) filename,oi.date date,bi.comments comments";
 		String sqlExcept = " from orderitem oi left join bookitem bi on oi.bookitem=bi.id left join `order` o on o.id=oi.order left join product p on bi.product=p.id left join productpic pic on p.id=pic.productid where bi.user=? group by oi.id,p.name,o.orderno,bi.price,bi.num,oi.date order by oi.id desc";
 		int pagenumber = Integer.parseInt(this.getPara("pageNumber"));
 		int pagesize = Integer.parseInt(this.getPara("pageSize"));

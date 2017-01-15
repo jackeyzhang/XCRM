@@ -20,7 +20,7 @@ $(function() {
 						data : {
 							ids : ids,
 							amount : $(".amount").html(),
-							price : $("#price").html(),
+							price : $("#price").val(),
 							ordercomments : $("#ordercomments").val()
 						},
 						success : function(indata, status) {
