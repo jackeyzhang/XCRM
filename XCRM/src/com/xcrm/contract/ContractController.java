@@ -17,7 +17,7 @@ public class ContractController extends AbstractController {
 		String editorValue = getPara("editorValue");
 		Contract contract = new Contract();
 		contract.set("name", name).save();
-		String filename = getContractTemplatePath() + contract.getId();
+		String filename = getContractTemplatePath() + contract.getId() + ".html";
 		try {
 			FileUtils.write(new File(filename), editorValue);
 		} catch (IOException e) {
@@ -32,7 +32,7 @@ public class ContractController extends AbstractController {
 		String editorValue = getPara("editorValue");
 		Contract contract = new Contract();
 		contract.set("id", id).set("name", name).update();
-		String filename = getContractTemplatePath() + contract.getId();
+		String filename = getContractTemplatePath() + contract.getId() + ".html";
 		try {
 			FileUtils.write(new File(filename), editorValue);
 		} catch (IOException e) {
@@ -45,7 +45,7 @@ public class ContractController extends AbstractController {
 		String id = getPara("id");
 		if (!StringUtils.isEmpty(id)) {
 			Contract contract = Contract.dao.findById(id);
-			String filename = getContractTemplatePath() + contract.getId();
+			String filename = getContractTemplatePath() + contract.getId() + ".html";
 			setAttr("id", contract.getId());
 			setAttr("name", contract.getName());
 			try {
@@ -85,5 +85,11 @@ public class ContractController extends AbstractController {
 	@Override
 	public int getCategory() {
 		return Constant.CATEGORY_USER;
+	}
+	
+	public void view( ){
+	  String id = getPara("id");
+	  setAttr("contract", id);
+	  this.render( "view.html" );
 	}
 }
