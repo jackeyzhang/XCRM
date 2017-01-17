@@ -39,6 +39,19 @@
 			calc_amount();
 		});  
 		
+    var calc_disacount = function() {
+        var price =$('#price').val();
+        var amount = 0;
+        for (var i = 0; i < $('.sum').length; i++) {
+          amount += parseInt($($('.sum')[i]).html());
+        }
+        $('#discount').val(price/amount * 100);
+      };
+	      
+     $("#price").on('input',function(e){  
+   	  calc_disacount();
+     });  
+		
 		var change_comments=function(){
 			if($(this).has('textarea').length==0){
 				var comments=$.trim($(this).html());
