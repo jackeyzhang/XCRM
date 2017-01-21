@@ -14,7 +14,9 @@ $(function() {
 						ids += $($('.itemid')[i]).val()
 								+ (($('.itemid').length - 1 == i) ? '' : ',');
 					}
-					$.ajax({
+					location.href = "/payment";
+					
+					/*$.ajax({
 						url : "/cartlist/save",
 						type : 'post',
 						data : {
@@ -28,7 +30,7 @@ $(function() {
 								location.href = "/order";
 							}
 						}
-					});
+					});*/
 
 				}
 			});
