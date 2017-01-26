@@ -204,6 +204,12 @@ CREATE TABLE `orderitem` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
+
+-- from Jan 25, 2017  add company for customer
+ALTER TABLE `xcrm`.`customer` 
+ADD COLUMN `company` VARCHAR(100) NULL COMMENT '公司名称' AFTER `updateDate`;
+
+
 --default script in
 
 INSERT INTO `user` (`id`, `contact`, `department`, `title`, `username`, `password`, `isenable`, `email`) VALUES  (1, 'root', 'it', 'dev', 'root', 'root', b'1', 'lewis@gmail.com');

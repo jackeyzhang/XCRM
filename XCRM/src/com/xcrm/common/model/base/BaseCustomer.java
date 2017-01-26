@@ -145,4 +145,12 @@ public abstract class BaseCustomer<M extends BaseCustomer<M>> extends Model<M> i
 		return get("updateDate");
 	}
 
+	public void setCompany(java.lang.String company) {
+		set("company", company);
+	}
+
+	public java.lang.String getCompany() {
+		return get("company");
+	}
+
 }

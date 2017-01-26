@@ -55,19 +55,6 @@
 				$(attrtype.find('span')[0]).click();
 			}
 		});
-		
-		$.get('/customer/list/', function(data){
-			  //get customer list
-		    for( d in data){
-		      $('#customerselect').append("<option value='" + data[d].id + "'>" + data[d].name + "</option>");
-		    }
-		});
-		$.get('/contract/list/', function(data){
-			//get customer list
-		    for( dd in data){
-		      $('#contractselect').append("<option value='" + data[dd].id + "'>" + data[dd].name + "</option>");
-		    }
-    });
 	  
 	});
 </script>
