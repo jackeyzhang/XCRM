@@ -1,7 +1,7 @@
 <script>
 function contractnameformatter(value, row){
 	if(value){
-    return '<a href="/contract/view?id='+ row['contractid'] +'"  target="_blank" title="'+ value + '">'+value+'</a>';
+    return '<a href="/contract/view?id='+ row['contractid'] +'&orderno='+row['orderno']+'"  target="_blank" title="'+ value + '">'+value+'</a>';
 	}else{
 		return '';
 	}
