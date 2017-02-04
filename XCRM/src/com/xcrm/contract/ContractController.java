@@ -14,6 +14,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.xcrm.common.AbstractController;
 import com.xcrm.common.model.Contract;
 import com.xcrm.common.util.Constant;
+import com.xcrm.common.util.StrUtil;
 
 public class ContractController extends AbstractController {
 
@@ -114,6 +115,10 @@ public class ContractController extends AbstractController {
     this.setAttr( "orderiteminfo", info.getOrderinfo() );
     this.setAttr( "paymentinfo", "请于本合同签订之日支付款项50%，本合同签订之日起7日内付清剩余款项。" );
     this.setAttr( "accountinfo", "王锋<br> 6222081001018679971 <br> 中国工商银行<br>" );
+    
+    this.setAttr( "amount", info.getAmount());
+    this.setAttr( "discount", info.getDiscount() );
+    this.setAttr( "paid", info.getPaid() );
 
     this.render( "view.html" );
   }
@@ -133,8 +138,12 @@ class ContractPrintInfo{
   private String address;
   private String orderinfo;
   
+  private String amount;
+  private String discount;
+  private String paid;
+  
   public void Dataloading( Long orderno ) {
-    String sql = "select bi.comments,cust.name cname,cust.shiptoAddr,cust.company,cust.phone,cust.contact,bi.price,bi.num,prd.name pname,bi.prdattrs from xcrm.order o"
+    String sql = "select bi.comments,cust.name cname,cust.shiptoAddr,cust.company,cust.phone,cust.contact,o.price,o.totalprice,o.price/o.totalprice*100 discount,bi.num,prd.name pname,bi.prdattrs from xcrm.order o"
         + " left join xcrm.orderitem oi on o.id=oi.order"
         + " left join xcrm.bookitem bi on oi.bookitem=bi.id"
         + " left join xcrm.customer cust on cust.id= bi.customer"
@@ -150,16 +159,20 @@ class ContractPrintInfo{
         setContact( record.getStr( "cname" ) );
         setTelephone( record.getStr( "phone" ) );
         setAddress( record.getStr( "shiptoAddr" ) );
+        setAmount( "" + StrUtil.formatPrice( record.getFloat( "totalprice" )) );
+        setPaid( "" + StrUtil.formatPrice( record.getFloat( "price" ) ) );
+        setDiscount( "" + StrUtil.formatPercentage( record.getDouble( "discount" ) ) );
         i++;
       }
       sb.append( record.getStr( "pname" ) ).append(getSpace(25))
       .append(  formatAttr( record.getStr( "prdattrs" ) ) ).append(getSpace(20))
-      .append(  formatNum( record.getNumber( "num" ) )  ).append(getSpace(20))
-      .append(  formatPrice( record.getNumber( "price" ))  ).append(getSpace(20))
+      .append(  StrUtil.formatNum( record.getNumber( "num" ) )  ).append(getSpace(20))
+      .append(  StrUtil.formatPrice( record.getNumber( "price" ))  ).append(getSpace(20))
       .append(  record.getStr( "comments" )  ).append(getSpace(20))
       .append( "<br>" );
     }
     this.setOrderinfo( sb.toString() );
+
   }
   
   private String getSpace( int num ){
@@ -170,6 +183,14 @@ class ContractPrintInfo{
     return result;
   }
   
+  /**
+   * format attribute value
+   * 
+   * e.g. {"204":"白沙","205":"黄色","206":"S"}
+   * 
+   * @param attrValue
+   * @return 白沙 黄色 S
+   */
   private String formatAttr( String attrValue ){
     String[] attrs =  attrValue.split( "," );
     String result = "";
@@ -180,15 +201,6 @@ class ContractPrintInfo{
     return result;
   }
   
-  private String formatPrice( Number price ){
-    NumberFormat format = new DecimalFormat( "￥##,###.00##" );
-    return format.format( price );
-  }
-  
-  private String formatNum( Number Num ){
-    NumberFormat format = new DecimalFormat( "##.00" );
-    return format.format( Num );
-  }
   
   public String getContract() {
     return contract;
@@ -229,6 +241,35 @@ class ContractPrintInfo{
   public void setOrderinfo( String orderinfo ) {
     this.orderinfo = orderinfo;
   }
+
   
+  public String getAmount() {
+    return amount;
+  }
+
+  
+  public void setAmount( String amount ) {
+    this.amount = amount;
+  }
+
+  
+  public String getDiscount() {
+    return discount;
+  }
+
+  
+  public void setDiscount( String discount ) {
+    this.discount = discount;
+  }
+
+  
+  public String getPaid() {
+    return paid;
+  }
+
+  
+  public void setPaid( String paid ) {
+    this.paid = paid;
+  }
   
 }
