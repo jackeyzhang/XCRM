@@ -3,6 +3,14 @@ $(function() {
 		location.href = "/cartlist";
 	});
 	
+	$('#deliverytime').datetimepicker({
+	    format: 'yyyy-mm-dd',
+	    autoclose: true,
+	    todayBtn: true,
+	    startView:2,
+	    minView:2
+	});
+	
 	$('#submitorder').on('click', function() {
 		// submit row
 		$.ajax({
@@ -10,7 +18,10 @@ $(function() {
 			type : 'post',
 			data : {
 				customer: $("#customerselect").val(),
-				contract: $("#contractselect").val()
+				contract: $("#contractselect").val(),
+				paymenttype: $("#paymentwayselect").val(),
+				deliverytime: $("#deliverytime").val(),
+				paid: $("#paid").val()
 			},
 			success :function(indata, status) {
 				if (status == "success") {
@@ -45,4 +56,6 @@ $(function() {
 			   }
 		   }
 	  });
+	  
+	  
 });

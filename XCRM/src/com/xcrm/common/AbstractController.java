@@ -31,10 +31,13 @@ public abstract class AbstractController extends Controller {
 	}
 
 	public void index() {
+	    preSetAttribute();
 		setAttribute();
 		render(getIndexHtml());
 	}
 
+	protected void preSetAttribute(){}
+	
 	protected void setAttribute() {
 		setAttr("model", getModalName());
 		setAttr("page_header", getPageHeader());

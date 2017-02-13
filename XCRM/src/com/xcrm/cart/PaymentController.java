@@ -13,14 +13,14 @@ import com.xcrm.common.util.Constant;
 
 
 public class PaymentController extends AbstractController {
+  
+  @Override
+  protected void preSetAttribute() {
+    this.setAttr( "paidsuggest", this.getSessionAttr( "amount" ) );
+  }
 
   public void submitorder() {
     saveOrder();
-    
-    this.setSessionAttr( "ordercomments", this.getPara( "ordercomments" ) );
-    this.setSessionAttr( "bookitems", this.getPara( "ids" ) );
-    this.setSessionAttr( "amount", this.getPara( "amount" ) );
-    this.setSessionAttr( "price", this.getPara( "price" ) ); 
     
     this.removeSessionAttr( "ordercomments" );
     this.removeSessionAttr( "bookitems" );
@@ -33,6 +33,10 @@ public class PaymentController extends AbstractController {
     // save book items
     Integer customerId = getParaToInt( "customer" );
     Integer contractId = getParaToInt( "contract" );
+    Integer paymenttype = getParaToInt( "paymenttype" );
+    Date  deliverytime = getParaToDate( "deliverytime" );
+    Float paid = Float.parseFloat( getPara( "paid" ) );
+    
     String bookitemids = this.getSessionAttr( "bookitems" );
     Db.update("update bookitem set status=1 where id in (" + bookitemids + ") ");
     String[] bookitemidarray = bookitemids.split( "," );
@@ -47,6 +51,9 @@ public class PaymentController extends AbstractController {
     Date date = new Date();
     order.setDate( date );
     order.setOrderno( date.getTime() );
+    order.setPaymenttype( paymenttype );
+    order.setPaid( paid );
+    order.setDeliverytime( deliverytime );
     // persist price
     String price = this.getSessionAttr( "price" );
     if ( price != null && !price.isEmpty() ) {

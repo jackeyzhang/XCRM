@@ -57,4 +57,28 @@ public abstract class BaseOrder<M extends BaseOrder<M>> extends Model<M> impleme
 		return get("comments");
 	}
 
+	public void setPaymenttype(java.lang.Integer paymenttype) {
+		set("paymenttype", paymenttype);
+	}
+
+	public java.lang.Integer getPaymenttype() {
+		return get("paymenttype");
+	}
+
+	public void setPaid(java.lang.Float paid) {
+		set("paid", paid);
+	}
+
+	public java.lang.Float getPaid() {
+		return get("paid");
+	}
+
+	public void setDeliverytime(java.util.Date deliverytime) {
+		set("deliverytime", deliverytime);
+	}
+
+	public java.util.Date getDeliverytime() {
+		return get("deliverytime");
+	}
+
 }
