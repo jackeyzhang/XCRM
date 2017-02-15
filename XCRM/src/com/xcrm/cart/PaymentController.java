@@ -16,7 +16,7 @@ public class PaymentController extends AbstractController {
   
   @Override
   protected void preSetAttribute() {
-    this.setAttr( "paidsuggest", this.getSessionAttr( "amount" ) );
+    this.setAttr( "paidsuggest", this.getSessionAttr( "price" ) );
   }
 
   public void submitorder() {
@@ -36,6 +36,8 @@ public class PaymentController extends AbstractController {
     Integer paymenttype = getParaToInt( "paymenttype" );
     Date  deliverytime = getParaToDate( "deliverytime" );
     Float paid = Float.parseFloat( getPara( "paid" ) );
+    String paymentcomments = getPara("paymentcomments");
+    Integer status = getParaToInt( "status" );
     
     String bookitemids = this.getSessionAttr( "bookitems" );
     Db.update("update bookitem set status=1 where id in (" + bookitemids + ") ");
@@ -54,6 +56,8 @@ public class PaymentController extends AbstractController {
     order.setPaymenttype( paymenttype );
     order.setPaid( paid );
     order.setDeliverytime( deliverytime );
+    order.setPaymentcomments( paymentcomments );
+    order.setStatus( status );
     // persist price
     String price = this.getSessionAttr( "price" );
     if ( price != null && !price.isEmpty() ) {

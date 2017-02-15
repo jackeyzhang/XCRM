@@ -81,4 +81,20 @@ public abstract class BaseOrder<M extends BaseOrder<M>> extends Model<M> impleme
 		return get("deliverytime");
 	}
 
+	public void setStatus(java.lang.Integer status) {
+		set("status", status);
+	}
+
+	public java.lang.Integer getStatus() {
+		return get("status");
+	}
+
+	public void setPaymentcomments(java.lang.String paymentcomments) {
+		set("paymentcomments", paymentcomments);
+	}
+
+	public java.lang.String getPaymentcomments() {
+		return get("paymentcomments");
+	}
+
 }
