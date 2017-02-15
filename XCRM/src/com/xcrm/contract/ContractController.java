@@ -143,7 +143,7 @@ class ContractPrintInfo{
   private String paid;
   
   public void Dataloading( Long orderno ) {
-    String sql = "select bi.comments,cust.name cname,cust.shiptoAddr,cust.company,cust.phone,cust.contact,o.price,o.totalprice,o.price/o.totalprice*100 discount,bi.num,prd.name pname,bi.prdattrs from xcrm.order o"
+    String sql = "select bi.comments,cust.name cname,cust.shiptoAddr,cust.company,cust.phone,cust.contact,bi.price,o.totalprice,o.price/o.totalprice*100 discount,bi.num,prd.name pname,bi.prdattrs from xcrm.order o"
         + " left join xcrm.orderitem oi on o.id=oi.order"
         + " left join xcrm.bookitem bi on oi.bookitem=bi.id"
         + " left join xcrm.customer cust on cust.id= bi.customer"
@@ -160,7 +160,7 @@ class ContractPrintInfo{
         setTelephone( record.getStr( "phone" ) );
         setAddress( record.getStr( "shiptoAddr" ) );
         setAmount( "" + StrUtil.formatPrice( record.getFloat( "totalprice" )) );
-        setPaid( "" + StrUtil.formatPrice( record.getFloat( "price" ) ) );
+        setPaid( "" + StrUtil.formatPrice( record.getInt( "price" ) ) );
         setDiscount( "" + StrUtil.formatPercentage( record.getDouble( "discount" ) ) );
         i++;
       }
@@ -168,7 +168,7 @@ class ContractPrintInfo{
       .append(  formatAttr( record.getStr( "prdattrs" ) ) ).append(getSpace(20))
       .append(  StrUtil.formatNum( record.getNumber( "num" ) )  ).append(getSpace(20))
       .append(  StrUtil.formatPrice( record.getNumber( "price" ))  ).append(getSpace(20))
-      .append(  record.getStr( "comments" )  ).append(getSpace(20))
+      .append(  record.getStr( "comments" ) == null ? "" : record.getStr( "comments" )  ).append(getSpace(20))
       .append( "<br>" );
     }
     this.setOrderinfo( sb.toString() );

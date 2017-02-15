@@ -21,7 +21,7 @@ $(function() {
 				contract: $("#contractselect").val(),
 				paymenttype: $("#paymentwayselect").val(),
 				deliverytime: $("#deliverytime").val(),
-				paid: $("#paid").val(),
+//				paid: $("#paid").val(),  提交订单不付款
 				paymentcomments: $("#paymentcomments").val(),
 				status: 2
 			},

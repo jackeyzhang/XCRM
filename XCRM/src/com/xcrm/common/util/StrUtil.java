@@ -27,7 +27,6 @@ public class StrUtil {
   
   public static String formatPercentage( double  Num ){
     BigDecimal  format = new BigDecimal ( Num );
-    format.setScale(2, RoundingMode.HALF_UP);
-    return format.toString();
+    return "" + format.setScale(2, RoundingMode.HALF_UP).doubleValue();
   }
 }

@@ -35,7 +35,7 @@ public class PaymentController extends AbstractController {
     Integer contractId = getParaToInt( "contract" );
     Integer paymenttype = getParaToInt( "paymenttype" );
     Date  deliverytime = getParaToDate( "deliverytime" );
-    Float paid = Float.parseFloat( getPara( "paid" ) );
+    Float paid = Float.parseFloat( getPara( "paid" ) == null ? "0.0" : getPara( "paid" ) );
     String paymentcomments = getPara("paymentcomments");
     Integer status = getParaToInt( "status" );
     

@@ -10,7 +10,8 @@ import com.xcrm.common.util.Constant;
 public class OrderController extends AbstractController {
 
 	public void list() {
-		String sql = "select oi.id id,p.name name,o.orderno orderno,bi.price price,o.price dealprice,bi.num num,GROUP_CONCAT(pic.fielname) filename,oi.date date,contract.name contractname,contract.id contractid,bi.comments comments";
+	    //price是原价  dealprice是成交价  
+		String sql = "select oi.id id,p.name name,o.orderno orderno,bi.price price,o.price dealprice,o.paid paid,bi.num num,GROUP_CONCAT(pic.fielname) filename,oi.date date,contract.name contractname,contract.id contractid,bi.comments comments";
 		String sqlExcept = " from orderitem oi "
 		    + "left join bookitem bi on oi.bookitem=bi.id "
 		    + "left join `order` o on o.id=oi.order "
@@ -24,6 +25,13 @@ public class OrderController extends AbstractController {
 		Pager pager = new Pager(page.getTotalRow(), page.getList());
 		this.renderJson(pager);
 
+	}
+	
+	public void vieworder(){
+	  String orderno = this.getPara("orderno");
+	  this.setAttr( "orderno", orderno );
+	  this.setAttribute();
+	  this.render( "orderview.html" );
 	}
 
 	@Override
