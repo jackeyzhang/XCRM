@@ -143,12 +143,12 @@ class ContractPrintInfo{
   private String paid;
   
   public void Dataloading( Long orderno ) {
-    String sql = "select bi.comments,cust.name cname,cust.shiptoAddr,cust.company,cust.phone,cust.contact,bi.price,o.totalprice,o.price/o.totalprice*100 discount,bi.num,prd.name pname,bi.prdattrs from xcrm.order o"
+    String sql = "select bi.comments,cust.name cname,cust.shiptoAddr,cust.company,cust.phone,cust.contact,o.price shouldpay,bi.price price,o.totalprice,o.price/o.totalprice*100 discount,bi.num,prd.name pname,bi.prdattrs from xcrm.order o"
         + " left join xcrm.orderitem oi on o.id=oi.order"
         + " left join xcrm.bookitem bi on oi.bookitem=bi.id"
         + " left join xcrm.customer cust on cust.id= bi.customer"
         + " left join xcrm.product prd on prd.id=bi.product"
-        + " where o.orderno=" + orderno;
+        + " where o.orderno=" + orderno ;
     List<Record> records = Db.find( sql );
     
     int i =0;
@@ -160,7 +160,7 @@ class ContractPrintInfo{
         setTelephone( record.getStr( "phone" ) );
         setAddress( record.getStr( "shiptoAddr" ) );
         setAmount( "" + StrUtil.formatPrice( record.getFloat( "totalprice" )) );
-        setPaid( "" + StrUtil.formatPrice( record.getInt( "price" ) ) );
+        setPaid( "" + StrUtil.formatPrice( record.getFloat( "shouldpay" ) ) );
         setDiscount( "" + StrUtil.formatPercentage( record.getDouble( "discount" ) ) );
         i++;
       }

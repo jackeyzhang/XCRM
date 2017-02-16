@@ -10,15 +10,14 @@ import com.xcrm.common.util.Constant;
 public class OrderController extends AbstractController {
 
 	public void list() {
-	    //price是原价  dealprice是成交价  
-		String sql = "select oi.id id,p.name name,o.orderno orderno,bi.price price,o.price dealprice,o.paid paid,bi.num num,GROUP_CONCAT(pic.fielname) filename,oi.date date,contract.name contractname,contract.id contractid,bi.comments comments";
+	    //price是原价  deal price是成交价  
+		String sql = "select GROUP_CONCAT(p.name) name,o.orderno orderno,sum(bi.price*bi.num) price,o.price dealprice,o.paid paid,sum(bi.num) num,oi.date date,contract.name contractname,contract.id contractid";
 		String sqlExcept = " from orderitem oi "
 		    + "left join bookitem bi on oi.bookitem=bi.id "
 		    + "left join `order` o on o.id=oi.order "
 		    + "left join product p on bi.product=p.id "
-		    + "left join productpic pic on p.id=pic.productid "
 		    + "left join contract contract on bi.contract=contract.id "
-		    + "where bi.user=? group by oi.id,p.name,o.orderno,bi.price,bi.num,oi.date order by oi.id desc";
+		    + "where bi.user=? group by o.orderno order by o.orderno desc";
 		int pagenumber = Integer.parseInt(this.getPara("pageNumber"));
 		int pagesize = Integer.parseInt(this.getPara("pageSize"));
 		Page<Record> page = Db.paginate(pagenumber, pagesize, sql, sqlExcept, getCurrentUserId());
@@ -27,11 +26,23 @@ public class OrderController extends AbstractController {
 
 	}
 	
-	public void vieworder(){
+	public void orderview(){
+	  super.setAttribute();
 	  String orderno = this.getPara("orderno");
 	  this.setAttr( "orderno", orderno );
-	  this.setAttribute();
-	  this.render( "orderview.html" );
+	  
+	  //price是原价  deal price是成交价  
+      String sql = "select p.name name,bi.price price,o.price dealprice,o.paid paid,bi.num num,oi.date date,contract.name contractname,contract.id contractid";
+      String sqlExcept = " from orderitem oi "
+          + "left join bookitem bi on oi.bookitem=bi.id "
+          + "left join `order` o on o.id=oi.order "
+          + "left join product p on bi.product=p.id "
+          + "left join contract contract on bi.contract=contract.id "
+          + "where o.orderno = "+ orderno +" order by o.orderno desc";
+      Page<Record> page = Db.paginate(1, 100, sql, sqlExcept);
+      Pager pager = new Pager(page.getTotalRow(), page.getList());
+      //TODO 
+      this.render( "orderview.html" );
 	}
 
 	@Override

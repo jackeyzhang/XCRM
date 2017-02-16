@@ -1,0 +1,33 @@
+
+
+<table id="table" class="table table-striped table-hover"
+	data-show-refresh="true" data-show-columns="true" data-search="true"
+	data-query-params="queryParams" data-toolbar=".toolbar"
+	data-pagination="true" data-show-toggle="true">
+	<thead>
+		<tr>
+			<script>
+				function contractnameformatter(value, row) {
+					if (value) {
+						return '<a href="/contract/view?id='
+								+ row['contractid'] + '&orderno='
+								+ row['orderno'] + '"  target="_blank" title="'
+								+ value + '">' + value + '</a>';
+					} else {
+						return '';
+					}
+				}
+
+			</script>
+			<th data-field="name">购买产品名称</th>
+			<th data-field="num">产品数量</th>
+			<th data-field="price">产品原价</th>
+			<th data-field="date">下单日期</th>
+			<th data-field="contractid">合同编号</th>
+			<th data-field="contractname" data-formatter="contractnameformatter"
+				data-align="center">合同</th>
+		</tr>
+	</thead>
+</table>
+
+
