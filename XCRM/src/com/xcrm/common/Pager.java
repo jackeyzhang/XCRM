@@ -47,7 +47,6 @@ public class Pager implements Serializable{
   public void setRows( List<Record> rows ) {
     this.rows = rows;
   }
-  
-  
+
 
 }

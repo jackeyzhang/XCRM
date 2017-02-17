@@ -25,25 +25,6 @@ public class OrderController extends AbstractController {
 		this.renderJson(pager);
 
 	}
-	
-	public void orderview(){
-	  super.setAttribute();
-	  String orderno = this.getPara("orderno");
-	  this.setAttr( "orderno", orderno );
-	  
-	  //price是原价  deal price是成交价  
-      String sql = "select p.name name,bi.price price,o.price dealprice,o.paid paid,bi.num num,oi.date date,contract.name contractname,contract.id contractid";
-      String sqlExcept = " from orderitem oi "
-          + "left join bookitem bi on oi.bookitem=bi.id "
-          + "left join `order` o on o.id=oi.order "
-          + "left join product p on bi.product=p.id "
-          + "left join contract contract on bi.contract=contract.id "
-          + "where o.orderno = "+ orderno +" order by o.orderno desc";
-      Page<Record> page = Db.paginate(1, 100, sql, sqlExcept);
-      Pager pager = new Pager(page.getTotalRow(), page.getList());
-      //TODO 
-      this.render( "orderview.html" );
-	}
 
 	@Override
 	public String getModalName() {

@@ -17,7 +17,7 @@ function paidformatter(value, row){
 	
 function ordernoformatter(value, row){
     if(value){
-      return '<a href="/order/orderview?orderno='+ row['orderno'] + '">'+value+'</a>';
+      return '<a href="/orderview?orderno='+ row['orderno'] + '">'+value+'</a>';
     }else{
       return value;
     }

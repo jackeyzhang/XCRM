@@ -27,6 +27,7 @@ import com.xcrm.index.IndexController;
 import com.xcrm.login.LoginController;
 import com.xcrm.login.LoginInterceptor;
 import com.xcrm.order.OrderController;
+import com.xcrm.order.OrderViewController;
 import com.xcrm.product.PriceController;
 import com.xcrm.product.ProductController;
 import com.xcrm.product.ProductcategoryController;
@@ -73,6 +74,7 @@ public class XCRMConfig extends JFinalConfig {
     me.add("/cartlist", CartlistController.class);
     me.add("/payment", PaymentController.class);
     me.add("/order", OrderController.class);
+    me.add("/orderview", OrderViewController.class);
   }
 
   public static C3p0Plugin createC3p0Plugin() {

@@ -45,7 +45,7 @@
         for (var i = 0; i < $('.sum').length; i++) {
           amount += parseInt($($('.sum')[i]).html());
         }
-        $('#discount').val(price/amount * 100);
+        $('#discount').val( (price/amount * 100).toFixed(2));
       };
 	      
      $("#price").on('input',function(e){  
