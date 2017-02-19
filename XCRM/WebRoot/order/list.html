@@ -9,7 +9,7 @@ function contractnameformatter(value, row){
 
 function paidformatter(value, row){
 	  if(value == 0 || value == null){
-	    return '<a href="/order/paymentorder?orderno='+ row['orderno'] + '">'+"未支付"+'</a>';
+	    return '<a href="/payment?orderno='+ row['orderno'] + '">'+"未支付"+'</a>';
 	  }else{
 	    return value;
 	  }
