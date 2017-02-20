@@ -15,6 +15,16 @@ public class OrderViewController extends AbstractController {
       this.setAttr( "orderno", orderno );
       super.index();
     }
+    
+    public void loadingPayment(){
+      String orderno = this.getPara( "orderno" );
+      String sql = "select pay.customerid,pay.comments,pay.paid,pay.paymenttime,pay.paymenttype";
+      String sqlExcept = " from payment pay "
+          + "where pay.orderno = "+ orderno +" order by pay.paymenttime desc";
+      Page<Record> page = Db.paginate(1, 100, sql, sqlExcept);
+      Pager pager = new Pager(page.getTotalRow(), page.getList());
+      this.renderJson(pager);
+    }
   
 	public void list() {
 	  String orderno = this.getSessionAttr( "orderno" );

@@ -5,22 +5,28 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <#include "../common/js2css.html"/>
+<script src="/js/payment.js"></script>
 </head>
 <body>
-  <div class="container">
-    <div class="row">
-      <div class="span12">
-        <#include "../common/menu.html"/>
-        <#include "../common/pageheader.html"/>
-        <#include "../common/toolbar.html"/>
-        <div>
-          <h3>订单号:${orderno!}</h3>
+	<div class="container">
+		<div class="row">
+			<div class="span12">
+				<#include "../common/menu.html"/> <#include
+				"../common/pageheader.html"/>
+				<div>
+					<h3>订单号:${orderno!}</h3>
+				</div>
+				<#include "orderdetail.html"/>
+				
+		    <div>
+          <h3>支付详情如下:</h3>
         </div>
-        <#include "orderdetail.html"/>
-        <#include "../common/footer.html"/>
-      </div>
-    </div>
-  </div>
+				<#include "orderpayment.html"/>
+		
+				<#include "../common/footer.html"/>
+			</div>
+		</div>
+	</div>
 
 </body>
 </html>
