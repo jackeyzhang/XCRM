@@ -21,28 +21,6 @@ $(function() {
 				contract: $("#contractselect").val(),
 				paymenttype: $("#paymentwayselect").val(),
 				deliverytime: $("#deliverytime").val(),
-//				paid: $("#paid").val(),  提交订单不付款
-				paymentcomments: $("#paymentcomments").val(),
-				status: 2
-			},
-			success :function(indata, status) {
-				if (status == "success") {
-					location.href = "/order";
-				}
-			}
-		});
-	});	
-	
-	$('#paymentorder').on('click', function() {
-		// submit row
-		$.ajax({
-			url : "/payment/submitorder",
-			type : 'post',
-			data : {
-				customer: $("#customerselect").val(),
-				contract: $("#contractselect").val(),
-				paymenttype: $("#paymentwayselect").val(),
-				deliverytime: $("#deliverytime").val(),
 				paid: $("#paid").val(),
 				paymentcomments: $("#paymentcomments").val(),
 				status: 1

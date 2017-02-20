@@ -9,6 +9,7 @@ import com.xcrm.common.AbstractController;
 import com.xcrm.common.model.Bookitem;
 import com.xcrm.common.model.Order;
 import com.xcrm.common.model.Orderitem;
+import com.xcrm.common.model.Payment;
 import com.xcrm.common.util.Constant;
 
 
@@ -37,7 +38,6 @@ public class PaymentController extends AbstractController {
     Date  deliverytime = getParaToDate( "deliverytime" );
     Float paid = Float.parseFloat( getPara( "paid" ) == null ? "0.0" : getPara( "paid" ) );
     String paymentcomments = getPara("paymentcomments");
-    Integer status = getParaToInt( "status" );
     
     String bookitemids = this.getSessionAttr( "bookitems" );
     Db.update("update bookitem set status=1 where id in (" + bookitemids + ") ");
@@ -53,11 +53,7 @@ public class PaymentController extends AbstractController {
     Date date = new Date();
     order.setDate( date );
     order.setOrderno( date.getTime() );
-    order.setPaymenttype( paymenttype );
-    order.setPaid( paid );
     order.setDeliverytime( deliverytime );
-    order.setPaymentcomments( paymentcomments );
-    order.setStatus( status );
     // persist price
     String price = this.getSessionAttr( "price" );
     if ( price != null && !price.isEmpty() ) {
@@ -74,6 +70,19 @@ public class PaymentController extends AbstractController {
       order.setComments( ordercomments );
     }
     order.save();
+    
+    //persist payment
+    if(paid > 0){
+      Payment payment = new Payment();
+      payment.setPaymenttype( paymenttype );
+      payment.setPaid( paid );
+      payment.setComments( paymentcomments );
+      payment.setCustomerid( customerId );
+      payment.setPaymenttime( new Date() );
+      payment.setOrderno( order.getOrderno() );
+      payment.save();
+    }
+    
     // save order items
     List<Orderitem> orderitems = new ArrayList<Orderitem>();
     for ( String bookitemid : bookitemidarray ) {

@@ -24,6 +24,7 @@ public class _MappingKit {
 		arp.addMapping("customer", "id", Customer.class);
 		arp.addMapping("order", "id", Order.class);
 		arp.addMapping("orderitem", "id", Orderitem.class);
+		arp.addMapping("payment", "id", Payment.class);
 		arp.addMapping("price", "id", Price.class);
 		arp.addMapping("priceinventoryvalue", "id", Priceinventoryvalue.class);
 		arp.addMapping("product", "id", Product.class);

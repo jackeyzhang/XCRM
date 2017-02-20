@@ -9,7 +9,7 @@ function contractnameformatter(value, row){
 
 function paidformatter(value, row){
 	  if(value == 0 || value == null){
-	    return '<a href="/payment?orderno='+ row['orderno'] + '">'+"未支付"+'</a>';
+	    return 0;
 	  }else{
 	    return value;
 	  }
@@ -22,6 +22,14 @@ function ordernoformatter(value, row){
       return value;
     }
   }
+  
+function dueformatter(value, row){
+		if(value == 0 || value == null){
+		  return '<a href="/payment?orderno='+ row['orderno'] + '">'+0+'</a>';
+		}else{
+		  return '<a href="/payment?orderno='+ row['orderno'] + '">'+value+'</a>';
+		}
+  }
 </script>
 <th data-field="orderno" data-formatter="ordernoformatter">订单号</th>
 <th data-field="name">购买产品名称</th>
@@ -29,6 +37,6 @@ function ordernoformatter(value, row){
 <th data-field="price">产品原价</th>
 <th data-field="dealprice">成交价格</th>
 <th data-field="paid" data-formatter="paidformatter">实际支付</th>
+<th data-field="due" data-formatter="dueformatter">欠款</th>
 <th data-field="date">下单日期</th>
-<th data-field="contractid">合同编号</th>
-<th data-field="contractname" data-formatter="contractnameformatter" data-align="center">合同</th>
+<th data-field="contractname" data-formatter="contractnameformatter" data-align="center">打印合同</th>
