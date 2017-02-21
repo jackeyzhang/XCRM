@@ -13,13 +13,18 @@ public class OrderViewController extends AbstractController {
       String orderno = this.getPara( "orderno" );
       this.setSessionAttr( "orderno", orderno );
       this.setAttr( "orderno", orderno );
+      
+      Record record = Db.findFirst( "select o.comments,o.paymentcomments from xcrm.order o where o.orderno=" + orderno );
+      this.setAttr( "ordercomments", record.getStr( "comments" ) );
+      this.setAttr( "paymentcomments", record.getStr( "paymentcomments" ) );
       super.index();
     }
     
     public void loadingPayment(){
       String orderno = this.getPara( "orderno" );
-      String sql = "select pay.customerid,pay.comments,pay.paid,pay.paymenttime,pay.paymenttype";
+      String sql = "select CONCAT(cust.name, '-' ,cust.company) customer,pay.comments,pay.paid,pay.paymenttime,pay.paymenttype";
       String sqlExcept = " from payment pay "
+          + "left join customer cust on cust.id=pay.customerid "
           + "where pay.orderno = "+ orderno +" order by pay.paymenttime desc";
       Page<Record> page = Db.paginate(1, 100, sql, sqlExcept);
       Pager pager = new Pager(page.getTotalRow(), page.getList());
@@ -29,7 +34,7 @@ public class OrderViewController extends AbstractController {
 	public void list() {
 	  String orderno = this.getSessionAttr( "orderno" );
       //price是原价  deal price是成交价  
-      String sql = "select p.name name,bi.price price,o.price dealprice,o.paid paid,bi.num num,oi.date date,contract.name contractname,contract.id contractid";
+      String sql = "select o.orderno,p.name name,bi.price price,o.price dealprice,o.paid paid,bi.num num,oi.date date,contract.name contractname,contract.id contractid";
       String sqlExcept = " from orderitem oi "
           + "left join bookitem bi on oi.bookitem=bi.id "
           + "left join `order` o on o.id=oi.order "

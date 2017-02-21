@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<#include "../common/js2css.html"/>
+<script src="/js/bootstrap3-typeahead.js"></script>
+<script src="/js/payment.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="span12">
+				<#include "../common/menu.html"/> 
+				<#include "../common/pageheader.html"/>
+
+				<div class="container-fluid">
+				
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<h3>收货人信息</h3><span>${customer!}</span>
+							</div>
+						</div>
+					</div>
+					
+
+					<div class="row">
+						<div class="col-md-3">
+              <div class="form-group">
+                <h3>付款方式</h3>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <h3>付款金额</h3>
+              </div>
+            </div>
+					</div>
+					
+          <div class="row">
+						<div class="col-md-3" style="text-align: left">
+              <select class="form-control selector" id="paymentwayselect"
+                name="paymentwayselect">
+                <option value="">请选择支付方式...</option>
+                <option value="1">现金支付</option>
+                <option value="2">刷卡支付</option>
+                <option value="3">网上支付</option>
+                <option value="4">后期支付</option>
+              </select>
+            </div>
+            
+            <div class="col-md-3" style="text-align: left">
+              <input type="text" class="form-control" name="paid" id="paid" value="${due!}">
+            </div>
+          </div>
+          
+           <div class="row">
+            <div class="col-md-3">
+              <div class="form-group">
+                <h3>付款备注信息</h3>
+              </div>
+            </div>
+            </div>
+          
+          <div class="row">
+	          <div class="col-md-12" style="text-align: left;">
+                  <textarea placeholder="请添加付款说明" id="paymentcomments" class="form-control" rows="2"></textarea>
+            </div>
+          </div>
+          
+          <div style="margin: 0 0 100px;">
+          </div>
+
+					<div class="row">
+						<div class="col-md-2 col-md-offset-1"
+              style="float: right; font-size: 18px; background-color: #df3033; text-align: center;">
+              <a id="spaymentsubmitorder" class="sc-btn">保存付款信息</a>
+            </div>
+					</div>
+				</div>
+				<#include "../common/footer.html"/>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,16 +1,37 @@
 <table id="paymenttable" class="table table-striped table-hover"
-  data-url="/orderview/loadingPayment?orderno=${orderno!}">
+	data-url="/orderview/loadingPayment?orderno=${orderno!}">
 	<thead>
 		<tr>
 			<script>
+				function paymenttypeformatter(value, row){
+					if( value == 1){
+						return "现金支付";
+					}else if(value == 2){
+						return "刷卡支付";
+					}else if(value ==3 ){
+						return "网上支付";
+					}else{
+						return "其他支付";
+					}
+				}
 			</script>
-			<th data-field="customerid">客户</th>
+			<th data-field="customer">客户</th>
 			<th data-field="paid">支付金额</th>
-			<th data-field="paymenttype">支付方式</th>
+			<th data-field="paymenttype" data-formatter="paymenttypeformatter">支付方式</th>
 			<th data-field="paymenttime">支付时间</th>
 			<th data-field="comments">付款备注</th>
 		</tr>
 	</thead>
 </table>
+<p>
+</p>
+<div>
+	<div class="row">
+		<div class="col-md-2 col-md-offset-1"
+			style="float: right; font-size: 18px; background-color: blue; text-align: center;">
+			<a id="paymentorder" class="sc-btn" href="spayment?orderno=${orderno!}">继续支付</a>
+		</div>
+	</div>
+</div>
 
 

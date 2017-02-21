@@ -19,6 +19,7 @@ import com.xcrm.attribute.AttributeidController;
 import com.xcrm.cart.CartController;
 import com.xcrm.cart.CartlistController;
 import com.xcrm.cart.PaymentController;
+import com.xcrm.cart.SingePaymentController;
 import com.xcrm.common.model._MappingKit;
 import com.xcrm.common.util.Constant;
 import com.xcrm.contract.ContractController;
@@ -75,6 +76,7 @@ public class XCRMConfig extends JFinalConfig {
     me.add("/payment", PaymentController.class);
     me.add("/order", OrderController.class);
     me.add("/orderview", OrderViewController.class);
+    me.add("/spayment", SingePaymentController.class);
   }
 
   public static C3p0Plugin createC3p0Plugin() {

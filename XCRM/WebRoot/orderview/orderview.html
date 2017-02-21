@@ -15,11 +15,13 @@
 				"../common/pageheader.html"/>
 				<div>
 					<h3>订单号:${orderno!}</h3>
+					<h4>${ordercomments!}</h4>
 				</div>
 				<#include "orderdetail.html"/>
 				
 		    <div>
           <h3>支付详情如下:</h3>
+          <h4>${paymentcomments!}</h4>
         </div>
 				<#include "orderpayment.html"/>
 		

@@ -25,9 +25,9 @@ function ordernoformatter(value, row){
   
 function dueformatter(value, row){
 		if(value == 0 || value == null){
-		  return '<a href="/payment?orderno='+ row['orderno'] + '">'+0+'</a>';
+		  return '<a href="/spayment?orderno='+ row['orderno'] + '">'+0+'</a>';
 		}else{
-		  return '<a href="/payment?orderno='+ row['orderno'] + '">'+value+'</a>';
+		  return '<a href="/spayment?orderno='+ row['orderno'] + '">'+value+'</a>';
 		}
   }
 </script>
