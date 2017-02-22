@@ -6,6 +6,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.xcrm.common.AbstractController;
 import com.xcrm.common.Pager;
 import com.xcrm.common.util.Constant;
+import com.xcrm.common.util.StrUtil;
 
 public class OrderViewController extends AbstractController {
   
@@ -14,9 +15,15 @@ public class OrderViewController extends AbstractController {
       this.setSessionAttr( "orderno", orderno );
       this.setAttr( "orderno", orderno );
       
-      Record record = Db.findFirst( "select o.comments,o.paymentcomments from xcrm.order o where o.orderno=" + orderno );
+      Record record = Db.findFirst( "select o.comments,o.paymentcomments,o.price from xcrm.order o where o.orderno=" + orderno );
+      Float dealPrice =  record.getFloat( "price" );
+      Record paymentrecord = Db.findFirst( "select sum(paid) paid from payment where orderno=" + orderno + " group by orderno" );
+      Double paid = paymentrecord.getDouble( "paid" );
       this.setAttr( "ordercomments", record.getStr( "comments" ) );
       this.setAttr( "paymentcomments", record.getStr( "paymentcomments" ) );
+      this.setAttr( "dealprice", StrUtil.formatPrice( dealPrice ) );
+      this.setAttr( "paid", StrUtil.formatPrice( paid ) );
+      this.setAttr( "due", StrUtil.formatPrice( dealPrice - paid ) );
       super.index();
     }
     
@@ -28,6 +35,7 @@ public class OrderViewController extends AbstractController {
           + "where pay.orderno = "+ orderno +" order by pay.paymenttime desc";
       Page<Record> page = Db.paginate(1, 100, sql, sqlExcept);
       Pager pager = new Pager(page.getTotalRow(), page.getList());
+ 
       this.renderJson(pager);
     }
   

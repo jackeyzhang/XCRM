@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <#include "../common/js2css.html"/>
-<script src="/js/payment.js"></script>
+<script src="/js/spayment.js"></script>
 </head>
 <body>
 	<div class="container">
@@ -20,8 +20,12 @@
 				<#include "orderdetail.html"/>
 				
 		    <div>
-          <h3>支付详情如下:</h3>
-          <h4>${paymentcomments!}</h4>
+          <h3>支付详情如下:<span class="label label-default">${paymentcomments!}</span></h3>
+           <h4>
+          <span class="label label-primary">应该支付:${dealprice!}</span>
+          <span class="label label-success">已经支付:${paid!}</span>
+          <span class="label label-warning">还需支付:${due!}</span>
+          </h4>
         </div>
 				<#include "orderpayment.html"/>
 		
