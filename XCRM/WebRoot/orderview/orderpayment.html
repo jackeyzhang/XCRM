@@ -4,12 +4,20 @@
 		<tr>
 			<script>
 				function paymenttypeformatter(value, row){
-					if( value == 1){
-						return "现金支付";
+					if(value == 1){
+						return "网银转账";
 					}else if(value == 2){
-						return "刷卡支付";
+						return "微信";
 					}else if(value ==3 ){
-						return "网上支付";
+						return "支付宝";
+					}else if(value ==4 ){
+            return "信用卡";
+					}else if(value ==5 ){
+            return "借记卡";
+					}else if(value ==6 ){
+            return "现金";
+					}else if(value ==7 ){
+            return "支票";
 					}else{
 						return "其他支付";
 					}

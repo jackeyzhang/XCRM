@@ -15,9 +15,9 @@ public class SingePaymentController extends AbstractController {
   protected void preSetAttribute() {
     //    this.setAttr( "paidsuggest", this.getSessionAttr( "price" ) );
     String orderno = this.getPara( "orderno" );
-    String sql = "select CONCAT(cust.name, '-' ,cust.company) customer,cust.id customerid,round(o.price-ifnull(sum(pay.paid),0), 2) due " + "from `order` o "
+    String sql = "select CONCAT(cust.name, '-' ,cust.company) customer,cust.id customerid,(select round(o.price-ifnull(sum(paid),0), 2) from payment where orderno= o.orderno) due " + "from `order` o "
         + "left join orderitem oi on oi.order=o.id " + "left join bookitem bi on oi.bookitem=bi.id  " + "left join customer cust on cust.id=bi.customer "
-        + "left join payment pay on pay.orderno=o.orderno  " + "where o.orderno=" + orderno;
+        + "where o.orderno=" + orderno;
     Record record = Db.findFirst( sql );
     this.setAttr( "customer", record.getStr( "customer" ) );
     this.setAttr( "due", record.getDouble( "due" ) );

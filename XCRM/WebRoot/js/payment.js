@@ -13,6 +13,12 @@ $(function() {
 	});
 	
 	$('#submitorder').on('click', function() {
+		var customer = $("#customerselect").val();
+		var contract = $("#contractselect").val();
+		if( contract == '' || customer == '' ||customer == null || contract == null){
+			alert("请选择收货人和合同");
+			return;
+		}
 		// submit row
 		$.ajax({
 			url : "/payment/submitorder",
