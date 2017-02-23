@@ -45,7 +45,7 @@ $(function() {
 	$.get('/customer/list/', function(data){
 		customerlist = data;
 	    for( d in data){
-	      $('#customerselect').append("<option value='" + data[d].id + "'>" + data[d].name + "</option>");
+	      $('#customerselect').append("<option value='" + data[d].id + "'>" + data[d].name + "-"+ data[d].company + "</option>");
 	    }
 	});
 	
