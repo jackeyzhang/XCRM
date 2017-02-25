@@ -15,7 +15,7 @@ public class OrderController extends AbstractController {
     String sql = "select GROUP_CONCAT(p.name) name,o.orderno orderno,o.totalprice price,o.price dealprice,sum(bi.num) num,oi.date date,contract.name contractname,contract.id contractid,(select round(sum(paid),2) from payment where orderno= o.orderno) paid,(select round(o.price-ifnull(sum(paid),0), 2) from payment where orderno= o.orderno) due";
     String sqlExcept = " from orderitem oi " + "left join bookitem bi on oi.bookitem=bi.id " + "left join `order` o on o.id=oi.order " + "left join product p on bi.product=p.id "
         + "left join contract contract on bi.contract=contract.id "
-        + "where bi.user=? group by o.orderno order by o.orderno desc";
+        + "where bi.user=? "+ this.getSearchStatement(true, "p.") +"group by o.orderno order by o.orderno desc";
     int pagenumber = Integer.parseInt( this.getPara( "pageNumber" ) );
     int pagesize = Integer.parseInt( this.getPara( "pageSize" ) );
     Page<Record> page = Db.paginate( pagenumber, pagesize, sql, sqlExcept, getCurrentUserId() );

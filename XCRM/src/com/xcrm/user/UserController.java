@@ -9,18 +9,6 @@ import com.xcrm.common.util.Constant;
 @Before(UserInterceptor.class)
 public class UserController extends AbstractController {
 
-//  public void list() {
-//    List<User> users = User.dao.find( "select * from user" );
-//    List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList( getCategory() );
-//    for(User user : users){
-//      for(Attribute attribute : attributes){
-//        Attributevalue av = Attributevalue.dao.findFirst( "select * from attributevalue where attributeid=? and objectid=? and category=?", attribute.getAttributeid(), user.getInt( "id" ), getCategory() );
-//        if(av == null) continue;
-//        user.put( "attribute-" + av.getAttributeid(), av.getValue() );
-//      }
-//    }
-//    this.renderJson( users );
-//  }
 
   public void save() {
     User user = this.getModel( User.class, "" , true);
@@ -78,4 +66,11 @@ public class UserController extends AbstractController {
   public int getCategory() {
     return Constant.CATEGORY_USER;
   }
+
+  @Override
+  protected String searchWord() {
+    return "username";
+  }
+  
+  
 }
