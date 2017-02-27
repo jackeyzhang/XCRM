@@ -1,5 +1,7 @@
 package com.xcrm.order;
 
+import java.math.BigDecimal;
+
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
@@ -17,26 +19,27 @@ public class OrderViewController extends AbstractController {
     this.setAttr( "orderno", orderno );
 
     Record record = Db.findFirst( "select o.comments,o.paymentcomments,o.price from xcrm.order o where o.orderno=" + orderno );
-    Float dealPrice = record.getFloat( "price" );
+    BigDecimal dealPrice = record.getBigDecimal( "price" );
     Record paymentrecord = Db.findFirst( "select sum(paid) paid from payment where orderno=" + orderno + " group by orderno" );
-    Double paid = paymentrecord.getDouble( "paid" );
+    BigDecimal paid = paymentrecord.getBigDecimal( "paid" );
     this.setAttr( "ordercomments", record.getStr( "comments" ) );
     this.setAttr( "paymentcomments", record.getStr( "paymentcomments" ) );
     this.setAttr( "dealprice", StrUtil.formatPrice( dealPrice ) );
     this.setAttr( "paid", StrUtil.formatPrice( paid ) );
-    Double due = dealPrice - paid;
-    if ( due > 0 )
-      this.setAttr( "dueinfo1", "还需支付:" + due );
-    if ( due < 0 )
-      this.setAttr( "dueinfo2", "挂账:" + -due );
-    if ( due == 0 )
+    BigDecimal due = dealPrice.subtract( paid );
+    String dues = StrUtil.formatNum( due );
+    if ( due.floatValue() > 0.01 )
+      this.setAttr( "dueinfo1", "还需支付:" + dues );
+    else if ( due.floatValue() < -0.01 )
+      this.setAttr( "dueinfo2", "挂账:" + dues );
+    else
       this.setAttr( "dueinfo3", "支付完成" );
     super.index();
   }
 
   public void loadingPayment() {
     String orderno = this.getPara( "orderno" );
-    String sql = "select CONCAT(cust.name, '-' ,cust.company) customer,pay.comments,pay.paid,pay.paymenttime,pay.paymenttype";
+    String sql = "select CONCAT(cust.name, '-' ,cust.company) customer,pay.comments,round(pay.paid,2) paid,pay.paymenttime,pay.paymenttype";
     String sqlExcept = " from payment pay " + "left join customer cust on cust.id=pay.customerid " + "where pay.orderno = " + orderno + " order by pay.paymenttime desc";
     Page<Record> page = Db.paginate( 1, 100, sql, sqlExcept );
     Pager pager = new Pager( page.getTotalRow(), page.getList() );
@@ -47,7 +50,7 @@ public class OrderViewController extends AbstractController {
   public void list() {
     String orderno = this.getSessionAttr( "orderno" );
     //price是原价  deal price是成交价  
-    String sql = "select o.orderno,p.name name,bi.price price,o.price dealprice,o.paid paid,bi.num num,oi.date date,contract.name contractname,contract.id contractid";
+    String sql = "select o.orderno,p.name name,round(bi.price,2) price,round(o.price,2) dealprice,round(o.paid,2) paid,bi.num num,oi.date date,contract.name contractname,contract.id contractid";
     String sqlExcept = " from orderitem oi " + "left join bookitem bi on oi.bookitem=bi.id " + "left join `order` o on o.id=oi.order " + "left join product p on bi.product=p.id "
         + "left join contract contract on bi.contract=contract.id " + "where o.orderno = " + orderno + " order by o.orderno desc";
     Page<Record> page = Db.paginate( 1, 100, sql, sqlExcept );

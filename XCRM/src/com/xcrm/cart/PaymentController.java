@@ -1,5 +1,6 @@
 package com.xcrm.cart;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,7 +36,7 @@ public class PaymentController extends AbstractController {
     Integer contractId = getParaToInt( "contract" );
     Integer paymenttype = getParaToInt( "paymenttype" );
     Date  deliverytime = getParaToDate( "deliverytime" );
-    Float paid = Float.parseFloat( getPara( "paid" ).isEmpty()? "0.0" : getPara( "paid" ) );
+    BigDecimal paid = new BigDecimal( Float.parseFloat( getPara( "paid" ).isEmpty()? "0.0" : getPara( "paid" ) ));
     String paymentcomments = getPara("paymentcomments");
     
     String bookitemids = this.getSessionAttr( "bookitems" );
@@ -56,12 +57,12 @@ public class PaymentController extends AbstractController {
     // persist price
     String price = this.getSessionAttr( "price" );
     if ( price != null && !price.isEmpty() ) {
-      order.setPrice( Float.parseFloat( price ) );
+      order.setPrice( new BigDecimal( Float.parseFloat( price ) ) );
     }
     // persist amount
     String amount = this.getSessionAttr( "amount" );
     if ( amount != null && !amount.isEmpty() ) {
-      order.setTotalprice( Float.parseFloat( amount ) );
+      order.setTotalprice( new BigDecimal(Float.parseFloat( amount )) );
     }
     // persist comments
     String ordercomments = this.getSessionAttr( "ordercomments" );
@@ -71,7 +72,7 @@ public class PaymentController extends AbstractController {
     order.save();
     
     //persist payment
-    if(paid > 0){
+    if(paid.floatValue() > 0){
       Payment payment = new Payment();
       payment.setPaymenttype( paymenttype );
       payment.setPaid( paid );

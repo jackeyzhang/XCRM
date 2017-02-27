@@ -16,12 +16,12 @@ import java.text.NumberFormat;
 public class StrUtil {
 
   public static String formatNum( Number Num ){
-    NumberFormat format = new DecimalFormat( "##.00" );
+    NumberFormat format = new DecimalFormat( "##0.00" );
     return format.format( Num );
   }
   
   public static  String formatPrice( Number price ){
-    NumberFormat format = new DecimalFormat( "￥##,###.00##" );
+    NumberFormat format = new DecimalFormat( "￥##,###.00" );
     return format.format( price );
   }
   

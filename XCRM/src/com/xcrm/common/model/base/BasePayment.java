@@ -33,11 +33,11 @@ public abstract class BasePayment<M extends BasePayment<M>> extends Model<M> imp
 		return get("paymenttype");
 	}
 
-	public void setPaid(java.lang.Float paid) {
+	public void setPaid(java.math.BigDecimal paid) {
 		set("paid", paid);
 	}
 
-	public java.lang.Float getPaid() {
+	public java.math.BigDecimal getPaid() {
 		return get("paid");
 	}
 

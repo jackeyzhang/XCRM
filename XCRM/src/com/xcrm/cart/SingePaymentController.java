@@ -1,5 +1,6 @@
 package com.xcrm.cart;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.jfinal.plugin.activerecord.Db;
@@ -13,14 +14,13 @@ public class SingePaymentController extends AbstractController {
 
   @Override
   protected void preSetAttribute() {
-    //    this.setAttr( "paidsuggest", this.getSessionAttr( "price" ) );
     String orderno = this.getPara( "orderno" );
     String sql = "select CONCAT(cust.name, '-' ,cust.company) customer,cust.id customerid,(select round(o.price-ifnull(sum(paid),0), 2) from payment where orderno= o.orderno) due " + "from `order` o "
         + "left join orderitem oi on oi.order=o.id " + "left join bookitem bi on oi.bookitem=bi.id  " + "left join customer cust on cust.id=bi.customer "
         + "where o.orderno=" + orderno;
     Record record = Db.findFirst( sql );
     this.setAttr( "customer", record.getStr( "customer" ) );
-    this.setAttr( "due", record.getDouble( "due" ) );
+    this.setAttr( "due", record.getBigDecimal( "due" ) );
     this.setSessionAttr( "customerid", record.getInt( "customerid" ) );
     this.setSessionAttr( "spay-orderno", orderno );
   }
@@ -28,10 +28,10 @@ public class SingePaymentController extends AbstractController {
   public void submitorder() {
     String orderno = this.getSessionAttr( "spay-orderno" );
     Integer paymenttype = getParaToInt( "paymenttype" );
-    Float paid = Float.parseFloat( getPara( "paid" ).isEmpty() ? "0.0" : getPara( "paid" ) );
+    BigDecimal paid = new BigDecimal ( Float.parseFloat( getPara( "paid" ).isEmpty() ? "0.0" : getPara( "paid" ) ));
     String paymentcomments = getPara( "paymentcomments" );
     //persist payment
-    if ( paid > 0 ) {
+    if ( paid.floatValue() > 0 ) {
       Payment payment = new Payment();
       payment.setPaymenttype( paymenttype );
       payment.setPaid( paid );

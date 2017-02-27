@@ -12,7 +12,7 @@ public class OrderController extends AbstractController {
 
   public void list() {
     //price是原价  deal price是成交价  
-    String sql = "select GROUP_CONCAT(p.name) name,o.orderno orderno,o.totalprice price,o.price dealprice,sum(bi.num) num,oi.date date,contract.name contractname,contract.id contractid,(select round(sum(paid),2) from payment where orderno= o.orderno) paid,(select round(o.price-ifnull(sum(paid),0), 2) from payment where orderno= o.orderno) due";
+    String sql = "select GROUP_CONCAT(p.name) name,o.orderno orderno,round(o.totalprice,2) price,round(o.price,2) dealprice,sum(bi.num) num,oi.date date,contract.name contractname,contract.id contractid,(select round(sum(paid),2) from payment where orderno= o.orderno) paid,(select round(o.price-ifnull(sum(paid),0), 2) from payment where orderno= o.orderno) due";
     String sqlExcept = " from orderitem oi " + "left join bookitem bi on oi.bookitem=bi.id " + "left join `order` o on o.id=oi.order " + "left join product p on bi.product=p.id "
         + "left join contract contract on bi.contract=contract.id "
         + "where bi.user=? "+ this.getSearchStatement(true, "p.") +"group by o.orderno order by o.orderno desc";

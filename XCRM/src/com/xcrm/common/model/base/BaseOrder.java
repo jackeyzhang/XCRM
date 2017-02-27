@@ -33,19 +33,19 @@ public abstract class BaseOrder<M extends BaseOrder<M>> extends Model<M> impleme
 		return get("date");
 	}
 
-	public void setTotalprice(java.lang.Float totalprice) {
+	public void setTotalprice(java.math.BigDecimal totalprice) {
 		set("totalprice", totalprice);
 	}
 
-	public java.lang.Float getTotalprice() {
+	public java.math.BigDecimal getTotalprice() {
 		return get("totalprice");
 	}
 
-	public void setPrice(java.lang.Float price) {
+	public void setPrice(java.math.BigDecimal price) {
 		set("price", price);
 	}
 
-	public java.lang.Float getPrice() {
+	public java.math.BigDecimal getPrice() {
 		return get("price");
 	}
 
@@ -65,11 +65,11 @@ public abstract class BaseOrder<M extends BaseOrder<M>> extends Model<M> impleme
 		return get("paymenttype");
 	}
 
-	public void setPaid(java.lang.Float paid) {
+	public void setPaid(java.math.BigDecimal paid) {
 		set("paid", paid);
 	}
 
-	public java.lang.Float getPaid() {
+	public java.math.BigDecimal getPaid() {
 		return get("paid");
 	}
 
