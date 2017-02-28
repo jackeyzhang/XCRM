@@ -21,16 +21,16 @@ public class OrderViewController extends AbstractController {
     Record record = Db.findFirst( "select o.comments,o.paymentcomments,o.price from xcrm.order o where o.orderno=" + orderno );
     BigDecimal dealPrice = record.getBigDecimal( "price" );
     Record paymentrecord = Db.findFirst( "select sum(paid) paid from payment where orderno=" + orderno + " group by orderno" );
-    BigDecimal paid = paymentrecord.getBigDecimal( "paid" );
+    BigDecimal paid = paymentrecord == null ? new BigDecimal(0) : paymentrecord.getBigDecimal( "paid" );
     this.setAttr( "ordercomments", record.getStr( "comments" ) );
     this.setAttr( "paymentcomments", record.getStr( "paymentcomments" ) );
     this.setAttr( "dealprice", StrUtil.formatPrice( dealPrice ) );
     this.setAttr( "paid", StrUtil.formatPrice( paid ) );
     BigDecimal due = dealPrice.subtract( paid );
     String dues = StrUtil.formatNum( due );
-    if ( due.floatValue() > 0.01 )
+    if ( due.floatValue() > 0.001 )
       this.setAttr( "dueinfo1", "还需支付:" + dues );
-    else if ( due.floatValue() < -0.01 )
+    else if ( due.floatValue() < -0.001 )
       this.setAttr( "dueinfo2", "挂账:" + dues );
     else
       this.setAttr( "dueinfo3", "支付完成" );

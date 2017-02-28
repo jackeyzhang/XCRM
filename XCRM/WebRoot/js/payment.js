@@ -11,9 +11,10 @@ $(function() {
 	    startView:2,
 	    minView:2
 	});
+
 	
 	$('#submitorder').on('click', function() {
-		var customer = $("#customerselect").val();
+		var customer = $("#customersearch").val();
 		var contract = $("#contractselect").val();
 		if( contract == '' || customer == '' ||customer == null || contract == null){
 			alert("请选择收货人和合同");
@@ -24,7 +25,7 @@ $(function() {
 			url : "/payment/submitorder",
 			type : 'post',
 			data : {
-				customer: $("#customerselect").val(),
+				customer: $("#customervalue").val(),
 				contract: $("#contractselect").val(),
 				paymenttype: $("#paymentwayselect").val(),
 				deliverytime: $("#deliverytime").val(),
@@ -41,12 +42,21 @@ $(function() {
 	});	
 	
 	//get customer list
-	var customerlist;
 	$.get('/customer/list/', function(data){
-		customerlist = data;
+		var subjects = new Array(); 
 	    for( d in data){
-	      $('#customerselect').append("<option value='" + data[d].id + "'>" + data[d].name + "-"+ data[d].company + "</option>");
+	      subjects.push( data[d] );
 	    }
+	    $('#customersearch').typeahead({
+	    	source: subjects,
+	    	afterSelect: function (item) {
+	    		$('#customervalue').val(item.id);
+	    		$('#customerinfo').html( "<h4><b>公司名称:</b>" + item.company +"   <b>邮寄地址:</b> " + item.shiptoAddr + "</h4>");
+	    	},
+	    	displayText: function (item) {
+                return item.name + "-" +item.company;//返回字符串
+            }
+	    }) 
 	});
 	
 	//get contract list
@@ -56,15 +66,6 @@ $(function() {
 	    }
 	});
 	
-	  //set attribute value from attributeidList
-	  $('#customerselect').change(function(){ 
-		  $('#customerinfo').html("");
-		   for(d in customerlist){
-			   if( customerlist[d].id == $(this).children('option:selected').val()){
-				   $('#customerinfo').html( "<h4><b>公司名称:</b>" + customerlist[d].company +"   <b>邮寄地址:</b> " + customerlist[d].shiptoAddr + "</h4>");
-			   }
-		   }
-	  });
 	  
 	  
 });
