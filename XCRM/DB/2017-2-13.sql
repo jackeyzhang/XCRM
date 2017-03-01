@@ -31,3 +31,6 @@ CHANGE COLUMN `paid` `paid` DECIMAL(16,6) NULL DEFAULT NULL ;
 ALTER TABLE `xcrm`.`payment` 
 CHANGE COLUMN `paid` `paid` DECIMAL(16,6) NULL DEFAULT NULL ;
 
+ALTER TABLE `xcrm`.`bookitem` 
+CHANGE COLUMN `price` `price` DECIMAL(16,6) NOT NULL ;
+

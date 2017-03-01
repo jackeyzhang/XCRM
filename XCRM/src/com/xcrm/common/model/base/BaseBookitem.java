@@ -25,11 +25,11 @@ public abstract class BaseBookitem<M extends BaseBookitem<M>> extends Model<M> i
 		return get("product");
 	}
 
-	public void setPrice(java.lang.Integer price) {
+	public void setPrice(java.math.BigDecimal price) {
 		set("price", price);
 	}
 
-	public java.lang.Integer getPrice() {
+	public java.math.BigDecimal getPrice() {
 		return get("price");
 	}
 
