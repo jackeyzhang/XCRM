@@ -25,7 +25,7 @@ public class StrUtil {
     return format.format( price );
   }
   
-  public static String formatPercentage( double  Num ){
+  public static String formatPercentage( String  Num ){
     BigDecimal  format = new BigDecimal ( Num );
     return "" + format.setScale(2, RoundingMode.HALF_UP).doubleValue();
   }

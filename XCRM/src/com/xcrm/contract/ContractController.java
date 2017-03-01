@@ -159,9 +159,9 @@ class ContractPrintInfo{
         setContact( record.getStr( "cname" ) );
         setTelephone( record.getStr( "phone" ) );
         setAddress( record.getStr( "shiptoAddr" ) );
-        setAmount( "" + StrUtil.formatPrice( record.getFloat( "totalprice" )) );
-        setPaid( "" + StrUtil.formatPrice( record.getFloat( "shouldpay" ) ) );
-        setDiscount( "" + StrUtil.formatPercentage( record.getDouble( "discount" ) ) );
+        setAmount( "" + StrUtil.formatPrice( record.getBigDecimal( "totalprice" )) );
+        setPaid( "" + StrUtil.formatPrice( record.getBigDecimal( "shouldpay" ) ) );
+        setDiscount( "" + StrUtil.formatPercentage( "" + record.getBigDecimal( "discount" ) ) );
         i++;
       }
       sb.append( record.getStr( "pname" ) ).append(getSpace(25))
