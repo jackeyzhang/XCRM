@@ -62,7 +62,7 @@ public class PriceController extends AbstractController {
       Attributevalue av = Attributevalue.dao.findFirst( "select * from attributevalue where attributeid=? and objectid=? and category=?", attribute.getAttributeid(), productid,
           Constant.CATEGORY_PRODUCT );
       if ( av == null || av.getAttributeid() < 200 )
-        continue;
+        continue;   
       valueMap.put( attribute, av.getValue() );
     }
 

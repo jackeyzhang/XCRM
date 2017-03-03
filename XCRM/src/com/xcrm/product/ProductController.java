@@ -51,7 +51,7 @@ public class ProductController extends AbstractController {
       }
       pager = new Pager(page.getTotalRow(), page.getList());
     } else {
-      List<Record> records = Db.find("select * from " + getModalName());
+      List<Record> records = Db.find("select id,name from " + getModalName());
       pager = new Pager(records.size(), records);
     }
     List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList(getCategory());
