@@ -233,8 +233,11 @@ public class PriceController extends AbstractController {
   }
 
   private String getSpecificAttribute(Map<Attribute,String> map,int attributeid){
-    Attribute specificAttribute = map.keySet().stream().filter( p->p.getAttributeid() == attributeid ).findAny().get();
-    if(specificAttribute == null) return null;
-    return map.get( specificAttribute );
+    for(Attribute a : map.keySet()){
+      if(a.getAttributeid() == attributeid){
+        return map.get( a );
+      }
+    }
+    return null;
   }
 }
