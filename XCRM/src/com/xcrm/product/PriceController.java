@@ -1,7 +1,6 @@
 package com.xcrm.product;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -58,7 +57,6 @@ public class PriceController extends AbstractController {
   private void fillAttribute( String productid ) {
     List<Record> records = new ArrayList<Record>();
     List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList( getCategory() );
-    Collections.sort( attributes );
     Map<Attribute, String> valueMap = new HashMap<Attribute, String>();
     for ( Attribute attribute : attributes ) {
       Attributevalue av = Attributevalue.dao.findFirst( "select * from attributevalue where attributeid=? and objectid=? and category=?", attribute.getAttributeid(), productid,
@@ -70,15 +68,15 @@ public class PriceController extends AbstractController {
 
     String value1 = "", value2 = "", value3 = "";
     if ( valueMap.values().size() >= 1 ) {
-      value1 = (String)valueMap.values().toArray()[0];
+      value1 = getSpecificAttribute( valueMap, 204 );
     }
     if ( valueMap.values().size() >= 2 ) {
-      value2 = (String)valueMap.values().toArray()[1];
+      value2 = getSpecificAttribute( valueMap, 206 );
     }
     if ( valueMap.values().size() >= 3 ) {
-      value3 = (String)valueMap.values().toArray()[2];
+      value3 = getSpecificAttribute( valueMap, 205 );
     }
-
+    
     if ( !StringUtils.isEmpty( value1 ) && !StringUtils.isEmpty( value2 ) && !StringUtils.isEmpty( value3 ) ) {
       String[] v1 = value1.split( "," );
       String[] v2 = value2.split( "," );
@@ -234,4 +232,9 @@ public class PriceController extends AbstractController {
     return value;
   }
 
+  private String getSpecificAttribute(Map<Attribute,String> map,int attributeid){
+    Attribute specificAttribute = map.keySet().stream().filter( p->p.getAttributeid() == attributeid ).findAny().get();
+    if(specificAttribute == null) return null;
+    return map.get( specificAttribute );
+  }
 }
