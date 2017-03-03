@@ -7,9 +7,8 @@ ADD COLUMN `paid` FLOAT NULL;
 ALTER TABLE `xcrm`.`order` 
 ADD COLUMN `deliverytime` DATETIME NULL DEFAULT NULL;
 
-
 ALTER TABLE `xcrm`.`order` 
-ADD COLUMN `paymentcomments` VARCHAR(2000) NULL AFTER `status`;
+ADD COLUMN `paymentcomments` VARCHAR(2000) NULL;
 
 CREATE TABLE `payment` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
