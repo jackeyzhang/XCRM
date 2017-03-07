@@ -50,6 +50,8 @@ public class PriceController extends AbstractController {
         continue;
       record.set( "attribute-" + getCategory() + "-" + av.getAttributeid(), av.getValue() );
     }
+    Record product = Db.findById( "product", record.getInt( "product" ) );
+    record.set( "productname", product.get( "name" ) );
     setAttr( "id", id );
     renderJson( record );
   }

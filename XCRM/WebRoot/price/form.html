@@ -1,109 +1,25 @@
-<script>
-	$(function() {
-
-		// get level1category list
-/* 		var level1;
-		$.get('/productcategory/listtoplevel/', function(data) {
-			level1 = data;
-			for (d in data) {
-				$('#level1category').append(
-						"<option value='" + data[d].id + "'>" + data[d].name
-								+ "</option>");
-			}
-		});
-
-		var level2;
-		$.get('/productcategory/listsecondlevel/', function(data) {
-			level2 = data;
-		}); */
-
-/* 		$('#level1category').change(
-				function() {
-					$('#level2category').empty();
-					for (c in level2) {
-						if (level2[c].pid == $(this)
-								.children('option:selected').val()) {
-							$('#level2category').append(
-									"<option value='" + level2[c].id + "'>"
-											+ level2[c].name + "</option>");
-						}
-					}
-				}); */
-		
-	    $('#productselect').change(
-          function() {
-            var productid = $(this).children('option:selected').val();
-            $.ajax({
-                type : "get",
-                url : "/price/preadd?pid=" + productid,
-                success : function(data, status) {
-                  if (status == "success") {
-                    $('.bootstrap-table').html(data);
-                  }
-                }
-              });
-            
-            setTimeout(function() {
-                $('#productselect').val(productid);
-               }, 500);
-       });
-				
-			$('#pricebutton').click(
-					function(){
-						var value = $("input[name='price']").val();
-						$("input[name^='price-']").val( value );
-					}
-			);
-			
-			$('#countbutton').click(
-			          function(){
-			            var value = $("input[name='count']").val();
-			            $("input[name^='count']").val( value );
-			          }
-			      );
-		
-	});
-</script>
-
-<div class="container-fluid">
-	<div class="form-group">
-		<label>名称</label> <input type="text" class="form-control" name="name"
-			placeholder="名称" data-required-error="名称不能为空" required>
-		<div class="help-block with-errors"></div>
-	</div>
-</div>
-
 <div class="container-fluid">
 	<div class="row">
-		<!-- <div class="col-md-4">
+	
+		<div class="col-md-6">
 			<div class="form-group">
-				<label>产品大类</label> <select class="form-control selector"
-					name="level1category" id="level1category" required>
-					<option value="">请选择...</option>
-				</select>
+				<label>选择产品</label>
+				<input type="text" class="form-control span3" id="productsearch"
+					data-provide="typeahead" data-items="4" name="productname"/> 
+				<input type="hidden"
+					class="form-control span3" id="productvalue" name="product" />
+			</div>
+		</div>
+
+		<div class="col-md-6">
+			<div class="form-group">
+				<label>价格名称</label> <input type="text" class="form-control"
+					name="name" placeholder="价格名称" data-required-error="名称不能为空"
+					id="pricename" readonly>
 				<div class="help-block with-errors"></div>
 			</div>
 		</div>
 
-		<div class="col-md-4">
-			<div class="form-group">
-				<label>产品小类</label> <select class="form-control selector"
-					name="level2category" id="level2category">
-					<option value="">请选择...</option>
-				</select>
-				<div class="help-block with-errors"></div>
-			</div>
-		</div> -->
-
-		<div class="col-md-12">
-			<div class="form-group">
-				<label>产品</label> <select class="form-control selector"
-					name="product" id="productselect" required>
-					<option value="">请选择...</option>
-				</select>
-				<div class="help-block with-errors"></div>
-			</div>
-		</div>
 	</div>
 </div>
 
@@ -135,7 +51,7 @@
 				<label>设置有效</label>
 				<div>
 					<label class="checkbox-inline"> <input type="radio"
-						id="inlineCheckbox1" value="1" name="enable">生效
+						id="inlineCheckbox1" value="1" name="enable" checked>生效
 					</label> <label class="checkbox-inline"> <input type="radio"
 						id="inlineCheckbox2" value="0" name="enable">失效
 					</label>
@@ -148,7 +64,7 @@
 				<label>是否默认价格表</label>
 				<div>
 					<label class="checkbox-inline"> <input type="radio"
-						id="inlineCheckbox3" value="1" name="default">是
+						id="inlineCheckbox3" value="1" name="default" checked>是
 					</label> <label class="checkbox-inline"> <input type="radio"
 						id="inlineCheckbox4" value="0" name="default">否
 					</label>

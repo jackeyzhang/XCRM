@@ -47,7 +47,7 @@ $(function() {
 		window.location.href = '/price/';
 	});
 
-	$('.modal-footer .btn.btn-primary.submit').click(function() {
+	$('#submitprice').click(function() {
 		form = $('#modal-form');
 		var row = {};
 		//fire validate
@@ -87,14 +87,14 @@ $(function() {
 	});
 	
 	//get product list
-	$.get('/product/list/', function(data) {
-		productList = data.rows;
-		for (d in productList) {
-			$('#productselect').append(
-					"<option value='" + productList[d].id + "'>"
-							+ productList[d].name + "</option>");
-		}
-	});
+//	$.get('/product/list/', function(data) {
+//		productList = data.rows;
+//		for (d in productList) {
+//			$('#productselect').append(
+//					"<option value='" + productList[d].id + "'>"
+//							+ productList[d].name + "</option>");
+//		}
+//	});
 	
 	
 	function loadData(title, row) {
