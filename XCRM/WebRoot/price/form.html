@@ -3,19 +3,19 @@
 	
 		<div class="col-md-6">
 			<div class="form-group">
-				<label>选择产品</label>
+				<label>输入产品名称(支持模糊查找选择)</label>
 				<input type="text" class="form-control span3" id="productsearch"
-					data-provide="typeahead" data-items="4" name="productname"/> 
+					data-provide="typeahead" data-items="4" name="productname" ${readonly!}/> 
 				<input type="hidden"
-					class="form-control span3" id="productvalue" name="product" />
+					class="form-control span3" id="productvalue" name="product"/>
 			</div>
 		</div>
 
 		<div class="col-md-6">
 			<div class="form-group">
 				<label>价格名称</label> <input type="text" class="form-control"
-					name="name" placeholder="价格名称" data-required-error="名称不能为空"
-					id="pricename" readonly>
+					name="name" placeholder="价格名称" data-required-error="价格名称不能为空" 
+					id="pricename"  required/>
 				<div class="help-block with-errors"></div>
 			</div>
 		</div>
@@ -28,7 +28,7 @@
 		<div class="col-md-6">
 			<div class="form-group">
 				<label>默认价格</label> <input type="text" class="form-control"
-					name="price" placeholder="" required>
+					name="price" placeholder="" data-required-error="价格不能为空" required>
 				<div class="help-block with-errors"></div>
 				<button type="button" class="btn btn-primary" id="pricebutton">应用到所有</button>
 			</div>
@@ -36,7 +36,7 @@
 		<div class="col-md-6">
 			<div class="form-group">
 				<label>默认初始库存</label> <input type="number" class="form-control"
-					name="count" placeholder="" required>
+					name="count" placeholder="" data-required-error="库存不能为空"  required>
 				<div class="help-block with-errors"></div>
 				<button type="button" class="btn btn-primary" id="countbutton">应用到所有</button>
 			</div>

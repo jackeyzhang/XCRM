@@ -82,14 +82,13 @@ public abstract class AbstractController extends Controller {
   public abstract int getCategory();
 
   public void list() {
-    Pager pager = new Pager();
     if ( this.getPara( "pageNumber" ) != null ) {
       int pagenumber = Integer.parseInt( this.getPara( "pageNumber" ) );
       int pagesize = Integer.parseInt( this.getPara( "pageSize" ) );
       String searchword = this.getPara( "searchword" );
       String sqlExcept = searchword == null ? "from " + getModalName() : "from " + getModalName() + " where " + searchWord() + " like '%" + searchword + "%'";
       Page<Record> page = Db.paginate( pagenumber, pagesize, "select * ", sqlExcept);
-      pager = new Pager( page.getTotalRow(), page.getList() );
+      Pager pager = new Pager( page.getTotalRow(), page.getList() );
       List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList( getCategory() );
       Iterator<Record> iter = pager.getRows().iterator();
       for ( ; iter.hasNext(); ) {
@@ -107,7 +106,7 @@ public abstract class AbstractController extends Controller {
     }
     else {
       List<Record> records = Db.find( "select * from " + getModalName() );
-      pager = new Pager( records.size(), records );
+      Pager pager = new Pager( records.size(), records );
       List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList( getCategory() );
       for ( Record record : pager.getRows() ) {
         for ( Attribute attribute : attributes ) {

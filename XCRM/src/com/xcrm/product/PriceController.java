@@ -36,6 +36,9 @@ public class PriceController extends AbstractController {
     }
     fillAttribute( pid );
     setAttr( "id", getPara( "id" ) );
+    if(getPara( "id" ) != null){
+      setAttr( "readonly", "readonly" );
+    }
     render( "/price/add.html" );
   }
 

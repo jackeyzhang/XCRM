@@ -47,7 +47,7 @@ $(function() {
 		window.location.href = '/price/';
 	});
 
-	$('#submitprice').click(function() {
+	$('#submitprice').click(function(event) {
 		form = $('#modal-form');
 		var row = {};
 		//fire validate
@@ -55,46 +55,44 @@ $(function() {
 		if(form.validator().data('bs.validator').hasErrors()){
 			return;
 		}
-		// get input value to row
-		form.find('input[name]').each(function() {
-			if($(this).attr('type') == "radio"){
-				if($(this).is(":checked")){
+		if($('#productvalue').val() == ''){
+			event.preventDefault();
+			alert("请选择一个已存在的产品!");
+		}else{
+			// get input value to row
+			form.find('input[name]').each(function() {
+				if($(this).attr('type') == "radio"){
+					if($(this).is(":checked")){
+						row[$(this).attr('name')] = $(this).val();
+					}
+				}else{
 					row[$(this).attr('name')] = $(this).val();
 				}
-			}else{
-				row[$(this).attr('name')] = $(this).val();
-			}
-		});
-		// get select value to row
-		form.find('select[name]').each(function() {
-			if($(this).val() instanceof Array){
-				row[$(this).attr('name')] = $(this).val().join(',');
-			}else{
-				row[$(this).attr('name')] = $(this).val();
-			}
-		});
-		// submit row
-		$.ajax({
-			url : $('#id') == "" ? "/price/add"
-					: "/price/update",
-			type : 'post',
-			data : row,
-			success :function(indata, status) {
-				if (status == "success") {
+			});
+			// get select value to row
+			form.find('select[name]').each(function() {
+				if($(this).val() instanceof Array){
+					row[$(this).attr('name')] = $(this).val().join(',');
+				}else{
+					row[$(this).attr('name')] = $(this).val();
 				}
-			}
-		});
+			});
+			// submit row
+			$.ajax({
+				url : $('#id') == "" ? "/price/add"
+						: "/price/update",
+				type : 'post',
+				data : row,
+				success :function(indata, status) {
+					if (status == "success") {
+					}
+				},
+				error: function () {
+					alert("编辑失败");
+	            }
+			});
+		}
 	});
-	
-	//get product list
-//	$.get('/product/list/', function(data) {
-//		productList = data.rows;
-//		for (d in productList) {
-//			$('#productselect').append(
-//					"<option value='" + productList[d].id + "'>"
-//							+ productList[d].name + "</option>");
-//		}
-//	});
 	
 	
 	function loadData(title, row) {
