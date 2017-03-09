@@ -5,7 +5,14 @@ import com.xcrm.common.util.Constant;
 
 
 public class ReportController extends AbstractController {
-
+  
+  @Override
+  public void index() {
+    super.index();
+    String reportname = this.getPara();
+    if(reportname != null)
+    this.setAttr( "currentreport", reportname );
+  }
 
   @Override
   public String getModalName() {

@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>贝可曼尼信息系统</title> 
 <#include "../common/js2css.html"/>
+<script src="/js/report.js"></script>
 </head>
 <body>
 	<div class="container">
@@ -13,6 +14,10 @@
 			<div class="span12">
 				<#include "../common/menu.html"/>
 				<#include "../common/pageheader.html"/>
+				<#include "menu.html"/>
+				<#if currentreport??> 
+				 <#include "${currentreport}.html"/>
+				</#if> 
 				<#include "../common/footer.html"/>
 			</div>
 		</div>
