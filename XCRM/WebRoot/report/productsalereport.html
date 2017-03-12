@@ -1,9 +1,61 @@
+<!-- 查询条件 -->
 <div>
-<h1>产品售卖分析</h1>
+	<div class="row">
+		<div class="col-md-12">
+		  <h3><span class="label label-info">选择要查看的订单时间段和订单状态</span></h3>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-3">
+			<label>开始时间</label> <input class="form-control" type="text"
+				id="startdate" placeholder="请选择开始时间" name="startdate">
+		</div>
+
+		<div class="col-md-3">
+			<label>结束时间</label> <input class="form-control" type="text"
+				id="endate" placeholder="请选择结束时间" name="endate">
+		</div>
+
+		<div class="col-md-3">
+			<label>订单状态</label> <select class="form-control selector"
+				id="orderstatusselect" name="orderstatusselect">
+				<option value="">请选择订单状态...</option>
+				<option value="1">已下订单</option>
+				<option value="2">已付定金</option>
+				<option value="3">已付全款</option>
+				<option value="43">取消订单</option>
+			</select>
+		</div>
+
+		<div class="col-md-3">
+			<button type="button" class="btn btn-default btn-block"
+				id="queryingbutton-productsales">查询分析</button>
+		</div>
+	</div>
+
 </div>
 
+<p>
+</p>
+<!-- 查询结果 -->
 <div>
-
-
-
+   <table id="reporttable"
+          data-toggle="table"
+          data-group-by="true"
+          data-group-by-field="productname"
+          data-url="../json/data6.json">
+       <thead>
+       <tr>
+           <th data-field="productname">商品名称</th>
+           <th data-field="companyname">公司名称</th>
+           <th data-field="productncount">产品数量</th>
+           <th data-field="orderdate">订单日期</th>
+           <th data-field="deliverydate">交货日期</th>
+           <th data-field="workingperson">当前工作人员</th>
+           <th data-field="orderstatus">订单状态</th>
+           <th data-field="saler">销售代表</th>
+       </tr>
+       </thead>
+   </table>
 </div>
