@@ -2,7 +2,9 @@ package com.xcrm.report;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
@@ -25,7 +27,7 @@ public class ReportController extends AbstractController {
     Date enddate = this.getParaToDate( "enddate" );
     //Integer orderstatus = getParaToInt( "orderstatus" );
     //query
-    String sql = "select prd.name productname,cust.company companyname,ord.date orderdate,sum(bi.num) productncount "
+    String sql = "select prd.name productname,cust.company companyname,ord.date orderdate,sum(bi.num) productcount "
         + "from xcrm.product prd left join xcrm.bookitem bi on prd.id = bi.product "
         + "left join xcrm.orderitem oi on oi.bookitem = bi.id "
         + "left join xcrm.order ord on oi.order = ord.id "
@@ -33,7 +35,7 @@ public class ReportController extends AbstractController {
         + "where ord.date>=? and ord.date<=? "
         + "group by prd.name, cust.company, ord.id order by prd.name ";
     List<Record> records = Db.find(  sql, startdate, enddate  );
-    //groupRecordsByField(records, "productncount", "productname");
+    groupRecordsByField(records, "productcount", "productname");
     this.renderJson( records );
   }
 
@@ -66,24 +68,28 @@ public class ReportController extends AbstractController {
     int groupIndex = 0;
     String currentSplitkey = "";
     BigDecimal count = new BigDecimal( 0 );
+    Map<Integer,Record> map = new LinkedHashMap<Integer,Record>();
     for( int i = 0; i < records.size(); i++){
       Record record = records.get( i );
       String splitkey = record.getStr( groupfield );
       if(currentSplitkey.isEmpty()){
         currentSplitkey = splitkey;
       }
-      count.add( record.getBigDecimal( calField ) );
       if(currentSplitkey.equals( splitkey ) && i != records.size()-1){
+        count = count.add( record.getBigDecimal( calField ) );
         continue;
       }else{
-        currentSplitkey = splitkey;
-        groupIndex = i;
         Record grouprecord = new Record();
         grouprecord.set( calField, count );
-        grouprecord.set( groupfield, splitkey );
-        records.add( groupIndex, grouprecord );
+        grouprecord.set( groupfield, currentSplitkey );
+        grouprecord.set( "isgroup", true );
+        map.put( groupIndex, grouprecord );
+        groupIndex = i+1;
+        currentSplitkey = splitkey;
       }
-      
+    }
+    for( Integer index : map.keySet()){
+      records.add( index, map.get( index ) );
     }
   }
   

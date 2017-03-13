@@ -46,6 +46,9 @@ $(function() {
 		startView : 2,
 		minView : 2
 	});
+	
+	var startdatestr = getFirstDayOfCurrentDay( );
+	$('#startdate').val( startdatestr );
 
 	$('#endate').datetimepicker({
 		format : 'yyyy-mm-dd',
@@ -54,5 +57,19 @@ $(function() {
 		startView : 2,
 		minView : 2
 	});
+	
+	var enddatestr = getCurrentDay();
+	$('#endate').val( enddatestr );
+	
+	function getFirstDayOfCurrentDay( ){
+		var cdate = new Date();
+		return cdate.getFullYear() + "-" + (cdate.getMonth()+1) + "-" + "01";
+	}
+	
+	function getCurrentDay(){
+		var cdate = new Date();
+		return  cdate.getFullYear() + "-" + (cdate.getMonth()+1) + "-" + cdate.getDate();
+	}
+	
 
 });

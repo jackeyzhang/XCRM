@@ -44,12 +44,29 @@
           data-toggle="table"
           data-group-by="true"
           data-group-by-field="productname"
-          data-url="../json/data6.json">
+          data-row-style="rowStyle">
        <thead>
        <tr>
-           <th data-field="productname">商品名称</th>
+       <script>
+	       function rowStyle(row, index) {
+	    	   if(row['isgroup']){
+	    		   return {classes: 'info'};
+	    	   }else{
+	    		   return {};
+	    	   }
+	       }
+	       
+	       function productnameformmater(value, row){
+	    	   if(row['isgroup']){
+	    		   return value;
+	    	   }else{
+	    		   return '';
+	    	   }
+	       }
+       </script>
+           <th data-field="productname" data-formatter="productnameformmater">商品名称</th>
            <th data-field="companyname">公司名称</th>
-           <th data-field="productncount">产品数量</th>
+           <th data-field="productcount">产品数量</th>
            <th data-field="orderdate">订单日期</th>
            <th data-field="deliverydate">交货日期</th>
            <th data-field="workingperson">当前工作人员</th>
