@@ -69,7 +69,7 @@ public class PaymentController extends AbstractController {
     if ( ordercomments != null && !ordercomments.isEmpty() ) {
       order.setComments( ordercomments );
     }
-    order.save();
+    
     
     //persist payment
     if(paid.floatValue() > 0){
@@ -81,7 +81,14 @@ public class PaymentController extends AbstractController {
       payment.setPaymenttime( new Date() );
       payment.setOrderno( order.getOrderno() );
       payment.save();
+      if(order.getPrice().floatValue() - paid.floatValue() > 0.01){
+        order.setStatus( 2 );//2 means 已付定金
+      }else{
+        order.setStatus( 3 );//3 means 支付完成
+      }
     }
+    
+    order.save();
     
     // save order items
     List<Orderitem> orderitems = new ArrayList<Orderitem>();

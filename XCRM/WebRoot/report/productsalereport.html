@@ -63,14 +63,26 @@
 	    		   return '';
 	    	   }
 	       }
+	       
+	       function statusformatter(value, row){
+	    	   if(value == 1){
+	    	        return '已下订单';
+	    	   }else if(value == 2){
+	    	        return '已付定金';
+	    	   }else if(value == 3){
+	    	          return '已付全款';
+	    	   }else if(value == 4){
+	    	        return '已经取消';
+	    	   }
+	    	}
        </script>
            <th data-field="productname" data-formatter="productnameformmater">商品名称</th>
            <th data-field="companyname">公司名称</th>
            <th data-field="productcount">产品数量</th>
            <th data-field="orderdate">订单日期</th>
-           <th data-field="deliverydate">交货日期</th>
+           <th data-field="deliverytime">交货日期</th>
            <th data-field="workingperson">当前工作人员</th>
-           <th data-field="orderstatus">订单状态</th>
+           <th data-field="orderstatus" data-formatter="statusformatter">订单状态</th>
            <th data-field="saler">销售代表</th>
        </tr>
        </thead>

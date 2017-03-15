@@ -6,6 +6,7 @@ import java.util.Date;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.xcrm.common.AbstractController;
+import com.xcrm.common.model.Order;
 import com.xcrm.common.model.Payment;
 import com.xcrm.common.util.Constant;
 
@@ -23,6 +24,7 @@ public class SingePaymentController extends AbstractController {
     this.setAttr( "due", record.getBigDecimal( "due" ) );
     this.setSessionAttr( "customerid", record.getInt( "customerid" ) );
     this.setSessionAttr( "spay-orderno", orderno );
+    this.setSessionAttr( "due", record.getBigDecimal( "due" ) );
   }
 
   public void submitorder() {
@@ -41,8 +43,23 @@ public class SingePaymentController extends AbstractController {
       payment.setPaymenttime( new Date() );
       payment.setOrderno( Long.parseLong( orderno ) );
       payment.save();
+      BigDecimal due = getSessionAttr( "due" );
+      if( due.floatValue() - paid.floatValue() <= 0.001 ){
+        Order ord = Order.dao.findFirst( "select * from xcrm.order where orderno=?", Long.parseLong( orderno )  );
+        if(ord != null){
+          ord.setStatus( 3 );//3 means 支付完成
+          ord.update();
+        }
+      }else{
+        Order ord = Order.dao.findFirst( "select * from xcrm.order where orderno=?",  Long.parseLong( orderno )  );
+        if(ord != null){
+          ord.setStatus( 2 );//2 means 支付定金
+          ord.update();
+        }
+      }
       this.removeSessionAttr( "customerid" );
       this.removeSessionAttr( "spay-orderno" );
+      this.removeSessionAttr( "due" );
     }
     this.renderNull();
   }

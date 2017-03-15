@@ -1,6 +1,7 @@
 package com.xcrm.report;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -25,9 +26,15 @@ public class ReportController extends AbstractController {
   public void querying() {
     Date startdate = this.getParaToDate( "startdate" );
     Date enddate = this.getParaToDate( "enddate" );
+    Calendar endcalendar = Calendar.getInstance();
+    endcalendar.setTime( enddate );
+    endcalendar.set( Calendar.HOUR_OF_DAY, 23 );
+    endcalendar.set( Calendar.MINUTE, 59 );
+    endcalendar.set( Calendar.SECOND, 59 );
+    enddate = endcalendar.getTime();
     //Integer orderstatus = getParaToInt( "orderstatus" );
     //query
-    String sql = "select prd.name productname,cust.company companyname,ord.date orderdate,sum(bi.num) productcount "
+    String sql = "select prd.name productname,cust.company companyname,ord.date orderdate,sum(bi.num) productcount,ord.deliverytime,ord.status orderstatus "
         + "from xcrm.product prd left join xcrm.bookitem bi on prd.id = bi.product "
         + "left join xcrm.orderitem oi on oi.bookitem = bi.id "
         + "left join xcrm.order ord on oi.order = ord.id "
@@ -79,6 +86,9 @@ public class ReportController extends AbstractController {
         count = count.add( record.getBigDecimal( calField ) );
         continue;
       }else{
+        if(i == records.size()-1){
+          count = count.add( record.getBigDecimal( calField ) );
+        }
         Record grouprecord = new Record();
         grouprecord.set( calField, count );
         grouprecord.set( groupfield, currentSplitkey );
