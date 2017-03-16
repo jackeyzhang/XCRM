@@ -40,7 +40,7 @@ public class ReportController extends AbstractController {
         + "left join xcrm.order ord on oi.order = ord.id "
         + "left join xcrm.customer cust on cust.id=bi.customer "
         + "where ord.date>=? and ord.date<=? "
-        +  (orderstatus == 0 ? "" : " ord.status = " + orderstatus + " ")
+        +  (orderstatus == 0 ? "" : " and ord.status = " + orderstatus + " ")
         + "group by prd.name, cust.company, ord.id order by prd.name ";
     List<Record> records = Db.find(  sql, startdate, enddate  );
     groupRecordsByField(records, "productcount", "productname");
