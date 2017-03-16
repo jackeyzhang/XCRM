@@ -32,7 +32,7 @@ public class ReportController extends AbstractController {
     endcalendar.set( Calendar.MINUTE, 59 );
     endcalendar.set( Calendar.SECOND, 59 );
     enddate = endcalendar.getTime();
-    //Integer orderstatus = getParaToInt( "orderstatus" );
+    Integer orderstatus = getParaToInt( "orderstatus" );
     //query
     String sql = "select prd.name productname,cust.company companyname,ord.date orderdate,sum(bi.num) productcount,ord.deliverytime,ord.status orderstatus "
         + "from xcrm.product prd left join xcrm.bookitem bi on prd.id = bi.product "
@@ -40,6 +40,7 @@ public class ReportController extends AbstractController {
         + "left join xcrm.order ord on oi.order = ord.id "
         + "left join xcrm.customer cust on cust.id=bi.customer "
         + "where ord.date>=? and ord.date<=? "
+        +  (orderstatus == 0 ? "" : " ord.status = " + orderstatus + " ")
         + "group by prd.name, cust.company, ord.id order by prd.name ";
     List<Record> records = Db.find(  sql, startdate, enddate  );
     groupRecordsByField(records, "productcount", "productname");
