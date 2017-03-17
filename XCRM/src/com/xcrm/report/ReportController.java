@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
@@ -23,7 +24,7 @@ public class ReportController extends AbstractController {
       this.setAttr( "currentreport", reportname );
   }
 
-  public void querying() {
+  public void queryingproductsales() {
     Date startdate = this.getParaToDate( "startdate" );
     Date enddate = this.getParaToDate( "enddate" );
     Calendar endcalendar = Calendar.getInstance();
@@ -40,10 +41,49 @@ public class ReportController extends AbstractController {
         + "left join xcrm.order ord on oi.order = ord.id "
         + "left join xcrm.customer cust on cust.id=bi.customer "
         + "where ord.date>=? and ord.date<=? "
+        + " and bi.user= " + getCurrentUserId() + " "
         +  (orderstatus == 0 ? "" : " and ord.status = " + orderstatus + " ")
         + "group by prd.name, cust.company, ord.id order by prd.name ";
     List<Record> records = Db.find(  sql, startdate, enddate  );
     groupRecordsByField(records, "productcount", "productname");
+    this.renderJson( records );
+  }
+  
+  public void queryingorderpaymentreport() {
+    Date startdate = this.getParaToDate( "startdate" );
+    Date enddate = this.getParaToDate( "enddate" );
+    Calendar endcalendar = Calendar.getInstance();
+    endcalendar.setTime( enddate );
+    endcalendar.set( Calendar.HOUR_OF_DAY, 23 );
+    endcalendar.set( Calendar.MINUTE, 59 );
+    endcalendar.set( Calendar.SECOND, 59 );
+    enddate = endcalendar.getTime();
+    Boolean topay = this.getParaToBoolean( "topay" );
+    Boolean todue = this.getParaToBoolean( "todue" );
+    //price是原价  deal price是成交价  
+    String sql = "select cust.company companyname, "
+        + "GROUP_CONCAT(p.name) name,"
+        + "sum(bi.num) productcount,"
+        + "oi.date orderdate,"
+        + "contract.name contractname,"
+        + "contract.id contractid,"
+        + "o.orderno orderno,"
+        + "round(o.totalprice,2) price,"//原价
+        + "round(o.price,2) dealprice,"//成交价格
+        + "(select round(o.price-ifnull(sum(paid),0), 2) from payment where orderno= o.orderno) due,"//应付
+        + "(select round(sum(paid),2) from payment where orderno= o.orderno) paid,"//已付
+        + "o.status orderstatus"
+        + " from orderitem oi " 
+        + "left join bookitem bi on oi.bookitem=bi.id " 
+        + "left join `order` o on o.id=oi.order " 
+        + "left join product p on bi.product=p.id "
+        + "left join contract contract on bi.contract=contract.id "
+        + "left join customer cust on cust.id=bi.customer "
+        + "where o.date>=? and o.date<=? "
+        + "and bi.user= " + getCurrentUserId() + " "
+        +"group by o.orderno order by o.orderno desc";
+    List<Record> records = Db.find(  sql, startdate, enddate  );
+    records = filterOrderPaymentRecords( records, topay, todue );
     this.renderJson( records );
   }
 
@@ -102,6 +142,18 @@ public class ReportController extends AbstractController {
     for( Integer index : map.keySet()){
       records.add( index, map.get( index ) );
     }
+  }
+  
+  private List<Record> filterOrderPaymentRecords( List<Record> records, Boolean topay, Boolean todue ) {
+    if ( topay && todue )
+      return records;
+    if ( topay ) {
+      return records.stream().filter( r -> r.getBigDecimal( "due" ).floatValue() > 0 ).collect( Collectors.toList() );
+    }
+    if ( todue ) {
+      return records.stream().filter( r -> r.getBigDecimal( "due" ).floatValue() < 0 ).collect( Collectors.toList() );
+    }
+    return records;
   }
   
 }

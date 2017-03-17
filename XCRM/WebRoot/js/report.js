@@ -3,12 +3,8 @@ $(function() {
 		window.location.href = "/report/productsalereport";
 	});
 
-	$('#productsalereportbutton').click(function() {
-		window.location.href = "/report/productsalereport";
-	});
-
-	$('#orderreportbutton').click(function() {
-		window.location.href = "/report/orderreport";
+	$('#orderpaymentreportbutton').click(function() {
+		window.location.href = "/report/orderpaymentreport";
 	});
 
 	$('#salesreportbutton').click(function() {
@@ -22,7 +18,7 @@ $(function() {
 	$('#queryingbutton-productsales').click(function() {
 		$.ajax({
 			type : "post",
-			url : "/report/querying",
+			url : "/report/queryingproductsales",
 			data : {
 				startdate: $("#startdate").val(),
 				enddate: $("#endate").val(),
@@ -38,6 +34,29 @@ $(function() {
 			}
 		});
 	});
+	
+	$('#queryingbutton-orderreport').click(function() {
+		$.ajax({
+			type : "post",
+			url : "/report/queryingorderpaymentreport",
+			data : {
+				startdate: $("#startdate").val(),
+				enddate: $("#endate").val(),
+				topay: $("#topay").is(':checked'),
+				todue: $("#todue").is(':checked')
+			},
+			success : function(data, status) {
+				if (status == "success") {
+					$('#reporttable').bootstrapTable('load', data);
+				}
+			},
+			error : function() {
+				showAlert("查询失败");
+			}
+		});
+	});
+	
+	
 
 	$('#startdate').datetimepicker({
 		format : 'yyyy-mm-dd',
