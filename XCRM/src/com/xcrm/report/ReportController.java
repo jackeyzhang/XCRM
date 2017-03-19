@@ -35,11 +35,12 @@ public class ReportController extends AbstractController {
     enddate = endcalendar.getTime();
     Integer orderstatus = getParaToInt( "orderstatus" );
     //query
-    String sql = "select prd.name productname,cust.company companyname,ord.date orderdate,sum(bi.num) productcount,ord.deliverytime,ord.status orderstatus "
+    String sql = "select prd.name productname,cust.company companyname,ord.date orderdate,sum(bi.num) productcount,ord.deliverytime,ord.status orderstatus,user.username saler "
         + "from xcrm.product prd left join xcrm.bookitem bi on prd.id = bi.product "
         + "left join xcrm.orderitem oi on oi.bookitem = bi.id "
         + "left join xcrm.order ord on oi.order = ord.id "
         + "left join xcrm.customer cust on cust.id=bi.customer "
+        + "left join user user on user.id=bi.user "
         + "where ord.date>=? and ord.date<=? "
         + " and bi.user= " + getCurrentUserId() + " "
         +  (orderstatus == 0 ? "" : " and ord.status = " + orderstatus + " ")
@@ -72,13 +73,15 @@ public class ReportController extends AbstractController {
         + "round(o.price,2) dealprice,"//成交价格
         + "(select round(o.price-ifnull(sum(paid),0), 2) from payment where orderno= o.orderno) due,"//应付
         + "(select round(sum(paid),2) from payment where orderno= o.orderno) paid,"//已付
-        + "o.status orderstatus"
+        + "o.status orderstatus,"
+        + "user.username saler"
         + " from orderitem oi " 
         + "left join bookitem bi on oi.bookitem=bi.id " 
         + "left join `order` o on o.id=oi.order " 
         + "left join product p on bi.product=p.id "
         + "left join contract contract on bi.contract=contract.id "
         + "left join customer cust on cust.id=bi.customer "
+        + "left join user user on user.id=bi.user "
         + "where o.date>=? and o.date<=? "
         + "and bi.user= " + getCurrentUserId() + " "
         +"group by o.orderno order by o.orderno desc";
