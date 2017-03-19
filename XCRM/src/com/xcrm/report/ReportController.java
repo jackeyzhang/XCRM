@@ -3,10 +3,10 @@ package com.xcrm.report;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
@@ -163,10 +163,24 @@ public class ReportController extends AbstractController {
     if ( topay && todue )
       return records;
     if ( topay ) {
-      return records.stream().filter( r -> r.getBigDecimal( "due" ).floatValue() < 0 ).collect( Collectors.toList() );
+      Iterator<Record> iter = records.iterator();
+      for(;iter.hasNext();){
+        Record record = iter.next();
+        if( record.getBigDecimal( "due" ).floatValue() > 0){
+          iter.remove();
+        }
+      }
+      return records;
     }
     if ( todue ) {
-      return records.stream().filter( r -> r.getBigDecimal( "due" ).floatValue() > 0 ).collect( Collectors.toList() );
+      Iterator<Record> iter = records.iterator();
+      for(;iter.hasNext();){
+        Record record = iter.next();
+        if( record.getBigDecimal( "due" ).floatValue() < 0){
+          iter.remove();
+        }
+      }
+      return records;
     }
     return records;
   }
