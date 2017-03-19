@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<#include "../common/js2css.html"/>
+<script src="/js/cancelorder.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="span12">
+				<#include "../common/menu.html"/> 
+				<#include "../common/pageheader.html"/>
+
+				<div class="container-fluid">
+
+          <div class="row">
+            <div class="col-md-3">
+                <h3>取消原因:</h3>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col-md-9 col-md-offset-1">
+	            <div class="radio">
+	              <input type="radio" name="reason"
+	                id="reason1" value="暂时不想购买" checked>暂时不想购买
+	            </div>
+	            <div class="radio">
+	              <input type="radio" name="reason"
+	                id="reason2" value="价格太贵了">价格太贵了
+	            </div>
+	            <div class="radio">
+                <input type="radio" name="reason"
+                  id="reason3" value="下单错误了">下单错误了
+              </div>
+              <div class="radio">
+                <input type="radio" name="reason"
+                  id="reason4" value="选择了其他款式">选择了其他款式
+              </div>
+              <div class="radio">
+                <input type="radio" name="reason"
+                  id="other" value="其他原因">其他原因
+              </div>
+            </div>
+           </div>
+
+					<div class="row" id="cancelinfolabel">
+            <div class="col-md-3">
+              <div class="form-group">
+                <h3>取消订单原因</h3>
+              </div>
+            </div>
+            </div>
+          
+          <div class="row" id="cancelinfo">
+	          <div class="col-md-12" style="text-align: left;">
+               <textarea placeholder="请添加取消原因说明" id="cancelordercomments" class="form-control" rows="2"></textarea>
+            </div>
+          </div>
+          
+          <div style="margin: 0 0 100px;">
+          </div>
+
+					<div class="row">
+						<div class="col-md-2 col-md-offset-1"
+              style="float: right; font-size: 18px; background-color: #df3033; text-align: center;">
+              <a id="cancelorderbutton" class="sc-btn">确认取消订单</a>
+            </div>
+					</div>
+				</div>
+				<#include "../common/footer.html"/>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

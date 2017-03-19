@@ -31,6 +31,14 @@ function dueformatter(value, row){
 		}
   }
   
+function opformatter(value, row){
+	   if( row['status'] != 4 ){
+		    return '<a href="/cancelorder?orderno='+ row['orderno'] + '">'+ '取消订单' +'</a>';
+	   }else{
+		   return "";
+	   }
+}
+  
 function statusformatter(value, row){
 	 if(value == 1){
 	      return '已下订单';
@@ -54,3 +62,4 @@ function statusformatter(value, row){
 <th data-field="status" data-formatter="statusformatter">订单状态</th>
 <th data-field="date">下单日期</th>
 <th data-field="contractname" data-formatter="contractnameformatter" data-align="center">打印合同</th>
+<th data-field="date" data-formatter="opformatter">操作</th>
