@@ -55,6 +55,11 @@ public class CustomerController extends AbstractController {
   public int getCategory() {
     return Constant.CATEGORY_CUSTOMER;
   }
+
+  @Override
+  protected String searchWord() {
+    return "company";
+  }
   
   
 }

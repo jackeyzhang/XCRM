@@ -45,7 +45,7 @@ public class ReportController extends AbstractController {
         +  (orderstatus == 0 ? "" : " and ord.status = " + orderstatus + " ")
         + "group by prd.name, cust.company, ord.id order by prd.name ";
     List<Record> records = Db.find(  sql, startdate, enddate  );
-    groupRecordsByField(records, "productcount", "productname");
+    groupRecordsByField(records, "productcount", "productname", true);
     this.renderJson( records );
   }
   
@@ -84,6 +84,7 @@ public class ReportController extends AbstractController {
         +"group by o.orderno order by o.orderno desc";
     List<Record> records = Db.find(  sql, startdate, enddate  );
     records = filterOrderPaymentRecords( records, topay, todue );
+    groupAllRecords( "orderno", records, "productcount", "price", "dealprice", "due", "paid" );
     this.renderJson( records );
   }
 
@@ -112,9 +113,10 @@ public class ReportController extends AbstractController {
     return Constant.CATEGORY_SCHEDULE;
   }
   
-  private void groupRecordsByField( List<Record> records, String calField, String groupfield ){
+  private void groupRecordsByField( List<Record> records, String calField, String groupfield, boolean includeAll ){
     int groupIndex = 0;
     String currentSplitkey = "";
+    BigDecimal countall = new BigDecimal( 0 );
     BigDecimal count = new BigDecimal( 0 );
     Map<Integer,Record> map = new LinkedHashMap<Integer,Record>();
     for( int i = 0; i < records.size(); i++){
@@ -125,10 +127,12 @@ public class ReportController extends AbstractController {
       }
       if(currentSplitkey.equals( splitkey ) && i != records.size()-1){
         count = count.add( record.getBigDecimal( calField ) );
+        countall = countall.add( record.getBigDecimal( calField ) );
         continue;
       }else{
         if(i == records.size()-1){
           count = count.add( record.getBigDecimal( calField ) );
+          countall = countall.add( record.getBigDecimal( calField ) );
         }
         Record grouprecord = new Record();
         grouprecord.set( calField, count );
@@ -136,11 +140,19 @@ public class ReportController extends AbstractController {
         grouprecord.set( "isgroup", true );
         map.put( groupIndex, grouprecord );
         groupIndex = i+1;
+        count = new BigDecimal( 0 );
         currentSplitkey = splitkey;
       }
     }
     for( Integer index : map.keySet()){
       records.add( index, map.get( index ) );
+    }
+    if(includeAll){
+      Record totalrecord = new Record();
+      totalrecord.set( calField, countall );
+      totalrecord.set( groupfield, "总计" );
+      totalrecord.set( "istotal", true );
+      records.add( 0, totalrecord );
     }
   }
   
@@ -148,12 +160,32 @@ public class ReportController extends AbstractController {
     if ( topay && todue )
       return records;
     if ( topay ) {
-      return records.stream().filter( r -> r.getBigDecimal( "due" ).floatValue() > 0 ).collect( Collectors.toList() );
-    }
-    if ( todue ) {
       return records.stream().filter( r -> r.getBigDecimal( "due" ).floatValue() < 0 ).collect( Collectors.toList() );
     }
+    if ( todue ) {
+      return records.stream().filter( r -> r.getBigDecimal( "due" ).floatValue() > 0 ).collect( Collectors.toList() );
+    }
     return records;
+  }
+  
+  private void groupAllRecords( String groupfield, List<Record> records, String... calculatefields ) {
+    BigDecimal[] countall = new BigDecimal[calculatefields.length];
+    for ( int i = 0; i < records.size(); i++ ) {
+      for ( int j = 0; j < countall.length; j++ ) {
+        if ( countall[j] == null ) {
+          countall[j] = new BigDecimal( 0 );
+        }
+        BigDecimal value = records.get( i ).getBigDecimal( calculatefields[j] );
+        countall[j] = countall[j].add( value == null ? new BigDecimal( 0 ) : value );
+      }
+    }
+    Record totalrecord = new Record();
+    totalrecord.set( groupfield, "总计" );
+    totalrecord.set( "istotal", true );
+    for ( int i = 0; i < countall.length; i++ ) {
+      totalrecord.set( calculatefields[i], countall[i] );
+    }
+    records.add( 0,  totalrecord);
   }
   
 }

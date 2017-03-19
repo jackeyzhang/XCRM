@@ -44,12 +44,15 @@
           data-toggle="table"
           data-group-by="true"
           data-group-by-field="productname"
-          data-row-style="rowStyle">
+          data-row-style="rowStyle"
+          data-show-export="true">
        <thead>
        <tr>
        <script>
 	       function rowStyle(row, index) {
-	    	   if(row['isgroup']){
+	    	   if(row['istotal']){
+             return {classes: 'danger'};
+           }else if(row['isgroup']){
 	    		   return {classes: 'info'};
 	    	   }else{
 	    		   return {};
@@ -57,7 +60,7 @@
 	       }
 	       
 	       function productnameformmater(value, row){
-	    	   if(row['isgroup']){
+	    	   if(row['isgroup'] || row['istotal']){
 	    		   return value;
 	    	   }else{
 	    		   return '';
@@ -75,10 +78,21 @@
 	    	        return '已经取消';
 	    	   }
 	    	}
+	       
+	       function cellStyle(value, row, index) {
+	           if (row['isgroup'] || row['istotal']) {
+	               return {
+	                   css: {
+	                       "font-weight": "bold",
+	                   }
+	               };
+	           }
+	           return {};
+	       }
        </script>
-           <th data-field="productname" data-formatter="productnameformmater">商品名称</th>
+           <th data-field="productname" data-formatter="productnameformmater" data-cell-style="cellStyle">商品名称</th>
            <th data-field="companyname">公司名称</th>
-           <th data-field="productcount">产品数量</th>
+           <th data-field="productcount" data-cell-style="cellStyle">产品数量</th>
            <th data-field="orderdate">订单日期</th>
            <th data-field="deliverytime">交货日期</th>
            <th data-field="workingperson">当前工作人员</th>
