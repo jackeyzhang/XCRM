@@ -48,7 +48,7 @@
            }
          }
          
-         function productnameformmater(value, row){
+         function companynameformmater(value, row){
            if(row['isgroup'] || row['istotal']){
              return value;
            }else{
@@ -79,13 +79,13 @@
              return {};
          }
        </script>
-       <th data-field="companyname">公司名称</th>
-       <th data-field="orderno" data-cell-style="cellStyle">订单号</th>
+       <th data-field="companyname"  data-formatter="companynameformmater" data-cell-style="cellStyle">公司名称</th>
+       <th data-field="orderno">订单号</th>
        <th data-field="dealprice" data-cell-style="cellStyle">成交价格</th>
        <th data-field="paid" data-cell-style="cellStyle">实际支付</th>
        <th data-field="productcount" data-cell-style="cellStyle">产品数量</th>
        <th data-field="price" data-cell-style="cellStyle">产品原价</th>
-       <th data-field="discountrate" data-cell-style="cellStyle">折扣率</th>
+       <th data-field="discountrate">折扣率</th>
        <th data-field="due" data-cell-style="cellStyle">欠款</th>
        <th data-field="orderdate">订单日期</th>
        <th data-field="saler">销售代表</th>

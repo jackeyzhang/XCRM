@@ -13,7 +13,7 @@ import java.util.Date;
  */
 public class DateUtil {
 
-  public static Date get235959OfOneDay( Date date){
+  public static Date get23h59m59sOfOneDay( Date date){
     Calendar endcalendar = Calendar.getInstance();
     endcalendar.setTime( date );
     endcalendar.set( Calendar.HOUR_OF_DAY, 23 );

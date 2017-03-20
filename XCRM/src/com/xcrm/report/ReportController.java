@@ -1,6 +1,7 @@
 package com.xcrm.report;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -33,7 +34,7 @@ public class ReportController extends AbstractController {
   public void queryingproductsales() {
     Date startdate = this.getParaToDate( START );
     Date enddate = this.getParaToDate( END );
-    enddate = DateUtil.get235959OfOneDay( enddate );
+    enddate = DateUtil.get23h59m59sOfOneDay( enddate );
     Integer orderstatus = getParaToInt( "orderstatus" );
     //query
     String sql = "select prd.name productname,cust.company companyname,ord.date orderdate,sum(bi.num) productcount,ord.deliverytime,ord.status orderstatus,user.username saler "
@@ -47,7 +48,7 @@ public class ReportController extends AbstractController {
         +  (orderstatus == 0 ? "" : " and ord.status = " + orderstatus + " ")
         + "group by prd.name, cust.company, ord.id order by prd.name ";
     List<Record> records = Db.find(  sql, startdate, enddate  );
-    groupRecordsByField(records, "productcount", "productname", true);
+    records = groupRecordsByField( "productname", records,  "productcount");
     this.renderJson( records );
   }
   
@@ -57,10 +58,10 @@ public class ReportController extends AbstractController {
   public void queryingorderpaymentreport() {
     Date startdate = this.getParaToDate( START );
     Date enddate = this.getParaToDate( END );
-    enddate = DateUtil.get235959OfOneDay( enddate );
+    enddate = DateUtil.get23h59m59sOfOneDay( enddate );
     Boolean topay = this.getParaToBoolean( "topay" );
     Boolean todue = this.getParaToBoolean( "todue" );
-    List<Record> records = Db.find(  getOrderAnalyzeSql(), startdate, enddate  );
+    List<Record> records = Db.find(  getOrderAnalyzeSql("o.orderno"), startdate, enddate  );
     records = filterOrderPaymentRecords( records, topay, todue );
     addTotalRecords( "orderno", records, "productcount", "price", "dealprice", "due", "paid" );
     this.renderJson( records );
@@ -72,9 +73,9 @@ public class ReportController extends AbstractController {
   public void queryingcustomerreport(){
     Date startdate = this.getParaToDate( START );
     Date enddate = this.getParaToDate( END );
-    enddate = DateUtil.get235959OfOneDay( enddate );
-    List<Record> records = Db.find(  getOrderAnalyzeSql(), startdate, enddate  );
-    addTotalRecords( "companyname", records, "productcount", "price", "dealprice", "due", "paid" );
+    enddate = DateUtil.get23h59m59sOfOneDay( enddate );
+    List<Record> records = Db.find(  getOrderAnalyzeSql("cust.company"), startdate, enddate  );
+    records = groupRecordsByField( "companyname", records,  "productcount", "price", "dealprice", "due", "paid");
     this.renderJson( records );
   }
   
@@ -84,9 +85,9 @@ public class ReportController extends AbstractController {
   public void queryingsalereport(){
     Date startdate = this.getParaToDate( START );
     Date enddate = this.getParaToDate( END );
-    enddate = DateUtil.get235959OfOneDay( enddate );
-    List<Record> records = Db.find(  getOrderAnalyzeSql(), startdate, enddate  );
-    addTotalRecords( "companyname", records, "productcount", "price", "dealprice", "due", "paid" );
+    enddate = DateUtil.get23h59m59sOfOneDay( enddate );
+    List<Record> records = Db.find(  getOrderAnalyzeSql("user.username"), startdate, enddate  );
+    records = groupRecordsByField( "saler", records,  "productcount", "price", "dealprice", "due", "paid");
     this.renderJson( records );
   
   }
@@ -116,7 +117,7 @@ public class ReportController extends AbstractController {
     return Constant.CATEGORY_SCHEDULE;
   }
   
-  private String getOrderAnalyzeSql( ){
+  private String getOrderAnalyzeSql( String orderbyField ){
     //price是原价  deal price是成交价  
    return  "select cust.company companyname, "
         + "GROUP_CONCAT(p.name) name,"
@@ -141,50 +142,65 @@ public class ReportController extends AbstractController {
         + "left join user user on user.id=bi.user "
         + "where o.date>=? and o.date<=? "
         + "and bi.user= " + getCurrentUserId() + " "
-        + "group by o.orderno order by o.orderno desc";
+        + "group by o.orderno order by " +  orderbyField + " desc";
   }
   
-  private void groupRecordsByField( List<Record> records, String calField, String groupfield, boolean includeAll ){
-    int groupIndex = 0;
-    String currentSplitkey = "";
-    BigDecimal countall = new BigDecimal( 0 );
-    BigDecimal count = new BigDecimal( 0 );
-    Map<Integer,Record> map = new LinkedHashMap<Integer,Record>();
-    for( int i = 0; i < records.size(); i++){
-      Record record = records.get( i );
-      String splitkey = record.getStr( groupfield );
-      if(currentSplitkey.isEmpty()){
-        currentSplitkey = splitkey;
-      }
-      if(currentSplitkey.equals( splitkey ) && i != records.size()-1){
-        count = count.add( record.getBigDecimal( calField ) );
-        countall = countall.add( record.getBigDecimal( calField ) );
-        continue;
+  
+  private List<Record> groupRecordsByField( String groupbyfield, List<Record> records,  String... calFields ){
+    BigDecimal[] countall = new BigDecimal[calFields.length];
+    BigDecimal[] count = new BigDecimal[calFields.length];
+    for( int i=0;i<calFields.length; i++ ){
+      countall[i] = new BigDecimal( 0 );
+      count[i] = new BigDecimal( 0 );
+    }
+    
+    Map<String,List<Record>> groupmap = new LinkedHashMap<>();
+    for( Record record : records ){
+      String splitkey = record.getStr( groupbyfield ) == null ? "其他" : record.getStr( groupbyfield );
+      if(groupmap.containsKey( splitkey )){
+        groupmap.get( splitkey ).add( record );
       }else{
-        if(i == records.size()-1){
-          count = count.add( record.getBigDecimal( calField ) );
-          countall = countall.add( record.getBigDecimal( calField ) );
-        }
-        Record grouprecord = new Record();
-        grouprecord.set( calField, count );
-        grouprecord.set( groupfield, currentSplitkey );
-        grouprecord.set( "isgroup", true );
-        map.put( groupIndex, grouprecord );
-        groupIndex = i+1;
-        count = new BigDecimal( 0 );
-        currentSplitkey = splitkey;
+        List<Record> tempRecords = new ArrayList<>() ;
+        tempRecords.add( record );
+        groupmap.put( splitkey, tempRecords);
       }
     }
-    for( Integer index : map.keySet()){
-      records.add( index, map.get( index ) );
+    
+    for( String key : groupmap.keySet() ){
+      for( int i=0;i<calFields.length; i++ ){
+        count[i] = new BigDecimal( 0 );
+      }
+      for( Record record : groupmap.get( key )){
+        for( int index = 0; index < calFields.length; index++ ){
+          BigDecimal value = record.getBigDecimal( calFields[index] ) == null ? new BigDecimal( 0 ) : record.getBigDecimal( calFields[index] );
+          count[index] = count[index].add( value );
+          countall[index] = countall[index].add( value );
+        }
+      }
+      Record grouprecord = new Record();
+      grouprecord.set( groupbyfield, key );
+      for ( int j = 0; j < count.length; j++ ) {
+        grouprecord.set( calFields[j], count[j] );
+      }
+      grouprecord.set( "isgroup", true );
+      groupmap.get( key ).add( 0, grouprecord );
     }
-    if(includeAll){
-      Record totalrecord = new Record();
-      totalrecord.set( calField, countall );
-      totalrecord.set( groupfield, "总计" );
-      totalrecord.set( "istotal", true );
-      records.add( 0, totalrecord );
+    
+    
+    List<Record> result = new ArrayList<>();
+    for( String key : groupmap.keySet() ){
+      result.addAll( groupmap.get( key ) );
     }
+    
+    Record totalrecord = new Record();
+    for ( int j = 0; j < countall.length; j++ ) {
+      totalrecord.set( calFields[j], countall[j] );
+    }
+    totalrecord.set( groupbyfield, "总计" );
+    totalrecord.set( "istotal", true );
+    result.add( 0, totalrecord );
+    
+    return result;
   }
   
   private List<Record> filterOrderPaymentRecords( List<Record> records, Boolean topay, Boolean todue ) {
