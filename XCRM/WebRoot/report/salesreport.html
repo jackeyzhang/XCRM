@@ -1,9 +1,95 @@
+<!-- 查询条件 -->
 <div>
-<h1>销售分析</h1>
+  <div class="row">
+    <div class="col-md-12">
+      <h3><span class="label label-info">选择要查看的订单时间段和订单状态</span></h3>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+      <label>开始时间</label> <input class="form-control" type="text"
+        id="startdate" placeholder="请选择开始时间" name="startdate">
+    </div>
+
+    <div class="col-md-3">
+      <label>结束时间</label> <input class="form-control" type="text"
+        id="endate" placeholder="请选择结束时间" name="endate">
+    </div>
+
+    <div class="col-md-3">
+      <button type="button" class="btn btn-info btn-block"
+        id="queryingbutton-sales">查询分析</button>
+    </div>
+  </div>
+
 </div>
 
+<p>
+</p>
+<!-- 查询结果 -->
 <div>
-
-
-
+   <table id="reporttable"
+          data-toggle="table"
+          data-group-by="true"
+          data-group-by-field=""
+          data-row-style="rowStyle"
+          data-show-export="true">
+       <thead>
+       <tr>
+       <script>
+         function rowStyle(row, index) {
+           if(row['istotal']){
+             return {classes: 'danger'};
+           }else if(row['isgroup']){
+             return {classes: 'info'};
+           }else{
+             return {};
+           }
+         }
+         
+         function productnameformmater(value, row){
+           if(row['isgroup'] || row['istotal']){
+             return value;
+           }else{
+             return '';
+           }
+         }
+         
+         function statusformatter(value, row){
+           if(value == 1){
+                return '已下订单';
+           }else if(value == 2){
+                return '已付定金';
+           }else if(value == 3){
+                return '已付全款';
+           }else if(value == 4){
+                return '已经取消';
+           }
+        }
+         
+         function cellStyle(value, row, index) {
+             if (row['isgroup'] || row['istotal']) {
+                 return {
+                     css: {
+                         "font-weight": "bold",
+                     }
+                 };
+             }
+             return {};
+         }
+       </script>
+       <th data-field="saler">销售代表</th>       
+       <th data-field="orderno" data-cell-style="cellStyle">订单号</th>
+       <th data-field="dealprice" data-cell-style="cellStyle">成交价格</th>
+       <th data-field="paid" data-cell-style="cellStyle">实际支付</th>
+       <th data-field="productcount" data-cell-style="cellStyle">产品数量</th>
+       <th data-field="price" data-cell-style="cellStyle">产品原价</th>
+       <th data-field="discountrate" data-cell-style="cellStyle">折扣率</th>
+       <th data-field="due" data-cell-style="cellStyle">欠款</th>
+       <th data-field="companyname">公司名称</th>
+       <th data-field="orderdate">订单日期</th>
+       </tr>
+       </thead>
+   </table>
 </div>

@@ -56,6 +56,43 @@ $(function() {
 		});
 	});
 	
+	$('#queryingbutton-customer').click(function() {
+		$.ajax({
+			type : "post",
+			url : "/report/queryingcustomerreport",
+			data : {
+				startdate: $("#startdate").val(),
+				enddate: $("#endate").val()
+			},
+			success : function(data, status) {
+				if (status == "success") {
+					$('#reporttable').bootstrapTable('load', data);
+				}
+			},
+			error : function() {
+				showAlert("查询失败");
+			}
+		});
+	});
+	
+	$('#queryingbutton-sales').click(function() {
+		$.ajax({
+			type : "post",
+			url : "/report/queryingsalereport",
+			data : {
+				startdate: $("#startdate").val(),
+				enddate: $("#endate").val()
+			},
+			success : function(data, status) {
+				if (status == "success") {
+					$('#reporttable').bootstrapTable('load', data);
+				}
+			},
+			error : function() {
+				showAlert("查询失败");
+			}
+		});
+	});
 	
 
 	$('#startdate').datetimepicker({

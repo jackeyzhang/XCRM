@@ -1,7 +1,6 @@
 package com.xcrm.report;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -12,9 +11,13 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.xcrm.common.AbstractController;
 import com.xcrm.common.util.Constant;
+import com.xcrm.common.util.DateUtil;
 
 
 public class ReportController extends AbstractController {
+  
+  public static final String START = "startdate";
+  public static final String END = "enddate";
 
   @Override
   public void index() {
@@ -24,15 +27,13 @@ public class ReportController extends AbstractController {
       this.setAttr( "currentreport", reportname );
   }
 
+  /**
+   * query product sales
+   */
   public void queryingproductsales() {
-    Date startdate = this.getParaToDate( "startdate" );
-    Date enddate = this.getParaToDate( "enddate" );
-    Calendar endcalendar = Calendar.getInstance();
-    endcalendar.setTime( enddate );
-    endcalendar.set( Calendar.HOUR_OF_DAY, 23 );
-    endcalendar.set( Calendar.MINUTE, 59 );
-    endcalendar.set( Calendar.SECOND, 59 );
-    enddate = endcalendar.getTime();
+    Date startdate = this.getParaToDate( START );
+    Date enddate = this.getParaToDate( END );
+    enddate = DateUtil.get235959OfOneDay( enddate );
     Integer orderstatus = getParaToInt( "orderstatus" );
     //query
     String sql = "select prd.name productname,cust.company companyname,ord.date orderdate,sum(bi.num) productcount,ord.deliverytime,ord.status orderstatus,user.username saler "
@@ -50,45 +51,44 @@ public class ReportController extends AbstractController {
     this.renderJson( records );
   }
   
+  /**
+   * query order payment order
+   */
   public void queryingorderpaymentreport() {
-    Date startdate = this.getParaToDate( "startdate" );
-    Date enddate = this.getParaToDate( "enddate" );
-    Calendar endcalendar = Calendar.getInstance();
-    endcalendar.setTime( enddate );
-    endcalendar.set( Calendar.HOUR_OF_DAY, 23 );
-    endcalendar.set( Calendar.MINUTE, 59 );
-    endcalendar.set( Calendar.SECOND, 59 );
-    enddate = endcalendar.getTime();
+    Date startdate = this.getParaToDate( START );
+    Date enddate = this.getParaToDate( END );
+    enddate = DateUtil.get235959OfOneDay( enddate );
     Boolean topay = this.getParaToBoolean( "topay" );
     Boolean todue = this.getParaToBoolean( "todue" );
-    //price是原价  deal price是成交价  
-    String sql = "select cust.company companyname, "
-        + "GROUP_CONCAT(p.name) name,"
-        + "sum(bi.num) productcount,"
-        + "oi.date orderdate,"
-        + "contract.name contractname,"
-        + "contract.id contractid,"
-        + "o.orderno orderno,"
-        + "round(o.totalprice,2) price,"//原价
-        + "round(o.price,2) dealprice,"//成交价格
-        + "(select round(o.price-ifnull(sum(paid),0), 2) from payment where orderno= o.orderno) due,"//应付
-        + "(select round(sum(paid),2) from payment where orderno= o.orderno) paid,"//已付
-        + "o.status orderstatus,"
-        + "user.username saler"
-        + " from orderitem oi " 
-        + "left join bookitem bi on oi.bookitem=bi.id " 
-        + "left join `order` o on o.id=oi.order " 
-        + "left join product p on bi.product=p.id "
-        + "left join contract contract on bi.contract=contract.id "
-        + "left join customer cust on cust.id=bi.customer "
-        + "left join user user on user.id=bi.user "
-        + "where o.date>=? and o.date<=? "
-        + "and bi.user= " + getCurrentUserId() + " "
-        +"group by o.orderno order by o.orderno desc";
-    List<Record> records = Db.find(  sql, startdate, enddate  );
+    List<Record> records = Db.find(  getOrderAnalyzeSql(), startdate, enddate  );
     records = filterOrderPaymentRecords( records, topay, todue );
-    groupAllRecords( "orderno", records, "productcount", "price", "dealprice", "due", "paid" );
+    addTotalRecords( "orderno", records, "productcount", "price", "dealprice", "due", "paid" );
     this.renderJson( records );
+  }
+  
+  /**
+   * query customer report
+   */
+  public void queryingcustomerreport(){
+    Date startdate = this.getParaToDate( START );
+    Date enddate = this.getParaToDate( END );
+    enddate = DateUtil.get235959OfOneDay( enddate );
+    List<Record> records = Db.find(  getOrderAnalyzeSql(), startdate, enddate  );
+    addTotalRecords( "companyname", records, "productcount", "price", "dealprice", "due", "paid" );
+    this.renderJson( records );
+  }
+  
+  /**
+   * query sales report
+   */
+  public void queryingsalereport(){
+    Date startdate = this.getParaToDate( START );
+    Date enddate = this.getParaToDate( END );
+    enddate = DateUtil.get235959OfOneDay( enddate );
+    List<Record> records = Db.find(  getOrderAnalyzeSql(), startdate, enddate  );
+    addTotalRecords( "companyname", records, "productcount", "price", "dealprice", "due", "paid" );
+    this.renderJson( records );
+  
   }
 
   @Override
@@ -114,6 +114,34 @@ public class ReportController extends AbstractController {
   @Override
   public int getCategory() {
     return Constant.CATEGORY_SCHEDULE;
+  }
+  
+  private String getOrderAnalyzeSql( ){
+    //price是原价  deal price是成交价  
+   return  "select cust.company companyname, "
+        + "GROUP_CONCAT(p.name) name,"
+        + "sum(bi.num) productcount,"
+        + "oi.date orderdate,"
+        + "contract.name contractname,"
+        + "contract.id contractid,"
+        + "o.orderno orderno,"
+        + "round(o.totalprice,2) price,"//原价
+        + "round(o.price,2) dealprice,"//成交价格
+        + "round(o.price/o.totalprice*100,2) discountrate,"//折扣
+        + "(select round(o.price-ifnull(sum(paid),0), 2) from payment where orderno= o.orderno) due,"//应付
+        + "(select round(sum(paid),2) from payment where orderno= o.orderno) paid,"//已付
+        + "o.status orderstatus,"
+        + "user.username saler"
+        + " from orderitem oi " 
+        + "left join bookitem bi on oi.bookitem=bi.id " 
+        + "left join `order` o on o.id=oi.order " 
+        + "left join product p on bi.product=p.id "
+        + "left join contract contract on bi.contract=contract.id "
+        + "left join customer cust on cust.id=bi.customer "
+        + "left join user user on user.id=bi.user "
+        + "where o.date>=? and o.date<=? "
+        + "and bi.user= " + getCurrentUserId() + " "
+        + "group by o.orderno order by o.orderno desc";
   }
   
   private void groupRecordsByField( List<Record> records, String calField, String groupfield, boolean includeAll ){
@@ -164,7 +192,7 @@ public class ReportController extends AbstractController {
       return records;
     if ( topay ) {
       Iterator<Record> iter = records.iterator();
-      for(;iter.hasNext();){
+      while(iter.hasNext()){
         Record record = iter.next();
         if( record.getBigDecimal( "due" ).floatValue() > 0){
           iter.remove();
@@ -174,7 +202,7 @@ public class ReportController extends AbstractController {
     }
     if ( todue ) {
       Iterator<Record> iter = records.iterator();
-      for(;iter.hasNext();){
+      while(iter.hasNext()){
         Record record = iter.next();
         if( record.getBigDecimal( "due" ).floatValue() < 0){
           iter.remove();
@@ -185,7 +213,7 @@ public class ReportController extends AbstractController {
     return records;
   }
   
-  private void groupAllRecords( String groupfield, List<Record> records, String... calculatefields ) {
+  private void addTotalRecords( String totalfield, List<Record> records, String... calculatefields ) {
     BigDecimal[] countall = new BigDecimal[calculatefields.length];
     for ( int i = 0; i < records.size(); i++ ) {
       for ( int j = 0; j < countall.length; j++ ) {
@@ -197,7 +225,7 @@ public class ReportController extends AbstractController {
       }
     }
     Record totalrecord = new Record();
-    totalrecord.set( groupfield, "总计" );
+    totalrecord.set( totalfield, "总计" );
     totalrecord.set( "istotal", true );
     for ( int i = 0; i < countall.length; i++ ) {
       totalrecord.set( calculatefields[i], countall[i] );
