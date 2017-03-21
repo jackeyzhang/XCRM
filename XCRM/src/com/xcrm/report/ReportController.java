@@ -160,7 +160,7 @@ public class ReportController extends AbstractController {
       if(groupmap.containsKey( splitkey )){
         groupmap.get( splitkey ).add( record );
       }else{
-        List<Record> tempRecords = new ArrayList<>() ;
+        List<Record> tempRecords = new ArrayList<Record>() ;
         tempRecords.add( record );
         groupmap.put( splitkey, tempRecords);
       }
