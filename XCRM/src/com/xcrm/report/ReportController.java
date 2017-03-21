@@ -154,7 +154,7 @@ public class ReportController extends AbstractController {
       count[i] = new BigDecimal( 0 );
     }
     
-    Map<String,List<Record>> groupmap = new LinkedHashMap<>();
+    Map<String,List<Record>> groupmap = new LinkedHashMap<String,List<Record>>();
     for( Record record : records ){
       String splitkey = record.getStr( groupbyfield ) == null ? "其他" : record.getStr( groupbyfield );
       if(groupmap.containsKey( splitkey )){
@@ -187,7 +187,7 @@ public class ReportController extends AbstractController {
     }
     
     
-    List<Record> result = new ArrayList<>();
+    List<Record> result = new ArrayList<Record>();
     for( String key : groupmap.keySet() ){
       result.addAll( groupmap.get( key ) );
     }
