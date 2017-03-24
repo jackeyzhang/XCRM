@@ -39,7 +39,7 @@ public class SearchController extends AbstractController {
 		}
 		if (!StringUtils.isEmpty(keyword)) {
 			sb.append(" and p.name like ?");
-			params.add(keyword.trim() + "%");
+			params.add("%" + keyword.trim() + "%");
 		}
 		sb.append(" group by p.id,p.name");
 		Page<Record> page = Db.paginate(pageNum, PAGE_SIZE,
