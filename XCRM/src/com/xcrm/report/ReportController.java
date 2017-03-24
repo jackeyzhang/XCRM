@@ -45,7 +45,7 @@ public class ReportController extends AbstractController {
         + "left join user user on user.id=bi.user "
         + "where ord.date>=? and ord.date<=? "
         + " and bi.user= " + getCurrentUserId() + " "
-        +  (orderstatus == 0 ? "" : " and ord.status = " + orderstatus + " ")
+        +  (orderstatus == 0 ? "and ord.status != 4 " : " and ord.status = " + orderstatus + " ")
         + "group by prd.name, cust.company, ord.id order by prd.name ";
     List<Record> records = Db.find(  sql, startdate, enddate  );
     records = groupRecordsByField( "productname", records,  "productcount");
