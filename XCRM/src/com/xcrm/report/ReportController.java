@@ -142,6 +142,7 @@ public class ReportController extends AbstractController {
         + "left join user user on user.id=bi.user "
         + "where o.date>=? and o.date<=? "
         + "and bi.user= " + getCurrentUserId() + " "
+        + "and o.status != 4 "
         + "group by o.orderno order by " +  orderbyField + " desc";
   }
   
