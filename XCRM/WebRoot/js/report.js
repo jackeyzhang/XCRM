@@ -22,7 +22,7 @@ $(function() {
 			data : {
 				startdate: $("#startdate").val(),
 				enddate: $("#endate").val(),
-				orderstatus: $("#orderstatusselect").val()
+				orderstatus: $("#orderstatusselect").val().toString()
 			},
 			success : function(data, status) {
 				if (status == "success") {

@@ -18,9 +18,9 @@
 		</div>
 
 		<div class="col-md-3">
-			<label>订单状态</label> <select class="form-control selector"
+			<label>订单状态</label> <select multiple class="form-control selector"
 				id="orderstatusselect" name="orderstatusselect">
-				<option value="0">请选择订单状态...</option>
+				<option value="">请选择订单状态...</option>
 				<option value="1">已下订单</option>
 				<option value="2">已付定金</option>
 				<option value="3">已付全款</option>
@@ -63,7 +63,7 @@
 	    	   if(row['isgroup'] || row['istotal']){
 	    		   return value;
 	    	   }else{
-	    		   return value;
+	    		   return '';
 	    	   }
 	       }
 	       

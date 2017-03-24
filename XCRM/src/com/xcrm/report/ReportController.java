@@ -35,7 +35,7 @@ public class ReportController extends AbstractController {
     Date startdate = this.getParaToDate( START );
     Date enddate = this.getParaToDate( END );
     enddate = DateUtil.get23h59m59sOfOneDay( enddate );
-    Integer orderstatus = getParaToInt( "orderstatus" );
+    String orderstatus = getPara( "orderstatus" );
     //query
     String sql = "select prd.name productname,cust.company companyname,ord.date orderdate,sum(bi.num) productcount,ord.deliverytime,ord.status orderstatus,user.username saler "
         + "from xcrm.product prd left join xcrm.bookitem bi on prd.id = bi.product "
@@ -45,7 +45,7 @@ public class ReportController extends AbstractController {
         + "left join user user on user.id=bi.user "
         + "where ord.date>=? and ord.date<=? "
         + " and bi.user= " + getCurrentUserId() + " "
-        +  (orderstatus == 0 ? "and ord.status != 4 " : " and ord.status = " + orderstatus + " ")
+        +  ( orderstatus == null || orderstatus.isEmpty() ? " " : " and ord.status in( " + orderstatus + ") ")
         + "group by prd.name, cust.company, ord.id order by prd.name ";
     List<Record> records = Db.find(  sql, startdate, enddate  );
     records = groupRecordsByField( "productname", records,  "productcount");
