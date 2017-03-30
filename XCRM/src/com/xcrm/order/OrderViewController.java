@@ -50,8 +50,14 @@ public class OrderViewController extends AbstractController {
   public void list() {
     String orderno = this.getSessionAttr( "orderno" );
     //price是原价  deal price是成交价  
-    String sql = "select o.orderno,p.name name,round(bi.price,2) price,round(o.price,2) dealprice,round(o.paid,2) paid,bi.num num,oi.date date,contract.name contractname,contract.id contractid";
-    String sqlExcept = " from orderitem oi " + "left join bookitem bi on oi.bookitem=bi.id " + "left join `order` o on o.id=oi.order " + "left join product p on bi.product=p.id "
+    String imgpath = getPrdImgBaseUrl() ;
+    String sql = "select concat('"+imgpath+"',CAST(p.id AS CHAR),'/',(select ppic.fielname from productpic ppic where ppic.productid=p.id limit 1)) filename," 
+        +" o.orderno,p.name name,round(bi.price,2) price,round(o.price,2) dealprice,"
+        + "round(o.paid,2) paid,bi.num num,oi.date date,contract.name contractname,contract.id contractid";
+    String sqlExcept = " from orderitem oi " 
+        + "left join bookitem bi on oi.bookitem=bi.id " 
+        + "left join `order` o on o.id=oi.order " 
+        + "left join product p on bi.product=p.id "
         + "left join contract contract on bi.contract=contract.id " + "where o.orderno = " + orderno + " order by o.orderno desc";
     Page<Record> page = Db.paginate( 1, 100, sql, sqlExcept );
     Pager pager = new Pager( page.getTotalRow(), page.getList() );

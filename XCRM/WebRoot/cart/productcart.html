@@ -56,6 +56,12 @@
 			}
 		});
 	  
+	  var r = window.location.search;
+    if(r.indexOf('editorder') > 0){
+       var orderno = r.substring(r.indexOf("?")+1,r.length);
+       $('#sc').html('加入修改订单');
+    }
+	 
 	});
 </script>
 <div class="col-md-4" style="padding-left: 0px">

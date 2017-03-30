@@ -6,7 +6,13 @@
 <script>
 	$(function() {
 		$('.grid_prd .prd_img,.grid_prd .prd_name').on('click', function() {
-			location.href = "/cart?pid="+$(this).siblings('.prd_id').html();
+			var r = window.location.search;
+			if(r.indexOf('editorder') > 0){
+	       var orderno = r.substring(r.indexOf("?")+1,r.length);
+	       location.href = "/cart?pid="+$(this).siblings('.prd_id').html() + "&" +orderno;
+			}else{
+				 location.href = "/cart?pid="+$(this).siblings('.prd_id').html();
+			}
 		});
 	});
 </script>

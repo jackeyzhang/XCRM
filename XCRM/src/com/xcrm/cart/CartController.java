@@ -14,6 +14,8 @@ import com.xcrm.common.AbstractController;
 import com.xcrm.common.AttributeID;
 import com.xcrm.common.model.Attributevalue;
 import com.xcrm.common.model.Bookitem;
+import com.xcrm.common.model.Order;
+import com.xcrm.common.model.Orderitem;
 import com.xcrm.common.model.Priceinventoryvalue;
 import com.xcrm.common.model.Product;
 import com.xcrm.common.model.Productpic;
@@ -62,12 +64,36 @@ public class CartController extends AbstractController {
 	}
 
 	public void save() {
-		Bookitem bookitem = this.getModel(Bookitem.class, "", true);
-		bookitem.setUser(getCurrentUserId());
-		bookitem.setStatus(false);
-		bookitem.setDate(new Date());
-		bookitem.save();
-		this.redirect("/cartlist/");
+	    String editorderflag = this.getRequest().getHeader("Referer" );
+	    if( !editorderflag.isEmpty() && editorderflag.contains( "editorder" )){
+	      String orderno = editorderflag.substring( editorderflag.lastIndexOf( "=" ) + 1 );
+	      System.out.println( orderno );
+	      Order order = Order.dao.findFirst(  "select * from xcrm.order where orderno=?", orderno );
+	      if(order != null){
+	        Orderitem orderitem = new Orderitem();
+	        orderitem.setOrder( order.getId() );
+	        orderitem.setDate( new Date() );
+	        
+	        Bookitem bookitem = this.getModel(Bookitem.class, "", true);
+            bookitem.setUser(getCurrentUserId());
+            bookitem.setStatus(false);
+            bookitem.setDate(new Date());
+            bookitem.save();
+            
+            orderitem.setBookitem( bookitem.getId() );
+            orderitem.save();
+            this.redirect("/editorder?orderno=" + orderno);
+	      }
+	    }else{
+	        Bookitem bookitem = this.getModel(Bookitem.class, "", true);
+	        bookitem.setUser(getCurrentUserId());
+	        bookitem.setStatus(false);
+	        bookitem.setDate(new Date());
+	        bookitem.save();
+	        this.redirect("/cartlist/");
+	    }
+		
+		
 	}
 
 	@Override

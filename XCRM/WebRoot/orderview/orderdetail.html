@@ -13,7 +13,24 @@
 						return '';
 					}
 				}
+				
+				function filenameformatter(value, row) {
+	          if (value) {
+	            return '<img width="10%" src="' +  value +'"></img>';
+	          } else {
+	            return '';
+	          }
+	        }
+				
+				function cellStyle(value, row, index) {
+            return {
+                css: {
+                    "width": "400px",
+                }
+            };
+         }
 			</script>
+			<th data-field="filename" data-formatter="filenameformatter" data-cell-style="cellStyle">产品图片</th>
 			<th data-field="name">购买产品名称</th>
 			<th data-field="num">产品数量</th>
 			<th data-field="price">产品原价</th>

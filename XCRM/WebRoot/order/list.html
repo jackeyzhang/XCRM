@@ -33,7 +33,8 @@ function dueformatter(value, row){
   
 function opformatter(value, row){
 	   if( row['status'] != 4 ){
-		    return '<a href="/cancelorder?orderno='+ row['orderno'] + '">'+ '取消订单' +'</a>';
+		    return '<a href="/cancelorder?orderno='+ row['orderno'] + '">'+ '取消' +'</a> ' +
+		    '<a href="/editorder?orderno='+ row['orderno'] + '">'+ '编辑' +'</a>';
 	   }else{
 		   return "";
 	   }
