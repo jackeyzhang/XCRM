@@ -1,24 +1,45 @@
 <script>
 	$(function() {
+		
+		var freshEditOrderUI = function(){
+			 var r = window.location.search;
+	     var orderno = r.substring(r.indexOf("?")+1,r.length);
+	     location.href = '/editorder?' + orderno;
+		}
+		
 		$('.create.btn.btn-primary').on('click', function() {
-			var r = window.location.search;
-			var orderno = r.substring(r.indexOf("?")+1,r.length);
-			location.href = '/search?edit' + orderno;
+			 var r = window.location.search;
+        var orderno = r.substring(r.indexOf("?")+1,r.length);
+        location.href = '/search?edit' + orderno;
 		});
+		
 		$('.del-item').on('click', function() {
 			var that = $(this);
 			var id = that.attr('data');
 			$.ajax({
 				type : "get",
-				url : '/cartlist/remove?id=' + id,
+				url : '/cartlist/cancel?id=' + id,
 				success : function(data, status) {
 					if (status == "success") {
-						that.parents('tr').empty();
-						calc_amount();
+						freshEditOrderUI();
 					}
 				}
 			});
 		});
+		
+    $('.resume-item').on('click', function() {
+        var that = $(this);
+        var id = that.attr('data');
+        $.ajax({
+          type : "get",
+          url : '/cartlist/resume?id=' + id,
+          success : function(data, status) {
+            if (status == "success") {
+            	freshEditOrderUI();
+            }
+          }
+        });
+      });
 		
 		var auto_calc_amount = function(){
 			var amount = 0;
@@ -141,16 +162,28 @@ table {
 		<td><img width="80px" height="80px"
 			src='${(item.filename??)?string((prdimg_path+"/"+item.pid+"/"+((item.filename!"")?split(","))[0]),"/img/placehold.jpg")}' />
 		</td>
-		<td>${item.name}</td>
-		<td>${item.num}</td>
-		<td>${item.price}</td>
-		<td class="sum">${item.price*item.num}</td>
-		<td class="comments-td"><#if item.comments??>${item.comments}
-			<#else><textarea placeholder="请添加商品说明" class="form-control" cols="8"
-				rows="2"></textarea></#if>
-		</td>
-		<td><a class="del-item" data="${item.id}"
-			href="javascript:void(0);">取消</a></td>
+		<#if item.status??&&item.status == 2>
+			<td><s>${item.name}</s></td>
+			<td><s>${item.num}</s></td>
+			<td><s>${item.price}</s></td>
+			<td class="sum">${0}</td>
+	    <td class="comments-td"><#if item.comments??><s>${item.comments}</s>
+	      <#else><textarea placeholder="请添加商品说明" class="form-control" cols="8"
+	        rows="2"></textarea></#if>
+	    <td><a class="resume-item" data="${item.id}"
+        href="javascript:void(0);">恢复</a></td>
+		<#else>
+			<td>${item.name}</td>
+	    <td>${item.num}</td>
+	    <td>${item.price}</td>
+			<td class="sum">${item.price*item.num}</td>
+	    <td class="comments-td"><#if item.comments??>${item.comments}
+	      <#else><textarea placeholder="请添加商品说明" class="form-control" cols="8"
+	        rows="2"></textarea></#if>
+	    </td>
+	    <td><a class="del-item" data="${item.id}"
+	      href="javascript:void(0);">取消</a></td>
+		</#if>
 	</tr>
 	</#list>
 

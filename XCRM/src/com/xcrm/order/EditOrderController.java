@@ -15,7 +15,7 @@ public class EditOrderController extends AbstractController {
     super.index();
     String orderno = this.getPara( "orderno" );
     List<Record> list = Db.find(
-            "select bi.id, bi.num num,bi.price price,bi.product pid,p.name name,bi.comments comments,GROUP_CONCAT(pic.fielname) filename "
+            "select bi.status,bi.id, bi.num num,bi.price price,bi.product pid,p.name name,bi.comments comments,GROUP_CONCAT(pic.fielname) filename "
             + "from bookitem bi "
             + "left join product p on bi.product=p.id "
             + "left join productpic pic on pic.productid=p.id "

@@ -31,6 +31,7 @@ public class CartlistController extends AbstractController {
 
 	public void save() {
 		String ids = this.getPara("ids");
+		//update status to active
 		Db.update("update bookitem set status=1 where id in (" + ids + ") ");
 		// add comment per book items
 		String comments = this.getPara("comments");
@@ -60,6 +61,20 @@ public class CartlistController extends AbstractController {
 	public void remove() {
 		Bookitem.dao.deleteById(this.getPara("id"));
 		renderNull();
+	}
+	
+	public void cancel() {
+	   Bookitem bookitem =  Bookitem.dao.findById( this.getPara("id") );
+	   bookitem.setStatus( Bookitem.STATUS_CANCELLED );
+	   bookitem.update();
+	   renderNull();
+	}
+	
+	public void resume(){
+  	   Bookitem bookitem =  Bookitem.dao.findById( this.getPara("id") );
+       bookitem.setStatus( Bookitem.STATUS_ACTIVE );
+       bookitem.update();
+       renderNull();
 	}
 
 	@Override

@@ -57,11 +57,11 @@ public abstract class BaseBookitem<M extends BaseBookitem<M>> extends Model<M> i
 		return get("date");
 	}
 
-	public void setStatus(java.lang.Boolean status) {
+	public void setStatus(java.lang.Integer status) {
 		set("status", status);
 	}
 
-	public java.lang.Boolean getStatus() {
+	public java.lang.Integer getStatus() {
 		return get("status");
 	}
 

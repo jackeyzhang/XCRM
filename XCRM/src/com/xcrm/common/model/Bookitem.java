@@ -8,4 +8,7 @@ import com.xcrm.common.model.base.BaseBookitem;
 @SuppressWarnings("serial")
 public class Bookitem extends BaseBookitem<Bookitem> {
 	public static final Bookitem dao = new Bookitem();
+	public static final int STATUS_INIT = 0;
+	public static final int STATUS_ACTIVE = 1;
+	public static final int STATUS_CANCELLED = 2;
 }
