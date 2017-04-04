@@ -27,6 +27,7 @@ public class PaymentController extends AbstractController {
     this.removeSessionAttr( "bookitems" );
     this.removeSessionAttr( "amount" );
     this.removeSessionAttr( "price" );
+    this.removeSessionAttr( "orderno" );
     this.renderNull();
   }
 
@@ -48,12 +49,18 @@ public class PaymentController extends AbstractController {
       bi.setCustomer( customerId );
       bi.update();
     }
+    String ordero = this.getSessionAttr( "orderno" );
+    
     // save order
     Order order = new Order();
     Date date = new Date();
-    order.setDate( date );
-    order.setOrderno( date.getTime() );
-    order.setDeliverytime( deliverytime );
+    if(ordero == null || ordero.isEmpty() ){
+      order.setDate( date );
+      order.setOrderno( date.getTime() );
+      order.setDeliverytime( deliverytime );
+    }else{
+      order = Order.dao.findFirst( "select * from xcrm.order where orderno=" + ordero );
+    }
     // persist price
     String price = this.getSessionAttr( "price" );
     if ( price != null && !price.isEmpty() ) {
@@ -88,7 +95,11 @@ public class PaymentController extends AbstractController {
       }
     }
     
-    order.save();
+    if(ordero == null || ordero.isEmpty() ){
+      order.save();
+    }else{
+      order.update();
+    }
     
     // save order items
     List<Orderitem> orderitems = new ArrayList<Orderitem>();

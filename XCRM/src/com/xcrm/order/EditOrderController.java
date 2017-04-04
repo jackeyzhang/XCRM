@@ -20,12 +20,12 @@ public class EditOrderController extends AbstractController {
             + "left join product p on bi.product=p.id "
             + "left join productpic pic on pic.productid=p.id "
             + "left join orderitem oi on oi.bookitem=bi.id "
-            + "left join xcrm.order ord on ord.id=oi.order "
+            + "left join xcrm.order ord on ord.id=oi.order " 
             + "where ord.orderno=? group by bi.id, bi.num,bi.price,bi.product,p.name",
             orderno);
     setAttr("list", list);
-    setAttr("dealprice", 123);
-    setAttr("paid", 223);
+    setAttr("paid", getPaidAmount( orderno ));
+    setAttr("dealprice", getDue(list, getPaidAmount( orderno )));
     setAttr("prdimg_path", getPrdImgBaseUrl());
 }
   
@@ -65,4 +65,19 @@ public class EditOrderController extends AbstractController {
   }
   
   
+  public float getPaidAmount(String orderno){
+    List<Record> list =  Db.find( "select round(sum(paid),2)  paid from payment where orderno=" + orderno );
+    if(list.isEmpty()) return 0;
+    if( list.get( 0 ).getBigDecimal( "paid" ) == null) return 0;
+    return list.get( 0 ).getBigDecimal( "paid" ).floatValue();
+  }
+  
+  public float getDue( List<Record> list, float paid ){
+    float price = 0;
+    for( Record record : list ){
+      if(record.getInt( "status" ) == 1)
+      price += record.getBigDecimal( "price" ).floatValue() * record.getInt( "num" );
+    }
+    return price - paid;
+  }
 }

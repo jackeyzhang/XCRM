@@ -22,6 +22,7 @@ public class CartlistController extends AbstractController {
 	}
 	
 	public void gotoPayment(){
+	  this.setSessionAttr( "orderno", this.getPara("orderno") );
 	  this.setSessionAttr( "ordercomments", this.getPara( "ordercomments" ) );
 	  this.setSessionAttr( "bookitems", this.getPara( "ids" ) );
 	  this.setSessionAttr( "amount", this.getPara( "amount" ) );//原价
