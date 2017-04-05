@@ -105,4 +105,12 @@ public abstract class BaseBookitem<M extends BaseBookitem<M>> extends Model<M> i
 		return get("comments");
 	}
 
+	public void setDiscount(java.lang.Integer discount) {
+		set("discount", discount);
+	}
+
+	public java.lang.Integer getDiscount() {
+		return get("discount");
+	}
+
 }

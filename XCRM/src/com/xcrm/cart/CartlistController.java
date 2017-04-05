@@ -15,7 +15,7 @@ public class CartlistController extends AbstractController {
 	public void index() {
 		super.index();
 		List<Record> list = Db.find(
-				"select bi.id, bi.num num,bi.price price,bi.product pid,p.name name,bi.comments comments,GROUP_CONCAT(pic.fielname) filename from bookitem bi left join product p on bi.product=p.id left join productpic pic on pic.productid=p.id where  bi.user=? and bi.status=0 group by bi.id, bi.num,bi.price,bi.product,p.name",
+				"select bi.id,bi.discount, bi.num num,bi.price price,bi.product pid,p.name name,bi.comments comments,GROUP_CONCAT(pic.fielname) filename from bookitem bi left join product p on bi.product=p.id left join productpic pic on pic.productid=p.id where  bi.user=? and bi.status=0 group by bi.id, bi.num,bi.price,bi.product,p.name",
 				getCurrentUserId());
 		setAttr("list", list);
 		setAttr("prdimg_path", getPrdImgBaseUrl());
@@ -28,6 +28,13 @@ public class CartlistController extends AbstractController {
 	  this.setSessionAttr( "amount", this.getPara( "amount" ) );//原价
 	  this.setSessionAttr( "price", this.getPara( "price" ) ); //成交价
 	  this.renderNull();
+	}
+	
+	public void discount(){
+	  Bookitem bi = Bookitem.dao.findById( this.getPara("id") );
+	  bi.setDiscount( this.getParaToInt( "discount" ) );
+	  bi.update();
+      renderNull();
 	}
 
 	public void save() {
