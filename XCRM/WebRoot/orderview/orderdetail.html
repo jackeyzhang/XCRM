@@ -16,7 +16,7 @@
 				
 				function filenameformatter(value, row) {
 	          if (value) {
-	            return '<img width="10%" src="' +  value +'"></img>';
+	            return '<img height="100px" src="' +  value +'"></img>';
 	          } else {
 	            return '';
 	          }
@@ -26,6 +26,8 @@
             return {
                 css: {
                     "width": "400px",
+                    "height":"100px",
+                    "padding":"0px"
                 }
             };
          }
