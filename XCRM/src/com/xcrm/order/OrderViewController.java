@@ -53,7 +53,7 @@ public class OrderViewController extends AbstractController {
     String imgpath = getPrdImgBaseUrl() ;
     String sql = "select concat('"+imgpath+"',CAST(p.id AS CHAR),'/',(select ppic.fielname from productpic ppic where ppic.productid=p.id limit 1)) filename," 
         +" o.orderno,p.name name,round(bi.price,2) price,round(o.price,2) dealprice,"
-        + "round(o.paid,2) paid,bi.num num,oi.date date,contract.name contractname,contract.id contractid";
+        + "round(o.paid,2) paid,bi.num num,bi.discount discount,oi.date date,contract.name contractname,contract.id contractid";
     String sqlExcept = " from orderitem oi " 
         + "left join bookitem bi on oi.bookitem=bi.id " 
         + "left join `order` o on o.id=oi.order " 
