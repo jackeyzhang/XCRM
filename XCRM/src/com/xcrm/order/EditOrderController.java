@@ -1,5 +1,6 @@
 package com.xcrm.order;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import com.jfinal.plugin.activerecord.Db;
@@ -24,8 +25,9 @@ public class EditOrderController extends AbstractController {
             + "where ord.orderno=? group by bi.id, bi.num,bi.price,bi.product,p.name",
             orderno);
     setAttr("list", list);
-    setAttr("paid", getPaidAmount( orderno ));
-    setAttr("dealprice", getDue(list, getPaidAmount( orderno )));
+    float paid = getPaidAmount( orderno );
+    setAttr("paid", ""+paid);
+    setAttr("dealprice", ""+getDue(list, paid));
     setAttr("prdimg_path", getPrdImgBaseUrl());
 }
   
@@ -69,7 +71,8 @@ public class EditOrderController extends AbstractController {
     List<Record> list =  Db.find( "select round(sum(paid),2)  paid from payment where orderno=" + orderno );
     if(list.isEmpty()) return 0;
     if( list.get( 0 ).getBigDecimal( "paid" ) == null) return 0;
-    return list.get( 0 ).getBigDecimal( "paid" ).floatValue();
+    DecimalFormat decimalFormat=new DecimalFormat(".00");
+    return Float.parseFloat( decimalFormat.format( list.get( 0 ).getBigDecimal( "paid" ).floatValue() ) );
   }
   
   public float getDue( List<Record> list, float paid ){
@@ -78,6 +81,7 @@ public class EditOrderController extends AbstractController {
       if(record.getInt( "status" ) == 1)
       price += record.getBigDecimal( "price" ).floatValue() * record.getInt( "num" );
     }
-    return price - paid;
+    DecimalFormat decimalFormat=new DecimalFormat(".00");
+    return Float.parseFloat( decimalFormat.format( price - paid) );
   }
 }

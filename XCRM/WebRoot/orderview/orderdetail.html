@@ -16,7 +16,7 @@
 				
 				function filenameformatter(value, row) {
 	          if (value) {
-	            return '<img height="100px" src="' +  value +'"></img>';
+	            return '<img height="100px" max-width="100px" src="' +  value +'"></img>';
 	          } else {
 	            return '';
 	          }
@@ -25,9 +25,10 @@
 				function cellStyle(value, row, index) {
             return {
                 css: {
-                    "width": "400px",
+                    "width": "150px",
                     "height":"100px",
-                    "padding":"0px"
+                    "padding":"0px",
+                    "text-align":"center"
                 }
             };
          }

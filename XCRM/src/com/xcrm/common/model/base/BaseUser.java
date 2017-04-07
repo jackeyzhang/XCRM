@@ -81,4 +81,12 @@ public abstract class BaseUser<M extends BaseUser<M>> extends Model<M> implement
 		return get("storeid");
 	}
 
+	public void setRole(java.lang.Integer role) {
+		set("role", role);
+	}
+
+	public java.lang.Integer getRole() {
+		return get("role");
+	}
+
 }

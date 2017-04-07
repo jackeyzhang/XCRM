@@ -1,0 +1,2 @@
+ALTER TABLE `xcrm`.`user` 
+ADD COLUMN `role` INT(11) NULL DEFAULT 1;
