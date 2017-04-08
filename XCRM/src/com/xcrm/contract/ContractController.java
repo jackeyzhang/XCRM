@@ -164,20 +164,20 @@ class ContractPrintInfo{
         setDiscount( "" + StrUtil.formatPercentage( "" + record.getBigDecimal( "discount" ) ) );
         i++;
       }
-      sb.append( record.getStr( "pname" ) ).append(getSpace(25))
-      .append(  formatAttr( record.getStr( "prdattrs" ) ) ).append(getSpace(20))
-      .append(  StrUtil.formatNum( record.getNumber( "num" ) )  ).append(getSpace(20))
-      .append(  StrUtil.formatPrice( record.getNumber( "price" ))  ).append(getSpace(20))
-      .append(  record.getStr( "comments" ) == null ? "" : record.getStr( "comments" )  ).append(getSpace(20))
+      sb.append( getFixlengthStrWithSpace(record.getStr( "pname" ), 35 ) )
+      .append(  getFixlengthStrWithSpace( formatAttr( record.getStr( "prdattrs" ) ), 25 ) )
+      .append(  getFixlengthStrWithSpace( StrUtil.formatNum( record.getNumber( "num" ) ) ,25) )
+      .append(  getFixlengthStrWithSpace( StrUtil.formatPrice( record.getNumber( "price" )), 25 )  )
+      .append(  getFixlengthStrWithSpace( record.getStr( "comments" ) == null ? "" : record.getStr( "comments" ), 20)  )
       .append( "<br>" );
     }
     this.setOrderinfo( sb.toString() );
 
   }
   
-  private String getSpace( int num ){
-    String result = "";
-    for( int i=0; i<num; i++){
+  private String getFixlengthStrWithSpace( String result, int num ) {
+    int spacelength = num - result.length();
+    for ( int i = 0; i < spacelength; i++ ) {
       result += "&nbsp";
     }
     return result;
