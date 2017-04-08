@@ -11,6 +11,8 @@ import java.util.Map;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.xcrm.common.AbstractController;
+import com.xcrm.common.model.Order;
+import com.xcrm.common.model.User;
 import com.xcrm.common.util.Constant;
 import com.xcrm.common.util.DateUtil;
 
@@ -44,7 +46,7 @@ public class ReportController extends AbstractController {
         + "left join xcrm.customer cust on cust.id=bi.customer "
         + "left join user user on user.id=bi.user "
         + "where ord.date>=? and ord.date<=? "
-        + " and bi.user= " + getCurrentUserId() + " "
+        + getAndWhereWithRoleSql()
         +  ( orderstatus == null || orderstatus.isEmpty() ? " " : " and ord.status in( " + orderstatus + ") ")
         + "group by prd.name, cust.company, ord.id order by prd.name ";
     List<Record> records = Db.find(  sql, startdate, enddate  );
@@ -141,8 +143,8 @@ public class ReportController extends AbstractController {
         + "left join customer cust on cust.id=bi.customer "
         + "left join user user on user.id=bi.user "
         + "where o.date>=? and o.date<=? "
-        + "and bi.user= " + getCurrentUserId() + " "
-        + "and o.status != 4 "
+        + getAndWhereWithRoleSql()
+        + "and o.status != " + Order.STATUS_CANCELLED
         + "group by o.orderno order by " +  orderbyField + " desc";
   }
   
@@ -248,6 +250,17 @@ public class ReportController extends AbstractController {
       totalrecord.set( calculatefields[i], countall[i] );
     }
     records.add( 0,  totalrecord);
+  }
+  
+  
+  private String getAndWhereWithRoleSql() {
+    User user = User.dao.findById( getCurrentUserId() );
+    if ( user.isRoot() ) {
+      return "";
+    }
+    else {
+      return " and bi.user= " + getCurrentUserId() + " ";
+    }
   }
   
 }
