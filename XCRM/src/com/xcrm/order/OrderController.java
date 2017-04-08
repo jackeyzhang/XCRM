@@ -8,6 +8,7 @@ import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.xcrm.common.AbstractController;
 import com.xcrm.common.Pager;
+import com.xcrm.common.model.User;
 import com.xcrm.common.util.Constant;
 
 
@@ -21,10 +22,11 @@ public class OrderController extends AbstractController {
         + "left join product p on bi.product=p.id "
         + "left join contract contract on bi.contract=contract.id "
         + "left join customer cust on cust.id=bi.customer "
-        + "where bi.user=? "+ this.getSearchStatement(true, "cust.") +"group by o.orderno order by o.orderno desc";
+        + "where " + getSqlForUserRole()
+        + this.getSearchStatement(true, "cust.") +"group by o.orderno order by o.orderno desc";
     int pagenumber = Integer.parseInt( this.getPara( "pageNumber" ) );
     int pagesize = Integer.parseInt( this.getPara( "pageSize" ) );
-    Page<Record> page = Db.paginate( pagenumber, pagesize, sql, sqlExcept, getCurrentUserId() );
+    Page<Record> page = Db.paginate( pagenumber, pagesize, sql, sqlExcept);
     Pager pager = new Pager( page.getTotalRow(), page.getList() );
     this.renderJson( pager );
 
@@ -75,5 +77,13 @@ public class OrderController extends AbstractController {
     return "company";
   }
   
+  private String getSqlForUserRole(){
+    User user = User.dao.findById( this.getCurrentUserId() );
+    if(user.isRoot()){
+      return " bi.user is not null ";
+    }else{
+      return " bi.user=" +  this.getCurrentUserId() + " ";
+    }
+  }
   
 }
