@@ -228,4 +228,21 @@ public class ProductController extends AbstractController {
   public int getCategory() {
     return Constant.CATEGORY_PRODUCT;
   }
+  
+  public void wxlist(){
+    List<Record> records = Db.find("select id,name,(select pic.fielname from productpic pic where pic.productid=prd.id limit 1) filename from product prd;");
+    Pager pager = new Pager(records.size(), records);
+    List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList(getCategory());
+    for (Record record : pager.getRows()) {
+      for (Attribute attribute : attributes) {
+        Attributevalue av = Attributevalue.dao.findFirst(
+            "select * from attributevalue where attributeid=? and objectid=? and category=?",
+            attribute.getAttributeid(), record.getInt("id"), getCategory());
+        if (av == null)
+          continue;
+        record.set("attribute-" + getCategory() + "-"+av.getAttributeid(), av.getValue());
+      }
+    }
+    this.renderJson(pager);
+  }
 }

@@ -30,7 +30,7 @@ public class LoginInterceptor implements Interceptor {
 				}
 				inv.invoke();
 			} else {
-				if (uri.equals(Constant.LOGIN_ACTION) || uri.equals(Constant.SLASH)) {
+				if (uri.equals(Constant.LOGIN_ACTION) || uri.equals(Constant.SLASH) || uri.contains( "wx" )) {
 					inv.invoke();
 				} else {
 					inv.getController().redirect(Constant.SLASH);
