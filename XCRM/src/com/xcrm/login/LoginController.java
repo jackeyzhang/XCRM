@@ -26,6 +26,9 @@ public class LoginController extends Controller {
 	public void wxlogin() {
 	  String username = this.getPara( "user" );
 	  String password = this.getPara( "password");
+	  if(username == null || username.isEmpty() || password == null || password.isEmpty()){
+	    this.renderJson( false );
+	  }
 	  User dbUser = User.dao.findFirst("select * from user where (username=? or email=?) and password=? and isenable = true",
 	      username.trim(), username.trim(), password);
 	  if(dbUser != null){
