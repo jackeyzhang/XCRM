@@ -18,7 +18,7 @@ public class OrderViewController extends AbstractController {
     this.setSessionAttr( "orderno", orderno );
     this.setAttr( "orderno", orderno );
 
-    Record record = Db.findFirst( "select o.comments,o.paymentcomments,o.price from xcrm.order o where o.orderno=" + orderno );
+    Record record = Db.findFirst( "select o.comments,o.paymentcomments,o.price from `order` o where o.orderno=" + orderno );
     BigDecimal dealPrice = record.getBigDecimal( "price" );
     Record paymentrecord = Db.findFirst( "select sum(paid) paid from payment where orderno=" + orderno + " group by orderno" );
     BigDecimal paid = paymentrecord == null ? new BigDecimal(0) : paymentrecord.getBigDecimal( "paid" );

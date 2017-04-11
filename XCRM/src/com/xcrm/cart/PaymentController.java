@@ -59,7 +59,7 @@ public class PaymentController extends AbstractController {
       order.setOrderno( date.getTime() );
       order.setDeliverytime( deliverytime );
     }else{
-      order = Order.dao.findFirst( "select * from xcrm.order where orderno=" + ordero );
+      order = Order.dao.findFirst( "select * from `order` where orderno=" + ordero );
     }
     // persist price
     String price = this.getSessionAttr( "price" );

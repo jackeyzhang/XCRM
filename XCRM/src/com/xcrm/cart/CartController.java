@@ -64,7 +64,7 @@ public class CartController extends AbstractController {
     String editorderflag = this.getRequest().getHeader( "Referer" );
     if ( !editorderflag.isEmpty() && editorderflag.contains( "editorder" ) ) {
       String orderno = editorderflag.substring( editorderflag.lastIndexOf( "=" ) + 1 );
-      Order order = Order.dao.findFirst( "select * from xcrm.order where orderno=?", orderno );
+      Order order = Order.dao.findFirst( "select * from `order` where orderno=?", orderno );
       if ( order != null ) {
         Orderitem orderitem = new Orderitem();
         orderitem.setOrder( order.getId() );

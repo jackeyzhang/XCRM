@@ -45,13 +45,13 @@ public class SingePaymentController extends AbstractController {
       payment.save();
       BigDecimal due = getSessionAttr( "due" );
       if( due.floatValue() - paid.floatValue() <= 0.001 ){
-        Order ord = Order.dao.findFirst( "select * from xcrm.order where orderno=?", Long.parseLong( orderno )  );
+        Order ord = Order.dao.findFirst( "select * from `order` where orderno=?", Long.parseLong( orderno )  );
         if(ord != null){
           ord.setStatus( 3 );//3 means 支付完成
           ord.update();
         }
       }else{
-        Order ord = Order.dao.findFirst( "select * from xcrm.order where orderno=?",  Long.parseLong( orderno )  );
+        Order ord = Order.dao.findFirst( "select * from `order` where orderno=?",  Long.parseLong( orderno )  );
         if(ord != null){
           ord.setStatus( 2 );//2 means 支付定金
           ord.update();

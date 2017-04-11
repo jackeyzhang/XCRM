@@ -45,7 +45,6 @@ public class AttributeidController extends AbstractController {
 
   @Override
   public int getCategory() {
-    // TODO Auto-generated method stub
     return 0;
   }
   

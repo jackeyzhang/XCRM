@@ -21,7 +21,7 @@ public class EditOrderController extends AbstractController {
             + "left join product p on bi.product=p.id "
             + "left join productpic pic on pic.productid=p.id "
             + "left join orderitem oi on oi.bookitem=bi.id "
-            + "left join xcrm.order ord on ord.id=oi.order " 
+            + "left join `order` ord on ord.id=oi.order " 
             + "where ord.orderno=? group by bi.id, bi.num,bi.price,bi.product,p.name",
             orderno);
     setAttr("list", list);
@@ -34,7 +34,7 @@ public class EditOrderController extends AbstractController {
   public void cancel(){
     String orderno = this.getPara( "orderno" );
     String cancelreason = this.getPara( "cancelreason" );
-    Order order = Order.dao.findFirst( "select * from xcrm.order where orderno=?" , orderno );
+    Order order = Order.dao.findFirst( "select * from `order` where orderno=?" , orderno );
     order.setStatus( 4 );
     order.setComments( cancelreason );
     order.update();

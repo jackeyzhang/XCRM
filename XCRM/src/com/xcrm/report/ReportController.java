@@ -40,10 +40,10 @@ public class ReportController extends AbstractController {
     String orderstatus = getPara( "orderstatus" );
     //query
     String sql = "select prd.name productname,cust.company companyname,ord.date orderdate,sum(bi.num) productcount,ord.deliverytime,ord.status orderstatus,user.username saler "
-        + "from xcrm.product prd left join xcrm.bookitem bi on prd.id = bi.product "
-        + "left join xcrm.orderitem oi on oi.bookitem = bi.id "
-        + "left join xcrm.order ord on oi.order = ord.id "
-        + "left join xcrm.customer cust on cust.id=bi.customer "
+        + "from product prd left join bookitem bi on prd.id = bi.product "
+        + "left join orderitem oi on oi.bookitem = bi.id "
+        + "left join `order` ord on oi.order = ord.id "
+        + "left join customer cust on cust.id=bi.customer "
         + "left join user user on user.id=bi.user "
         + "where ord.date>=? and ord.date<=? "
         + getAndWhereWithRoleSql()

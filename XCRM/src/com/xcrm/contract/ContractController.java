@@ -12,6 +12,7 @@ import org.apache.commons.lang.StringUtils;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.xcrm.common.AbstractController;
+import com.xcrm.common.model.Bookitem;
 import com.xcrm.common.model.Contract;
 import com.xcrm.common.util.Constant;
 import com.xcrm.common.util.StrUtil;
@@ -100,7 +101,7 @@ public class ContractController extends AbstractController {
     
     Long orderno = this.getParaToLong( "orderno" );
     ContractPrintInfo info = new ContractPrintInfo();
-    info.Dataloading( orderno );
+    info.loaddata( orderno );
     
     this.setAttr( "Acontract", info.getContract() );
     this.setAttr( "Acontact", info.getContact() );
@@ -142,13 +143,15 @@ class ContractPrintInfo{
   private String discount;
   private String paid;
   
-  public void Dataloading( Long orderno ) {
-    String sql = "select bi.comments,cust.name cname,cust.shiptoAddr,cust.company,cust.phone,cust.contact,o.price shouldpay,bi.price price,o.totalprice,o.price/o.totalprice*100 discount,bi.num,prd.name pname,bi.prdattrs from xcrm.order o"
-        + " left join xcrm.orderitem oi on o.id=oi.order"
-        + " left join xcrm.bookitem bi on oi.bookitem=bi.id"
-        + " left join xcrm.customer cust on cust.id= bi.customer"
-        + " left join xcrm.product prd on prd.id=bi.product"
-        + " where o.orderno=" + orderno ;
+  public void loaddata( Long orderno ) {
+    String sql = "select bi.comments,cust.name cname,cust.shiptoAddr,cust.company,cust.phone,cust.contact,o.price shouldpay,bi.price price,o.totalprice,o.price/o.totalprice*100 discount,bi.num,prd.name pname,bi.prdattrs "
+        + " from `order` o"
+        + " left join orderitem oi on o.id=oi.order"
+        + " left join bookitem bi on oi.bookitem=bi.id"
+        + " left join customer cust on cust.id= bi.customer"
+        + " left join product prd on prd.id=bi.product"
+        + " where o.orderno=" + orderno 
+        + " and bi.status !=" + Bookitem.STATUS_CANCELLED;
     List<Record> records = Db.find( sql );
     
     int i =0;

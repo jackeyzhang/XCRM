@@ -10,7 +10,7 @@ public class CancelOrderController extends AbstractController {
   public void cancel(){
     String orderno = this.getPara( "orderno" );
     String cancelreason = this.getPara( "cancelreason" );
-    Order order = Order.dao.findFirst( "select * from xcrm.order where orderno=?" , orderno );
+    Order order = Order.dao.findFirst( "select * from `order` where orderno=?" , orderno );
     order.setStatus( Order.STATUS_CANCELLED );
     order.setComments( cancelreason );
     order.update();
