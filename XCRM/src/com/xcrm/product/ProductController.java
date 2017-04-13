@@ -3,7 +3,6 @@ package com.xcrm.product;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -29,43 +28,37 @@ import com.xcrm.common.util.PropUtil;
 
 @Before(ProductInterceptor.class)
 public class ProductController extends AbstractController {
+
   public void list() {
     Pager pager = new Pager();
-    if (this.getPara("pageNumber") != null) {
-      int pagenumber = Integer.parseInt(this.getPara("pageNumber"));
-      int pagesize = Integer.parseInt(this.getPara("pageSize"));
-      int level1 = this.getParaToInt("level1", 0);
-      int level2 = this.getParaToInt("level2", 0);
-      Page<Record> page = Db.paginate(pagenumber, pagesize, "select * ",
-          " from product " + (level1 > 0 ? "where level1category= " + level1 : "")
-              + (level2 > 0 ? " and level2category= " + level2 : ""));
-      String searchword = this.getPara("searchword");
-      Iterator<Record> iter = page.getList().iterator();
-      for (; iter.hasNext();) {
-        Record record = iter.next();
-        if (record.getStr("name") != null && searchword != null
-            && !record.getStr("name").contains(searchword)) {
-          iter.remove();
-          continue;
-        }
+    if ( this.getPara( "pageNumber" ) != null ) {
+      int pagenumber = Integer.parseInt( this.getPara( "pageNumber" ) );
+      int pagesize = Integer.parseInt( this.getPara( "pageSize" ) );
+      int level1 = this.getParaToInt( "level1", 0 );
+      int level2 = this.getParaToInt( "level2", 0 );
+      String searchword = this.getPara( "searchword" );
+      if ( searchword == null ) {
+        searchword = "";
       }
-      pager = new Pager(page.getTotalRow(), page.getList());
-    } else {
-      List<Record> records = Db.find("select id,name from " + getModalName());
-      pager = new Pager(records.size(), records);
+      Page<Record> page = Db.paginate( pagenumber, pagesize, "select * ", " from product where 1=1 " + ( level1 > 0 ? " and level1category= " + level1 : "" )
+          + ( level2 > 0 ? " and level2category= " + level2 : "" ) + ( searchword.isEmpty() ? "" : " and name like '%" + searchword + "%'" ) );
+      pager = new Pager( page.getTotalRow(), page.getList() );
     }
-    List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList(getCategory());
-    for (Record record : pager.getRows()) {
-      for (Attribute attribute : attributes) {
-        Attributevalue av = Attributevalue.dao.findFirst(
-            "select * from attributevalue where attributeid=? and objectid=? and category=?",
-            attribute.getAttributeid(), record.getInt("id"), getCategory());
-        if (av == null)
+    else {
+      List<Record> records = Db.find( "select id,name from " + getModalName() );
+      pager = new Pager( records.size(), records );
+    }
+    List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList( getCategory() );
+    for ( Record record : pager.getRows() ) {
+      for ( Attribute attribute : attributes ) {
+        Attributevalue av = Attributevalue.dao.findFirst( "select * from attributevalue where attributeid=? and objectid=? and category=?", attribute.getAttributeid(),
+            record.getInt( "id" ), getCategory() );
+        if ( av == null )
           continue;
-        record.set("attribute-" + getCategory() + "-"+av.getAttributeid(), av.getValue());
+        record.set( "attribute-" + getCategory() + "-" + av.getAttributeid(), av.getValue() );
       }
     }
-    this.renderJson(pager);
+    this.renderJson( pager );
 
   }
 
@@ -236,7 +229,7 @@ public class ProductController extends AbstractController {
     for (Record record : pager.getRows()) {
       for (Attribute attribute : attributes) {
         Attributevalue av = Attributevalue.dao.findFirst(
-            "select * from attributevalue where attributeid=? and objectid=? and category=?",
+            "select * from attributevalue where attributeid=? and objectid=? and category=? limit 10",
             attribute.getAttributeid(), record.getInt("id"), getCategory());
         if (av == null)
           continue;
