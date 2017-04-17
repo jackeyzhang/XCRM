@@ -1,8 +1,10 @@
 <script>
 	$(function() {
+		
 		$('.create.btn.btn-primary').on('click', function() {
 			location.href = '/search/';
 		});
+		
 		$('.del-item').on('click', function() {
 			var that = $(this);
 			var id = that.attr('data');
@@ -17,6 +19,32 @@
 				}
 			});
 		});
+		
+    $('.addprice-item').on('click', function() {
+        var that = $(this);
+        var id = that.attr('data');
+        $('#addpriceModal' + id).modal('toggle');
+      });
+    
+    $('.addpricebutton').on('click', function() {
+        var that = $(this);
+        var id = that.attr('data');
+        var addprice = $('#additempriceinput' + id).val();
+        var afee = $('#itemafee' + id).val();
+        $.ajax({
+          type : "get",
+          url : '/cartlist/changebookitemprice?id=' + id + '&addprice=' + addprice,
+          success : function(data, status) {
+        	  $('#addpriceModal' + id).modal('toggle');
+            if (status == "success") {
+            	var itemprice = parseFloat( addprice ) + parseFloat( $( '#sum'+id ).html( ) ) - parseFloat( afee );
+            	$('#sum'+id).html( itemprice.toFixed( 2 ) );
+            	$('#itemafee' + id).val( addprice );
+              calc_amount( );
+            }
+          }
+        }); 
+      });
 		
 		var calc_amount = function() {
 			var amount = 0;
@@ -43,7 +71,8 @@
         var numval = parseFloat(num);
         var discountitem = e.target.value;
         var itemprice = priceval*numval*discountitem/100;
-        e.target.parentNode.nextElementSibling.innerHTML = itemprice;
+        var afee = parseFloat($('.itemafee').val());
+        e.target.parentNode.nextElementSibling.innerHTML = (itemprice+afee).toFixed(2); 
       };
 		
 		$("#discount").on('input',function(e){  
@@ -60,7 +89,7 @@
 		         success : function(data, status) {
 		           if (status == "success") {
 		        	      item_calc_amount(e);
-		        	       calc_amount();
+		        	      calc_amount();
 		           }
 		         }
 		       });
@@ -89,7 +118,7 @@
 				$(this).find('textarea').on('blur',update_comments);
 				$(this).find('textarea').focus();
 			}
-		}
+		};
 		
 		var update_comments = function(){
 			var that = $(this);
@@ -109,7 +138,8 @@
 					td.on('click',change_comments);
 				}
 			});
-		}
+		};
+		
 		
 		$('.comments-td').on('click',change_comments);
 		$('.comments-td textarea').on('blur',update_comments);
@@ -150,6 +180,7 @@ table {
 	<#list list as item>
 	<tr>
 		<input type="hidden" value="${item.id}" class="itemid" />
+		<input type="hidden" value="${item.afee}" class="itemafee" id="itemafee${item.id}"/>
 		<td><img width="80px" height="80px"
 			src='${(item.filename??)?string((prdimg_path+"/"+item.pid+"/"+((item.filename!"")?split(","))[0]),"/img/placehold.jpg")}' />
 		</td>
@@ -158,14 +189,32 @@ table {
 		<td class="price" id="itemprice">${item.price}</td>
 		<td style="padding-top:0px;"><input type="number" class="form-control itemdiscount" data="${item.id}"
       id="itemdiscount" min="1" max="100" value="${item.discount}"/></td>
-		<td class="sum">${item.price*item.num*item.discount/100}</td>
+		<td class="sum" id="sum${item.id}">${item.price*item.num*item.discount/100 + item.afee}</td>
 		<td class="comments-td"><#if item.comments??>${item.comments}
 			<#else><textarea placeholder="请添加商品说明" class="form-control" cols="8"
 				rows="2"></textarea></#if>
 		</td>
 		<td><a class="del-item" data="${item.id}"
-			href="javascript:void(0);">删除</a></td>
+			href="javascript:void(0);">删除</a>
+			<a class="addprice-item" data="${item.id}"
+      href="javascript:void(0);">定制费</a></td>
 	</tr>
+	<!-- 模态框 定制费弹出框 -->
+		<div class="modal fade addpriceModal" id="addpriceModal${item.id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		    <div class="modal-dialog">
+		        <div class="modal-content">
+		            <div class="modal-body">
+		            <span>增加定制费用:</span>
+		            <input type="number" class="form-control" data="${item.id}"
+		                  id="additempriceinput${item.id}"  value="${item.afee}"/>
+		            </div>
+		            <div class="modal-footer">
+		                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+		                <button type="button" class="btn btn-primary addpricebutton" data="${item.id}">确认追加</button>
+		            </div>
+		        </div>
+		    </div>
+		</div>
 	</#list>
 
 </table>

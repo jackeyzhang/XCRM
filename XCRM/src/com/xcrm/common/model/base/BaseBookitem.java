@@ -113,4 +113,12 @@ public abstract class BaseBookitem<M extends BaseBookitem<M>> extends Model<M> i
 		return get("discount");
 	}
 
+	public void setAdditionfee(java.math.BigDecimal additionfee) {
+		set("additionfee", additionfee);
+	}
+
+	public java.math.BigDecimal getAdditionfee() {
+		return get("additionfee");
+	}
+
 }
