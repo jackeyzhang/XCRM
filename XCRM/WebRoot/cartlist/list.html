@@ -64,14 +64,14 @@
 		};
 		
 		// calculte item amount
-    var item_calc_amount = function(e) {
+    var item_calc_amount = function(e,id) {
         var price = e.target.parentNode.previousElementSibling.textContent;
         var priceval = parseFloat(price);
         var num = e.target.parentNode.previousElementSibling.previousElementSibling.textContent;
         var numval = parseFloat(num);
         var discountitem = e.target.value;
         var itemprice = priceval*numval*discountitem/100;
-        var afee = parseFloat($('.itemafee').val());
+        var afee = parseFloat($('#itemafee'+id).val());
         e.target.parentNode.nextElementSibling.innerHTML = (itemprice+afee).toFixed(2); 
       };
 		
@@ -88,7 +88,7 @@
 		         url : '/cartlist/discount?id=' + id +'&discount=' + discountitem,
 		         success : function(data, status) {
 		           if (status == "success") {
-		        	      item_calc_amount(e);
+		        	      item_calc_amount(e,id);
 		        	      calc_amount();
 		           }
 		         }

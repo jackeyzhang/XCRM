@@ -98,6 +98,7 @@
 				return;
 			}
 			if(!discount) discount = 100;
+			$('#price').val( (amount*discount/100).toFixed(2));
 		};
 		
 		$("#discount").on('input',function(e){  
@@ -113,7 +114,7 @@
             url : '/cartlist/discount?id=' + id +'&discount=' + discountitem,
             success : function(data, status) {
               if (status == "success") {
-                  item_calc_amount(e);
+                  item_calc_amount(e,id);
                   calc_amount();
               }
             }
@@ -142,17 +143,17 @@
 				$(this).find('textarea').on('blur',update_comments);
 				$(this).find('textarea').focus();
 			}
-		}
+		};
 		
 	    // calculte item amount
-	    var item_calc_amount = function(e) {
+	    var item_calc_amount = function(e,id) {
 	        var price = e.target.parentNode.previousElementSibling.textContent;
 	        var priceval = parseFloat(price);
 	        var num = e.target.parentNode.previousElementSibling.previousElementSibling.textContent;
 	        var numval = parseFloat(num);
 	        var discountitem = e.target.value;
 	        var itemprice = priceval*numval*discountitem/100;
-	        var afee = parseFloat($('.itemafee').val());
+	        var afee = parseFloat($('#itemafee'+id).val());
 	        e.target.parentNode.nextElementSibling.innerHTML = (itemprice+afee).toFixed(2); 
 	      };
 		
@@ -224,7 +225,7 @@ table {
 	    <td class="price" id="itemprice">${item.price}</td>
 	    <td style="padding-top:0px;"><input type="number" class="form-control itemdiscount" data="${item.id}"
 	      id="itemdiscount" min="1" max="100" value="${item.discount}"/></td>
-			<td class="sum">${0}</td>
+			<td class="sum" id="sum${item.id}">${0}</td>
 	    <td class="comments-td"><#if item.comments??><s>${item.comments}</s>
 	      <#else><textarea placeholder="请添加商品说明" class="form-control" cols="8"
 	        rows="2"></textarea></#if>
@@ -238,7 +239,7 @@ table {
 	    <td class="price" id="itemprice">${item.price}</td>
 	    <td style="padding-top:0px;"><input type="number" class="form-control itemdiscount" data="${item.id}"
 	      id="itemdiscount" min="1" max="100" value="${item.discount}"/></td>
-			<td class="sum">${item.price*item.num*item.discount/100+item.afee}</td>
+			<td class="sum" id="sum${item.id}">${item.price*item.num*item.discount/100+item.afee}</td>
 	    <td class="comments-td"><#if item.comments??>${item.comments}
 	      <#else><textarea placeholder="请添加商品说明" class="form-control" cols="8"
 	        rows="2"></textarea></#if>
