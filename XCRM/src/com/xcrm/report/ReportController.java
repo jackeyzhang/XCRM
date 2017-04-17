@@ -145,7 +145,7 @@ public class ReportController extends AbstractController {
         + "where o.date>=? and o.date<=? "
         + getAndWhereWithRoleSql()
         + "and o.status != " + Order.STATUS_CANCELLED
-        + "group by o.orderno order by " +  orderbyField + " desc";
+        + " group by o.orderno order by " +  orderbyField + " desc";
   }
   
   
