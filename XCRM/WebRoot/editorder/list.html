@@ -78,6 +78,7 @@
 	              var itemprice = parseFloat( addprice ) + parseFloat( $( '#sum'+id ).html( ) ) - parseFloat( afee );
 	              $('#sum'+id).html( itemprice.toFixed( 2 ) );
 	              $('#itemafee' + id).val( addprice );
+	              $('#itemafeelabel' + id).html( '￥' +addprice );
 	              calc_amount( );
 	            }
 	          }
@@ -247,7 +248,7 @@ table {
 	    <td><a class="del-item" data="${item.id}"
 	      href="javascript:void(0);">取消</a>
 	      <a class="addprice-item" data="${item.id}"
-      href="javascript:void(0);">定制费</a></td>
+      href="javascript:void(0);">定制费</a> <span class="label label-danger" id="itemafeelabel${item.id}">￥${item.afee}</span></td>
 		</#if>
 		  <!-- 模态框 定制费弹出框 -->
     <div class="modal fade addpriceModal" id="addpriceModal${item.id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -260,7 +261,7 @@ table {
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary addpricebutton" data="${item.id}">确认追加</button>
+                    <button type="button" class="btn btn-primary addpricebutton" data="${item.id}">确定</button>
                 </div>
             </div>
         </div>
