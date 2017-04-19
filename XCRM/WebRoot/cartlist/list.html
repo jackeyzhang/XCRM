@@ -30,6 +30,12 @@
         var that = $(this);
         var id = that.attr('data');
         var addprice = $('#additempriceinput' + id).val();
+        if( addprice==''){
+        	$('.notnull').html("定制费不能为空");
+        	return;
+        }else{
+        	$('.notnull').html("");
+        }
         var afee = $('#itemafee' + id).val();
         $.ajax({
           type : "get",
@@ -198,16 +204,17 @@ table {
 		<td><a class="del-item" data="${item.id}"
 			href="javascript:void(0);">删除</a>
 			<a class="addprice-item" data="${item.id}"
-      href="javascript:void(0);">定制费</a> <span class="label label-danger" id="itemafeelabel${item.id}">￥${item.afee}</span></td>
+      href="javascript:void(0);">额外费用</a> <span class="label label-danger" id="itemafeelabel${item.id}">￥${item.afee}</span></td>
 	</tr>
 	<!-- 模态框 定制费弹出框 -->
 		<div class="modal fade addpriceModal" id="addpriceModal${item.id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		    <div class="modal-dialog">
 		        <div class="modal-content">
 		            <div class="modal-body">
-		            <span>增加定制费用:</span>
+		            <span>增加额外费用:</span>
 		            <input type="number" class="form-control" data="${item.id}"
 		                  id="additempriceinput${item.id}"  value="${item.afee}"/>
+		            <span class="notnull"></span>
 		            </div>
 		            <div class="modal-footer">
 		                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>

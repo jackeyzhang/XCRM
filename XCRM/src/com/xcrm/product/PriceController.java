@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 
 import com.jfinal.aop.Before;
+import com.jfinal.log.Log;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.xcrm.common.AbstractController;
@@ -115,8 +116,12 @@ public class PriceController extends AbstractController {
   protected void preRenderJsonForList( Record record ) {
     int product = record.getInt( "product" );
     Product p = Product.dao.findById( product );
-    record.set( "level1category", p.getLevel1category() );
-    record.set( "level2category", p.getLevel2category() );
+    if(p ==null){
+      Log.getLog( this.getClass() ).error( "product is not existing, the product id is:" + product );
+      return;
+    }
+    record.set( "level1category", p.getLevel1category() == null? 0 : p.getLevel1category() );
+    record.set( "level2category", p.getLevel2category() == null ? 0: p.getLevel2category());
 
     List<Attributevalue> avs = AttributeFinder.getInstance().getAttributeValueList( getCategory(), record.getInt( "id" ) );
     for ( Attributevalue av : avs ) {
