@@ -86,10 +86,7 @@ $(function() {
 				success :function(indata, status) {
 					if (status == "success") {
 					}
-				},
-				error: function () {
-					alert("编辑失败");
-	            }
+				}
 			});
 		}
 	});
