@@ -129,8 +129,10 @@ $(function() {
 								: '创建')
 								+ '成功', 'success');
 					},
-					error : function() {
-//						xcpage.$modal.modal('hide');
+					error : function(data) {
+						if(data.status == 522){
+							alert("产品名字不能重复!");
+						}
 						showAlert((xcpage.$modal.data('id') ? '更新'
 								: '创建')
 								+ '失败!', 'danger');

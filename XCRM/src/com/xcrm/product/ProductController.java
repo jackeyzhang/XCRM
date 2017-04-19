@@ -87,6 +87,10 @@ public class ProductController extends AbstractController {
   public void save() {
     Product product = this.getModel(Product.class, "", true).set("barcode", MD5Util.getSystemKey())
         .set("createuser", this.getCurrentUserId()).set("createdate", new Date());
+    Product duplicatProduct = Product.dao.findFirst( "select * from product where name=?", product.getName() );
+    if ( duplicatProduct != null ){
+      this.renderError( 522 );//name is duplicated
+    }
     product.save();
     saveImgs(product.getId());
     QRCodeUtil.generator(product.getId(), getRealPath(), PropUtil.getPrdQr2Path());
@@ -187,6 +191,7 @@ public class ProductController extends AbstractController {
     this.renderJson();
   }
 
+  @Override
   public void update() {
     Product product = this.getModel(Product.class, "", true)
         .set("edituser", this.getCurrentUserId()).set("editdate", new Date());
@@ -198,8 +203,14 @@ public class ProductController extends AbstractController {
     forwardIndex();
   }
 
+  @Override
   public void remove() {
-    Product.dao.deleteById(this.getParaToInt(0));
+    Integer prdid =this.getParaToInt(0);
+    Product.dao.deleteById(prdid);
+    Price price = Price.dao.findFirst( "select * from price where product=" + prdid );
+    if( price != null) {
+      price.delete();
+    }
     forwardIndex();
   }
 
