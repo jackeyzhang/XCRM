@@ -19,6 +19,7 @@ import com.xcrm.common.AttributeID;
 import com.xcrm.common.Pager;
 import com.xcrm.common.model.Attribute;
 import com.xcrm.common.model.Attributevalue;
+import com.xcrm.common.model.Price;
 import com.xcrm.common.model.Product;
 import com.xcrm.common.model.Productpic;
 import com.xcrm.common.qr2.QRCodeUtil;
@@ -89,6 +90,11 @@ public class ProductController extends AbstractController {
     product.save();
     saveImgs(product.getId());
     QRCodeUtil.generator(product.getId(), getRealPath(), PropUtil.getPrdQr2Path());
+    
+    Price price = new Price();
+    price.setProduct( product.getId() );
+    price.setName( product.getName() + "价格" );
+    price.save();
     forwardIndex(product);
   }
 
