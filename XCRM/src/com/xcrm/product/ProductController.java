@@ -240,17 +240,34 @@ public class ProductController extends AbstractController {
   }
   
   public void wxlist(){
-    List<Record> records = Db.find("select id,name,(select pic.fielname from productpic pic where pic.productid=prd.id limit 1) filename from product prd;");
+    List<Record> records = Db.find("select id,name,(select pic.fielname from productpic pic where pic.productid=prd.id limit 1) filename from product prd ");
     Pager pager = new Pager(records.size(), records);
     List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList(getCategory());
     for (Record record : pager.getRows()) {
       for (Attribute attribute : attributes) {
         Attributevalue av = Attributevalue.dao.findFirst(
-            "select * from attributevalue where attributeid=? and objectid=? and category=? limit 10",
+            "select * from attributevalue where attributeid=? and objectid=? and category=? ",
             attribute.getAttributeid(), record.getInt("id"), getCategory());
         if (av == null)
           continue;
         record.set("attribute-" + getCategory() + "-"+av.getAttributeid(), av.getValue());
+      }
+    }
+    this.renderJson(pager);
+  }
+  
+  public void wxgetproduct(){
+    List<Record> records = Db.find("select id,name,(select pic.fielname from productpic pic where pic.productid=prd.id limit 1) filename from product prd where prd.id=?", getPara( "prdid" ));
+    Pager pager = new Pager(records.size(), records);
+    List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList(getCategory());
+    for (Record record : pager.getRows()) {
+      for (Attribute attribute : attributes) {
+        Attributevalue av = Attributevalue.dao.findFirst(
+            "select * from attributevalue where attributeid=? and objectid=? and category=? ",
+            attribute.getAttributeid(), record.getInt("id"), getCategory());
+        if (av == null)
+          continue;
+        record.set("attribute"+av.getAttributeid(), av.getValue());
       }
     }
     this.renderJson(pager);
