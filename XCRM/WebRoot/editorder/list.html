@@ -70,7 +70,7 @@
 	        var addprice = $('#additempriceinput' + id).val();
 	        var afee = $('#itemafee' + id).val();
 	        if( addprice==''){
-	            $('.notnull').html("定制费不能为空");
+	            $('.notnull').html("额外费用不能为空");
 	            return;
 	          }else{
 	            $('.notnull').html("");
@@ -239,7 +239,7 @@ table {
 	    <td><a class="resume-item" data="${item.id}"
         href="javascript:void(0);">恢复</a>
         <a class="addprice-item" data="${item.id}"
-      href="javascript:void(0);">定制费</a></td>
+      href="javascript:void(0);">额外费用</a></td>
 		<#else>
 			<td>${item.name}</td>
 	    <td class="num" id="itemnum">${item.num}</td>
