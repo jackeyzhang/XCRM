@@ -218,4 +218,61 @@ public abstract class AbstractController extends Controller {
     result.append( prefix + searchWord() + " like '%" +  searchword + "%' " );
     return result.toString();
   }
+  
+  protected void fillProductAttributesInOrderCart( List<Record> records, String columnName ){
+    for( Record record : records ){
+      String columnVal = record.get( columnName );
+      if(columnVal == null || columnVal.isEmpty()) continue;
+      columnVal = columnVal.replace( "{", "" );
+      columnVal = columnVal.replace( "}", "" );
+      columnVal = columnVal.replace( "[", "" );
+      columnVal = columnVal.replace( "]", "" );
+      columnVal = columnVal.replace( "\"", "" );
+      columnVal = columnVal.replace( "204", "m" );
+      columnVal = columnVal.replace( "205", "c" );
+      columnVal = columnVal.replace( "206", "s" );
+      String[] attributes = columnVal.split( "," );
+      for( String attribute : attributes ){
+        String[] av = attribute.split( ":" );
+        record.set( av[0], av[1] );
+      }
+    }
+    
+  }
+  
+ public class ProductAttribute{
+    
+    private String color;
+    private String material;
+    private String size;
+    
+    public ProductAttribute() {
+      super();
+    }
+
+    public String getColor() {
+      return color;
+    }
+    
+    public void setColor( String color ) {
+      this.color = color;
+    }
+    
+    public String getMaterial() {
+      return material;
+    }
+    
+    public void setMaterial( String material ) {
+      this.material = material;
+    }
+    
+    public String getSize() {
+      return size;
+    }
+    
+    public void setSize( String size ) {
+      this.size = size;
+    }
+  }
+  
 }

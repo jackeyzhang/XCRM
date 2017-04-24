@@ -191,7 +191,7 @@ table {
 		<td><img width="80px" height="80px"
 			src='${(item.filename??)?string((prdimg_path+"/"+item.pid+"/"+((item.filename!"")?split(","))[0]),"/img/placehold.jpg")}' />
 		</td>
-		<td>${item.name}</td>
+		<td class="prdname">${item.name} <br> ${item.m}-${item.c}-${item.s}</td>
 		<td class="num" id="itemnum">${item.num}</td>
 		<td class="price" id="itemprice">${item.price}</td>
 		<td style="padding-top:0px;"><input type="number" class="form-control itemdiscount" data="${item.id}"

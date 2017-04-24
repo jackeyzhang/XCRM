@@ -16,7 +16,7 @@ public class EditOrderController extends AbstractController {
     super.index();
     String orderno = this.getPara( "orderno" );
     List<Record> list = Db.find(
-            "select bi.discount, bi.status,bi.id, bi.num num,bi.price price,bi.additionfee afee,bi.product pid,p.name name,bi.comments comments,GROUP_CONCAT(pic.fielname) filename "
+            "select bi.discount, bi.status,bi.id, bi.num num,bi.price price,bi.additionfee afee,bi.product pid,p.name name,bi.prdattrs attrs,bi.comments comments,GROUP_CONCAT(pic.fielname) filename "
             + "from bookitem bi "
             + "left join product p on bi.product=p.id "
             + "left join productpic pic on pic.productid=p.id "
@@ -24,6 +24,7 @@ public class EditOrderController extends AbstractController {
             + "left join `order` ord on ord.id=oi.order " 
             + "where ord.orderno=? group by bi.id, bi.num,bi.price,bi.product,p.name",
             orderno);
+    fillProductAttributesInOrderCart(list, "attrs");
     setAttr("list", list);
     float paid = getPaidAmount( orderno );
     setAttr("paid", ""+paid);

@@ -227,7 +227,7 @@ table {
 			src='${(item.filename??)?string((prdimg_path+"/"+item.pid+"/"+((item.filename!"")?split(","))[0]),"/img/placehold.jpg")}' />
 		</td>
 		<#if item.status??&&item.status == 2>
-			<td><s>${item.name}</s></td>
+			<td><s>${item.name}<br> ${item.m}-${item.c}-${item.s}</s></td>
 			<td class="num" id="itemnum">${item.num}</td>
 	    <td class="price" id="itemprice">${item.price}</td>
 	    <td style="padding-top:0px;"><input type="number" class="form-control itemdiscount" data="${item.id}"
@@ -241,7 +241,7 @@ table {
         <a class="addprice-item" data="${item.id}"
       href="javascript:void(0);">额外费用</a></td>
 		<#else>
-			<td>${item.name}</td>
+			<td>${item.name}<br> ${item.m}-${item.c}-${item.s}</td>
 	    <td class="num" id="itemnum">${item.num}</td>
 	    <td class="price" id="itemprice">${item.price}</td>
 	    <td style="padding-top:0px;"><input type="number" class="form-control itemdiscount" data="${item.id}"
