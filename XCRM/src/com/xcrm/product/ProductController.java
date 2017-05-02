@@ -20,6 +20,7 @@ import com.xcrm.common.Pager;
 import com.xcrm.common.model.Attribute;
 import com.xcrm.common.model.Attributevalue;
 import com.xcrm.common.model.Price;
+import com.xcrm.common.model.Priceinventoryvalue;
 import com.xcrm.common.model.Product;
 import com.xcrm.common.model.Productpic;
 import com.xcrm.common.qr2.QRCodeUtil;
@@ -256,20 +257,12 @@ public class ProductController extends AbstractController {
     this.renderJson(pager);
   }
   
-  public void wxgetproduct(){
-    List<Record> records = Db.find("select id,name,(select pic.fielname from productpic pic where pic.productid=prd.id limit 1) filename from product prd where prd.id=?", getPara( "prdid" ));
-    Pager pager = new Pager(records.size(), records);
-    List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList(getCategory());
-    for (Record record : pager.getRows()) {
-      for (Attribute attribute : attributes) {
-        Attributevalue av = Attributevalue.dao.findFirst(
-            "select * from attributevalue where attributeid=? and objectid=? and category=? ",
-            attribute.getAttributeid(), record.getInt("id"), getCategory());
-        if (av == null)
-          continue;
-        record.set("attribute"+av.getAttributeid(), av.getValue());
-      }
-    }
-    this.renderJson(pager);
+  public void wxgetproduct() {
+    Record record = Db.findFirst( "select id,name,(select pic.fielname from productpic pic where pic.productid=prd.id limit 1) filename from product prd where prd.id=?",
+        getPara( "prdid" ) );
+    List<Priceinventoryvalue> list = Priceinventoryvalue.dao.find( "select pi.* from priceinventoryvalue pi left join price pr on pi.priceid=pr.id  where pi.price>0 and pr.product=?",
+        this.getPara( "prdid" ) );
+    record.set( "prices",list);
+    renderJson( record );
   }
 }

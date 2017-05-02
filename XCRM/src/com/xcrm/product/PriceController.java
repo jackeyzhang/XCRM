@@ -250,4 +250,13 @@ public class PriceController extends AbstractController {
     }
     return null;
   }
+  
+  /**
+   * wx get price objects
+   * @param prdid
+   */
+  public void wxgetprice( Integer prdid ) {
+    List<Priceinventoryvalue> values = Priceinventoryvalue.dao.find( "select * from Priceinventoryvalue pv, price pc where pv.priceid= pc.id and pc.product=?", prdid );
+    this.renderJson( values );
+  }
 }
