@@ -1,13 +1,20 @@
 package com.xcrm.order;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import org.json.JSONArray;
 
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.xcrm.common.AbstractController;
 import com.xcrm.common.Pager;
+import com.xcrm.common.model.Bookitem;
+import com.xcrm.common.model.Order;
+import com.xcrm.common.model.Orderitem;
 import com.xcrm.common.model.User;
 import com.xcrm.common.util.Constant;
 
@@ -84,6 +91,60 @@ public class OrderController extends AbstractController {
     }else{
       return " bi.user=" +  this.getCurrentUserId() + " ";
     }
+  }
+  
+  public void wxsubmitorder() {
+    String oostr = this.getParaMap().get( "orderitems" )[0];
+    String totalcomments = this.getParaMap().get( "totalcomments" )[0];
+    BigDecimal totalprice = new BigDecimal( this.getParaMap().get( "totalprice" )[0] );
+    BigDecimal totalpricetopay = new BigDecimal( this.getParaMap().get( "totalpricetopay" )[0] );
+    if ( !oostr.isEmpty() ) {
+      JSONArray jsonArray = new JSONArray( oostr );
+      List<Integer> bookitems = new ArrayList< >();
+      for ( int i = 0; i < jsonArray.length(); i++ ) {
+        int productid = jsonArray.getJSONObject( i ).getInt( "productid" );
+        BigDecimal totalPrice = new BigDecimal( jsonArray.getJSONObject( i ).getInt( "totalprice" ) );
+        int count = jsonArray.getJSONObject( i ).getInt( "count" );
+        String attributes = jsonArray.getJSONObject( i ).getString( "attributes" );
+        int discount = jsonArray.getJSONObject( i ).getInt( "discount" );
+        String comments = jsonArray.getJSONObject( i ).getString( "comments" );
+
+        Bookitem bookitem = new Bookitem();
+        bookitem.setDate( new Date() );
+        bookitem.setStatus( Bookitem.STATUS_ACTIVE );
+        bookitem.setDiscount( discount );
+        bookitem.setNum( count );
+        bookitem.setProduct( productid );
+        bookitem.setPrdattrs( attributes );
+        bookitem.setPrice( totalPrice );
+        bookitem.setComments( comments );
+        bookitem.setUser( 1 );
+        bookitem.save();
+        bookitems.add( bookitem.getId() );
+      }
+
+      Order order = new Order();
+      Date date = new Date();
+      order.setDate( date );
+      order.setOrderno( date.getTime() );
+      order.setPrice( totalpricetopay );
+      order.setTotalprice( totalprice );
+      order.setComments( totalcomments );
+      order.save();
+
+      // save order items
+      List<Orderitem> orderitems = new ArrayList<>();
+      for ( int bookitemid : bookitems ) {
+        Orderitem orderitem = new Orderitem();
+        orderitem.setBookitem(bookitemid);
+        orderitem.setDate( date );
+        orderitem.setOrder( order.getId() );
+        orderitems.add( orderitem );
+      }
+      Db.batchSave( orderitems, orderitems.size() );
+    }
+
+    this.renderJson( "sucess" );
   }
   
 }
