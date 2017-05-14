@@ -1,8 +1,11 @@
 package com.xcrm.customer;
 
 import java.util.Date;
+import java.util.List;
 
 import com.jfinal.aop.Before;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Record;
 import com.xcrm.common.AbstractController;
 import com.xcrm.common.model.Customer;
 import com.xcrm.common.util.Constant;
@@ -61,5 +64,8 @@ public class CustomerController extends AbstractController {
     return "company";
   }
   
-  
+  public void wxlistallcustomers( ){
+    List<Record> records = Db.find( "select concat(name,'-',company) name from customer" );
+    this.renderJson( records );
+  }
 }
