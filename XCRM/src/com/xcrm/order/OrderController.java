@@ -1,6 +1,8 @@
 package com.xcrm.order;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -98,6 +100,9 @@ public class OrderController extends AbstractController {
     String totalcomments = this.getParaMap().get( "totalcomments" )[0];
     BigDecimal totalprice = new BigDecimal( this.getParaMap().get( "totalprice" )[0] );
     BigDecimal totalpricetopay = new BigDecimal( this.getParaMap().get( "totalpricetopay" )[0] );
+    Integer paymenttype = Integer.parseInt( this.getParaMap().get( "paymenttype" )[0] );
+    Integer customerid = Integer.parseInt( this.getParaMap().get( "customerid" )[0] );
+    String deliverydate = this.getParaMap().get( "deliverydate" )[0];
     if ( !oostr.isEmpty() ) {
       JSONArray jsonArray = new JSONArray( oostr );
       List<Integer> bookitems = new ArrayList< >();
@@ -119,6 +124,7 @@ public class OrderController extends AbstractController {
         bookitem.setPrice( totalPrice );
         bookitem.setComments( comments );
         bookitem.setUser( 1 );
+        bookitem.setCustomer( customerid );
         bookitem.save();
         bookitems.add( bookitem.getId() );
       }
@@ -130,6 +136,16 @@ public class OrderController extends AbstractController {
       order.setPrice( totalpricetopay );
       order.setTotalprice( totalprice );
       order.setComments( totalcomments );
+      order.setPaymenttype( paymenttype );
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
+      Date deliveryDate = new Date();
+      try {
+        deliveryDate = sdf.parse( deliverydate );
+      }
+      catch ( ParseException e ) {
+        e.printStackTrace();
+      }
+      order.setDeliverytime( deliveryDate );
       order.save();
 
       // save order items
@@ -144,7 +160,7 @@ public class OrderController extends AbstractController {
       Db.batchSave( orderitems, orderitems.size() );
     }
 
-    this.renderJson( "sucess" );
+    this.renderJson( "success" );
   }
   
 }
