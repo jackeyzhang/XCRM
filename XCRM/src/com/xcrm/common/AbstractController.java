@@ -223,18 +223,25 @@ public abstract class AbstractController extends Controller {
     for( Record record : records ){
       String columnVal = record.get( columnName );
       if(columnVal == null || columnVal.isEmpty()) continue;
-      columnVal = columnVal.replace( "{", "" );
-      columnVal = columnVal.replace( "}", "" );
-      columnVal = columnVal.replace( "[", "" );
-      columnVal = columnVal.replace( "]", "" );
-      columnVal = columnVal.replace( "\"", "" );
-      columnVal = columnVal.replace( "204", "m" );
-      columnVal = columnVal.replace( "205", "c" );
-      columnVal = columnVal.replace( "206", "s" );
-      String[] attributes = columnVal.split( "," );
-      for( String attribute : attributes ){
-        String[] av = attribute.split( ":" );
-        record.set( av[0], av[1] );
+      if ( columnVal.contains( "-" ) ) {
+        String[] attributes = columnVal.split( "-" );
+        record.set( "m", attributes[0] );
+        record.set( "s", attributes[1] );
+        record.set( "c", attributes[2] );
+      }else{
+        columnVal = columnVal.replace( "{", "" );
+        columnVal = columnVal.replace( "}", "" );
+        columnVal = columnVal.replace( "[", "" );
+        columnVal = columnVal.replace( "]", "" );
+        columnVal = columnVal.replace( "\"", "" );
+        columnVal = columnVal.replace( "204", "m" );
+        columnVal = columnVal.replace( "205", "c" );
+        columnVal = columnVal.replace( "206", "s" );
+        String[] attributes = columnVal.split( "," );
+        for( String attribute : attributes ){
+          String[] av = attribute.split( ":" );
+          record.set( av[0], av[1] );
+        }
       }
     }
     
