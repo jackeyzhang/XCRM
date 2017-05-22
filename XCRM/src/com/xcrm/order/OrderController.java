@@ -111,6 +111,7 @@ public class OrderController extends AbstractController {
       for ( int i = 0; i < jsonArray.length(); i++ ) {
         int productid = jsonArray.getJSONObject( i ).getInt( "productid" );
         BigDecimal totalPrice = new BigDecimal( jsonArray.getJSONObject( i ).getInt( "totalprice" ) );
+        BigDecimal afee = new BigDecimal( jsonArray.getJSONObject( i ).getInt( "afee" ) );
         int count = jsonArray.getJSONObject( i ).getInt( "count" );
         String attributes = jsonArray.getJSONObject( i ).getString( "attributes" );
         int discount = jsonArray.getJSONObject( i ).getInt( "discount" );
@@ -127,6 +128,7 @@ public class OrderController extends AbstractController {
         bookitem.setComments( comments );
         bookitem.setUser( userid );
         bookitem.setCustomer( customerid );
+        bookitem.setAdditionfee( afee );
         bookitem.save();
         bookitems.add( bookitem.getId() );
       }
