@@ -101,6 +101,7 @@ public class OrderController extends AbstractController {
     BigDecimal totalpricetopay = new BigDecimal( this.getParaMap().get( "totalpricetopay" )[0] );
     Integer paymenttype = Integer.parseInt( this.getParaMap().get( "paymenttype" )[0] );
     Integer customerid = Integer.parseInt( this.getParaMap().get( "customerid" )[0] );
+    Integer contractid = Integer.parseInt( this.getParaMap().get( "contractid" )[0] );
     Integer userid = Integer.parseInt( this.getParaMap().get( "userid" )[0] );
     String deliverydate = this.getParaMap().get( "deliverydate" )[0];
     Boolean ispay = Boolean.valueOf( this.getParaMap().get( "ispay" )[0] );
@@ -129,6 +130,7 @@ public class OrderController extends AbstractController {
         bookitem.setUser( userid );
         bookitem.setCustomer( customerid );
         bookitem.setAdditionfee( afee );
+        bookitem.setContract( contractid );
         bookitem.save();
         bookitems.add( bookitem.getId() );
       }

@@ -128,6 +128,11 @@ public class ContractController extends AbstractController {
     NumberFormat format = new DecimalFormat( "0000" );
     return format.format( contractid );
   }
+  
+  public void wxlistallcontracts( ){
+    List<Record> records = Db.find( "select name, id  from contract" );
+    this.renderJson( records );
+  }
 
 }
 
@@ -195,6 +200,9 @@ class ContractPrintInfo{
    * @return 白沙 黄色 S
    */
   private String formatAttr( String attrValue ){
+    if(attrValue.contains( "-" )){
+      return attrValue.replace( "-", " " );
+    }
     String[] attrs =  attrValue.split( "," );
     String result = "";
     for( String attr : attrs ){
