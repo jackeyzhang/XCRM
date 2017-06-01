@@ -15,7 +15,7 @@ public class LoginController extends Controller {
 				user.getStr("username").trim(), user.getStr("username").trim(), user.getStr("password"));
 		if (dbUser != null) {
 			this.setSessionAttr(Constant.CUR_USER, dbUser.getAttrs());
-			this.redirect("/user/index");
+			this.redirect("/order/index");
 		} else {
 			this.setAttr("login_error", "用户名或密码错误,请重新输入!");
 			this.setAttr("model", "login");

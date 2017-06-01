@@ -22,6 +22,7 @@ import com.xcrm.common.model.Attributevalue;
 import com.xcrm.common.model.Price;
 import com.xcrm.common.model.Priceinventoryvalue;
 import com.xcrm.common.model.Product;
+import com.xcrm.common.model.Productcategory;
 import com.xcrm.common.model.Productpic;
 import com.xcrm.common.qr2.QRCodeUtil;
 import com.xcrm.common.util.Constant;
@@ -92,6 +93,8 @@ public class ProductController extends AbstractController {
     if ( duplicatProduct != null ){
       this.renderError( 522 );//name is duplicated
     }
+    Productcategory level2 = Productcategory.dao.findById( product.getLevel2category() );
+    product.setLevel1category( level2.getPid() );
     product.save();
     saveImgs(product.getId());
     QRCodeUtil.generator(product.getId(), getRealPath(), PropUtil.getPrdQr2Path());
@@ -199,6 +202,8 @@ public class ProductController extends AbstractController {
     if (product.getStr("barcode").isEmpty()) {
       product.set("barcode", MD5Util.getSystemKey());
     }
+    Productcategory level2 = Productcategory.dao.findById( product.getLevel2category() );
+    product.setLevel1category( level2.getPid() );
     product.update();
     saveImgs(product.getId());
     forwardIndex();

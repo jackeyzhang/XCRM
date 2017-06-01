@@ -26,7 +26,7 @@ public class OrderController extends AbstractController {
 
   public void list() {
     //price是原价  deal price是成交价  
-    String sql = "select cust.company company, GROUP_CONCAT(p.name) name,o.orderno orderno,round(o.totalprice,2) price,round(o.price,2) dealprice,sum(bi.num) num,oi.date date,contract.name contractname,contract.id contractid,(select round(sum(paid),2) from payment where orderno= o.orderno) paid,(select round(o.price-ifnull(sum(paid),0), 2) from payment where orderno= o.orderno) due,o.status";
+    String sql = "select concat(cust.name, '-' , cust.company) company, GROUP_CONCAT(p.name) name,o.orderno orderno,round(o.totalprice,2) price,round(o.price,2) dealprice,sum(bi.num) num,oi.date date,contract.name contractname,contract.id contractid,(select round(sum(paid),2) from payment where orderno= o.orderno) paid,(select round(o.price-ifnull(sum(paid),0), 2) from payment where orderno= o.orderno) due,o.status";
     String sqlExcept = " from orderitem oi " + "left join bookitem bi on oi.bookitem=bi.id " + "left join `order` o on o.id=oi.order " + "left join product p on bi.product=p.id "
         + "left join contract contract on bi.contract=contract.id " + "left join customer cust on cust.id=bi.customer " + "where " + getSqlForUserRole()
         + this.getSearchStatement( true, "cust." ) + "group by o.orderno order by o.orderno desc";
@@ -111,7 +111,7 @@ public class OrderController extends AbstractController {
       List<Integer> bookitems = new ArrayList<>();
       for ( int i = 0; i < jsonArray.length(); i++ ) {
         int productid = jsonArray.getJSONObject( i ).getInt( "productid" );
-        BigDecimal totalPrice = new BigDecimal( jsonArray.getJSONObject( i ).getInt( "totalprice" ) );
+        BigDecimal price = new BigDecimal( jsonArray.getJSONObject( i ).getInt( "price" ) );
         BigDecimal afee = new BigDecimal( jsonArray.getJSONObject( i ).getInt( "afee" ) );
         int count = jsonArray.getJSONObject( i ).getInt( "count" );
         String attributes = jsonArray.getJSONObject( i ).getString( "attributes" );
@@ -125,7 +125,7 @@ public class OrderController extends AbstractController {
         bookitem.setNum( count );
         bookitem.setProduct( productid );
         bookitem.setPrdattrs( attributes );
-        bookitem.setPrice( totalPrice );
+        bookitem.setPrice( price );
         bookitem.setComments( comments );
         bookitem.setUser( userid );
         bookitem.setCustomer( customerid );
