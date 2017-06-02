@@ -29,7 +29,7 @@ public class OrderController extends AbstractController {
     String sql = "select ur.username username, concat(cust.name, '-' , cust.company) company, GROUP_CONCAT(p.name) name,o.orderno orderno,round(o.totalprice,2) price,round(o.price,2) dealprice,sum(bi.num) num,oi.date date,contract.name contractname,contract.id contractid,(select round(sum(paid),2) from payment where orderno= o.orderno) paid,(select round(o.price-ifnull(sum(paid),0), 2) from payment where orderno= o.orderno) due,o.status";
     String sqlExcept = " from orderitem oi " + "left join bookitem bi on oi.bookitem=bi.id " + "left join `order` o on o.id=oi.order " + "left join product p on bi.product=p.id "
         + "left join contract contract on bi.contract=contract.id " + "left join customer cust on cust.id=bi.customer left join user ur on bi.user=ur.id " + "where " + getSqlForUserRole()
-        + this.getSearchStatement( true, "cust." ) + "group by o.orderno order by o.orderno desc";
+        + this.getSearchStatement( true, "" ) + "group by o.orderno order by o.orderno desc";
     int pagenumber = Integer.parseInt( this.getPara( "pageNumber" ) );
     int pagesize = Integer.parseInt( this.getPara( "pageSize" ) );
     Page<Record> page = Db.paginate( pagenumber, pagesize, sql, sqlExcept );
@@ -81,7 +81,7 @@ public class OrderController extends AbstractController {
 
   @Override
   protected String searchWord() {
-    return "company";
+    return "cust.company,cust.name,o.orderno";
   }
 
   private String getSqlForUserRole() {

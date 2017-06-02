@@ -215,8 +215,23 @@ public abstract class AbstractController extends Controller {
     if(containsAnd){
       result.append( " and " );
     }
-    result.append( prefix + searchWord() + " like '%" +  searchword + "%' " );
+    if(searchWord().contains( "," )){
+      String[] searchwords = searchWord().split( "," );
+      int i=0;
+      result.append("(");
+      for( String searchWord : searchwords ){
+        result.append( searchWord + " like '%" +  searchword + "%' " );
+        if( i != searchwords.length -1 ){
+          result.append(" or ");
+        }
+        i++;
+      }
+      result.append(")");
+    }else{
+      result.append( prefix + searchWord() + " like '%" +  searchword + "%' " );
+    }
     return result.toString();
+    
   }
   
   protected void fillProductAttributesInOrderCart( List<Record> records, String columnName ){
