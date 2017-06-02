@@ -16,6 +16,11 @@
 <script>
 $(function() {
 	// get store list
+	$.get('/store/list/', function(data){
+	  storeList = data;
+	});
+
+	// get store list
 	for( d in storeList){
 	  $('#storeselect').append("<option value='" + storeList[d].id + "'>" + storeList[d].name + "</option>");
 	}
@@ -31,11 +36,15 @@ $(function() {
 <div class="form-group">
 	<label>部门</label> 
 		<select class="form-control selector" name="department">
-			<option value="1">化妆部</option>
-			<option value="2">礼服部</option>
-			<option value="3">销售部</option>
-			<option value="4">财务部</option>
-			<option value="5">办公室</option>
+      <option value="1">管理层</option>
+      <option value="2">设计部</option>
+			<option value="3">制版部</option>
+			<option value="4">裁剪部</option>
+			<option value="5">车工部</option>
+			<option value="6">制花部</option>
+			<option value="7">贴花部</option>
+			<option value="8">手工部</option>
+			<option value="9">库管部</option>
 	 </select>
 </div>
 <div class="form-group">
