@@ -43,7 +43,7 @@ public class ProductController extends AbstractController {
       if ( searchword == null ) {
         searchword = "";
       }
-      Page<Record> page = Db.paginate( pagenumber, pagesize, "select * ", " from product where 1=1 " + ( level1 > 0 ? " and level1category= " + level1 : "" )
+      Page<Record> page = Db.paginate( pagenumber, pagesize, "select prd.*,(select count(*) from productpic pic where pic.productid=prd.id) piccount ", " from product prd where 1=1 " + ( level1 > 0 ? " and level1category= " + level1 : "" )
           + ( level2 > 0 ? " and level2category= " + level2 : "" ) + ( searchword.isEmpty() ? "" : " and name like '%" + searchword + "%'" ) );
       pager = new Pager( page.getTotalRow(), page.getList() );
     }

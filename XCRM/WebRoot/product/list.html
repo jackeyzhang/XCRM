@@ -2,7 +2,11 @@
 
 function productnameformmater( value, row ){
 	if(row['id']){
-		return '<a href="/product/detail?barcode='+row['barcode']+'">'+value+'</a>';
+		if(row['piccount'] > 0){
+			return '<a href="/product/detail?barcode='+row['barcode']+'">&radic;'+value+'</a>';
+		}else{
+			 return '<a href="/product/detail?barcode='+row['barcode']+'">?'+value+'</a>';
+		}
 	}
 	return value;
 }
