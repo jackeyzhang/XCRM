@@ -65,7 +65,7 @@ public class CustomerController extends AbstractController {
   }
   
   public void wxlistallcustomers( ){
-    List<Record> records = Db.find( "select concat(name,'-',company) name, id  from customer" );
+    List<Record> records = Db.find( "select name,id,company  from customer" );
     this.renderJson( records );
   }
 }
