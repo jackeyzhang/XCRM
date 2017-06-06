@@ -65,7 +65,28 @@ public class CustomerController extends AbstractController {
   }
   
   public void wxlistallcustomers( ){
-    List<Record> records = Db.find( "select name,id,company  from customer" );
+    List<Record> records = Db.find( "select name,id,company  from customer order by id desc limit 20" );
     this.renderJson( records );
+  }
+  
+  public void wxsearchcustomer(){
+    String name = this.getPara( "name" );
+    List<Record> records = Db.find( "select name,id,company  from customer where name like '%" + name + "%' or company like '%" + name + "%' order by id desc"  );
+    this.renderJson( records );
+  }
+  
+  public void wxaddcustomer(){
+    String customername = this.getPara( "customername" );
+    String companyname = this.getPara( "companyname");
+    String mailaddress = this.getPara( "mailaddress");
+    String phone = this.getPara( "phone");
+    Customer customer = new Customer();
+    customer.set( "name", customername );
+    customer.set( "company", companyname );
+    customer.set( "shiptoAddr", mailaddress );
+    customer.set( "custAddr", mailaddress );
+    customer.set( "phone", phone );
+    customer.save();
+    this.renderJson( true );
   }
 }
