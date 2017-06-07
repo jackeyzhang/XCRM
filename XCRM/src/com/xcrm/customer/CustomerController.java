@@ -89,4 +89,32 @@ public class CustomerController extends AbstractController {
     customer.save();
     this.renderJson( true );
   }
+  
+  public void wxgetcustomer(){
+    String id = this.getPara( "id" );
+    Record record = Db.findFirst( "select name,id,company,shiptoaddr,phone  from customer where id=" + id);
+    this.renderJson( record );
+  }
+  
+  public void wxdeletecustomer(){
+    String id = this.getPara( "id" );
+    boolean deleted = Db.deleteById( "customer", id );
+    this.renderJson( deleted );
+  }
+  
+  public void wxupdatecustomer( ){
+    String id = this.getPara( "id" );
+    String customername = this.getPara( "customername" );
+    String companyname = this.getPara( "companyname");
+    String mailaddress = this.getPara( "mailaddress");
+    String phone = this.getPara( "phone");
+    Customer customer = Customer.dao.findById( id );
+    customer.set( "name", customername );
+    customer.set( "company", companyname );
+    customer.set( "shiptoAddr", mailaddress );
+    customer.set( "custAddr", mailaddress );
+    customer.set( "phone", phone );
+    customer.update();
+    this.renderJson( true );
+  }
 }
