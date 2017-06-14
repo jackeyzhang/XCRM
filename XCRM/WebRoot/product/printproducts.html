@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>贝可曼尼信息系统</title> <#include "../common/js2css.html"/>
+<script src="/js/jquery.PrintArea.js"></script>
+<link rel="stylesheet" href="/css/PrintArea.css">
+<script>
+	$(function() {
+		$("#print").click(function() {
+			$('.printarea').printArea({
+				mode : 'popup',
+				popClose : 'false',
+				extraCss : '',
+				retainAttr : '',
+				extraHead : ''
+			});
+		});
+
+	});
+</script>
+<style>
+.printlayout{
+  width:80mm
+}
+</style>
+</head>
+<body>
+	<div class="container">
+		<#include "../common/menu.html"/> 
+		<#if products?size !=0>
+		<button id="print" style="width: 80mm" type="button"
+			class="btn btn-primary btn-xs">打印</button>
+			
+	  <div class="printlayout">
+		<div class="printarea">
+					<#list products as product> 
+						<#if product_index%2==0>
+						<div style="float:left;width:50%;">
+							<div style="width: 40mm; height: 30mm; text-align: center">
+								<img alt="二维码不存在" style="width: 25mm; height: 25mm"
+									src="${product_qr2_path}/${product.id}.jpg" />
+								<div style="font-size: 10px; padding-left: 5px;">${product.name}
+									￥${product.price!}</div>
+							</div>
+						</div>
+						</#if> 
+					
+						<#if product_index%2==1>
+						<div style="float:left;width:50%;">
+							<div style="width: 40mm; height: 30mm; text-align: center">
+								<img alt="二维码不存在" style="width: 25mm; height: 25mm"
+									src="${product_qr2_path}/${product.id}.jpg" />
+								<div style="font-size: 10px; padding-left: 5px;">${product.name}
+									￥${product.price!}</div>
+							</div>
+						</div>
+						</#if>
+				</#list>
+			</div>
+		</div>
+			
+			</#if>
+	</div>
+</body>
+</html>
