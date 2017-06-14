@@ -85,6 +85,18 @@ public class ProductController extends AbstractController {
     setAttr("product", product);
     render("productdetail.html");
   }
+  
+  /**
+   * print all products
+   * 
+   */
+  public void printproducts(){
+    List<Product> products = Product.dao.find("select id,name,(select price from price where product=prd.id) price from product prd");
+    setAttr("products", products);
+    setAttr("prdimg_path", getPrdImgBaseUrl());
+    setAttr("product_qr2_path", getPrdQr2BaseUrl());
+    render("printproducts.html");
+  }
 
   public void save() {
     Product product = this.getModel(Product.class, "", true).set("barcode", MD5Util.getSystemKey())
