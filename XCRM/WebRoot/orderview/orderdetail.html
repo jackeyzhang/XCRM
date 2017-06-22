@@ -32,9 +32,17 @@
                 }
             };
          }
+				
+				function nameformatter(value, row){
+					if (value) {
+	            return  value + '<br>' +row['attr'];
+          } else {
+            return '';
+          }
+				}
 			</script>
 			<th data-field="filename" data-formatter="filenameformatter" data-cell-style="cellStyle">产品图片</th>
-			<th data-field="name">购买产品名称</th>
+			<th data-field="name" data-formatter="nameformatter">购买产品名称</th>
 			<th data-field="num">产品数量</th>
 			<th data-field="price">产品原价</th>
 			<th data-field="discount">折扣(百分比)</th>

@@ -31,24 +31,20 @@
 	<div class="container">
 		<#include "../common/menu.html"/> 
 		<#if products?size !=0>
-		<button id="print" style="width: 80mm" type="button"
+		<button id="print" style="width: 40mm" type="button"
 			class="btn btn-primary btn-xs">打印</button>
 			
 	  <div class="printlayout">
 		<div >
 					<#list products as product> 
-						<#if product_index%2==0>
-						<div style="float:left;width:50%;">
 							<div style="width: 40mm; height: 30mm; text-align: center" class="printarea">
 								<img alt="二维码不存在" style="width: 25mm; height: 25mm"
 									src="${product_qr2_path}/${product.id}.jpg" />
 								<div style="font-size: 10px; padding-left: 5px;">${product.name}
 									￥${product.price!}</div>
 							</div>
-						</div>
-						</#if> 
 					
-						<#if product_index%2==1>
+						<!-- <#if product_index%2==1>
 						<div style="float:left;width:50%;">
 							<div style="width: 40mm; height: 30mm; text-align: center" class="printarea">
 								<img alt="二维码不存在" style="width: 25mm; height: 25mm"
@@ -57,7 +53,7 @@
 									￥${product.price!}</div>
 							</div>
 						</div>
-						</#if>
+						</#if> -->
 				</#list>
 			</div>
 		</div>
