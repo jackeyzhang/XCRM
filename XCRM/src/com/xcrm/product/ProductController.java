@@ -258,7 +258,7 @@ public class ProductController extends AbstractController {
   }
   
   public void wxlist(){
-    List<Record> records = Db.find("select id,name,(select pic.fielname from productpic pic where pic.productid=prd.id limit 1) filename,(select name from productcategory where level=1 and id=prd.level1category limit 1 ) category  from product prd limit 20 ");
+    List<Record> records = Db.find("select id,name,(select pic.fielname from productpic pic where pic.productid=prd.id limit 1) filename,(select name from productcategory where level=1 and id=prd.level1category limit 1 ) category,(select price from price where product=prd.id) price  from product prd limit 20 ");
     Pager pager = new Pager(records.size(), records);
     List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList(getCategory());
     for (Record record : pager.getRows()) {
