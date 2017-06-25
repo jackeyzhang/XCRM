@@ -38,13 +38,29 @@ function level2categoryformmater(value, row){
 	  }
 	  return "";
 	}
+	
+var salesseason;
+$.get('/salesseason/list/', function(data){
+	salesseason = data;
+ });
+	
+function salesseasonformmater(value, row){
+    for(d in salesseason){
+      if(value == salesseason[d].id){
+        return salesseason[d].name;
+      }
+    }
+    return "";
+  }
+	
+
 
 </script>
 
 <th data-field="name" data-formatter="productnameformmater"><b style="color:blue">产品名称</b></th>
-<!-- <th data-field="barcode">产品标识码</th> -->
 <th data-field="level1category" data-formatter="level1categoryformmater">产品大类</th>
 <th data-field="level2category" data-formatter="level2categoryformmater">产品小类</th>
+<th data-field="salesseason" data-formatter="salesseasonformmater">上市年份</th>
 <!-- <th data-field="count">数量</th>
 <th data-field="period">交货期限</th> -->
 <th data-field="remark">备注</th>

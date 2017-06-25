@@ -65,6 +65,7 @@ $(function() {
 	      pageNumber: params.offset/params.limit + 1,  //页码  
 	      level1: $("#level1searchcategory").val(),  
 	      level2: $("#level2searchcategory").val(),
+	      salesseason: $("#salesseasonyear").val(),
 	      searchword:params.search
 	    };  
 	    return temp; 

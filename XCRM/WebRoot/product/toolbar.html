@@ -27,7 +27,15 @@
        $('#level2searchcategory').change(function() {
     	   $('#table').bootstrapTable('refresh');
        });
-      
+       
+       $.get('/salesseason/list/', function(data){
+           for( c in data){
+              $('#salesseasonyear').append("<option value='" + data[c].id + "'>" + data[c].name + "</option>");
+            }
+         });
+       $('#salesseasonyear').change(function() {
+           $('#table').bootstrapTable('refresh');
+         });
   });
   </script>
 <p class="toolbar">
@@ -44,6 +52,11 @@
 	<select class="form-control selector" name="level2category" id="level2searchcategory">
 		<option value="">请选择产品小类...</option>
 	</select>
+</div>
+<div class="col-md-2" style="margin-top: 10px;">
+  <select class="form-control selector" name="salesseasonyear" id="salesseasonyear">
+    <option value="">请选择上市年份...</option>
+  </select>
 </div>
 <span class="alert"></span>
 </p>

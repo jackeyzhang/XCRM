@@ -39,16 +39,19 @@ public class ProductController extends AbstractController {
       int pagesize = Integer.parseInt( this.getPara( "pageSize" ) );
       int level1 = this.getParaToInt( "level1", 0 );
       int level2 = this.getParaToInt( "level2", 0 );
+      int salesseason = this.getParaToInt( "salesseason", 0 );
       String searchword = this.getPara( "searchword" );
       if ( searchword == null ) {
         searchword = "";
       }
-      Page<Record> page = Db.paginate( pagenumber, pagesize, "select prd.*,(select count(*) from productpic pic where pic.productid=prd.id) piccount ", " from product prd where 1=1 " + ( level1 > 0 ? " and level1category= " + level1 : "" )
-          + ( level2 > 0 ? " and level2category= " + level2 : "" ) + ( searchword.isEmpty() ? "" : " and name like '%" + searchword + "%'" ) );
+      Page<Record> page = Db.paginate( pagenumber, pagesize, "select prd.*,(select count(*) from productpic pic where pic.productid=prd.id) piccount,(select ss.id from salesseason ss where ss.id=prd.salesseason) salesseason ", " from product prd where 1=1 " + ( level1 > 0 ? " and level1category= " + level1 : "" )
+          + ( level2 > 0 ? " and level2category= " + level2 : "" ) 
+          + ( salesseason > 0 ? " and salesseason= " + salesseason : "" ) 
+          + ( searchword.isEmpty() ? "" : " and name like '%" + searchword + "%'" ) );
       pager = new Pager( page.getTotalRow(), page.getList() );
     }
     else {
-      List<Record> records = Db.find( "select id,name from " + getModalName() );
+      List<Record> records = Db.find( "select id,name,(select ss.id from salesseason ss where ss.id=prd.salesseason) salesseason from " + getModalName() + " prd");
       pager = new Pager( records.size(), records );
     }
     List<Attribute> attributes = AttributeFinder.getInstance().getAllAttributeList( getCategory() );
