@@ -112,7 +112,10 @@ public class OrderController extends AbstractController {
       for ( int i = 0; i < jsonArray.length(); i++ ) {
         int productid = jsonArray.getJSONObject( i ).getInt( "productid" );
         BigDecimal price = new BigDecimal( jsonArray.getJSONObject( i ).getInt( "price" ) );
-        BigDecimal afee = new BigDecimal( jsonArray.getJSONObject( i ).getInt( "afee" ) );
+        BigDecimal afee = new BigDecimal( 0 );
+        if( !jsonArray.getJSONObject( i ).isNull( "afee" ) ){
+          afee  = new BigDecimal( jsonArray.getJSONObject( i ).getInt( "afee" ) );
+        }
         int count = jsonArray.getJSONObject( i ).getInt( "count" );
         String attributes = jsonArray.getJSONObject( i ).getString( "attributes" );
         int discount = jsonArray.getJSONObject( i ).getInt( "discount" );
