@@ -7,9 +7,6 @@ import com.xcrm.common.util.Constant;
 
 public class SalesSeasonController extends AbstractController {
 
-  public void list(){
-    super.list();
-  }
   public void save(){
     Salesseason Salesseason =  this.getModel( Salesseason.class, "" );
     Salesseason.save();

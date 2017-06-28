@@ -105,4 +105,12 @@ public abstract class BaseProduct<M extends BaseProduct<M>> extends Model<M> imp
 		return get("edituser");
 	}
 
+	public void setSalesseason(java.lang.Integer salesseason) {
+		set("salesseason", salesseason);
+	}
+
+	public java.lang.Integer getSalesseason() {
+		return get("salesseason");
+	}
+
 }
