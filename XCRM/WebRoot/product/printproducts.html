@@ -31,9 +31,6 @@
 	  width: 40mm; 
 	  height: 30mm; 
 	  text-align: center;
-	  img{
-	   padding-left: 5mm;
-	  }
 	}
 </style>
 </head>
@@ -47,7 +44,7 @@
 		<div >
 					<#list products as product> 
 							<div style="width: 40mm; height: 30mm; text-align: center;" class="printarea">
-								<img alt="二维码不存在" style="width: 25mm; height: 25mm;margin-left:10px;"
+								<img alt="二维码不存在" style="width: 25mm; height: 25mm;margin-left:5px;"
 									src="${product_qr2_path}/${product.id}.jpg" />
 								<div style="font-size: 10px;">${product.name}
 									￥${product.price!}</div>
