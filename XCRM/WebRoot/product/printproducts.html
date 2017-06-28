@@ -26,6 +26,16 @@
   width:40mm
 }
 </style>
+<style type="text/css" media="print">
+	.printarea {
+	  width: 40mm; 
+	  height: 30mm; 
+	  text-align: center;
+	  img{
+	   padding-left: 10px;
+	  }
+	}
+</style>
 </head>
 <body>
 	<div class="container">
@@ -34,11 +44,10 @@
 		<button id="print" style="width: 40mm" type="button"
 			class="btn btn-primary btn-xs">打印</button>
 			
-	  <div class="printlayout">
 		<div >
 					<#list products as product> 
-							<div style="width: 40mm; height: 25mm; text-align: center;" class="printarea">
-								<img alt="二维码不存在" style="width: 13mm; height: 13mm"
+							<div style="width: 40mm; height: 30mm; text-align: center;" class="printarea">
+								<img alt="二维码不存在" style="width: 25mm; height: 25mm"
 									src="${product_qr2_path}/${product.id}.jpg" />
 								<div style="font-size: 10px; padding-left: 5px;">${product.name}
 									￥${product.price!}</div>
@@ -56,7 +65,6 @@
 						</#if> -->
 				</#list>
 			</div>
-		</div>
 			
 			</#if>
 	</div>
