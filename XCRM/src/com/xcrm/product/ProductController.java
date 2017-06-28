@@ -71,7 +71,7 @@ public class ProductController extends AbstractController {
   public void detail() {
     setAttribute();
     Product product =
-        Product.dao.findFirst("select * from product where barcode =?", this.getPara("barcode"));
+        Product.dao.findFirst("select prd.*,(select price from price where product=prd.id) price from product prd where barcode =?", this.getPara("barcode"));
     List<Productpic> pics =
         Productpic.dao.find("select * from productpic where productid=?", product.getId());
     List<Attributevalue> attributevalues =
