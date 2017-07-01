@@ -14,6 +14,8 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 
+import org.eclipse.jetty.util.log.Log;
+
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
@@ -61,7 +63,11 @@ public class QRCodeUtil {
       return image;
     }
     // 插入图片
-    QRCodeUtil.insertImage(image, imgPath, needCompress);
+    try{
+      QRCodeUtil.insertImage(image, imgPath, needCompress);
+    }catch( Exception e){
+      Log.warn( " Generate QA error"  + e.getMessage() );
+    }
     return image;
   }
 
@@ -80,7 +86,7 @@ public class QRCodeUtil {
       System.err.println("" + imgPath + "   该文件不存在！");
       return;
     }
-    Image src = ImageIO.read(new File(imgPath));
+    Image src = ImageIO.read( file );
     int width = src.getWidth(null);
     int height = src.getHeight(null);
     if (needCompress) { // 压缩LOGO
@@ -243,8 +249,8 @@ public class QRCodeUtil {
   }
 
   public static void generator(int prdid, String basePath, String qr2Path) {
-    String text = "http://baidu.com?prdid=" + prdid;
-    String logo = basePath + Constant.SLASH + "favicon.ico";
+    String text = "http://www.backmany.com?prdid=" + prdid;
+    String logo = basePath + Constant.SLASH + "qr.png";
     String barcode = basePath + Constant.SLASH + qr2Path + Constant.SLASH;
     try {
       QRCodeUtil.encode(text, logo, barcode, String.valueOf(prdid), true);
