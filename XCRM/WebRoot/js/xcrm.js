@@ -236,7 +236,7 @@ function showAlert(title, type) {
 }
 
 function logout(row){
-	if (confirm('确定注销该用户?')) {
+//	if (confirm('确定注销该用户?')) {
 		$.ajax({
 			url : '/user/logoff/' + row,
 			type : 'get',
@@ -249,11 +249,11 @@ function logout(row){
 				showAlert('注销失败!', 'danger');
 			}
 		})
-	}
+//	}
 }
 
 function active(row){
-	if (confirm('确定激活该用户?')) {
+//	if (confirm('确定激活该用户?')) {
 		$.ajax({
 			url : '/user/active/' + row,
 			type : 'get',
@@ -266,6 +266,6 @@ function active(row){
 				showAlert('激活失败!', 'danger');
 			}
 		})
-	}
+//	}
 }
 

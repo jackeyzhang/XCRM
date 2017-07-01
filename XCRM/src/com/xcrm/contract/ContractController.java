@@ -15,6 +15,7 @@ import com.xcrm.common.AbstractController;
 import com.xcrm.common.model.Bookitem;
 import com.xcrm.common.model.Contract;
 import com.xcrm.common.util.Constant;
+import com.xcrm.common.util.PropUtil;
 import com.xcrm.common.util.StrUtil;
 
 public class ContractController extends AbstractController {
@@ -108,19 +109,19 @@ public class ContractController extends AbstractController {
     this.setAttr( "Atelephone", info.getTelephone() );
     this.setAttr( "Aaddress", info.getAddress() );
     
-    this.setAttr( "Bcontract", "上海曼可服饰有限公司" );
-    this.setAttr( "Bcontact", "王有锋" );
-    this.setAttr( "Btelephone", "021 67868791" );
-    this.setAttr( "Baddress", "上海市松江区九亭镇九谊路399号四楼" );
+    this.setAttr( "Bcontract", PropUtil.getContractConfig( "compnayname" ) );
+    this.setAttr( "Bcontact", PropUtil.getContractConfig( "compnayman" ) );
+    this.setAttr( "Btelephone", PropUtil.getContractConfig( "compnaytel" ) );
+    this.setAttr( "Baddress", PropUtil.getContractConfig( "compnayaddress" ) );
     
     this.setAttr( "orderiteminfo", info.getOrderinfo() );
-    this.setAttr( "paymentinfo", "请于本合同签订之日支付款项50%，本合同签订之日起7日内付清剩余款项。" );
-    this.setAttr( "accountinfo", "王锋<br> 6222081001018679971 <br> 中国工商银行<br>" );
+    this.setAttr( "paymentinfo", PropUtil.getContractConfig( "paymentinfo" ) );
+    this.setAttr( "accountinfo", PropUtil.getContractConfig( "paymentaccount" ) );
     
     this.setAttr( "amount", info.getAmount());
     this.setAttr( "discount", info.getDiscount() );
     this.setAttr( "paid", info.getPaid() );
-
+    
     this.render( "view.html" );
   }
   
@@ -161,6 +162,7 @@ class ContractPrintInfo{
     
     int i =0;
     StringBuilder sb = new StringBuilder();
+   
     for( Record record : records ){
       if ( i == 0 ) {
         setContract( record.getStr( "company" ) );
@@ -172,23 +174,16 @@ class ContractPrintInfo{
         setDiscount( "" + StrUtil.formatPercentage( "" + record.getBigDecimal( "discount" ) ) );
         i++;
       }
-      sb.append( getFixlengthStrWithSpace(record.getStr( "pname" ), 35 ) )
-      .append(  getFixlengthStrWithSpace( formatAttr( record.getStr( "prdattrs" ) ), 25 ) )
-      .append(  getFixlengthStrWithSpace( StrUtil.formatNum( record.getNumber( "num" ) ) ,25) )
-      .append(  getFixlengthStrWithSpace( StrUtil.formatPrice( record.getNumber( "price" )), 25 )  )
-      .append(  getFixlengthStrWithSpace( record.getStr( "comments" ) == null ? "" : record.getStr( "comments" ), 20)  )
-      .append( "<br>" );
+      sb.append( "<tr>" )
+      .append( getTD( 182, record.getStr( "pname" ) ))
+      .append( getTD( 164, formatAttr( record.getStr( "prdattrs" ) ) ))
+      .append( getTD( 112, StrUtil.formatNum( record.getNumber( "num" ) ) ))
+      .append( getTD( 134, StrUtil.formatPrice( record.getNumber( "price" )) ))
+      .append( getTD( 452, record.getStr( "comments" ) == null ? "" : record.getStr( "comments" ) ))
+      .append( "</tr>" );
     }
     this.setOrderinfo( sb.toString() );
 
-  }
-  
-  private String getFixlengthStrWithSpace( String result, int num ) {
-    int spacelength = num - result.length();
-    for ( int i = 0; i < spacelength; i++ ) {
-      result += "&nbsp";
-    }
-    return result;
   }
   
   /**
@@ -282,5 +277,22 @@ class ContractPrintInfo{
   public void setPaid( String paid ) {
     this.paid = paid;
   }
+  
+//  public String getTR( ){
+//    StringBuilder tr = new StringBuilder();
+//    tr.append( "<tr>" )
+//    .append( getTD( 182, "商品信息") )
+//    .append( getTD( 164, "型号颜色大小") )
+//    .append( getTD( 112, "数量") )
+//    .append( getTD( 134, "单价") )
+//    .append( getTD( 452, "商品备注") );
+//    tr.append( "</tr>" );
+//    return tr.toString();
+//  }
+//  
+  public String getTD( int width, String text ){
+    return "<td width=\""+ width +"\" valign=\"top\" style=\"word-break: break-all;\"><strong>"+ text +"</strong></td>";
+  }
+
   
 }

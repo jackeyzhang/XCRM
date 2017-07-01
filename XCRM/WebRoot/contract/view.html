@@ -4,21 +4,28 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <#include "../common/js2css.html"/>
-<link rel="stylesheet" href="/css/PrintArea.css" >
+<link rel="stylesheet" href="/css/PrintArea.css">
 <script src="/js/jquery.PrintArea.js"></script>
 <script src="/js/contractprint.js"></script>
 </head>
 <body>
-<div class="container">
- <button id="print" style="width: 100px" type="button" class="btn btn-primary btn-xs">打印</button>
-</div>
-<div class="printarea">
 	<div class="container">
-		<div class="row">
-			<div class="span12">
-			<#include "/biz_img/template/${contract}.html"/></div>
+		<div class="container">
+			<div class="row">
+				<div class="span12" style="text-align:center">
+					<button id="print" style="width: 100px" type="button"
+						class="btn btn-primary btn-xs">打印</button>
+				</div>
+			</div>
 		</div>
 	</div>
-</div>
+	<div class="printarea">
+		<div class="container">
+			<div class="row">
+				<div class="span12">
+				<#include "/biz_img/template/${contract}.html"/></div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

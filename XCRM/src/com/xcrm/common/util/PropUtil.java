@@ -27,5 +27,9 @@ public class PropUtil {
   public static String getImgDomain() {
     return PropKit.get("img.domain");
   }
+  
+  public static String getContractConfig( String name) {
+    return PropKit.get("contract.config." + name);
+  }
 
 }
