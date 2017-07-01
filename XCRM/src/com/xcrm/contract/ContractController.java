@@ -291,7 +291,7 @@ class ContractPrintInfo{
 //  }
 //  
   public String getTD( int width, String text ){
-    return "<td width=\""+ width +"\" valign=\"top\" style=\"word-break: break-all;\"><strong>"+ text +"</strong></td>";
+    return "<td width=\""+ width +"\" valign=\"top\" style=\"word-break: break-all;\">"+ text +"</td>";
   }
 
   
