@@ -12,11 +12,11 @@
 	<div class="container">
 		<div class="row">
 			<div class="span12">
-				<#include "../common/menu.html"/> 
-				<#include "../common/pageheader.html"/>
+				<#include "../common/menu.html"/> <#include
+				"../common/pageheader.html"/>
 
 				<div class="container-fluid">
-				
+
 					<div class="row">
 						<div class="col-md-6">
 							<div class="form-group">
@@ -24,19 +24,20 @@
 							</div>
 						</div>
 					</div>
-					
+
 					<div class="row">
 						<div class="col-md-3" style="text-align: left">
 							<!-- <select class="form-control selector" id="customerselect"
 								name="customer">
 								<option value="">请选择收货人...</option>
 							</select> -->
-							<input type="text" class="form-control span3" id="customersearch" data-provide="typeahead" data-items="4" />
-							<input type="hidden" class="form-control span3" id="customervalue" name="customer"/>  
+							<input type="text" class="form-control span3" id="customersearch"
+								data-provide="typeahead" data-items="4" /> <input type="hidden"
+								class="form-control span3" id="customervalue" name="customer" />
 						</div>
-            <div class="col-md-9" style="text-align: left">
-              <span id="customerinfo"></span>
-            </div>
+						<div class="col-md-9" style="text-align: left">
+							<span id="customerinfo"></span>
+						</div>
 					</div>
 
 					<div class="row">
@@ -51,65 +52,66 @@
 							</div>
 						</div>
 						<div class="col-md-3">
-              <div class="form-group">
-                <h3>付款方式</h3>
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="form-group">
-                <h3>付款金额</h3>
-              </div>
-            </div>
+							<div class="form-group">
+								<h3>付款方式</h3>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<h3>付款金额</h3>
+							</div>
+						</div>
 					</div>
-					
-          <div class="row">
-            <div class="col-md-3" style="text-align: left">
-              <select class="form-control selector" id="contractselect"
-                name="contractselect">
-                <option value="">请选择合同...</option>
-              </select>
-            </div>
 
+					<div class="row">
 						<div class="col-md-3" style="text-align: left">
-							<input class="form-control" type="text" id="deliverytime"
-								name="deliverytime" >
+							<select class="form-control selector" id="contractselect"
+								name="contractselect">
+								<option value="">请选择合同...</option>
+							</select>
 						</div>
 
 						<div class="col-md-3" style="text-align: left">
-              <select class="form-control selector" id="paymentwayselect"
-                name="paymentwayselect">
-                <option value="">请选择支付方式...</option>
-                <option value="1">网银转账</option>
-                <option value="2">微信支付</option>
-                <option value="3">支付宝支付</option>
-                <option value="4">信用卡</option>
-                <option value="5">借记卡</option>
-                <option value="6">现金</option>
-                <option value="7">支票</option>
-              </select>
-            </div>
-            
-            <div class="col-md-3" style="text-align: left">
-              <input type="text" class="form-control" name="paid" id="paid" value="${paidsuggest!}">
-            </div>
-          </div>
-          
-           <div class="row">
-            <div class="col-md-3">
-              <div class="form-group">
-                <h3>付款备注信息</h3>
-              </div>
-            </div>
-            </div>
-          
-          <div class="row">
-	          <div class="col-md-12" style="text-align: left;">
-                  <textarea placeholder="请添加付款备注信息" id="paymentcomments" class="form-control" rows="2"></textarea>
-            </div>
-          </div>
-          
-          <div style="margin: 0 0 100px;">
-          </div>
+							<input class="form-control" type="text" id="deliverytime"
+								name="deliverytime">
+						</div>
+
+						<div class="col-md-3" style="text-align: left">
+							<select class="form-control selector" id="paymentwayselect"
+								name="paymentwayselect">
+								<option value="">请选择支付方式...</option>
+								<option value="3">支付宝支付</option>
+								<option value="2">微信支付</option>
+								<option value="4">建行</option>
+								<option value="5">农行</option>
+								<option value="6">现金</option>
+								<option value="1">网银转账</option>
+								<option value="7">支票</option>
+							</select>
+						</div>
+
+						<div class="col-md-3" style="text-align: left">
+							<input type="text" class="form-control" name="paid" id="paid"
+								value="${paidsuggest!}">
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-3">
+							<div class="form-group">
+								<h3>付款备注信息</h3>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-12" style="text-align: left;">
+							<textarea placeholder="请添加付款备注信息" id="paymentcomments"
+								class="form-control" rows="2"></textarea>
+						</div>
+					</div>
+
+					<div style="margin: 0 0 100px;"></div>
 
 					<div class="row">
 						<div class="col-md-2 col-md-offset-1"
