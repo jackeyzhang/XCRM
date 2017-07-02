@@ -2,6 +2,7 @@ package com.xcrm.contract;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
@@ -18,174 +19,180 @@ import com.xcrm.common.util.Constant;
 import com.xcrm.common.util.PropUtil;
 import com.xcrm.common.util.StrUtil;
 
+
 public class ContractController extends AbstractController {
 
-	public void save() {
-		String name = getPara("name");
-		String editorValue = getPara("editorValue");
-		Contract contract = new Contract();
-		contract.set("name", name).save();
-		String filename = getContractTemplatePath() + contract.getId() + ".html";
-		try {
-			FileUtils.write(new File(filename), editorValue);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		redirect("/" + getModalName() + "/");
-	}
+  public void save() {
+    String name = getPara( "name" );
+    String editorValue = getPara( "editorValue" );
+    Contract contract = new Contract();
+    contract.set( "name", name ).save();
+    String filename = getContractTemplatePath() + contract.getId() + ".html";
+    try {
+      FileUtils.write( new File( filename ), editorValue );
+    }
+    catch ( IOException e ) {
+      e.printStackTrace();
+    }
+    redirect( "/" + getModalName() + "/" );
+  }
 
-	public void update() {
-		Integer id = getParaToInt("id");
-		String name = getPara("name");
-		String editorValue = getPara("editorValue");
-		Contract contract = new Contract();
-		contract.set("id", id).set("name", name).update();
-		String filename = getContractTemplatePath() + contract.getId() + ".html";
-		try {
-			FileUtils.write(new File(filename), editorValue);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		redirect("/" + getModalName() + "/");
-	}
+  public void update() {
+    Integer id = getParaToInt( "id" );
+    String name = getPara( "name" );
+    String editorValue = getPara( "editorValue" );
+    Contract contract = new Contract();
+    contract.set( "id", id ).set( "name", name ).update();
+    String filename = getContractTemplatePath() + contract.getId() + ".html";
+    try {
+      FileUtils.write( new File( filename ), editorValue );
+    }
+    catch ( IOException e ) {
+      e.printStackTrace();
+    }
+    redirect( "/" + getModalName() + "/" );
+  }
 
-	public void preadd() {
-		String id = getPara("id");
-		if (!StringUtils.isEmpty(id)) {
-			Contract contract = Contract.dao.findById(id);
-			String filename = getContractTemplatePath() + contract.getId() + ".html";
-			setAttr("id", contract.getId());
-			setAttr("name", contract.getName());
-			try {
-				setAttr("editorValue", FileUtils.readFileToString(new File(filename)));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		render("/contract/add.html");
-	}
+  public void preadd() {
+    String id = getPara( "id" );
+    if ( !StringUtils.isEmpty( id ) ) {
+      Contract contract = Contract.dao.findById( id );
+      String filename = getContractTemplatePath() + contract.getId() + ".html";
+      setAttr( "id", contract.getId() );
+      setAttr( "name", contract.getName() );
+      try {
+        setAttr( "editorValue", FileUtils.readFileToString( new File( filename ) ) );
+      }
+      catch ( IOException e ) {
+        e.printStackTrace();
+      }
+    }
+    render( "/contract/add.html" );
+  }
 
-	public void remove() {
-		Contract.dao.deleteById(this.getParaToInt(0));
-		forwardIndex();
-	}
+  public void remove() {
+    Contract.dao.deleteById( this.getParaToInt( 0 ) );
+    forwardIndex();
+  }
 
-	@Override
-	public String getModalName() {
-		return "contract";
-	}
+  @Override
+  public String getModalName() {
+    return "contract";
+  }
 
-	@Override
-	public String getPageHeader() {
-		return "创建或修改合同相关信息";
-	}
+  @Override
+  public String getPageHeader() {
+    return "创建或修改合同相关信息";
+  }
 
-	@Override
-	public String getToolBarAddButtonTitle() {
-		return "创建合同";
-	}
+  @Override
+  public String getToolBarAddButtonTitle() {
+    return "创建合同";
+  }
 
-	@Override
-	public String getIndexHtml() {
-		return "contract.html";
-	}
+  @Override
+  public String getIndexHtml() {
+    return "contract.html";
+  }
 
-	@Override
-	public int getCategory() {
-		return Constant.CATEGORY_USER;
-	}
-	
+  @Override
+  public int getCategory() {
+    return Constant.CATEGORY_USER;
+  }
+
   public void view() {
     Integer contractid = this.getParaToInt( "id" );
     this.setAttr( "contract", contractid );
     this.setAttr( "number", formatContractNumber( contractid ) );
-    
+
     Long orderno = this.getParaToLong( "orderno" );
     ContractPrintInfo info = new ContractPrintInfo();
     info.loaddata( orderno );
-    
+
     this.setAttr( "Acontract", info.getContract() );
     this.setAttr( "Acontact", info.getContact() );
     this.setAttr( "Atelephone", info.getTelephone() );
     this.setAttr( "Aaddress", info.getAddress() );
-    
+
     this.setAttr( "Bcontract", PropUtil.getContractConfig( "compnayname" ) );
     this.setAttr( "Bcontact", PropUtil.getContractConfig( "compnayman" ) );
     this.setAttr( "Btelephone", PropUtil.getContractConfig( "compnaytel" ) );
     this.setAttr( "Baddress", PropUtil.getContractConfig( "compnayaddress" ) );
-    
+
     this.setAttr( "orderiteminfo", info.getOrderinfo() );
     this.setAttr( "paymentinfo", PropUtil.getContractConfig( "paymentinfo" ) );
     this.setAttr( "accountinfo", PropUtil.getContractConfig( "paymentaccount" ) );
-    
-    this.setAttr( "amount", info.getAmount());
-    this.setAttr( "discount", info.getDiscount() );
+
+    this.setAttr( "amount", info.getAmount() );
+    this.setAttr( "afee", info.getAfee() );//afee
     this.setAttr( "paid", info.getPaid() );
-    
+
     this.render( "view.html" );
   }
-  
-  private String formatContractNumber( Integer contractid ){
+
+  private String formatContractNumber( Integer contractid ) {
     NumberFormat format = new DecimalFormat( "0000" );
     return format.format( contractid );
   }
-  
-  public void wxlistallcontracts( ){
+
+  public void wxlistallcontracts() {
     List<Record> records = Db.find( "select name, id  from contract" );
     this.renderJson( records );
   }
 
 }
 
-class ContractPrintInfo{
-  
+class ContractPrintInfo {
+
   private String contract;
   private String contact;
   private String telephone;
   private String address;
   private String orderinfo;
-  
+
   private String amount;
   private String discount;
+  private String afee;
   private String paid;
-  
+
   public void loaddata( Long orderno ) {
-    String sql = "select bi.comments,cust.name cname,cust.shiptoAddr,cust.company,cust.phone,cust.contact,o.price shouldpay,bi.price price,o.totalprice,o.price/o.totalprice*100 discount,bi.num,prd.name pname,bi.prdattrs "
-        + " from `order` o"
-        + " left join orderitem oi on o.id=oi.order"
-        + " left join bookitem bi on oi.bookitem=bi.id"
-        + " left join customer cust on cust.id= bi.customer"
-        + " left join product prd on prd.id=bi.product"
-        + " where o.orderno=" + orderno 
-        + " and bi.status !=" + Bookitem.STATUS_CANCELLED;
+    String sql = "select bi.comments,cust.name cname,cust.shiptoAddr,cust.company,cust.phone,cust.contact,o.price shouldpay,bi.price*bi.num*(bi.discount/100)*(o.totaldiscount/100) price,bi.additionfee afee,o.totalprice,o.price/o.totalprice*100 discount,bi.num,prd.name pname,bi.prdattrs "
+        + " from `order` o" + " left join orderitem oi on o.id=oi.order" + " left join bookitem bi on oi.bookitem=bi.id" + " left join customer cust on cust.id= bi.customer"
+        + " left join product prd on prd.id=bi.product" + " where o.orderno=" + orderno + " and bi.status !=" + Bookitem.STATUS_CANCELLED;
     List<Record> records = Db.find( sql );
-    
-    int i =0;
+
     StringBuilder sb = new StringBuilder();
-   
-    for( Record record : records ){
+    BigDecimal afeetotal = new BigDecimal( 0 );
+    BigDecimal amounttotal = new BigDecimal( 0 );
+    for ( int i = 0; i < records.size(); i++ ) {
+      Record record = records.get( i );
       if ( i == 0 ) {
         setContract( record.getStr( "company" ) );
         setContact( record.getStr( "cname" ) );
         setTelephone( record.getStr( "phone" ) );
         setAddress( record.getStr( "shiptoAddr" ) );
-        setAmount( "" + StrUtil.formatPrice( record.getBigDecimal( "totalprice" )) );
-        setPaid( "" + StrUtil.formatPrice( record.getBigDecimal( "shouldpay" ) ) );
-        setDiscount( "" + StrUtil.formatPercentage( "" + record.getBigDecimal( "discount" ) ) );
-        i++;
+        setPaid( "" + StrUtil.formatPrice( record.getBigDecimal( "shouldpay" ) ) );//应该支付
       }
-      sb.append( "<tr>" )
-      .append( getTD( 182, record.getStr( "pname" ) ))
-      .append( getTD( 164, formatAttr( record.getStr( "prdattrs" ) ) ))
-      .append( getTD( 112, StrUtil.formatNum( record.getNumber( "num" ) ) ))
-      .append( getTD( 134, StrUtil.formatPrice( record.getNumber( "price" )) ))
-      .append( getTD( 452, record.getStr( "comments" ) == null ? "" : record.getStr( "comments" ) ))
-      .append( "</tr>" );
+      afeetotal = afeetotal.add( record.getBigDecimal( "afee" ) );
+      amounttotal = amounttotal.add( record.getBigDecimal( "price" ) );
+      if ( i == records.size() - 1 ) {
+        setAmount( "" + StrUtil.formatPrice( amounttotal ) );//商品小计
+        setAfee( "" + StrUtil.formatPrice( afeetotal ) );//定制费
+      }
+      sb
+          .append( "<tr>" )
+          .append( getTD( 150, record.getStr( "pname" ) ) )
+          .append( getTD( 150, formatAttr( record.getStr( "prdattrs" ) ) ) )
+          .append( getTD( 80, StrUtil.formatNum( record.getNumber( "num" ) ) ) )
+          .append( getTD( 100, StrUtil.formatPrice( record.getNumber( "price" ) ) ) )//订单项金额小计
+          .append( getTD( 100, StrUtil.formatPrice( record.getNumber( "afee" ) ) ) )//订单项定制费
+          .append( getTD( 470, record.getStr( "comments" ) == null ? "" : record.getStr( "comments" ) ) )//订单项备注
+          .append( "</tr>" );
     }
     this.setOrderinfo( sb.toString() );
 
   }
-  
+
   /**
    * format attribute value
    * 
@@ -194,105 +201,105 @@ class ContractPrintInfo{
    * @param attrValue
    * @return 白沙 黄色 S
    */
-  private String formatAttr( String attrValue ){
-    if(attrValue.contains( "-" )){
+  private String formatAttr( String attrValue ) {
+    if ( attrValue.contains( "-" ) ) {
       return attrValue.replace( "-", " " );
     }
-    String[] attrs =  attrValue.split( "," );
+    String[] attrs = attrValue.split( "," );
     String result = "";
-    for( String attr : attrs ){
-      result += attr.split( ":" )[1] +" ";
+    for ( String attr : attrs ) {
+      result += attr.split( ":" )[1] + " ";
     }
     result = result.replace( "}", "" ).replace( "\"", "" );
     return result;
   }
-  
-  
+
   public String getContract() {
     return contract;
   }
-  
+
   public void setContract( String contract ) {
     this.contract = contract;
   }
-  
+
   public String getContact() {
     return contact;
   }
-  
+
   public void setContact( String contact ) {
     this.contact = contact;
   }
-  
+
   public String getTelephone() {
     return telephone;
   }
-  
+
   public void setTelephone( String telephone ) {
     this.telephone = telephone;
   }
-  
+
   public String getAddress() {
     return address;
   }
-  
+
   public void setAddress( String address ) {
     this.address = address;
   }
-  
+
   public String getOrderinfo() {
     return orderinfo;
   }
-  
+
   public void setOrderinfo( String orderinfo ) {
     this.orderinfo = orderinfo;
   }
 
-  
   public String getAmount() {
     return amount;
   }
 
-  
   public void setAmount( String amount ) {
     this.amount = amount;
   }
 
-  
   public String getDiscount() {
     return discount;
   }
 
-  
   public void setDiscount( String discount ) {
     this.discount = discount;
   }
 
-  
+  public String getAfee() {
+    return afee;
+  }
+
+  public void setAfee( String afee ) {
+    this.afee = afee;
+  }
+
   public String getPaid() {
     return paid;
   }
 
-  
   public void setPaid( String paid ) {
     this.paid = paid;
   }
-  
-//  public String getTR( ){
-//    StringBuilder tr = new StringBuilder();
-//    tr.append( "<tr>" )
-//    .append( getTD( 182, "商品信息") )
-//    .append( getTD( 164, "型号颜色大小") )
-//    .append( getTD( 112, "数量") )
-//    .append( getTD( 134, "单价") )
-//    .append( getTD( 452, "商品备注") );
-//    tr.append( "</tr>" );
-//    return tr.toString();
-//  }
-//  
-  public String getTD( int width, String text ){
-    return "<td width=\""+ width +"\" valign=\"top\" style=\"word-break: break-all;\">"+ text +"</td>";
+
+  //  public String getTR( ){
+  //    StringBuilder tr = new StringBuilder();
+  //    tr.append( "<tr>" )
+  //    .append( getTD( 182, "商品信息") )
+  //    .append( getTD( 164, "型号颜色大小") )
+  //    .append( getTD( 112, "数量") )
+  //    .append( getTD( 134, "单价") )
+  //    .append( getTD( 452, "商品备注") );
+  //    tr.append( "</tr>" );
+  //    return tr.toString();
+  //  }
+  //  
+  public String getTD( int width, String text ) {
+    return "<td width=\"" + width + "\" valign=\"top\" style=\"word-break: break-all;\">" + text + "</td>";
   }
 
-  
 }

@@ -28,6 +28,7 @@ public class PaymentController extends AbstractController {
     this.removeSessionAttr( "amount" );
     this.removeSessionAttr( "price" );
     this.removeSessionAttr( "orderno" );
+    this.removeSessionAttr( "totaldiscount" );
     this.renderNull();
   }
 
@@ -61,12 +62,12 @@ public class PaymentController extends AbstractController {
     }else{
       order = Order.dao.findFirst( "select * from `order` where orderno=" + ordero );
     }
-    // persist price
+    // persist price 成交价
     String price = this.getSessionAttr( "price" );
     if ( price != null && !price.isEmpty() ) {
       order.setPrice( new BigDecimal( Float.parseFloat( price ) ) );
     }
-    // persist amount
+    // persist amount 总价
     String amount = this.getSessionAttr( "amount" );
     if ( amount != null && !amount.isEmpty() ) {
       order.setTotalprice( new BigDecimal(Float.parseFloat( amount )) );
@@ -75,6 +76,11 @@ public class PaymentController extends AbstractController {
     String ordercomments = this.getSessionAttr( "ordercomments" );
     if ( ordercomments != null && !ordercomments.isEmpty() ) {
       order.setComments( ordercomments );
+    }
+    // persist totaldiscount 总折扣
+    String totaldiscount = this.getSessionAttr( "totaldiscount" );
+    if ( totaldiscount != null && !totaldiscount.isEmpty() ) {
+      order.setTotaldiscount(  new BigDecimal( Float.parseFloat( totaldiscount ) )  );
     }
     
     

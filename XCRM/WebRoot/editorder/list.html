@@ -47,6 +47,17 @@
         amount += parseFloat($($('.sum')[i]).html());
       }
       $('.amount').html(amount);
+      
+      var amountwithoutafee = 0;
+      for (var i = 0; i < $('.itemamount').length; i++) {
+        amountwithoutafee += parseFloat($('.itemamount')[i].value);
+      }
+      
+      var afee = 0;
+      for (var i = 0; i < $('.itemafee').length; i++) {
+         afee += parseFloat($('.itemafee')[i].value);
+      }
+      
       var discount =$('#discount').val();
       if(discount<=0 || discount > 100){
         showAlert("输入的折扣值不能大于100小于0!!!");
@@ -55,7 +66,8 @@
         return;
       }
       if(!discount) discount = 100;
-      $('#price').val( (amount*discount/100).toFixed(2));
+      //$('#price').val( (amount*discount/100).toFixed(2));
+      $('#price').val( (amountwithoutafee*discount/100 + afee).toFixed(2));
 		};
 		
 		$('.addprice-item').on('click', function() {
@@ -85,28 +97,13 @@
 	              $('#sum'+id).html( itemprice.toFixed( 2 ) );
 	              $('#itemafee' + id).val( addprice );
 	              $('#itemafeelabel' + id).html( '￥' +addprice );
-	              calc_amount( );
+	              $('#itemamount' + id ).val(itemprice - addprice  );
+	              auto_calc_amount( );
 	            }
 	          }
 	        }); 
 	      });
-		
-		var calc_amount = function() {
-			var amount = 0;
-			for (var i = 0; i < $('.sum').length; i++) {
-				amount += parseFloat($($('.sum')[i]).html());
-			}
-			$('.amount').html(amount.toFixed(2));
-			var discount =$('#discount').val();
-			if(discount<=0 || discount > 100){
-				showAlert("输入的折扣值不能大于100小于0!!!");
-				$('#discount').val(100);
-				$('#price').val(amount*100/100);
-				return;
-			}
-			if(!discount) discount = 100;
-			$('#price').val( (amount*discount/100).toFixed(2));
-		};
+
 		
 		$("#discount").on('input',function(e){  
 			auto_calc_amount();
@@ -122,19 +119,27 @@
             success : function(data, status) {
               if (status == "success") {
                   item_calc_amount(e,id);
-                  calc_amount();
+                  auto_calc_amount();
               }
             }
           });
     }); 
 		
+    //计算总折扣
     var calc_disacount = function() {
         var price =$('#price').val();
-        var amount = 0;
-        for (var i = 0; i < $('.sum').length; i++) {
-          amount += parseFloat($($('.sum')[i]).html());
+        
+        var amountwithoutafee = 0;
+        for (var i = 0; i < $('.itemamount').length; i++) {
+          amountwithoutafee += parseFloat($('.itemamount')[i].value);
         }
-        $('#discount').val( (price/amount * 100).toFixed(2));
+        
+        var afee = 0;
+        for (var i = 0; i < $('.itemafee').length; i++) {
+           afee += parseFloat($('.itemafee')[i].value);
+        }
+        
+        $('#discount').val( (( price - afee )/amountwithoutafee * 100).toFixed(2));
       };
 	      
      $("#price").on('input',function(e){  
@@ -184,10 +189,31 @@
 			});
 		}
 		
+	    //计算总折扣
+	    var calc_disacount = function() {
+	        var price =$('#price').val();
+	        
+	        var amountwithoutafee = 0;
+	        for (var i = 0; i < $('.itemamount').length; i++) {
+	          amountwithoutafee += parseFloat($('.itemamount')[i].value);
+	        }
+	        
+	        var afee = 0;
+	        for (var i = 0; i < $('.itemafee').length; i++) {
+	           afee += parseFloat($('.itemafee')[i].value);
+	        }
+	        
+	        $('#discount').val( (( price - afee )/amountwithoutafee * 100).toFixed(2));
+	      };
+	        
+	     $("#price").on('input',function(e){  
+	      calc_disacount();
+	     });  
+		
 		$('.comments-td').on('click',change_comments);
 		$('.comments-td textarea').on('blur',update_comments);
 		
-		calc_amount();
+		auto_calc_amount();
 	});
 </script>
 
@@ -222,92 +248,99 @@ table {
 	<#list list as item>
 	<tr>
 		<input type="hidden" value="${item.id}" class="itemid" />
-		<input type="hidden" value="${item.afee}" class="itemafee" id="itemafee${item.id}"/>
+		<input type="hidden" value="${item.afee}" class="itemafee"
+			id="itemafee${item.id}" />
+		<input type="hidden" value="${item.price*item.num*item.discount/100}"
+			class="itemamount" id="itemamount${item.id}" />
 		<td><img width="80px" height="80px"
 			src='${(item.filename??)?string((prdimg_path+"/"+item.pid+"/"+((item.filename!"")?split(","))[0]),"/img/placehold.jpg")}' />
+		</td> <#if item.status??&&item.status == 2>
+		<td><s>${item.name}<br> ${item.m}-${item.c}-${item.s}
+		</s></td>
+		<td class="num" id="itemnum">${item.num}</td>
+		<td class="price" id="itemprice">${item.price}</td>
+		<td style="padding-top: 0px;"><input type="number"
+			class="form-control itemdiscount" data="${item.id}" id="itemdiscount"
+			min="1" max="100" value="${item.discount}" /></td>
+		<td class="sum" id="sum${item.id}">${0}</td>
+		<td class="comments-td"><#if item.comments??><s>${item.comments}</s>
+			<#else><textarea placeholder="请添加商品说明" class="form-control" cols="8"
+				rows="2"></textarea></#if>
+		<td><a class="resume-item" data="${item.id}"
+			href="javascript:void(0);">恢复</a> <a class="addprice-item"
+			data="${item.id}" href="javascript:void(0);">额外费用</a></td> <#else>
+		<td>${item.name}<br> ${item.m}-${item.c}-${item.s}
 		</td>
-		<#if item.status??&&item.status == 2>
-			<td><s>${item.name}<br> ${item.m}-${item.c}-${item.s}</s></td>
-			<td class="num" id="itemnum">${item.num}</td>
-	    <td class="price" id="itemprice">${item.price}</td>
-	    <td style="padding-top:0px;"><input type="number" class="form-control itemdiscount" data="${item.id}"
-	      id="itemdiscount" min="1" max="100" value="${item.discount}"/></td>
-			<td class="sum" id="sum${item.id}">${0}</td>
-	    <td class="comments-td"><#if item.comments??><s>${item.comments}</s>
-	      <#else><textarea placeholder="请添加商品说明" class="form-control" cols="8"
-	        rows="2"></textarea></#if>
-	    <td><a class="resume-item" data="${item.id}"
-        href="javascript:void(0);">恢复</a>
-        <a class="addprice-item" data="${item.id}"
-      href="javascript:void(0);">额外费用</a></td>
-		<#else>
-			<td>${item.name}<br> ${item.m}-${item.c}-${item.s}</td>
-	    <td class="num" id="itemnum">${item.num}</td>
-	    <td class="price" id="itemprice">${item.price}</td>
-	    <td style="padding-top:0px;"><input type="number" class="form-control itemdiscount" data="${item.id}"
-	      id="itemdiscount" min="1" max="100" value="${item.discount}"/></td>
-			<td class="sum" id="sum${item.id}">${item.price*item.num*item.discount/100+item.afee}</td>
-	    <td class="comments-td"><#if item.comments??>${item.comments}
-	      <#else><textarea placeholder="请添加商品说明" class="form-control" cols="8"
-	        rows="2"></textarea></#if>
-	    </td>
-	    <td><a class="del-item" data="${item.id}"
-	      href="javascript:void(0);">取消</a>
-	      <a class="addprice-item" data="${item.id}"
-      href="javascript:void(0);">额外费用</a> <span class="label label-danger" id="itemafeelabel${item.id}">￥${item.afee}</span></td>
+		<td class="num" id="itemnum">${item.num}</td>
+		<td class="price" id="itemprice">${item.price}</td>
+		<td style="padding-top: 0px;"><input type="number"
+			class="form-control itemdiscount" data="${item.id}" id="itemdiscount"
+			min="1" max="100" value="${item.discount}" /></td>
+		<td class="sum" id="sum${item.id}">${item.price*item.num*item.discount/100+item.afee}</td>
+		<td class="comments-td"><#if item.comments??>${item.comments}
+			<#else><textarea placeholder="请添加商品说明" class="form-control" cols="8"
+				rows="2"></textarea></#if>
+		</td>
+		<td><a class="del-item" data="${item.id}"
+			href="javascript:void(0);">取消</a> <a class="addprice-item"
+			data="${item.id}" href="javascript:void(0);">额外费用</a> <span
+			class="label label-danger" id="itemafeelabel${item.id}">￥${item.afee}</span></td>
 		</#if>
-		  <!-- 模态框 定制费弹出框 -->
-    <div class="modal fade addpriceModal" id="addpriceModal${item.id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body">
-                <span>增加额外费用:</span>
-                <input type="number" class="form-control" data="${item.id}"
-                      id="additempriceinput${item.id}"  value="${item.afee}"/>
-                <span class="notnull"></span>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary addpricebutton" data="${item.id}">确定</button>
-                </div>
-            </div>
-        </div>
-    </div>
+		<!-- 模态框 定制费弹出框 -->
+		<div class="modal fade addpriceModal" id="addpriceModal${item.id}"
+			tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-body">
+						<span>增加额外费用:</span> <input type="number" class="form-control"
+							data="${item.id}" id="additempriceinput${item.id}"
+							value="${item.afee}" /> <span class="notnull"></span>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+						<button type="button" class="btn btn-primary addpricebutton"
+							data="${item.id}">确定</button>
+					</div>
+				</div>
+			</div>
+		</div>
 	</tr>
 	</#list>
 
 </table>
 
 <div class="col-md-12"
-  style="text-align: left; padding: 10px; border-top: 1px solid #ddd">
-    <div>
-      <textarea placeholder="请添加订单说明" id="ordercomments"
-        class="form-control" rows="2"></textarea>
-    </div>
+	style="text-align: left; padding: 10px; border-top: 1px solid #ddd">
+	<div>
+		<textarea placeholder="请添加订单说明" id="ordercomments"
+			class="form-control" rows="2"></textarea>
+	</div>
 </div>
 
 <div class="col-md-12"
 	style="text-align: left; padding: 10px; border-top: 1px solid #ddd">
-	
+
 	<div class="col-md-2" style="float: left; font-weight: bold">
 		<span>输入折扣(百分比):</span> <input type="number" class="form-control"
-			id="discount" value="100" min="1" max="100" />
+			id="discount" value="100" min="1" max="100" name="totaldiscount" />
 	</div>
-	
-	<div class="col-md-3 col-md-offset-5" style="text-align: right; font-weight: bold">
+
+	<div class="col-md-3 col-md-offset-5"
+		style="text-align: right; font-weight: bold">
 		<div>
-			<span>总价:</span> <span class="amount" style="color: #df3033; font-size: 18px"></span>
-			<span>   </span>
-			<span>已付:</span> <span style="color: #df3033; font-size: 18px">${paid!}</span>
+			<span>总价:</span> <span class="amount"
+				style="color: #df3033; font-size: 18px"></span> <span> </span> <span>已付:</span>
+			<span style="color: #df3033; font-size: 18px">${paid!}</span>
 		</div>
 		<div class="input-group">
-			<span class="input-group-addon">成交价: </span> 
-			<input type="text" class="form-control" id="price" name="price" value="${dealprice!}"/>
+			<span class="input-group-addon">成交价: </span> <input type="text"
+				class="form-control" id="price" name="price" value="${dealprice!}" />
 		</div>
 	</div>
 
 	<div class="col-md-2"
-		style="float: right;font-size: 18px; background-color: #df3033; text-align: center;">
+		style="float: right; font-size: 18px; background-color: #df3033; text-align: center;">
 		<a id="changeorder" class="sc-btn">确定修改</a>
 	</div>
 </div>

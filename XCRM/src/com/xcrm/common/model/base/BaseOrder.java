@@ -97,4 +97,12 @@ public abstract class BaseOrder<M extends BaseOrder<M>> extends Model<M> impleme
 		return get("status");
 	}
 
+	public void setTotaldiscount(java.math.BigDecimal totaldiscount) {
+		set("totaldiscount", totaldiscount);
+	}
+
+	public java.math.BigDecimal getTotaldiscount() {
+		return get("totaldiscount");
+	}
+
 }
