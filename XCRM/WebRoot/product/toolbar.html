@@ -36,12 +36,17 @@
        $('#salesseasonyear').change(function() {
            $('#table').bootstrapTable('refresh');
          });
+       
+       $('#printQR').click(function() {
+    	   var salesseason = $('#salesseasonyear option:selected').val();
+    	   window.location.href = "/product/printproducts?ss=" + salesseason;
+       });
   });
   </script>
 <p class="toolbar">
 <div class="col-md-2" style="margin-top: 10px; padding-left: 0px;">
 	<a class="create btn btn-primary" href="javascript:">${toolbar_create}</a>
-	<a class="printall btn btn-primary" href="/product/printproducts">打印标签</a>
+	<a class="printall btn btn-primary" id="printQR" href="javascript:">打印标签</a>
 </div>
 <div class="col-md-2" style="margin-top: 10px;">
 	<select class="form-control selector" name="level1category" id="level1searchcategory">

@@ -94,7 +94,9 @@ public class ProductController extends AbstractController {
    * 
    */
   public void printproducts(){
-    List<Product> products = Product.dao.find("select id,name,(select price from price where product=prd.id) price from product prd");
+    String salesseason = this.getPara( "ss" );
+    String appendWhere = salesseason.isEmpty() ? "" : "and salesseason=" + salesseason;
+    List<Product> products = Product.dao.find("select id,name,(select price from price where product=prd.id) price from product prd where 1 = 1 " +  appendWhere);
     setAttr("products", products);
     setAttr("prdimg_path", getPrdImgBaseUrl());
     setAttr("product_qr2_path", getPrdQr2BaseUrl());
