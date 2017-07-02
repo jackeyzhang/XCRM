@@ -39,7 +39,9 @@
        
        $('#printQR').click(function() {
     	   var salesseason = $('#salesseasonyear option:selected').val();
-    	   window.location.href = "/product/printproducts?ss=" + salesseason;
+    	   var level1category = $('#level1searchcategory option:selected').val();
+    	   var level2category = $('#level2searchcategory option:selected').val();
+    	   window.location.href = "/product/printproducts?ss=" + salesseason + "&lev1=" + level1category + "&lev2=" + level2category;
        });
   });
   </script>

@@ -95,7 +95,12 @@ public class ProductController extends AbstractController {
    */
   public void printproducts(){
     String salesseason = this.getPara( "ss" );
-    String appendWhere = salesseason.isEmpty() ? "" : "and salesseason=" + salesseason;
+    String level1category = this.getPara( "lev1" );
+    String level2category = this.getPara( "lev2" );
+    StringBuilder appendWhere = new StringBuilder();
+    appendWhere.append( salesseason.isEmpty() ? "" : " and salesseason=" + salesseason );
+    appendWhere.append( level1category.isEmpty() ? "" : " and level1category=" + level1category );
+    appendWhere.append( level2category.isEmpty() ? "" : " and level2category=" + level2category );
     List<Product> products = Product.dao.find("select id,name,(select price from price where product=prd.id) price from product prd where 1 = 1 " +  appendWhere);
     setAttr("products", products);
     setAttr("prdimg_path", getPrdImgBaseUrl());
