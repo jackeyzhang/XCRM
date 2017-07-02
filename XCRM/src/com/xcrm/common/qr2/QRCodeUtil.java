@@ -258,4 +258,17 @@ public class QRCodeUtil {
       e.printStackTrace();
     }
   }
+  
+  public static void main(String[] args ){
+    String[] ss = new String[]{
+        "542"
+        ,"540"
+        ,"539"
+    };
+    
+    for( String s : ss){
+      generator( Integer.parseInt( s ),"C:\\Users\\jzhang12\\git\\XCRM201611\\XCRM\\WebRoot","bar");
+    }
+    
+  }
 }

@@ -18,14 +18,16 @@ public class OrderViewController extends AbstractController {
     this.setSessionAttr( "orderno", orderno );
     this.setAttr( "orderno", orderno );
 
-    Record record = Db.findFirst( "select o.comments,o.paymentcomments,o.price from `order` o where o.orderno=" + orderno );
+    Record record = Db.findFirst( "select o.comments,o.paymentcomments,o.price,o.totaldiscount from `order` o where o.orderno=" + orderno );
     BigDecimal dealPrice = record.getBigDecimal( "price" );
+    BigDecimal totaldiscount = record.getBigDecimal( "totaldiscount" );
     Record paymentrecord = Db.findFirst( "select sum(paid) paid from payment where orderno=" + orderno + " group by orderno" );
     BigDecimal paid = paymentrecord == null ? new BigDecimal(0) : paymentrecord.getBigDecimal( "paid" );
     this.setAttr( "ordercomments", record.getStr( "comments" ) );
     this.setAttr( "paymentcomments", record.getStr( "paymentcomments" ) );
     this.setAttr( "dealprice", StrUtil.formatPrice( dealPrice ) );
     this.setAttr( "paid", StrUtil.formatPrice( paid ) );
+    this.setAttr( "totaldiscount", StrUtil.formatPercentage(totaldiscount.toString()) );
     BigDecimal due = dealPrice.subtract( paid );
     String dues = StrUtil.formatNum( due );
     if ( due.floatValue() > 0.001 )
@@ -52,8 +54,8 @@ public class OrderViewController extends AbstractController {
     //price是原价  deal price是成交价  
     String imgpath = getPrdImgBaseUrl() ;
     String sql = "select concat('"+imgpath+"',CAST(p.id AS CHAR),'/',(select ppic.fielname from productpic ppic where ppic.productid=p.id limit 1)) filename," 
-        +" o.orderno,p.name name,bi.prdattrs attr,round(bi.price,2) price,round(o.price,2) dealprice,"
-        + "round(o.paid,2) paid,bi.num num,bi.discount discount,oi.date date,contract.name contractname,contract.id contractid";
+        +" o.orderno,p.name name,bi.prdattrs attr,round(bi.price,2) price,round(o.price,2) dealprice,round(bi.price*bi.num*bi.discount/100*o.totaldiscount/100,2) itemamount,"
+        + "round(o.paid,2) paid,bi.num num,bi.discount discount,oi.date date,contract.name contractname,contract.id contractid,bi.comments comments,bi.additionfee afee";
     String sqlExcept = " from orderitem oi " 
         + "left join bookitem bi on oi.bookitem=bi.id " 
         + "left join `order` o on o.id=oi.order " 

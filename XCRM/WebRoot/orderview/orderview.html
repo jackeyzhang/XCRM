@@ -14,7 +14,9 @@
 				<#include "../common/menu.html"/> <#include
 				"../common/pageheader.html"/>
 				<div>
-					<h3>订单号:${orderno!}<span class="label label-default">${paymentcomments!}</span></h3>
+					<h3>订单号:${orderno!}</h3>
+					<h4><span class="label label-default">${"总折扣(百分比):" + totaldiscount!}</span></h4>
+					<h4><span class="label label-default">${paymentcomments!}</span></h4>
 					<h4>${ordercomments!}</h4>
 				</div>
 				<#include "orderdetail.html"/>
