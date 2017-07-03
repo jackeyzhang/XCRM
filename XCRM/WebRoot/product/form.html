@@ -1,32 +1,3 @@
- <script>
-  $(function() {
-      var level1;
-      $.get('/productcategory/listtoplevel/', function(data){
-        level1 = data;
-      });
-      
-      var level2;
-      $.get('/productcategory/listsecondlevel/', function(data){
-       level2 = data;
-       for( c in level2){
-    	   for( d in level1){
-    		   if( level2[c].pid == level1[d].id ){
-    			   $('#level2category').append("<option value='" + level2[c].id + "'>" + level1[d].name + "-" +level2[c].name + "</option>");
-    		   }
-    	   }
-         }
-      });
-      
-      var salesseason;
-      $.get('/salesseason/list/', function(data){
-         for( c in data){
-            $('#salesseason').append("<option value='" + data[c].id + "'>" + data[c].name + "</option>");
-          }
-       });
-
-      
-  });
-  </script>
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-6">

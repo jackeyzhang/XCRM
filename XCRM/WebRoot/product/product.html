@@ -6,9 +6,37 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>贝可曼尼信息系统</title> 
 <#include "../common/js2css.html"/>
+<script type="text/javascript">
+
+function load(){
+var level1;
+$.get('/productcategory/listtoplevel/', function(data){
+  level1 = data;
+});
+
+var level2;
+$.get('/productcategory/listsecondlevel/', function(data){
+ level2 = data;
+ for( c in level2){
+   for( d in level1){
+     if( level2[c].pid == level1[d].id ){
+       $('#level2category').append("<option value='" + level2[c].id + "'>" + level1[d].name + "-" +level2[c].name + "</option>");
+     }
+   }
+   }
+});
+
+var salesseason;
+$.get('/salesseason/list/', function(data){
+   for( c in data){
+      $('#salesseason').append("<option value='" + data[c].id + "'>" + data[c].name + "</option>");
+    }
+ });
+}
+</script>
 
 </head>
-<body>
+<body onload="load()">
   <div class="container">
     <div class="row">
       <div class="span12">
