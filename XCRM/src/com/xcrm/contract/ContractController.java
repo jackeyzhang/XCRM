@@ -102,10 +102,11 @@ public class ContractController extends AbstractController {
 
   public void view() {
     Integer contractid = this.getParaToInt( "id" );
-    this.setAttr( "contract", contractid );
-    this.setAttr( "number", formatContractNumber( contractid ) );
-
     Long orderno = this.getParaToLong( "orderno" );
+    
+    this.setAttr( "contract", contractid );
+    this.setAttr( "number", orderno );
+    
     ContractPrintInfo info = new ContractPrintInfo();
     info.loaddata( orderno );
 
@@ -123,6 +124,7 @@ public class ContractController extends AbstractController {
     this.setAttr( "paymentinfo", PropUtil.getContractConfig( "paymentinfo" ) );
     this.setAttr( "accountinfo", PropUtil.getContractConfig( "paymentaccount" ) );
 
+    this.setAttr( "numcount" , info.getNumcount( ) );
     this.setAttr( "amount", info.getAmount() );
     this.setAttr( "afee", info.getAfee() );//afee
     this.setAttr( "paid", info.getPaid() );
@@ -150,13 +152,14 @@ class ContractPrintInfo {
   private String address;
   private String orderinfo;
 
+  private String numcount;
   private String amount;
   private String discount;
   private String afee;
   private String paid;
 
   public void loaddata( Long orderno ) {
-    String sql = "select bi.comments,cust.name cname,cust.shiptoAddr,cust.company,cust.phone,cust.contact,o.price shouldpay,bi.price*bi.num*(bi.discount/100)*(o.totaldiscount/100) price,bi.additionfee afee,o.totalprice,o.price/o.totalprice*100 discount,bi.num,prd.name pname,bi.prdattrs "
+    String sql = "select bi.comments,cust.name cname,cust.shiptoAddr,cust.company,cust.phone,cust.contact,o.price shouldpay,bi.price*bi.num*(bi.discount/100)*(o.totaldiscount/100) price,bi.additionfee afee,o.totalprice,o.price/o.totalprice*100 discount,bi.num,prd.name pname,bi.prdattrs,bi.price oprice"
         + " from `order` o" + " left join orderitem oi on o.id=oi.order" + " left join bookitem bi on oi.bookitem=bi.id" + " left join customer cust on cust.id= bi.customer"
         + " left join product prd on prd.id=bi.product" + " where o.orderno=" + orderno + " and bi.status !=" + Bookitem.STATUS_CANCELLED;
     List<Record> records = Db.find( sql );
@@ -164,6 +167,7 @@ class ContractPrintInfo {
     StringBuilder sb = new StringBuilder();
     BigDecimal afeetotal = new BigDecimal( 0 );
     BigDecimal amounttotal = new BigDecimal( 0 );
+    int numcountTotal = 0;
     for ( int i = 0; i < records.size(); i++ ) {
       Record record = records.get( i );
       if ( i == 0 ) {
@@ -175,18 +179,21 @@ class ContractPrintInfo {
       }
       afeetotal = afeetotal.add( record.getBigDecimal( "afee" ) );
       amounttotal = amounttotal.add( record.getBigDecimal( "price" ) );
+      numcountTotal +=  record.getInt( "num" );
       if ( i == records.size() - 1 ) {
         setAmount( "" + StrUtil.formatPrice( amounttotal ) );//商品小计
         setAfee( "" + StrUtil.formatPrice( afeetotal ) );//定制费
+        setNumcount( "" + StrUtil.formatInt( numcountTotal ) );//数量小计
       }
       sb
           .append( "<tr>" )
           .append( getTD( 150, record.getStr( "pname" ) ) )
           .append( getTD( 150, formatAttr( record.getStr( "prdattrs" ) ) ) )
-          .append( getTD( 80, StrUtil.formatNum( record.getNumber( "num" ) ) ) )
-          .append( getTD( 100, StrUtil.formatPrice( record.getNumber( "price" ) ) ) )//订单项金额小计
-          .append( getTD( 100, StrUtil.formatPrice( record.getNumber( "afee" ) ) ) )//订单项定制费
-          .append( getTD( 470, record.getStr( "comments" ) == null ? "" : record.getStr( "comments" ) ) )//订单项备注
+          .append( getTD( 80, StrUtil.formatInt( record.getNumber( "num" ) ) ) )
+          .append( getTD( 120, StrUtil.formatPrice( record.getNumber( "oprice" ) ) ) )//产品原价
+          .append( getTD( 120, StrUtil.formatPrice( record.getNumber( "price" ) ) ) )//订单项金额小计
+          .append( getTD( 120, StrUtil.formatPrice( record.getNumber( "afee" ) ) ) )//订单项定制费
+          .append( getTD( 300, record.getStr( "comments" ) == null ? "" : record.getStr( "comments" ) ) )//订单项备注
           .append( "</tr>" );
     }
     this.setOrderinfo( sb.toString() );
@@ -301,5 +308,17 @@ class ContractPrintInfo {
   public String getTD( int width, String text ) {
     return "<td width=\"" + width + "\" valign=\"top\" style=\"word-break: break-all;\">" + text + "</td>";
   }
+
+  
+  public String getNumcount() {
+    return numcount;
+  }
+
+  
+  public void setNumcount( String numcount ) {
+    this.numcount = numcount;
+  }
+  
+  
 
 }
