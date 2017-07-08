@@ -99,6 +99,7 @@ public class OrderController extends AbstractController {
     String totalcomments = this.getParaMap().get( "totalcomments" )[0];
     BigDecimal totalprice = new BigDecimal( this.getParaMap().get( "totalprice" )[0] );
     BigDecimal totalpricetopay = new BigDecimal( this.getParaMap().get( "totalpricetopay" )[0] );
+    BigDecimal totaldiscount = new BigDecimal( this.getParaMap().get( "totaldiscount" )[0] );
     Integer paymenttype = Integer.parseInt( this.getParaMap().get( "paymenttype" )[0] );
     Integer customerid = Integer.parseInt( this.getParaMap().get( "customerid" )[0] );
     Integer contractid = Integer.parseInt( this.getParaMap().get( "contractid" )[0] );
@@ -145,6 +146,7 @@ public class OrderController extends AbstractController {
       order.setPrice( totalpricetopay );
       order.setTotalprice( totalprice );
       order.setComments( totalcomments );
+      order.setTotaldiscount( totaldiscount );
       order.save();
       
       

@@ -35,8 +35,12 @@
 				
 				function nameformatter(value, row){
 					if (value) {
-						  var attr = JSON.parse( row['attr'] );
-	            return  value + '<br>' + attr[204] + "-" + attr[205]+ "-"  + attr[206] ;
+						  if( row['attr'].indexOf("-") > 0 ){
+							  return row['attr'];
+						  }else{
+							  var attr = JSON.parse( row['attr'] );
+				        return  value + '<br>' + attr[204] + "-" + attr[205]+ "-"  + attr[206] ;
+						  }
           } else {
             return '';
           }
