@@ -247,11 +247,14 @@ table {
 	</thead>
 	<#list list as item>
 	<tr>
-		<input type="hidden" value="${item.id}" class="itemid" />
+		<input type="hidden" value="${item.id}" class="itemid" /> 
+		<#if item.status??&&item.status == 2>
+		<#else>
 		<input type="hidden" value="${item.afee}" class="itemafee"
 			id="itemafee${item.id}" />
 		<input type="hidden" value="${item.price*item.num*item.discount/100}"
-			class="itemamount" id="itemamount${item.id}" />
+			class="itemamount" id="itemamount${item.id}" /> </#if>
+			
 		<td><img width="80px" height="80px"
 			src='${(item.filename??)?string((prdimg_path+"/"+item.pid+"/"+((item.filename!"")?split(","))[0]),"/img/placehold.jpg")}' />
 		</td> <#if item.status??&&item.status == 2>
