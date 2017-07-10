@@ -60,7 +60,7 @@ public class OrderViewController extends AbstractController {
         + "left join bookitem bi on oi.bookitem=bi.id " 
         + "left join `order` o on o.id=oi.order " 
         + "left join product p on bi.product=p.id "
-        + "left join contract contract on bi.contract=contract.id " + "where o.orderno = " + orderno + " order by o.orderno desc";
+        + "left join contract contract on bi.contract=contract.id " + "where bi.status = 1 and o.orderno = " + orderno + " order by o.orderno desc";
     Page<Record> page = Db.paginate( 1, 100, sql, sqlExcept );
     Pager pager = new Pager( page.getTotalRow(), page.getList() );
     this.renderJson( pager );

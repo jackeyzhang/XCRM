@@ -50,7 +50,8 @@ $(function() {
 						ids : ids,
 						amount : $(".amount").html(),
 						price : $("#price").val(),
-						ordercomments : $("#ordercomments").val()
+						ordercomments : $("#ordercomments").val(),
+						totaldiscount : $("#discount").val()
 					},
 					success : function(indata, status) {
 						if (status == "success") {

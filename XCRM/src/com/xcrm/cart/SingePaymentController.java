@@ -20,11 +20,21 @@ public class SingePaymentController extends AbstractController {
         + "left join orderitem oi on oi.order=o.id " + "left join bookitem bi on oi.bookitem=bi.id  " + "left join customer cust on cust.id=bi.customer "
         + "where o.orderno=" + orderno;
     Record record = Db.findFirst( sql );
-    this.setAttr( "customer", record.getStr( "customer" ) );
-    this.setAttr( "due", record.getBigDecimal( "due" ) );
-    this.setSessionAttr( "customerid", record.getInt( "customerid" ) );
     this.setSessionAttr( "spay-orderno", orderno );
-    this.setSessionAttr( "due", record.getBigDecimal( "due" ) );
+    this.setSessionAttr( "customerid", record.getInt( "customerid" ) );
+    this.setAttr( "customer", record.getStr( "customer" ) );
+    
+    BigDecimal discount =  new BigDecimal ( Float.parseFloat( getSession().getAttribute( "totaldiscount" ).toString()));
+    BigDecimal price =  new BigDecimal ( Float.parseFloat( getSession().getAttribute( "price" ).toString()));
+    Order ord = Order.dao.findFirst( "select * from `order` where orderno=?", Long.parseLong( orderno )  );
+    if(ord != null){
+      ord.setPrice( price );
+      ord.setTotaldiscount( discount );
+      ord.update();
+    }
+    BigDecimal paid =  new BigDecimal ( Float.parseFloat( getSession().getAttribute( "paid" ).toString()));
+    this.setSessionAttr( "due", price.compareTo( paid ) > 0 ? price.subtract( paid ) : 0);
+    this.setAttr( "due", price.compareTo( paid ) > 0 ? price.subtract( paid ) : 0 );
   }
 
   public void submitorder() {

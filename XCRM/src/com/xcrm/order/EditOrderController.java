@@ -28,7 +28,8 @@ public class EditOrderController extends AbstractController {
     setAttr("list", list);
     float paid = getPaidAmount( orderno );
     setAttr("paid", ""+paid);
-    setAttr("dealprice", ""+getDue(list, paid));
+    setSessionAttr("paid", ""+paid);
+//    setAttr("dealprice", ""+getDue(list, paid));
     setAttr("prdimg_path", getPrdImgBaseUrl());
 }
   
