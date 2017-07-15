@@ -32,11 +32,12 @@
 			xcpage.cartprdattr[$(this).parent().attr('data')] = $(this).html();
 			$(this).parent().find('span').css('border-color', 'black');
 			$(this).css('border-color', 'red');
-			$('#prdattrs').val(JSON.stringify(xcpage.cartprdattr));
+			//$('#prdattrs').val(JSON.stringify(xcpage.cartprdattr));
 			var material = xcpage.cartprdattr['204'];
 			var color= xcpage.cartprdattr['205'];
 			var size= xcpage.cartprdattr['206'];
 			var key = material+'-'+size+'-'+color;
+			$('#prdattrs').val( key );
 			if(xcpage.prices[key]){
 				var price = xcpage.prices[key].price;
 				var count = xcpage.prices[key].count;
