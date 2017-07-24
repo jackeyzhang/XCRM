@@ -1,5 +1,5 @@
 <table id="table" class="table table-striped table-hover"
-  data-toolbar=".toolbar" data-show-toggle="true">
+	data-toolbar=".toolbar" data-show-toggle="true">
 	<thead>
 		<tr>
 			<script>
@@ -13,47 +13,75 @@
 						return '';
 					}
 				}
-				
+
 				function filenameformatter(value, row) {
-	          if (value) {
-	            return '<img height="100px" max-width="100px" src="' +  value +'"></img>';
-	          } else {
-	            return '';
-	          }
-	        }
-				
-				function cellStyle(value, row, index) {
-            return {
-                css: {
-                    "width": "150px",
-                    "height":"100px",
-                    "padding":"0px",
-                    "text-align":"center"
-                }
-            };
-         }
-				
-				function nameformatter(value, row){
 					if (value) {
-						  if( row['attr'].indexOf("-") > 0 ){
-							  return value + '<br>' + row['attr'];
-						  }else{
-							  var attr = JSON.parse( row['attr'] );
-				        return  value + '<br>' + attr[204] + "-" + attr[205]+ "-"  + attr[206] ;
-						  }
-          } else {
-            return '';
-          }
+						return '<img height="100px" max-width="100px" src="' +  value +'"></img>';
+					} else {
+						return '';
+					}
+				}
+
+				function cellStyle(value, row, index) {
+					return {
+						css : {
+							"width" : "150px",
+							"height" : "100px",
+							"padding" : "0px",
+							"text-align" : "center"
+						}
+					};
+				}
+
+				function nameformatter(value, row) {
+					if (value) {
+						if (row['attr'].indexOf("-") > 0) {
+							return value + '<br>' + row['attr'];
+						} else {
+							var attr = JSON.parse(row['attr']);
+							return value + '<br>' + attr[204] + "-" + attr[205]
+									+ "-" + attr[206];
+						}
+					} else {
+						return '';
+					}
+				}
+
+				function statusformatter(value, row) {
+					if (value == 1) {
+						return '已下订单';
+					} else if (value == 2) {
+						return '已付定金';
+					} else if (value == 3) {
+						return '已付全款';
+					} else if (value == 4) {
+						return '已经取消';
+					}
+				}
+
+				function deliverytimeformatter(value, row) {
+					if( !value ) return "";
+					var datetime = new Date(value);
+					var year = datetime.getFullYear();
+					var month = datetime.getMonth() + 1 < 10 ? "0"
+							+ (datetime.getMonth() + 1)
+							: datetime.getMonth() + 1;
+					var date = datetime.getDate() < 10 ? "0"
+							+ datetime.getDate() : datetime.getDate();
+					return year + "-" + month + "-" + date;
 				}
 			</script>
-			<th data-field="filename" data-formatter="filenameformatter" data-cell-style="cellStyle">产品图片</th>
+			<th data-field="filename" data-formatter="filenameformatter"
+				data-cell-style="cellStyle">产品图片</th>
 			<th data-field="name" data-formatter="nameformatter">购买产品名称</th>
 			<th data-field="num">产品数量</th>
-			<th data-field="price">产品单件原价</th>
-			<th data-field="discount">订单项折扣(百分比)</th>
+			<th data-field="price">单件原价</th>
+			<th data-field="discount">单项折扣</th>
 			<th data-field="itemamount">成交价格</th>
 			<th data-field="afee">定制费</th>
+			<th data-field="status" data-formatter="statusformatter">订单状态</th>
 			<th data-field="date">下单日期</th>
+			<th data-field="deliverytime" data-formatter="deliverytimeformatter">交货日期</th>
 			<th data-field="comments">商品备注</th>
 			<th data-field="contractname" data-formatter="contractnameformatter"
 				data-align="center">打印合同</th>
