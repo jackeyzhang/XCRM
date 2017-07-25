@@ -84,8 +84,13 @@
              }
              return {};
          }
+         
+         function ordernoformmater(value, row ){
+             if( !value ) return '';
+             return '<a href="/orderview?orderno='+ row['orderno'] + '">'+value+'</a>';
+           }
        </script>
-           <th data-field="orderno" data-cell-style="cellStyle">订单号</th>
+           <th data-field="orderno" data-cell-style="cellStyle" data-formatter="ordernoformmater">订单号</th>
            <th data-field="companyname">公司名称</th>
            <th data-field="productcount" data-cell-style="cellStyle">产品数量</th>
            <th data-field="price" data-cell-style="cellStyle">产品原价</th>

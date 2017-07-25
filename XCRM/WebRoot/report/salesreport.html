@@ -78,9 +78,14 @@
              }
              return {};
          }
+         
+         function ordernoformmater(value, row ){
+             if( !value ) return '';
+             return '<a href="/orderview?orderno='+ row['orderno'] + '">'+value+'</a>';
+           }
        </script>
        <th data-field="saler" data-formatter="salerformmater" data-cell-style="cellStyle">销售代表</th>       
-       <th data-field="orderno">订单号</th>
+       <th data-field="orderno"  data-formatter="ordernoformmater">订单号</th>
        <th data-field="dealprice" data-cell-style="cellStyle">成交价格</th>
        <th data-field="paid" data-cell-style="cellStyle">实际支付</th>
        <th data-field="productcount" data-cell-style="cellStyle">产品数量</th>

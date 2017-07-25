@@ -39,7 +39,7 @@ public class ReportController extends AbstractController {
     enddate = DateUtil.get23h59m59sOfOneDay( enddate );
     String orderstatus = getPara( "orderstatus" );
     //query
-    String sql = "select prd.name productname,cust.company companyname,ord.date orderdate,sum(bi.num) productcount,ord.deliverytime,ord.status orderstatus,user.username saler "
+    String sql = "select prd.name productname,CONCAT(cust.name,'-',cust.company) companyname,ord.date orderdate,sum(bi.num) productcount,ord.orderno,ord.deliverytime,ord.status orderstatus,user.username saler "
         + "from product prd left join bookitem bi on prd.id = bi.product "
         + "left join orderitem oi on oi.bookitem = bi.id "
         + "left join `order` ord on oi.order = ord.id "
@@ -121,7 +121,7 @@ public class ReportController extends AbstractController {
   
   private String getOrderAnalyzeSql( String orderbyField ){
     //price是原价  deal price是成交价  
-   return  "select cust.company companyname, "
+   return  "select CONCAT(cust.name,'-',cust.company) companyname, "
         + "GROUP_CONCAT(p.name) name,"
         + "sum(bi.num) productcount,"
         + "oi.date orderdate,"
