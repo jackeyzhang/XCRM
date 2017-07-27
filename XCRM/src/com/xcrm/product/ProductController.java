@@ -225,6 +225,7 @@ public class ProductController extends AbstractController {
       product.set("barcode", MD5Util.getSystemKey());
     }
     Productcategory level2 = Productcategory.dao.findById( product.getLevel2category() );
+    if( level2 != null && level2.getPid() != null )
     product.setLevel1category( level2.getPid() );
     product.update();
     saveImgs(product.getId());
