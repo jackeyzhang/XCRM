@@ -127,7 +127,10 @@ public class ContractController extends AbstractController {
     this.setAttr( "numcount" , info.getNumcount( ) );
     this.setAttr( "amount", info.getAmount() );
     this.setAttr( "afee", info.getAfee() );//afee
-    this.setAttr( "paid", info.getPaid() );
+    this.setAttr( "paid", info.getDue() );
+    
+    this.setAttr( "haspaid", info.getHaspaid() );
+    this.setAttr( "notpaid", info.getNotpaid() );
 
     this.render( "view.html" );
   }
@@ -156,12 +159,25 @@ class ContractPrintInfo {
   private String amount;
   private String discount;
   private String afee;
-  private String paid;
+  private String due;
+  
+  private String haspaid;
+  private String notpaid;
 
   public void loaddata( Long orderno ) {
-    String sql = "select bi.comments,cust.name cname,cust.shiptoAddr,cust.company,cust.phone,cust.contact,o.price shouldpay,bi.price*bi.num*(bi.discount/100)*(o.totaldiscount/100) price,bi.additionfee afee,o.totalprice,o.price/o.totalprice*100 discount,bi.num,prd.name pname,bi.prdattrs,bi.price oprice"
-        + " from `order` o" + " left join orderitem oi on o.id=oi.order" + " left join bookitem bi on oi.bookitem=bi.id" + " left join customer cust on cust.id= bi.customer"
-        + " left join product prd on prd.id=bi.product" + " where o.orderno=" + orderno + " and bi.status !=" + Bookitem.STATUS_CANCELLED;
+    String sql = "select cust.name cname, cust.shiptoAddr, cust.company, cust.phone, cust.contact, prd.name pname,"
+        + "o.price due, bi.price*bi.num*(bi.discount/100)*(o.totaldiscount/100) price, o.totalprice, o.price/o.totalprice*100 discount,"
+        + "bi.additionfee afee, bi.num, bi.comments, bi.prdattrs, bi.price oprice,"
+        + "(select round(sum(paid),2) from payment where orderno= o.orderno) paid,"
+        + "(select round(o.price-ifnull(sum(paid),0), 2) from payment where orderno= o.orderno) notpaid"
+        + " from `order` o" 
+        + " left join orderitem oi on o.id=oi.order" 
+        + " left join bookitem bi on oi.bookitem=bi.id" 
+        + " left join customer cust on cust.id= bi.customer"
+        + " left join product prd on prd.id=bi.product" 
+        + " where o.orderno=" + orderno 
+        + " and bi.status !=" + Bookitem.STATUS_CANCELLED;
+    
     List<Record> records = Db.find( sql );
 
     StringBuilder sb = new StringBuilder();
@@ -175,7 +191,9 @@ class ContractPrintInfo {
         setContact( record.getStr( "cname" ) );
         setTelephone( record.getStr( "phone" ) );
         setAddress( record.getStr( "shiptoAddr" ) );
-        setPaid( "" + StrUtil.formatPrice( record.getBigDecimal( "shouldpay" ) ) );//应该支付
+        setDue( "" + StrUtil.formatPrice( record.getBigDecimal( "due" ) ) );//应该支付
+        setHaspaid( "" + StrUtil.formatPrice( record.getBigDecimal( "paid" ) )  );
+        setNotpaid( "" + StrUtil.formatPrice( record.getBigDecimal( "notpaid" ) ) );
       }
       afeetotal = afeetotal.add( record.getBigDecimal( "afee" ) );
       amounttotal = amounttotal.add( record.getBigDecimal( "price" ) );
@@ -284,13 +302,34 @@ class ContractPrintInfo {
   public void setAfee( String afee ) {
     this.afee = afee;
   }
-
-  public String getPaid() {
-    return paid;
+  
+  public String getDue() {
+    return due;
   }
 
-  public void setPaid( String paid ) {
-    this.paid = paid;
+  
+  public void setDue( String due ) {
+    this.due = due;
+  }
+
+  
+  public String getHaspaid() {
+    return haspaid;
+  }
+
+  
+  public void setHaspaid( String haspaid ) {
+    this.haspaid = haspaid;
+  }
+
+  
+  public String getNotpaid() {
+    return notpaid;
+  }
+
+  
+  public void setNotpaid( String notpaid ) {
+    this.notpaid = notpaid;
   }
 
   //  public String getTR( ){

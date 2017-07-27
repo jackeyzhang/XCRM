@@ -26,9 +26,25 @@ public class OrderController extends AbstractController {
 
   public void list() {
     //price是原价  deal price是成交价  
-    String sql = "select ur.username username, concat(cust.name, '-' , cust.company) company, GROUP_CONCAT(p.name) name,o.orderno orderno,round(o.totalprice,2) price,round(o.price,2) dealprice,sum(bi.num) num,oi.date date,contract.name contractname,contract.id contractid,(select round(sum(paid),2) from payment where orderno= o.orderno) paid,(select round(o.price-ifnull(sum(paid),0), 2) from payment where orderno= o.orderno) due,o.status";
-    String sqlExcept = " from `order` o  " + "left join orderitem oi on o.id=oi.order and o.status <> 4 " + "left join bookitem bi on oi.bookitem=bi.id "  + "left join product p on bi.product=p.id "
-        + "left join contract contract on bi.contract=contract.id " + "left join customer cust on cust.id=bi.customer left join user ur on bi.user=ur.id " + "where " + getSqlForUserRole()
+    String sql = "select ur.username username, concat(cust.name, '-' , cust.company) company, "
+        + "GROUP_CONCAT(p.name) name,"
+        + "o.orderno orderno,"
+        + "round(o.totalprice,2) price,"
+        + "round(o.price,2) dealprice,"
+        + "sum(bi.num) num,"
+        + "oi.date date,"
+        + "contract.name contractname,"
+        + "contract.id contractid,"
+        + "(select round(sum(paid),2) from payment where orderno= o.orderno) paid,"
+        + "(select round(o.price-ifnull(sum(paid),0), 2) from payment where orderno= o.orderno) due,"
+        + "o.status";
+    String sqlExcept = " from `order` o  " 
+        + "left join orderitem oi on o.id=oi.order and o.status != " + Order.STATUS_CANCELLED 
+        + "left join bookitem bi on oi.bookitem=bi.id "  
+        + "left join product p on bi.product=p.id "
+        + "left join contract contract on bi.contract=contract.id " 
+        + "left join customer cust on cust.id=bi.customer left join user ur on bi.user=ur.id " 
+        + "where " + getSqlForUserRole()
         + this.getSearchStatement( true, "" ) + "group by o.orderno order by o.orderno desc";
     int pagenumber = Integer.parseInt( this.getPara( "pageNumber" ) );
     int pagesize = Integer.parseInt( this.getPara( "pageSize" ) );

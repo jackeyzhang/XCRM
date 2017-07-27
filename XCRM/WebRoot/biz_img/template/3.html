@@ -149,47 +149,73 @@
 	<br />
 </p>
 <table width="100%" style="font-size: 20px;">
-	<tbody>
-		<tr class="firstRow">
-			<td width="1125" valign="top"
-				style="word-break: break-all; background-color: rgb(216, 216, 216);"><strong>订单信息</strong></td>
-		</tr>
-		<tr>
-			<td width="1125" valign="top" style="word-break: break-all;"><p>${paymentinfo!}</p>
-				<p>
-					<br />
-				</p>
-				<p>
-					&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-					&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<img
-						src="/ueditor/jsp/upload/image/20170624/1498315008435044972.jpg"
-						title="1498315008435044972.jpg" width="132" height="141" />&nbsp;
-					&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<img
-						src="/ueditor/jsp/upload/image/20170624/1498315008442004967.jpg"
-						title="1498315008442004967.jpg" width="125" height="139" />
-				</p></td>
-		</tr>
-	</tbody>
+  <tbody>
+    <tr class="firstRow">
+      <td width="1116" valign="top"  colspan="2"
+        style="word-break: break-all; background-color: rgb(216, 216, 216);"><strong>付款信息</strong></td>
+    </tr>
+    <tr>
+      <td width="1116" valign="top" style="word-break: break-all;"><p>${paymentinfo!}</p></td>
+    </tr>
+    <tr>
+         <td valign="top" rowspan="1" width="1000"
+           style="word-break: break-all;">
+           <p style="float: right;">
+             <strong>已付款：</strong>
+           </p>
+         </td>
+         <td valign="top" rowspan="1" width="116"
+           style="word-break: break-all;">
+           <p style="float: left;">
+             <strong>${haspaid!}</strong>
+           </p>
+         </td>
+     </tr>
+     <tr>
+         <td valign="top" rowspan="1" width="1000"
+           style="word-break: break-all;">
+           <p style="float: right;">
+             <strong>待付款：</strong>
+           </p>
+         </td>
+         <td valign="top" rowspan="1" width="116"
+           style="word-break: break-all;">
+           <p style="float: left;">
+             <strong>${notpaid!}</strong>
+           </p>
+         </td>
+     </tr>
+  </tbody>
 </table>
 <p style="white-space: normal;">
-	<strong><span style="background-color: rgb(191, 191, 191);"></span></strong>
+  <strong><span style="background-color: rgb(191, 191, 191);"></span></strong>
 </p>
 <p style="white-space: normal;">
-	<span style="background-color: rgb(191, 191, 191);"><br /></span>
+  <span style="background-color: rgb(191, 191, 191);"><br /></span>
 </p>
 <p style="white-space: normal;">
-	<span style="background-color: rgb(191, 191, 191);"></span>
+  <span style="background-color: rgb(191, 191, 191);"></span>
 </p>
 <table width="100%" style="font-size: 20px;">
-	<tbody>
-		<tr class="firstRow">
-			<td width="1125" valign="top"
-				style="word-break: break-all; background-color: rgb(216, 216, 216);"><strong>账户信息</strong></td>
-		</tr>
-		<tr>
-			<td width="1125" valign="top" style="word-break: break-all;"><p>${accountinfo!}</p></td>
-		</tr>
-	</tbody>
+  <tbody>
+    <tr class="firstRow">
+      <td width="1125" valign="top"
+        style="word-break: break-all; background-color: rgb(216, 216, 216);"><strong>账户信息</strong></td>
+    </tr>
+    <tr>
+      <td width="1125" valign="top" style="word-break: break-all;"><p>${accountinfo!}</p>
+        <p>
+          &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+          &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+          &nbsp; &nbsp; &nbsp; &nbsp;<img
+            src="/ueditor/jsp/upload/image/20170624/1498315391451009933.jpg"
+            title="1498315391451009933.jpg" width="164" height="174" />&nbsp;
+          &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<img
+            src="/ueditor/jsp/upload/image/20170624/1498315391474084480.jpg"
+            title="1498315391474084480.jpg" width="168" height="172" />
+        </p></td>
+    </tr>
+  </tbody>
 </table>
 <p>
 </p>
