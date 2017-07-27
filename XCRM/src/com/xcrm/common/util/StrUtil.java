@@ -7,6 +7,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 /**
@@ -34,5 +36,14 @@ public class StrUtil {
   public static String formatPercentage( String  Num ){
     BigDecimal  format = new BigDecimal ( Num );
     return "" + format.setScale(2, RoundingMode.HALF_UP).doubleValue();
+  }
+  
+  public static String formatDate( Date date, String format ){
+      SimpleDateFormat oDateFormat = new SimpleDateFormat( format );
+      String lsDate = "";
+      if( date != null ) {
+        lsDate = oDateFormat.format( date );
+      }
+      return lsDate;
   }
 }

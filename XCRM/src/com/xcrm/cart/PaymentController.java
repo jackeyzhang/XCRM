@@ -12,6 +12,7 @@ import com.xcrm.common.model.Order;
 import com.xcrm.common.model.Orderitem;
 import com.xcrm.common.model.Payment;
 import com.xcrm.common.util.Constant;
+import com.xcrm.common.util.StrUtil;
 
 
 public class PaymentController extends AbstractController {
@@ -19,6 +20,9 @@ public class PaymentController extends AbstractController {
   @Override
   protected void preSetAttribute() {
     this.setAttr( "paidsuggest", this.getSessionAttr( "price" ) );
+    Date date = new Date();
+    date.setMonth( date.getMonth() + 2 );
+    this.setAttr( "defaultdeliverytime", StrUtil.formatDate( date, "yyyy-MM-dd") );
   }
 
   public void submitorder() {

@@ -73,13 +73,14 @@
 
 						<div class="col-md-3" style="text-align: left">
 							<input class="form-control" type="text" id="deliverytime"
-								name="deliverytime">
+								name="deliverytime" value="${defaultdeliverytime!}">
 						</div>
 
 						<div class="col-md-3" style="text-align: left">
 							<select class="form-control selector" id="paymentwayselect"
 								name="paymentwayselect">
 								<option value="">请选择支付方式...</option>
+								<option value="8">工行</option>
 								<option value="3">支付宝支付</option>
 								<option value="2">微信支付</option>
 								<option value="4">建行</option>
