@@ -6,9 +6,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
-import org.json.JSONArray;
+import org.eclipse.jetty.util.ajax.JSON;
 
+import com.jfinal.kit.HttpKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
@@ -39,7 +41,7 @@ public class OrderController extends AbstractController {
         + "(select round(o.price-ifnull(sum(paid),0), 2) from payment where orderno= o.orderno) due,"
         + "o.status";
     String sqlExcept = " from `order` o  " 
-        + "left join orderitem oi on o.id=oi.order and o.status != " + Order.STATUS_CANCELLED 
+        + "left join orderitem oi on o.id=oi.order and o.status != " + Order.STATUS_CANCELLED  + " "
         + "left join bookitem bi on oi.bookitem=bi.id "  
         + "left join product p on bi.product=p.id "
         + "left join contract contract on bi.contract=contract.id " 
@@ -111,32 +113,34 @@ public class OrderController extends AbstractController {
   }
 
   public void wxsubmitorder() {
-    String oostr = this.getParaMap().get( "orderitems" )[0];
-    String totalcomments = this.getParaMap().get( "totalcomments" )[0];
-    BigDecimal totalprice = new BigDecimal( this.getParaMap().get( "totalprice" )[0] );
-    BigDecimal totalpricetopay = new BigDecimal( this.getParaMap().get( "totalpricetopay" )[0] );
-    BigDecimal totaldiscount = new BigDecimal( this.getParaMap().get( "totaldiscount" )[0] );
-    Integer paymenttype = Integer.parseInt( this.getParaMap().get( "paymenttype" )[0] );
-    Integer customerid = Integer.parseInt( this.getParaMap().get( "customerid" )[0] );
-    Integer contractid = Integer.parseInt( this.getParaMap().get( "contractid" )[0] );
-    Integer userid = Integer.parseInt( this.getParaMap().get( "userid" )[0] );
-    String deliverydate = this.getParaMap().get( "deliverydate" )[0];
-    Boolean ispay = Boolean.valueOf( this.getParaMap().get( "ispay" )[0] );
-    BigDecimal paid = new BigDecimal( this.getParaMap().get( "paid" )[0] );
-    if ( !oostr.isEmpty() ) {
-      JSONArray jsonArray = new JSONArray( oostr );
+    String postData=HttpKit.readData(this.getRequest());
+    JSON json = new JSON();
+    Map dataFromWX = (Map)json.parse( postData );
+    Object[] orderitems = (Object[])dataFromWX.get( "orderitems" );
+    String totalcomments = dataFromWX.get( "totalcomments" ).toString();
+    BigDecimal totalprice = new BigDecimal( dataFromWX.get( "totalprice" ).toString() );
+    BigDecimal totalpricetopay = new BigDecimal( dataFromWX.get( "totalpricetopay" ).toString() );
+    BigDecimal totaldiscount = new BigDecimal( dataFromWX.get( "totaldiscount" ).toString() );
+    Integer paymenttype = Integer.parseInt( dataFromWX.get( "paymenttype" ).toString() );
+    Integer customerid = Integer.parseInt( dataFromWX.get( "customerid" ).toString() );
+    Integer contractid = Integer.parseInt( dataFromWX.get( "contractid" ).toString() );
+    Integer userid = Integer.parseInt( dataFromWX.get( "userid" ).toString() );
+    String deliverydate = dataFromWX.get( "deliverydate" ).toString();
+    Boolean ispay = Boolean.valueOf( dataFromWX.get( "ispay" ).toString() );
+    BigDecimal paid = new BigDecimal( dataFromWX.get( "paid" ).toString() );
+    if ( orderitems.length > 0 ) {
       List<Integer> bookitems = new ArrayList<>();
-      for ( int i = 0; i < jsonArray.length(); i++ ) {
-        int productid = jsonArray.getJSONObject( i ).getInt( "productid" );
-        BigDecimal price = new BigDecimal( jsonArray.getJSONObject( i ).getInt( "price" ) );
+      for ( Object orderitem : orderitems ) {
+        int productid = Integer.parseInt( ( (Map)orderitem ).get( "productid" ).toString() );
+        BigDecimal price = new BigDecimal( ( (Map)orderitem ).get( "price" ).toString() );
         BigDecimal afee = new BigDecimal( 0 );
-        if( !jsonArray.getJSONObject( i ).isNull( "afee" ) ){
-          afee  = new BigDecimal( jsonArray.getJSONObject( i ).getInt( "afee" ) );
+        if ( ( (Map)orderitem ).get( "afee" ) != null ) {
+          afee = new BigDecimal( ( (Map)orderitem ).get( "afee" ).toString() );
         }
-        int count = jsonArray.getJSONObject( i ).getInt( "count" );
-        String attributes = jsonArray.getJSONObject( i ).getString( "attributes" );
-        int discount = jsonArray.getJSONObject( i ).getInt( "discount" );
-        String comments = jsonArray.getJSONObject( i ).getString( "comments" );
+        int count =  Integer.parseInt( ( (Map)orderitem ).get( "count" ).toString() );
+        String attributes =  ( (Map)orderitem ).get( "attributes" ).toString();
+        int discount = Integer.parseInt( ( (Map)orderitem ).get( "discount" ).toString() );
+        String comments =  ( (Map)orderitem ).get( "comments" ).toString() ;
 
         Bookitem bookitem = new Bookitem();
         bookitem.setDate( new Date() );
@@ -188,9 +192,9 @@ public class OrderController extends AbstractController {
           payment.setOrderno( order.getOrderno() );
           payment.save();
           if(order.getPrice().floatValue() - paid.floatValue() > 0.01){
-            order.setStatus( 2 );//2 means 已付定金
+            order.setStatus( Order.STATUS_PARTPAID );//2 means 已付定金
           }else{
-            order.setStatus( 3 );//3 means 支付完成
+            order.setStatus( Order.STATUS_ALLPAID );//3 means 支付完成
           }
           order.update();
         }
@@ -198,15 +202,15 @@ public class OrderController extends AbstractController {
       
 
       // save order items
-      List<Orderitem> orderitems = new ArrayList<>();
+      List<Orderitem> orderitemList = new ArrayList<>();
       for ( int bookitemid : bookitems ) {
         Orderitem orderitem = new Orderitem();
         orderitem.setBookitem( bookitemid );
         orderitem.setDate( date );
         orderitem.setOrder( order.getId() );
-        orderitems.add( orderitem );
+        orderitemList.add( orderitem );
       }
-      Db.batchSave( orderitems, orderitems.size() );
+      Db.batchSave( orderitemList, orderitemList.size() );
     }
 
     this.renderJson( "success" );
