@@ -11,6 +11,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.xcrm.common.AbstractController;
 import com.xcrm.common.Pager;
 import com.xcrm.common.util.Constant;
+import com.xcrm.common.util.RecordUtil;
 import com.xcrm.common.util.StrUtil;
 
 
@@ -103,7 +104,7 @@ public class OrderViewController extends AbstractController {
         + "left join product p on bi.product=p.id "
         + "left join contract contract on bi.contract=contract.id " + "where bi.status = 1 and o.orderno = " + orderno + " order by o.orderno desc";
     Page<Record> page = Db.paginate( 1, 100, sql, sqlExcept );
-    Pager pager = new Pager( page.getTotalRow(), page.getList() );
+    Pager pager = new Pager( page.getTotalRow(), RecordUtil.fillRowNumber( page.getList() ) );
     return pager;
   }
   
