@@ -118,7 +118,7 @@ public class OrderController extends AbstractController {
       return " bi.user is not null ";
     }
     else {
-      return " bi.user=" + this.getCurrentUserId() + " ";
+      return " bi.user=" + userid + " ";
     }
   }
 
