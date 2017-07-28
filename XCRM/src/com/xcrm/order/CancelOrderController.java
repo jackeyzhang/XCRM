@@ -16,6 +16,10 @@ public class CancelOrderController extends AbstractController {
     order.update();
     this.renderNull();
   }
+  
+  public void wxcancelorder(){
+    cancel();
+  }
 
   @Override
   public String getModalName() {
