@@ -18,17 +18,20 @@ import java.util.Date;
 public class StrUtil {
 
   public static String formatNum( Number Num ){
+    if(Num == null ) return "0.00";
     NumberFormat format = new DecimalFormat( "##0.00" );
     return format.format( Num );
   }
   
   public static String formatInt( Number Num ){
+    if(Num == null ) return "0";
     NumberFormat format = new DecimalFormat( "##0" );
     return format.format( Num );
   }
   
   
   public static  String formatPrice( Number price ){
+    if(price == null ) return "￥0.00";
     NumberFormat format = new DecimalFormat( "￥##,##0.00" );
     return format.format( price );
   }
