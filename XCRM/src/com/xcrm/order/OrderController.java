@@ -39,13 +39,14 @@ public class OrderController extends AbstractController {
         + "(select round(o.price-ifnull(sum(paid),0), 2) from payment where orderno= o.orderno) due,"
         + "o.status";
     String sqlExcept = " from `order` o  " 
-        + "left join orderitem oi on o.id=oi.order and o.status != " + Order.STATUS_CANCELLED 
+        + "left join orderitem oi on o.id=oi.order "
         + "left join bookitem bi on oi.bookitem=bi.id "  
         + "left join product p on bi.product=p.id "
         + "left join contract contract on bi.contract=contract.id " 
         + "left join customer cust on cust.id=bi.customer left join user ur on bi.user=ur.id " 
         + "where " + getSqlForUserRole()
-        + this.getSearchStatement( true, "" ) + "group by o.orderno order by o.orderno desc";
+        + " and o.status != " + Order.STATUS_CANCELLED 
+        + this.getSearchStatement( true, "" ) + " group by o.orderno order by o.orderno desc";
     int pagenumber = Integer.parseInt( this.getPara( "pageNumber" ) );
     int pagesize = Integer.parseInt( this.getPara( "pageSize" ) );
     Page<Record> page = Db.paginate( pagenumber, pagesize, sql, sqlExcept );
