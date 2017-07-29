@@ -123,9 +123,9 @@ public class OrderController extends AbstractController {
   }
 
   public void wxsubmitorder() {
+    try{
     String postData=HttpKit.readData(this.getRequest());
-    JSON json = new JSON();
-    Map dataFromWX = (Map)json.parse( postData );
+    Map dataFromWX = (Map) new JSON().parse( postData );
     Object[] orderitems = (Object[])dataFromWX.get( "orderitems" );
     String totalcomments = dataFromWX.get( "totalcomments" ).toString();
     BigDecimal totalprice = new BigDecimal( dataFromWX.get( "totalprice" ).toString() );
@@ -222,8 +222,12 @@ public class OrderController extends AbstractController {
       }
       Db.batchSave( orderitemList, orderitemList.size() );
     }
-
-    this.renderJson( "success" );
+      this.renderJson( true );
+    }catch( Exception e ){
+      logError(e);
+      this.renderJson( false );
+    }
+    
   }
   
   public void wxlistorders( ){
