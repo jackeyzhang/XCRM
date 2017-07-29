@@ -10,7 +10,9 @@ import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.xcrm.common.AbstractController;
 import com.xcrm.common.Pager;
+import com.xcrm.common.model.Order;
 import com.xcrm.common.util.Constant;
+import com.xcrm.common.util.RecordUtil;
 import com.xcrm.common.util.StrUtil;
 
 
@@ -91,6 +93,7 @@ public class OrderViewController extends AbstractController {
     this.renderJson( json );
   }
   
+  
   private Pager getOrderItemViews( String orderno ){
     //price是原价  deal price是成交价  
     String imgpath = getPrdImgBaseUrl() ;
@@ -99,11 +102,11 @@ public class OrderViewController extends AbstractController {
         + "round(o.paid,2) paid,bi.num num,bi.discount discount,oi.date date,o.deliverytime,contract.name contractname,contract.id contractid,bi.comments comments,bi.additionfee afee";
     String sqlExcept = " from orderitem oi " 
         + "left join bookitem bi on oi.bookitem=bi.id " 
-        + "left join `order` o on o.id=oi.order " 
+        + "left join `order` o on o.id=oi.order and o.status != " + Order.STATUS_CANCELLED + " " 
         + "left join product p on bi.product=p.id "
         + "left join contract contract on bi.contract=contract.id " + "where bi.status = 1 and o.orderno = " + orderno + " order by o.orderno desc";
     Page<Record> page = Db.paginate( 1, 100, sql, sqlExcept );
-    Pager pager = new Pager( page.getTotalRow(), page.getList() );
+    Pager pager = new Pager( page.getTotalRow(), RecordUtil.fillRowNumber( page.getList() ) );
     return pager;
   }
   

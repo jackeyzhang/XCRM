@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.jfinal.core.Controller;
+import com.jfinal.log.Log;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
@@ -296,5 +297,9 @@ public abstract class AbstractController extends Controller {
       this.size = size;
     }
   }
+ 
+   protected void logError( Exception e ){
+     Log.getLog( this.getClass() ).error( e.getMessage() );
+   }
   
 }

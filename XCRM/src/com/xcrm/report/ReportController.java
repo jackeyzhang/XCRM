@@ -39,7 +39,14 @@ public class ReportController extends AbstractController {
     enddate = DateUtil.get23h59m59sOfOneDay( enddate );
     String orderstatus = getPara( "orderstatus" );
     //query
-    String sql = "select prd.name productname,CONCAT(cust.name,'-',cust.company) companyname,ord.date orderdate,sum(bi.num) productcount,ord.orderno,ord.deliverytime,ord.status orderstatus,user.username saler "
+    String sql = "select prd.name productname,"
+        + "CONCAT(cust.name,'-',cust.company) companyname,"
+        + "ord.date orderdate,"
+        + "sum(bi.num) productcount,"
+        + "ord.orderno,ord.deliverytime,"
+        + "ord.status orderstatus,"
+        + "user.username saler, "
+        + "bi.comments prdcomments "
         + "from product prd left join bookitem bi on prd.id = bi.product "
         + "left join orderitem oi on oi.bookitem = bi.id "
         + "left join `order` ord on oi.order = ord.id "
