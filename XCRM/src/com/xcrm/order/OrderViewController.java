@@ -32,9 +32,9 @@ public class OrderViewController extends AbstractController {
     this.setAttr( "paymentcomments", record.getStr( "paymentcomments" ) );
     this.setAttr( "dealprice", StrUtil.formatPrice( dealPrice ) );
     this.setAttr( "paid", StrUtil.formatPrice( paid ) );
-    this.setAttr( "totaldiscount", StrUtil.formatPercentage(totaldiscount.toString()) );
+    this.setAttr( "totaldiscount", StrUtil.formatNum(totaldiscount) );
     BigDecimal due = dealPrice.subtract( paid );
-    String dues = StrUtil.formatNum( due );
+    String dues = StrUtil.formatPrice( due );
     if ( due.floatValue() > 0.001 )
       this.setAttr( "dueinfo1", "还需支付:" + dues );
     else if ( due.floatValue() < -0.001 )
