@@ -24,17 +24,25 @@ public class SingePaymentController extends AbstractController {
     this.setSessionAttr( "customerid", record.getInt( "customerid" ) );
     this.setAttr( "customer", record.getStr( "customer" ) );
     
-    BigDecimal discount =  new BigDecimal ( Float.parseFloat( getSession().getAttribute( "totaldiscount" ).toString()));
-    BigDecimal price =  new BigDecimal ( Float.parseFloat( getSession().getAttribute( "price" ).toString()));
+    BigDecimal discount =  null, price = null;
+    if( getSession().getAttribute( "totaldiscount" ) != null ){
+      discount = new BigDecimal ( Float.parseFloat( getSession().getAttribute( "totaldiscount" ).toString()));
+    }
+    if(getSession().getAttribute( "price" ) != null ){
+      price =  new BigDecimal ( Float.parseFloat( getSession().getAttribute( "price" ).toString()));
+    }
     Order ord = Order.dao.findFirst( "select * from `order` where orderno=?", Long.parseLong( orderno )  );
-    if(ord != null){
+    if( ord != null && discount != null && price!= null ){
       ord.setPrice( price );
       ord.setTotaldiscount( discount );
       ord.update();
+      BigDecimal paid =  new BigDecimal ( Float.parseFloat( getSession().getAttribute( "paid" ).toString()));
+      this.setSessionAttr( "due", price.compareTo( paid ) > 0 ? price.subtract( paid ) : 0);
+      this.setAttr( "due", price.compareTo( paid ) > 0 ? price.subtract( paid ) : 0 );
+    }else{
+      this.setSessionAttr( "due", record.getBigDecimal( "due" ) );
+      this.setAttr( "due", record.getBigDecimal( "due" )  );
     }
-    BigDecimal paid =  new BigDecimal ( Float.parseFloat( getSession().getAttribute( "paid" ).toString()));
-    this.setSessionAttr( "due", price.compareTo( paid ) > 0 ? price.subtract( paid ) : 0);
-    this.setAttr( "due", price.compareTo( paid ) > 0 ? price.subtract( paid ) : 0 );
   }
 
   public void submitorder() {
