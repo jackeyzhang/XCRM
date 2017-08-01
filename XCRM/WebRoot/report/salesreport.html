@@ -81,7 +81,7 @@
          
          function ordernoformmater(value, row ){
              if( !value ) return '';
-             return '<a href="/orderview?orderno='+ row['orderno'] + '">'+value+'</a>';
+             return '<a href="/orderview?orderno='+ row['orderno'] + '" title="'+ row['orderno']+'" target="_blank">'+value+'</a>';
            }
        </script>
        <th data-field="saler" data-formatter="salerformmater" data-cell-style="cellStyle">销售代表</th>       
