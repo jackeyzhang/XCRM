@@ -214,27 +214,35 @@ public class ReportController extends AbstractController {
   }
   
   private List<Record> filterOrderPaymentRecords( List<Record> records, Boolean topay, Boolean todue ) {
-    if ( topay && todue )
+    if ( !topay && !todue )
       return records;
-    if ( topay ) {
+    if( topay && todue ){
       Iterator<Record> iter = records.iterator();
       while(iter.hasNext()){
         Record record = iter.next();
-        if( record.getBigDecimal( "due" ).floatValue() > 0){
+        if( record.getBigDecimal( "due" ).floatValue() == 0){
           iter.remove();
         }
       }
       return records;
     }
+    if ( topay ) {
+      Iterator<Record> iter = records.iterator();
+      while(iter.hasNext()){
+        Record record = iter.next();
+        if( record.getBigDecimal( "due" ).floatValue() >= 0){
+          iter.remove();
+        }
+      }
+    }
     if ( todue ) {
       Iterator<Record> iter = records.iterator();
       while(iter.hasNext()){
         Record record = iter.next();
-        if( record.getBigDecimal( "due" ).floatValue() < 0){
+        if( record.getBigDecimal( "due" ).floatValue() <= 0){
           iter.remove();
         }
       }
-      return records;
     }
     return records;
   }
