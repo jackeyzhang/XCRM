@@ -51,7 +51,7 @@ public class SingePaymentController extends AbstractController {
     BigDecimal paid = new BigDecimal ( Float.parseFloat( getPara( "paid" ).isEmpty() ? "0.0" : getPara( "paid" ) ));
     String paymentcomments = getPara( "paymentcomments" );
     //persist payment
-    if ( paid.floatValue() > 0 ) {
+    if ( paid.floatValue() != 0 ) {
       Payment payment = new Payment();
       payment.setPaymenttype( paymenttype );
       payment.setPaid( paid );

@@ -160,7 +160,7 @@ public class OrderViewController extends AbstractController {
         + "left join user u on u.id = bi.user "
         + "where bi.customer= "+ customerid +") oo on oo.oid = ord.id "
         + "where ord.status !=" + Order.STATUS_CANCELLED + " "
-        + "group by ord.orderno";
+        + "group by ord.orderno order by ord.orderno desc ";
     Page<Record> page = Db.paginate( 1, 100, sql, sqlExcept );
     List<Record> records = page.getList().stream().filter( p -> {
       if(showAll) return true;
