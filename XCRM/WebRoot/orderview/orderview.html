@@ -32,6 +32,22 @@
           </h4>
         </div>
 				<#include "orderpayment.html"/>
+				
+        <div>
+          <h3>历史支付详情:</h3>
+           <h4>
+          <span class="label label-primary">欠款金额:${own!}</span>
+          <span class="label label-success">挂账金额:${bill!}</span>
+          <span class="label label-warning">账户平衡:${balance!}</span>
+          <span class="hidden" id="customerid">${customer!}</span>
+          </h4>
+          <div class="checkbox">
+				    <label>
+				      <input type="checkbox" id="showallpayment">显示所有支付详情
+				    </label>
+				  </div>
+        </div>
+				<#include "allorderpayments.html"/>
 		
 				<#include "../common/footer.html"/>
 			</div>
