@@ -70,7 +70,7 @@ public class ReportController extends AbstractController {
     enddate = DateUtil.get23h59m59sOfOneDay( enddate );
     Boolean topay = this.getParaToBoolean( "topay" );
     Boolean todue = this.getParaToBoolean( "todue" );
-    List<Record> records = Db.find(  getOrderAnalyzeSql("o.orderno"), startdate, enddate  );
+    List<Record> records = Db.find(  getOrderAnalyzeSql("o.orderno", false), startdate, enddate  );
     records = filterOrderPaymentRecords( records, topay, todue );
     addTotalRecords( "orderno", records, "productcount", "price", "dealprice", "due", "paid" );
     this.renderJson( records );
@@ -83,7 +83,7 @@ public class ReportController extends AbstractController {
     Date startdate = this.getParaToDate( START );
     Date enddate = this.getParaToDate( END );
     enddate = DateUtil.get23h59m59sOfOneDay( enddate );
-    List<Record> records = Db.find(  getOrderAnalyzeSql("cust.company"), startdate, enddate  );
+    List<Record> records = Db.find(  getOrderAnalyzeSql("cust.company", true), startdate, enddate  );
     records = groupRecordsByField( "companyname", records,  "productcount", "price", "dealprice", "due", "paid");
     this.renderJson( records );
   }
@@ -95,7 +95,7 @@ public class ReportController extends AbstractController {
     Date startdate = this.getParaToDate( START );
     Date enddate = this.getParaToDate( END );
     enddate = DateUtil.get23h59m59sOfOneDay( enddate );
-    List<Record> records = Db.find(  getOrderAnalyzeSql("user.username"), startdate, enddate  );
+    List<Record> records = Db.find(  getOrderAnalyzeSql("user.username", false ), startdate, enddate  );
     records = groupRecordsByField( "saler", records,  "productcount", "price", "dealprice", "due", "paid");
     this.renderJson( records );
   
@@ -126,7 +126,7 @@ public class ReportController extends AbstractController {
     return Constant.CATEGORY_SCHEDULE;
   }
   
-  private String getOrderAnalyzeSql( String orderbyField ){
+  private String getOrderAnalyzeSql( String orderbyField, boolean removeCZ ){
     //price是原价  deal price是成交价  
    return  "select CONCAT(cust.name,'-',cust.company) companyname, "
         + "GROUP_CONCAT(p.name) name,"
@@ -138,8 +138,8 @@ public class ReportController extends AbstractController {
         + "round(o.totalprice,2) price,"//原价
         + "round(o.price,2) dealprice,"//成交价格
         + "round(o.price/o.totalprice*100,2) discountrate,"//折扣
-        + "(select round(o.price-ifnull(sum(paid),0), 2) from payment where orderno= o.orderno) due,"//应付
-        + "(select round(sum(paid),2) from payment where orderno= o.orderno) paid,"//已付
+        + "(select round(o.price-ifnull(sum(paid),0), 2) from payment where orderno= o.orderno " + ( removeCZ? " and paymenttype != 9" : "") + ") due,"//应付
+        + "(select round(ifnull(sum(paid),0),2) from payment where orderno= o.orderno" + ( removeCZ? " and paymenttype != 9" : "") + ") paid,"//已付
         + "o.status orderstatus,"
         + "user.username saler"
         + " from orderitem oi " 
