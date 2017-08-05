@@ -46,7 +46,7 @@ public class OrderViewController extends AbstractController {
       this.setAttr( "dueinfo2", "挂账:" + dues );
     else
       this.setAttr( "dueinfo3", "支付完成" );
-    Tuple<Number,Number> tuple = this.getTotalDueAndBillAndBalance( customerid );
+    Tuple<Number,Number> tuple = this.getTotalDueAndBillAndBalance( customerid, orderno );
     this.setAttr( "own", StrUtil.formatPrice(  tuple.getFirst() ) );
     this.setAttr( "bill", StrUtil.formatPrice(   tuple.getSecond()  ) );
     Number own = tuple.getFirst() == null ? 0 :   tuple.getFirst();
@@ -68,11 +68,12 @@ public class OrderViewController extends AbstractController {
   public void loadingAllPayments(){
     String customerid = this.getPara( "customerid" );
     String showall = this.getPara("showall");
+    String orderno = this.getSessionAttr( "orderno" );
     Boolean showAll = Boolean.valueOf( showall );
     if( customerid == null || customerid.isEmpty() ) {
       this.renderNull();
     }else{
-      this.renderJson( getAllPayments( customerid, showAll ) );
+      this.renderJson( getAllPayments( customerid, showAll, orderno ) );
     }
   }
 
@@ -140,7 +141,7 @@ public class OrderViewController extends AbstractController {
     return pager;
   }
   
-  private Pager getAllPayments( String customerid, Boolean showAll ){
+  private Pager getAllPayments( String customerid, Boolean showAll, String excludeOrderNo ){
     String sql = 
         "select  ord.orderno, "
         + "oo.customer,"
@@ -160,6 +161,7 @@ public class OrderViewController extends AbstractController {
         + "left join user u on u.id = bi.user "
         + "where bi.customer= "+ customerid +") oo on oo.oid = ord.id "
         + "where ord.status !=" + Order.STATUS_CANCELLED + " "
+        + "and ord.orderno != " + excludeOrderNo + " "
         + "group by ord.orderno order by ord.orderno desc ";
     Page<Record> page = Db.paginate( 1, 100, sql, sqlExcept );
     List<Record> records = page.getList().stream().filter( p -> {
@@ -170,7 +172,7 @@ public class OrderViewController extends AbstractController {
     return pager;
   }
   
-  private Tuple<Number,Number> getTotalDueAndBillAndBalance( int customerid ){
+  private Tuple<Number,Number> getTotalDueAndBillAndBalance( int customerid, String excludeOrderNo ){
   
     String sql = 
         "select ifnull(sum(ooo.own),0) own from ( select "
@@ -183,6 +185,7 @@ public class OrderViewController extends AbstractController {
         + "left join customer cust on cust.id= bi.customer "
         + "where bi.customer= "+ customerid +") oo on oo.oid = ord.id "
         + "where ord.status !=" + Order.STATUS_CANCELLED + " "
+        + " and ord.orderno != " + excludeOrderNo + " "
         + "group by ord.orderno "
         + ") ooo where ooo.own > 0 ";
     Record record = Db.findFirst( sql );
@@ -198,6 +201,7 @@ public class OrderViewController extends AbstractController {
             + "left join customer cust on cust.id= bi.customer "
             + "where bi.customer= "+ customerid +") oo on oo.oid = ord.id "
             + "where ord.status !=" + Order.STATUS_CANCELLED + " "
+            + " and ord.orderno != " + excludeOrderNo + " "
             + "group by ord.orderno "
             + ") ooo where ooo.own < 0 ";
     Record record1 = Db.findFirst( sql1 );
