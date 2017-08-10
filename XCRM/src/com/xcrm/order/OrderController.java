@@ -283,7 +283,25 @@ public class OrderController extends AbstractController {
       Pager pager = new Pager( page.getTotalRow(), page.getList() );
       this.renderJson( pager );
     }
-    
+  }
+  
+  public void wxbuyorderagain( ){
+    String orderno = this.getPara( "orderno" );
+    String sql = "select bi.product prdid, p.name prdname, bi.price price,bi.prdattrs attr,bi.num num,bi.discount, "
+        + " (select ppic.fielname from productpic ppic where ppic.productid=p.id limit 1) filename, "
+        + " round(bi.price*bi.discount/100,2) totalprice, "
+        + " bi.comments, "
+        + " bi.additionfee afee, "
+        + " o.totaldiscount totaldiscount, "
+        + " bi.customer custid, " 
+        + " concat(cust.name, '-' , cust.company)  custname " 
+        + " from orderitem oi "
+        + " left join `order` o on o.id = oi.order "
+        + " left join bookitem bi on oi.bookitem=bi.id " 
+        + " left join product p on bi.product=p.id "
+        + " left join customer cust on cust.id=bi.customer "
+        + " where o.orderno  = " + orderno;
+    this.renderJson( Db.find( sql ));
   }
 
 }
