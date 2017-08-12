@@ -18,8 +18,9 @@ public class User extends Model<User> {
 
   private static final long serialVersionUID = 1946424759277934855L;
 
-  public static final int ROLE_ROOT = 0;
-  public static final int ROLE_NORMAL = 1;
+  public static final int ROLE_ROOT = 0;//管理员：看所有订单 分配工作任务
+  public static final int ROLE_NORMAL = 1;//销售员：看自己订单 看分配任务
+  public static final int ROLE_WORKER = 2;//工厂工人：看分配任务
 
   public static User dao = new User();
 
