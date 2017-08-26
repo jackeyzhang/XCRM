@@ -30,6 +30,8 @@ public class EditOrderController extends AbstractController {
     setAttr("paid", ""+paid);
     setSessionAttr("paid", ""+paid);
 //    setAttr("dealprice", ""+getDue(list, paid));
+    Record discount = Db.findFirst( "select ord.totaldiscount totaldiscount from `order` ord where ord.orderno=?", orderno );
+    setAttr("totaldiscount", discount.getBigDecimal( "totaldiscount" ));
     setAttr("prdimg_path", getPrdImgBaseUrl());
 }
   
