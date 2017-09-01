@@ -32,7 +32,7 @@ public class OrderController extends AbstractController {
         + "GROUP_CONCAT(p.name) name,"
         + "o.orderno orderno,"
         + "round(o.totalprice,2) price,"
-        + "round(o.price,2) dealprice,"
+        + "round(sum(bi.price*bi.num),2) dealprice,"
         + "sum(bi.num) num,"
         + "oi.date date,"
         + "contract.name contractname,"
