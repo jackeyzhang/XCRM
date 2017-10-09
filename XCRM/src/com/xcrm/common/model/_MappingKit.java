@@ -33,6 +33,7 @@ public class _MappingKit {
 		arp.addMapping("salesseason", "id", Salesseason.class);
 		arp.addMapping("store", "id", Store.class);
 		arp.addMapping("user", "id", User.class);
+		arp.addMapping("workflow", "id", Workflow.class);
 	}
 }
 

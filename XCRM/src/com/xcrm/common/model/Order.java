@@ -14,5 +14,11 @@ public class Order extends BaseOrder<Order> {
   public static final int STATUS_PARTPAID = 2;//'已付定金'
   public static final int STATUS_ALLPAID = 3;//'已付全款'
   public static final int STATUS_CANCELLED = 4;//'已经取消'
+  
+  
+  public static final int WORK_STATUS_INIT = 0; //初始态  
+  public static final int WORK_STATUS_START = 1; //开始
+  public static final int WORK_STATUS_DONE = 2; //完成
+  public static final int WORK_STATUS_CANCEL = 3; //取消
 
 }

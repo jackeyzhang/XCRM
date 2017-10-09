@@ -105,4 +105,12 @@ public abstract class BaseOrder<M extends BaseOrder<M>> extends Model<M> impleme
 		return get("totaldiscount");
 	}
 
+	public void setWorkstatus(java.lang.Integer workstatus) {
+		set("workstatus", workstatus);
+	}
+
+	public java.lang.Integer getWorkstatus() {
+		return get("workstatus");
+	}
+
 }
