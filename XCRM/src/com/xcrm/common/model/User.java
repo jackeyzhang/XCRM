@@ -20,7 +20,7 @@ public class User extends Model<User> {
 
   public static final int ROLE_ROOT = 0;//管理员：看所有订单 分配工作任务
   public static final int ROLE_NORMAL = 1;//销售员：看自己订单 看分配任务
-  public static final int ROLE_WORKER = 2;//工厂工人：看分配任务
+  public static final int ROLE_WORKER = 2;//工厂工人：看自己分配任务
 
   public static User dao = new User();
 
@@ -37,5 +37,15 @@ public class User extends Model<User> {
   public boolean isRoot() {
     Integer role = Integer.parseInt( getAttrs().get( "role" ).toString() );
     return role == ROLE_ROOT;
+  }
+  
+  public boolean isSaler() {
+    Integer role = Integer.parseInt( getAttrs().get( "role" ).toString() );
+    return role == ROLE_NORMAL;
+  }
+  
+  public boolean isWorker() {
+    Integer role = Integer.parseInt( getAttrs().get( "role" ).toString() );
+    return role == ROLE_WORKER;
   }
 }
