@@ -20,7 +20,36 @@ ADD CONSTRAINT `bookitemfk`
   REFERENCES `xcrm`.`bookitem` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
+  
+  
+-- add work item table
+ 
+CREATE TABLE `xcrm`.`workitem` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `index` INT NOT NULL DEFAULT 0,
+  `dep` INT NOT NULL,
+  `userid` INT NULL,
+  `weight` INT NULL,
+  `status` INT NOT NULL DEFAULT 0,
+  `spendtime` INT NULL COMMENT 'minutes',
+  PRIMARY KEY (`id`));
 
+  
+-- add work tempalte table
+CREATE TABLE `xcrm`.`worktemplate` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `index` INT NOT NULL DEFAULT 0,
+  `userid` INT NULL,
+  `weight` INT NULL,
+  `status` INT NOT NULL DEFAULT 0,
+  `dep` INT NULL,
+  PRIMARY KEY (`id`));
+
+-- create table department
+CREATE TABLE `xcrm`.`department` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(450) NOT NULL,
+  PRIMARY KEY (`id`));
 
   
   

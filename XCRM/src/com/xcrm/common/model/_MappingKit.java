@@ -22,6 +22,7 @@ public class _MappingKit {
 		arp.addMapping("bookitem", "id", Bookitem.class);
 		arp.addMapping("contract", "id", Contract.class);
 		arp.addMapping("customer", "id", Customer.class);
+		arp.addMapping("department", "id", Department.class);
 		arp.addMapping("order", "id", Order.class);
 		arp.addMapping("orderitem", "id", Orderitem.class);
 		arp.addMapping("payment", "id", Payment.class);
@@ -34,6 +35,8 @@ public class _MappingKit {
 		arp.addMapping("store", "id", Store.class);
 		arp.addMapping("user", "id", User.class);
 		arp.addMapping("workflow", "id", Workflow.class);
+		arp.addMapping("workitem", "id", Workitem.class);
+		arp.addMapping("worktemplate", "id", Worktemplate.class);
 	}
 }
 
