@@ -24,6 +24,7 @@ import com.xcrm.common.model._MappingKit;
 import com.xcrm.common.util.Constant;
 import com.xcrm.contract.ContractController;
 import com.xcrm.customer.CustomerController;
+import com.xcrm.department.DepartmentController;
 import com.xcrm.index.IndexController;
 import com.xcrm.login.LoginController;
 import com.xcrm.login.LoginInterceptor;
@@ -85,6 +86,7 @@ public class XCRMConfig extends JFinalConfig {
     me.add("/cancelorder", CancelOrderController.class);
     me.add("/editorder", EditOrderController.class);
     me.add("/salesseason", SalesSeasonController.class);
+    me.add("/department", DepartmentController.class);
   }
 
   public static C3p0Plugin createC3p0Plugin() {

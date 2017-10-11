@@ -52,5 +52,7 @@ CREATE TABLE `xcrm`.`department` (
   PRIMARY KEY (`id`));
 
   
+-- init department records
+INSERT INTO `department` VALUES (1,'管理层'),(2,'设计部'),(3,'制版部'),(4,'裁剪部'),(5,'车工部'),(6,'制花部'),(7,'贴花部'),(8,'手工部'),(9,'库管部');
   
   
