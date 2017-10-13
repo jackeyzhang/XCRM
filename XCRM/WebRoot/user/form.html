@@ -25,7 +25,7 @@ $(function() {
 	});
 	
 	 // get department list
-	  $.get('/department/list/', function(data){
+	  $.get('/department/getall/', function(data){
 	    for( d in data){
 	      $('#departmentselect').append("<option value='" + data[d].id + "'>" + data[d].name + "</option>");
 	    }

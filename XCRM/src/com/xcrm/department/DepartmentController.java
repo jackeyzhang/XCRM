@@ -6,20 +6,27 @@ import com.xcrm.common.util.Constant;
 
 
 public class DepartmentController extends AbstractController {
+  
+  public void getall(){
+    this.renderJson(Department.getAllDepartments());
+  }
 
   public void save(){
     Department department =  this.getModel( Department.class, "" );
     department.save();
+    Department.reloadAll();
     this.forwardIndex(department);
   }
   
   public void update(){
     this.getModel( Department.class, "" ).update();
+    Department.reloadAll();
     this.forwardIndex();
   }
 
   public void remove(){
     Department.dao.deleteById( this.getParaToInt( 0 ) );
+    Department.reloadAll();
     this.forwardIndex();
   }
 

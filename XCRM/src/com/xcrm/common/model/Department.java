@@ -3,7 +3,6 @@ package com.xcrm.common.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.jfinal.plugin.ehcache.CacheKit;
 import com.xcrm.common.model.base.BaseDepartment;
 
 
@@ -18,10 +17,13 @@ public class Department extends BaseDepartment<Department> {
   public static final Department dao = new Department();
   
   public static List<Department> getAllDepartments(){
-    allDepartments = CacheKit.get( "Department", "all");
     if( allDepartments.isEmpty() ){
-      CacheKit.put( "Department", "all", dao.find( "select * from Department" ) );
+      reloadAll();
     }
     return allDepartments;
+  }
+  
+  public static void reloadAll( ){
+    allDepartments = dao.find( "select * from Department" );
   }
 }
