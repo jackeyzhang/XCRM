@@ -1,0 +1,13 @@
+<script>
+
+function userenabelformatter(value, row){
+  if(value){
+    return '<a href="javascript:logout('+row['id']+')" title="注销"><i class="glyphicon glyphicon-tree" style="color:green"></i>使用中</a>';
+  }else{
+    return '<a href="javascript:active('+row['id']+')" title="激活"><i class="glyphicon glyphicon-tree" style="color:gray"></i>停止使用</a>';
+  }
+}
+
+</script>
+<th data-field="name"><b style="color:blue">工单模板名称</b></th>
+<th data-field="enable" data-formatter="userenabelformatter" data-align="center">使用状态</th>

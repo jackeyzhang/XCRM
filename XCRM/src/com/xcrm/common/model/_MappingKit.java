@@ -35,8 +35,10 @@ public class _MappingKit {
 		arp.addMapping("store", "id", Store.class);
 		arp.addMapping("user", "id", User.class);
 		arp.addMapping("workflow", "id", Workflow.class);
+		arp.addMapping("workflowanditemtemplate", "id", Workflowanditemtemplate.class);
+		arp.addMapping("workflowtemplate", "id", Workflowtemplate.class);
 		arp.addMapping("workitem", "id", Workitem.class);
-		arp.addMapping("worktemplate", "id", Worktemplate.class);
+		arp.addMapping("workitemtemplate", "id", Workitemtemplate.class);
 	}
 }
 
