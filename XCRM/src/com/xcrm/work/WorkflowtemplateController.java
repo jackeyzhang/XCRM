@@ -30,7 +30,7 @@ public class WorkflowtemplateController extends AbstractController {
 
   @Override
   public String getPageHeader() {
-    return "创建或修改工单模板";
+    return "工单模板管理";
   }
 
   @Override
@@ -53,7 +53,6 @@ public class WorkflowtemplateController extends AbstractController {
     return "name";
   }
   
-  
   public void edit( ){
     String templateid = this.getPara( "id" );
     Workflowtemplate template = Workflowtemplate.dao.findById( templateid );
@@ -66,6 +65,7 @@ public class WorkflowtemplateController extends AbstractController {
   }
   
   public void add( ){
+    this.setAttr( "page_header", "创建新的工单模板");
     this.render( "addworkflowtemplate.html" );
   }
   

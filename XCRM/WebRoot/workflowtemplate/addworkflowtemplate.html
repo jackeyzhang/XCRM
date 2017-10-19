@@ -6,17 +6,94 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <#include "../common/js2css.html"/>
 
+<script>
+	$(function() {
+		var itemindex = 1;
+		$("#addworkitem").click(function() {
+			var workitemhtml = $("[name=workitemtemplate]:first").clone(true);
+			itemindex++;
+			workitemhtml.attr("id","workitem" + itemindex );
+			$("#workitemform").append( workitemhtml );
+			freshWorkitemIndex(1);
+		});
+
+		$("#deleteworkitem").click(function() {
+			$(this).closest(".form-group").remove();
+			freshWorkitemIndex(1);
+		});
+		
+		// get department list
+    $.get('/department/getall/', function(data){
+      for( d in data){
+        $('#departmentselect').append("<option value='" + data[d].id + "'>" + data[d].name + "</option>");
+      }
+    });
+		
+    function freshWorkitemIndex( index ){
+			$("[name=workitemindex]").each(function(){  
+			  $(this).html( index++ ); 
+			}); 
+		};
+    
+
+	});
+</script>
+
 </head>
 <body>
 	<div class="container">
-		<div class="row">
-			<div class="span12">
-				<#include "../common/menu.html"/> 
-				<#include "../common/pageheader.html"/>
+		<#include "../common/menu.html"/> 
+		<#include "../common/pageheader.html"/>
 
-				<#include "../common/footer.html"/>
+		<form class="form-horizontal" role="form" id="workitemform">
+		
+			<div class="form-group">
+				<label for="firstname" class="col-sm-2 control-label">模板名称</label>
+				<div class="col-sm-2">
+					<input type="text" class="form-control" id="name"
+						placeholder="请输入名字">
+				</div>
+				<div class="col-sm-1">
+					<button type="button" class="btn btn-warning btn-sm"
+						id="addworkitem">增加工作项</button>
+				</div>
 			</div>
-		</div>
+
+			<div class="form-group">
+				<div class="col-sm-offset-1 col-sm-12">
+					<h4>
+						<span class="label label-warning" style="width:100%">包含的工作项:</span>
+					</h4>
+				</div>
+			</div>
+
+			<div class="form-group" id="workitem1" name="workitemtemplate">
+			  <div class="col-sm-offset-1 col-sm-1"  style="margin-top:20px;">
+			   <span class="badge" name="workitemindex">1</span>
+			  </div>
+				<div class="col-sm-2">
+					<span class="label label-warning">部门名称</span> 
+					<select class="form-control selector" name="department" id="departmentselect">
+			       <option value="">请选择...</option>
+			   </select>
+				</div>
+				<div class="col-sm-2">
+					<span class="label label-warning">工作项百分比</span> <input type="number"
+						class="form-control" id="weight" placeholder="百分比">
+				</div>
+				<div class="col-sm-2">
+					<button type="button" class="btn btn-warning btn-sm" style="margin-top:20px;"
+						id="deleteworkitem">删除工作项</button>
+				</div>
+			</div>
+		</form>
+		 <div class="form-group">
+        <div class="col-sm-offset-6 col-sm-4">
+          <button type="submit" class="btn btn-primary">提交模板</button>
+        </div>
+      </div>
+
+	<#include "../common/footer.html"/>
 	</div>
 </body>
 </html>
