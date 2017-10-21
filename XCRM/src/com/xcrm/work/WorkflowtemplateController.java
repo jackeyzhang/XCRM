@@ -1,16 +1,34 @@
 package com.xcrm.work;
 
 import com.xcrm.common.AbstractController;
+import com.xcrm.common.model.Workflowanditemtemplate;
 import com.xcrm.common.model.Workflowtemplate;
+import com.xcrm.common.model.Workitemtemplate;
 import com.xcrm.common.util.Constant;
 
 
 public class WorkflowtemplateController extends AbstractController {
 
   public void save() {
-    Workflowtemplate worktemplate = this.getModel( Workflowtemplate.class, "" , true);
-    worktemplate.save();
-    forwardIndex(worktemplate);
+    Workflowtemplate workflowtemplate = this.getModel( Workflowtemplate.class, "" , true);
+    workflowtemplate.save();
+    String departments =this.getParaMap().get( "departments" )[0];
+    String weights = this.getParaMap().get( "weights" )[0];
+    String[] departmentArray = departments.split( "," );
+    String[] weightArray = weights.split( "," );
+    for( int i=0;i < departmentArray.length; i ++){
+      Workitemtemplate workitemtemplate = new Workitemtemplate();
+      workitemtemplate.setDep( Integer.parseInt( departmentArray[i] ) );
+      workitemtemplate.setWeight( Integer.parseInt( weightArray[i] ) );
+      workitemtemplate.setIndex( i );
+      workitemtemplate.setUserid( getCurrentUserId() );
+      workitemtemplate.save();
+      Workflowanditemtemplate relation = new Workflowanditemtemplate();
+      relation.setWorkflowtemplate( workflowtemplate.getId() );
+      relation.setWorkitemtemplate( workitemtemplate.getId() );
+      relation.save();
+    }
+    forwardAction("/workflowtemplate");
   }
 
   public void update() {

@@ -47,45 +47,9 @@
 		 $('form').on('submit', function() {
 			 var worktemplatename = $('#worktemplatename').val();
 			 if( !worktemplatename ){
-				   alert('模板名字不能为空！');
+					 alert('模板名字不能为空！');
 					 return;
 			 }
-			
-		 
-			 
-			 
-			 var departments ='',weights='';
-       var workitemtemplates = $('#workitemform').find('[name=workitemtemplate]'); // 获取所有文本框
-       for (var i = 0; i < workitemtemplates.length; i++) {
-    	   var workitemtemplate = workitemtemplates.eq(i);
-    	   var depart = workitemtemplate.find( 'select' ).val();
-    	   var weight = workitemtemplate.find( 'input' ).val();
-   		   departments += (depart+",");
-   		   weights += (weight + "," );
-       }
-			 
-       //组织数据
-       var templatedata = {
-          "name" : worktemplatename,
-          "departments" : departments,
-          "weights" : weights
-       };
-       
-			 $.ajax({
-            type: "post",
-            url: "/workflowtemplate/save",
-            data: templatedata,
-            success: function (data, status) {
-                if (status == "success") {
-                }
-            },
-            error: function () {
-            	alert("编辑失败");
-            },
-            complete: function () {
-            	window.location.href="/workflowtemplate/"; 
-            }
-        });
 			 
 		 });
     
