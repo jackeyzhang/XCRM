@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<#include "../common/js2css.html"/>
+</head>
+<body>
+	<div class="container">
+		<#include "../common/menu.html"/> 
+		<#include "../common/backtopageheader.html"/>
+
+			<div class="form-group">
+			   <div class="col-sm-offset-2 col-sm-2">
+				    <label for="firstname" class="control-label">
+				    <span class="label label-warning" style="width:100%;font-size: 15px;">模板名称:</span></label>
+				</div>
+				<div class="col-sm-2">
+						<label class="control-label">${worktemplatename!}</label>
+				</div>
+			</div>
+
+			<div class="form-group">
+			 <div class="row">
+				<div class="col-sm-offset-2 col-sm-10">
+					<h4>
+						<span class="label label-warning" style="width:100%">包含的工作项:</span>
+					</h4>
+				</div>
+				</div>
+			</div>
+
+		<div class="form-group">
+			<#if workitemtemplates?size != 0> <#list workitemtemplates as item>
+			<div class="row" style="padding-bottom:10px;">
+				<div class="col-sm-offset-2 col-sm-2">
+					<span class="badge" name="workitemindex"
+						style="background-color: #f0ad4e; font-size: 15px;">${item.index}</span>
+						<span class="label label-default" style="font-size: 15px;">部门名称:${item.department}
+          </span>
+				</div>
+				<div class="col-sm-2">
+					<span class="label label-default"
+						style="font-size: 15px;">所占百分比:${item.weight}
+					</span>
+				</div>
+			</div>
+			</#list> </#if>
+		</div>
+
+		<#include "../common/footer.html"/>
+	</div>
+</body>
+</html>

@@ -2,6 +2,8 @@ package com.xcrm.common.model;
 
 import java.util.List;
 
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Record;
 import com.xcrm.common.model.base.BaseWorkflowtemplate;
 
 /**
@@ -12,8 +14,15 @@ public class Workflowtemplate extends BaseWorkflowtemplate<Workflowtemplate> {
 	public static final Workflowtemplate dao = new Workflowtemplate();
 	
 	public List<Workitemtemplate> getWorkitemtemplates( ){
-	  return Workitemtemplate.dao.find( "select * from Workitemtemplate item "
-	      + "join in Workflowanditemtemplate ra on ra.workitemtemplate "
+	  return Workitemtemplate.dao.find( "select item.* from Workitemtemplate item "
+	      + "join Workflowanditemtemplate ra on ra.workitemtemplate=item.id "
 	      + " where ra.workflowtemplate = "  + this.getId());
 	}
+	
+	public List<Record> getWorkitemtemplateRecords( ){
+	  return Db.find(  "select item.*,de.name as department from Workitemtemplate item "
+          + "join Workflowanditemtemplate ra on ra.workitemtemplate=item.id "
+          + "left join Department de on de.id=item.dep "
+          + " where ra.workflowtemplate = "  + this.getId() );
+    }
 }

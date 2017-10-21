@@ -31,10 +31,6 @@ public class WorkflowtemplateController extends AbstractController {
     forwardAction("/workflowtemplate");
   }
 
-  public void update() {
-    this.getModel( Workflowtemplate.class, "" , true).update();
-    forwardIndex();
-  }
 
   public void remove() {
     Workflowtemplate.dao.deleteById( this.getParaToInt( 0 ) );
@@ -71,14 +67,16 @@ public class WorkflowtemplateController extends AbstractController {
     return "name";
   }
   
-  public void edit( ){
+  public void view( ){
+    this.setAttribute();
     String templateid = this.getPara( "id" );
     Workflowtemplate template = Workflowtemplate.dao.findById( templateid );
     if( template == null ){
       this.forwardIndex();
     }else{
-      this.setAttr( "page_header", template.getName());
-      this.render( "addworkflowtemplate.html" );
+      this.setAttr( "worktemplatename", template.getName());
+      this.setAttr( "workitemtemplates",  template.getWorkitemtemplateRecords() );
+      this.render( "viewworkflowtemplate.html" );
     }
   }
   
