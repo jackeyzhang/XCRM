@@ -44,15 +44,12 @@
 		};
 		
 		
-		 $('form').on('submit', function() {
+		 $('#submit').click( function() {
 			 var worktemplatename = $('#worktemplatename').val();
 			 if( !worktemplatename ){
 				   alert('模板名字不能为空！');
 					 return;
 			 }
-			
-		 
-			 
 			 
 			 var departments ='',weights='';
        var workitemtemplates = $('#workitemform').find('[name=workitemtemplate]'); // 获取所有文本框
@@ -76,11 +73,8 @@
             url: "/workflowtemplate/save",
             data: templatedata,
             success: function (data, status) {
-                if (status == "success") {
-                }
             },
             error: function () {
-            	alert("编辑失败");
             },
             complete: function () {
             	window.location.href="/workflowtemplate/"; 
@@ -99,7 +93,7 @@
 		<#include "../common/menu.html"/> 
 		<#include "../common/pageheader.html"/>
 
-		<form class="form-horizontal" role="form" id="workitemform" method="post">
+		<div class="form-horizontal" role="form" id="workitemform">
 			<div class="form-group">
 				<label for="firstname" class="col-sm-2 control-label">模板名称</label>
 				<div class="col-sm-2">
@@ -143,8 +137,8 @@
             id="insertworkitem">追加工作项</button>
         </div>
 			</div>
-          <button type="submit" class="btn btn-large btn-primary pull-right" >提交模板</button>
-		</form>
+      <button class="btn btn-large btn-primary pull-right" id="submit">提交模板</button>
+		</div>
 
 	<#include "../common/footer.html"/>
 	</div>

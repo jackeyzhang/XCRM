@@ -32,6 +32,13 @@ $.get('/salesseason/list/', function(data){
       $('#salesseason').append("<option value='" + data[c].id + "'>" + data[c].name + "</option>");
     }
  });
+
+$.get('/workflowtemplate/list/', function(data){
+   for( e in data){
+      $('#workflow').append("<option value='" + data[e].id + "'>" + data[e].name + "</option>");
+    }
+});
+
 }
 </script>
 

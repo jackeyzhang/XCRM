@@ -8,4 +8,8 @@ import com.xcrm.common.model.base.BaseProduct;
 @SuppressWarnings("serial")
 public class Product extends BaseProduct<Product> {
 	public static final Product dao = new Product();
+	
+	public Workflow getWorkflowObj( ){
+	  return Workflow.dao.findById( this.getWorkflow() );
+	}
 }

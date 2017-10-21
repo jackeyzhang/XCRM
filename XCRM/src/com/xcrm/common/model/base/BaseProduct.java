@@ -113,4 +113,12 @@ public abstract class BaseProduct<M extends BaseProduct<M>> extends Model<M> imp
 		return get("salesseason");
 	}
 
+	public void setWorkflow(java.lang.Integer workflow) {
+		set("workflow", workflow);
+	}
+
+	public java.lang.Integer getWorkflow() {
+		return get("workflow");
+	}
+
 }

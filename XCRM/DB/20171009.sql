@@ -85,4 +85,9 @@ ADD CONSTRAINT `workitemtemplate`
   REFERENCES `xcrm`.`workitemtemplate` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
+  
+
+ALTER TABLE `xcrm`.`product` 
+ADD COLUMN `workflow` INT(11) NULL AFTER `salesseason`;
+
 

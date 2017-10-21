@@ -28,7 +28,7 @@ public class WorkflowtemplateController extends AbstractController {
       relation.setWorkitemtemplate( workitemtemplate.getId() );
       relation.save();
     }
-    forwardAction("/workflowtemplate");
+    forwardIndex();
   }
 
 
