@@ -41,6 +41,7 @@ import com.xcrm.schedule.ScheduleController;
 import com.xcrm.search.SearchController;
 import com.xcrm.store.StoreController;
 import com.xcrm.user.UserController;
+import com.xcrm.work.WorkflowController;
 import com.xcrm.work.WorkflowtemplateController;
 
 
@@ -88,6 +89,7 @@ public class XCRMConfig extends JFinalConfig {
     me.add("/editorder", EditOrderController.class);
     me.add("/salesseason", SalesSeasonController.class);
     me.add("/department", DepartmentController.class);
+    me.add("/workflow", WorkflowController.class);
     me.add("/workflowtemplate", WorkflowtemplateController.class);
   }
 

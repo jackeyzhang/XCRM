@@ -14,10 +14,10 @@
 			<div class="form-group">
 			   <div class="col-sm-offset-2 col-sm-2">
 				    <label for="firstname" class="control-label">
-				    <span class="label label-warning" style="width:100%;font-size: 15px;">模板名称:</span></label>
+				    <span class="label label-warning" style="width:100%;font-size: 25px;">模板名称:</span></label>
 				</div>
-				<div class="col-sm-2">
-						<label class="control-label">${worktemplatename!}</label>
+				<div class="col-sm-4">
+						<label class="control-label" style="font-size: 25px;">${worktemplatename!}</label>
 				</div>
 			</div>
 
@@ -25,7 +25,7 @@
 			 <div class="row">
 				<div class="col-sm-offset-2 col-sm-10">
 					<h4>
-						<span class="label label-warning" style="width:100%">包含的工作项:</span>
+						<span class="label label-warning" style="width:100%">该模板包含的工作项:</span>
 					</h4>
 				</div>
 				</div>
@@ -42,7 +42,7 @@
 				</div>
 				<div class="col-sm-2">
 					<span class="label label-default"
-						style="font-size: 15px;">所占百分比:${item.weight}
+						style="font-size: 15px;">所占百分比:<b style="color:yellow">${item.weight}</b>
 					</span>
 				</div>
 			</div>
