@@ -33,14 +33,6 @@ public abstract class BaseWorkitem<M extends BaseWorkitem<M>> extends Model<M> i
 		return get("dep");
 	}
 
-	public void setUserid(java.lang.Integer userid) {
-		set("userid", userid);
-	}
-
-	public java.lang.Integer getUserid() {
-		return get("userid");
-	}
-
 	public void setWeight(java.lang.Integer weight) {
 		set("weight", weight);
 	}
@@ -63,6 +55,14 @@ public abstract class BaseWorkitem<M extends BaseWorkitem<M>> extends Model<M> i
 
 	public java.lang.Integer getSpendtime() {
 		return get("spendtime");
+	}
+
+	public void setWorkflow(java.lang.Integer workflow) {
+		set("workflow", workflow);
+	}
+
+	public java.lang.Integer getWorkflow() {
+		return get("workflow");
 	}
 
 }

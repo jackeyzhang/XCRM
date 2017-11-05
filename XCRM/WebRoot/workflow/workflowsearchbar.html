@@ -1,0 +1,24 @@
+<div class="row">
+  <div class="col-md-2" style="margin-top: 10px;">
+    <input type="text" class="form-control" name="orderno" placeholder="订单号"  data-provide="typeahead" value="${orderno!}"/>
+  </div>
+  <div class="col-md-2" style="margin-top: 10px;">
+    <input type="text" class="form-control" name="prdname" placeholder="产品名称"  data-provide="typeahead" value="${prdname!}"/>
+  </div>
+  <div class="col-md-2" style="margin-top: 10px;">
+    <input type="text" class="form-control" name="customername" placeholder="客户名称"  data-provide="typeahead" value="${customername!}"/>
+  </div>
+  <div class="col-md-2" style="margin-top: 10px;">
+    <select class="form-control selector" name="datepicker" id="datepicker">
+            <option value="1">最近一个月</option>
+            <option value="2">最近三个月</option>
+            <option value="3">全部</option>
+     </select>
+  </div>
+   <div class="col-md-2" style="margin-top: 10px;">
+    <button class="form-control btn btn-primary" id="searchworkflow">查找</button> 
+  </div>
+  <div class="col-md-2" style="margin-top: 10px;">
+    <button class="form-control btn btn-primary" id="listall">返回默认查找</button> 
+  </div>
+</div>

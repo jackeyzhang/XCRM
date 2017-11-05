@@ -28,6 +28,7 @@ import com.xcrm.common.qr2.QRCodeUtil;
 import com.xcrm.common.util.Constant;
 import com.xcrm.common.util.MD5Util;
 import com.xcrm.common.util.PropUtil;
+import com.xcrm.common.util.StrUtil;
 
 @Before(ProductInterceptor.class)
 public class ProductController extends AbstractController {
@@ -70,8 +71,13 @@ public class ProductController extends AbstractController {
 
   public void detail() {
     setAttribute();
-    Product product =
-        Product.dao.findFirst("select prd.*,(select price from price where product=prd.id) price from product prd where barcode =?", this.getPara("barcode"));
+    Product product =null;
+    if( !StrUtil.isEmpty( this.getPara("barcode") )){
+      product = Product.dao.findFirst("select prd.*,(select price from price where product=prd.id) price from product prd where barcode =?", this.getPara("barcode"));
+    }
+    if( !StrUtil.isEmpty( this.getPara("prdid") )){
+      product = Product.dao.findFirst("select prd.*,(select price from price where product=prd.id) price from product prd where id =?", this.getPara("prdid"));
+    }
     List<Productpic> pics =
         Productpic.dao.find("select * from productpic where productid=?", product.getId());
     List<Attributevalue> attributevalues =

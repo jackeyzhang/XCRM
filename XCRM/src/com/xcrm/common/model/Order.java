@@ -1,5 +1,7 @@
 package com.xcrm.common.model;
 
+import java.util.List;
+
 import com.xcrm.common.model.base.BaseOrder;
 
 
@@ -21,4 +23,19 @@ public class Order extends BaseOrder<Order> {
   public static final int WORK_STATUS_DONE = 2; //完成
   public static final int WORK_STATUS_CANCEL = 3; //取消
 
+  
+  public List<Orderitem> getAllOrderitems( ){
+    int orderid = this.getId();
+    return Orderitem.dao.find( "select * from orderitem where order = " + orderid );
+  }
+  
+  public List<Bookitem> getAllBookitems( ){
+    int orderid = this.getId();
+    return Bookitem.dao.find(
+        "select bi.*,prd.name prdname,prd.workflow,prd.id prdid, wf.id wfid, wf.status wfstatus "
+        + "from bookitem bi "
+        + "join product prd on prd.id= bi.product "
+        + "join orderitem oi on oi.bookitem = bi.id and oi.order = " + orderid 
+        + " left join workflow wf on wf.bookitem = bi.id ");
+  }
 }

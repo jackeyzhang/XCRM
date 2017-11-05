@@ -28,7 +28,6 @@ CREATE TABLE `xcrm`.`workitem` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `index` INT NOT NULL DEFAULT 0,
   `dep` INT NOT NULL,
-  `userid` INT NULL,
   `weight` INT NULL,
   `status` INT NOT NULL DEFAULT 0,
   `spendtime` INT NULL COMMENT 'minutes',
@@ -90,4 +89,6 @@ ADD CONSTRAINT `workitemtemplate`
 ALTER TABLE `xcrm`.`product` 
 ADD COLUMN `workflow` INT(11) NULL AFTER `salesseason`;
 
+ALTER TABLE `xcrm`.`workitem` 
+ADD COLUMN `workflow` INT(11) NOT NULL AFTER `spendtime`;
 
