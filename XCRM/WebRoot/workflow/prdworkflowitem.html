@@ -2,7 +2,7 @@
 <div class="col-md-2"
 	style="margin: 5px; border: 1px dashed blue; height: 200px;"
 	id="workflowitem">
-	<label>订单号：<a href="/product/detail?prdid=${bi.prdid}">${bi.orderno!}</a></label> <br> <label>产品数量：${bi.num!}</label> <br>
+	<label>订单号：<a href="/orderview?orderno=${row.orderno!}">${bi.orderno!}</a></label> <br> <label>产品数量：${bi.num!}</label> <br>
 	<div class="form-group">
 		<label>工作流模板:</label> 
 		<label id="selectworkflowitem" hidden>${bi.workflow!}</label> 
