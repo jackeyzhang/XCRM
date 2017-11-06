@@ -32,7 +32,7 @@ public class Order extends BaseOrder<Order> {
   public List<Bookitem> getAllBookitems( ){
     int orderid = this.getId();
     return Bookitem.dao.find(
-        "select bi.*,prd.name prdname,prd.workflow,prd.id prdid, wf.id wfid, wf.status wfstatus "
+        "select bi.*,prd.name prdname,prd.workflow,prd.id prdid, wf.id wfid, wf.status wfstatus,(select ppic.fielname from productpic ppic where ppic.productid = prd.id limit 1) fielname "
         + "from bookitem bi "
         + "join product prd on prd.id= bi.product "
         + "join orderitem oi on oi.bookitem = bi.id and oi.order = " + orderid 

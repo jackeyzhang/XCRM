@@ -53,8 +53,9 @@ public class WorkflowController extends AbstractController {
         }
         );
     Pager pager = new Pager( page.getTotalRow(), page.getList() );
-    this.setAttr( "data", pager );
-    this.setAttr( "page_header", "订单工作流管理" );
+    setAttr( "data", pager );
+    setAttr( "page_header", "订单工作流管理" );
+    setAttr( "prdimg_path", getPrdImgBaseUrl());
     render( getIndexHtml() );
   }
   

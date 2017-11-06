@@ -2,7 +2,8 @@
 <div class="col-md-2"
 	style="margin: 5px; border: 1px dashed blue; height: 200px;"
 	id="workflowitem">
-	<label>产品名称：<a href="/product/detail?prdid=${bi.prdid}">${bi.prdname!}</a></label> <br> <label>产品数量：${bi.num!}</label> <br>
+	<img src="${prdimg_path}${bi.prdid!}/${bi.fielname!}" class="img-responsive img-thumbnail"><br>
+	<label>名称：<a href="/product/detail?prdid=${bi.prdid}">${bi.prdname!}</a><span>  数量：${bi.num!}</span></label><br>
 	<div class="form-group">
 		<label>工作流模板:</label> 
 		<label id="selectworkflowitem" hidden>${bi.workflow!}</label> 

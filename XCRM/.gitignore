@@ -4,4 +4,6 @@
 /target/
 *.log
 /WebRoot/temp_img/
+/WebRoot/biz_img/prd
+/WebRoot/biz_img/qr2
 classes
