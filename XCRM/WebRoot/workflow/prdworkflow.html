@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<#include "../common/js2css.html"/>
+<script type="text/javascript">
+function load(){
+	$.get('/workflowtemplate/list/', function(data){
+		    for( e in data){
+		   	  $("[name='workitemtemplate']").append("<option value='" + data[e].id + "'>" + data[e].name + "</option>");
+		    }
+		    //var selectworkflow = $("#selectworkflowitem").html();
+		    //var selectworkflow = $("[name='workitemtemplate").prev().html();
+		    //$("[name='workitemtemplate']").val( selectworkflow );
+		    $("[name='workitemtemplate").each(function(){
+		    	$(this).val( $(this).prev().html());
+		    });
+	});
+
+};
+
+$(function() {
+	$("#searchworkflow").click( function() {
+		 var orderno = $("[name='orderno']").val( );
+		 var prdname = $("[name='prdname']").val( );
+		 var customername = $("[name='customername']").val( );
+		 var datepick = $("[name='datepicker']").val();
+		 var searchword = "orderno=" + orderno + "&prdname=" + prdname + "&customername=" + customername + "&datepick=" + datepick;
+		 window.location="/workflow/search?" + searchword;
+	});
+	
+	
+	$("#listall").click( function() {
+		 window.location="/workflow/index";
+	});
+	
+	$("[name='startworkitem']").click(function(){
+		  var bookitemid = $(this).attr("bookitem");
+		  var workflowtemplate = $(this).prev().prev().val();
+		  var index = 0, num = 1;
+		  window.location = "/workflow/startBookItem?bi="+bookitemid+"&wftid=" + workflowtemplate + "&index=" + index + "&num=" + num;
+	});
+	
+	
+});
+</script>
+<style type="text/css">
+#workflowitem:hover{
+  background-color:lightblue;
+}
+
+#workflow{
+  font-size: 12px;
+}
+
+label{
+  font-size: 12px;
+}
+</style>
+</head>
+<body onload="load()">
+	<div class="container">
+				<#include "../common/menu.html"/>
+				<#include "../common/pageheader.html"/>
+				<#include "toolbar.html"/>
+				<#include "prdworkflowlist.html"/>
+				<#include "../common/footer.html"/>
+	</div>
+</body>
+</html>

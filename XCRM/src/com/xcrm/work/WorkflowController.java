@@ -9,6 +9,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.xcrm.common.AbstractController;
 import com.xcrm.common.Pager;
 import com.xcrm.common.model.Order;
+import com.xcrm.common.model.Product;
 import com.xcrm.common.model.User;
 import com.xcrm.common.model.Workflow;
 import com.xcrm.common.model.Workflowtemplate;
@@ -57,34 +58,27 @@ public class WorkflowController extends AbstractController {
   
   public void indexOfProduct(){
   //price是原价  deal price是成交价  
-    String sql = "select concat(cust.name, '-' , cust.company) company, "
-        + "GROUP_CONCAT(p.name) name,"
-        + "o.orderno orderno,"
-        + "sum(bi.num) num,"
-        + "oi.date date,"
-        + "o.status,"
-        + "GROUP_CONCAT(bi.comments) comments";
+    String sql = "select p.name name, p.id prdid";
     String sqlExcept = " from `order` o  " 
         + "left join orderitem oi on o.id=oi.order "
         + "left join bookitem bi on oi.bookitem=bi.id "  
         + "left join product p on bi.product=p.id "
-        + "left join customer cust on cust.id=bi.customer " 
         + "where " + getSqlForUserRole()
         + " and o.status != " + Order.STATUS_CANCELLED + " "
         + this.getSearchStatement( true, "" ) 
-        + " group by o.orderno order by o.orderno,p.name desc" ;
+        + " group by p.name order by p.name desc" ;
     Page<Record> page = Db.paginate( 1, 30, sql, sqlExcept );
     page.getList().stream().forEach(
         p -> {
-          long orderno = p.getLong( "orderno" );
-          Order order = Order.dao.findFirst( "select * from `order` where orderno = ?", orderno );
-          p.set( "bi", order.getAllBookitems() );
+          int prdid = p.getInt( "prdid" );
+          Product product = Product.dao.findFirst( "select * from product where id = ?", prdid );
+          p.set( "bi", product.getAllBookitems() );
         }
         );
     Pager pager = new Pager( page.getTotalRow(), page.getList() );
     this.setAttr( "data", pager );
     this.setAttr( "page_header", "产品工作流" );
-    render( getIndexHtml() );
+    render("prdworkflow.html");
   }
   
   public void search() {
