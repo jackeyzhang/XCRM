@@ -1,5 +1,7 @@
 package com.xcrm.common.model;
 
+import java.util.List;
+
 import com.xcrm.common.model.base.BaseWorkflow;
 
 
@@ -15,4 +17,14 @@ public class Workflow extends BaseWorkflow<Workflow> {
   public static final int WORK_STATUS_START = 1; //开始
   public static final int WORK_STATUS_DONE = 2; //完成
   public static final int WORK_STATUS_CANCEL = 3; //取消
+  
+  /**
+   * 获取同一批(同一个bookitem)Workflow
+   * 
+   * @return
+   */
+  public List<Workflow> getRelatedWorkflows( ){
+    int bookitemid = this.getBookitem();
+    return dao.find( "select * from workflow where bookitem=?", bookitemid );
+  }
 }

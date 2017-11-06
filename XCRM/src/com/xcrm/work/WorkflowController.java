@@ -30,14 +30,16 @@ public class WorkflowController extends AbstractController {
         + "GROUP_CONCAT(p.name) name,"
         + "o.orderno orderno,"
         + "sum(bi.num) num,"
-        + "oi.date date,"
+        + "date_format(oi.date,'%Y-%m-%d') date,"
         + "o.status,"
+        + "user.username saler,"
         + "GROUP_CONCAT(bi.comments) comments";
     String sqlExcept = " from `order` o  " 
         + "left join orderitem oi on o.id=oi.order "
         + "left join bookitem bi on oi.bookitem=bi.id "  
         + "left join product p on bi.product=p.id "
-        + "left join customer cust on cust.id=bi.customer " 
+        + "left join customer cust on cust.id=bi.customer "
+        + "left join user user on user.id=bi.user " 
         + "where " + getSqlForUserRole()
         + " and o.status != " + Order.STATUS_CANCELLED + " "
         + this.getSearchStatement( true, "" ) 
@@ -52,7 +54,7 @@ public class WorkflowController extends AbstractController {
         );
     Pager pager = new Pager( page.getTotalRow(), page.getList() );
     this.setAttr( "data", pager );
-    this.setAttr( "page_header", "订单工作流" );
+    this.setAttr( "page_header", "订单工作流管理" );
     render( getIndexHtml() );
   }
   
@@ -77,7 +79,7 @@ public class WorkflowController extends AbstractController {
         );
     Pager pager = new Pager( page.getTotalRow(), page.getList() );
     this.setAttr( "data", pager );
-    this.setAttr( "page_header", "产品工作流" );
+    this.setAttr( "page_header", "产品工作流管理" );
     render("prdworkflow.html");
   }
   
@@ -208,7 +210,15 @@ public class WorkflowController extends AbstractController {
       Db.batchSave( wiList, wiList.size() );
       this.forwardIndex();
     }
-    
+  }
+  
+  public void viewWorkflowDetail(){
+    int workflowid = this.getParaToInt( "wkid" );
+    Workflow workflow = Workflow.dao.findById( workflowid );
+    if( workflow != null ){
+      this.setAttr( "workflows", workflow.getRelatedWorkflows() );
+    }
+    render("detailworkflow.html");
   }
   
 }

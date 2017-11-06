@@ -4,6 +4,7 @@
 	       <label><span class="badge badge-info">订单号：</span><a href="/orderview?orderno=${row.orderno!}">${row.orderno!}</a></label>
 	       <label><span class="badge badge-info">客户名称：</span>${row.company!}</label>
 	       <label><span class="badge badge-info">交货日期：</span>${row.date!}</label>
+	       <label><span class="badge badge-info">销售人员：</span>${row.saler!}</label>
 	       <button class="btn btn-primary btn-sm" style="margin-left:20px;" name="startorderWorkflow">开始订单工作流</button>
 	    </div>
 	     <#if row.bi?size != 0>
