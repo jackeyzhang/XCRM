@@ -1,23 +1,24 @@
 
 <div class="col-md-2"
-	style="margin: 5px; border: 1px dashed blue; height: 230px;padding-right:5px;"
+	style="margin: 5px; border: 1px dashed blue; height: 235px;padding-right:5px;"
 	id="workflowitem">
 	
 	<div class="form-group">
 	<div class="row">
-		<div class="col-md-4" style="padding-right:5px;">
+		<div class="col-md-4" style="padding-right:5px;padding-left:5px;">
 		  <img src="${prdimg_path}${bi.prdid!}/${bi.fielname!}" class="img-responsive img-thumbnail" style="height:80px;">
 		</div>
 		<div class="col-md-8" style="padding-left:5px;">
 		    <label>名称：<a href="/product/detail?prdid=${bi.prdid}">${bi.prdname!}</a></label><br>
-		    <label>  数量：${bi.num!}</label>
+		    <label>数量：${bi.num!}</label><br>
+		    <label>属性：${bi.prdattrs!}</label>
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-12" style="padding-left:5px;">
 		   <label>工作流模板:</label> 
 		</div>
-		<div class="col-md-12">
+		<div class="col-md-12" style="padding-left:5px;">
 				<label id="selectworkflowitem" hidden>${bi.workflow!}</label> 
 				<select class="form-control"
 					name="workitemtemplate" id="workflow">
@@ -25,10 +26,10 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-12" style="padding-left:5px;">
 				<label style="height:60px;">产品备注:${bi.comments!}</label> 
     </div>
-    <div class="col-md-12">
+    <div class="col-md-12" style="padding-left:5px;">
         <#if bi.wfid??>
           <button class="btn btn-default btn-xs" id="viewworkitem" name="viewworkitem" workflow="${bi.wfid}">查看订单项工作流</button>
         <#else>
