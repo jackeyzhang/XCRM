@@ -65,6 +65,13 @@ label{
 				<#include "../common/menu.html"/>
 				<#include "../common/pageheader.html"/>
 				<#include "toolbar.html"/>
+				
+				<#if workflows?size != 0>
+         <#list workflows as workflowitem>
+            <#include "detailworkflowitem.html"/>
+         </#list>
+       </#if>
+				
 				<#include "../common/footer.html"/>
 	</div>
 </body>

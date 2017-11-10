@@ -30,7 +30,7 @@ public class WorkflowController extends AbstractController {
         + "GROUP_CONCAT(p.name) name,"
         + "o.orderno orderno,"
         + "sum(bi.num) num,"
-        + "date_format(oi.date,'%Y-%m-%d') date,"
+        + "date_format(o.deliverytime,'%Y-%m-%d') date,"
         + "o.status,"
         + "user.username saler,"
         + "GROUP_CONCAT(bi.comments) comments";
@@ -195,6 +195,7 @@ public class WorkflowController extends AbstractController {
       workflow.setIndex( index + i );
       workflow.setStatus( Workflow.WORK_STATUS_INIT );
       workflow.setProgress( 0 );
+      workflow.setWorkflowtemplate( workflowtemplateid );
       workflow.save();
       
       Workflowtemplate wft = Workflowtemplate.dao.findById( workflowtemplateid );
@@ -219,6 +220,8 @@ public class WorkflowController extends AbstractController {
     if( workflow != null ){
       this.setAttr( "workflows", workflow.getRelatedWorkflows() );
     }
+    this.setAttr("order", workflow.getOrder());
+    this.setAttr("orderdeliverytime", StrUtil.formatDate( workflow.getOrder().getDeliverytime(), "yyyy-MM-dd" ));
     render("detailworkflow.html");
   }
   

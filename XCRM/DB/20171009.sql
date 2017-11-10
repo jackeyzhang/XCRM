@@ -92,3 +92,7 @@ ADD COLUMN `workflow` INT(11) NULL AFTER `salesseason`;
 ALTER TABLE `xcrm`.`workitem` 
 ADD COLUMN `workflow` INT(11) NOT NULL AFTER `spendtime`;
 
+ALTER TABLE `xcrm`.`workflow` 
+ADD COLUMN `workflowtemplate` INT(11) NOT NULL AFTER `progress`;
+
+

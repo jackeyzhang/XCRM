@@ -49,4 +49,12 @@ public abstract class BaseWorkflow<M extends BaseWorkflow<M>> extends Model<M> i
 		return get("progress");
 	}
 
+	public void setWorkflowtemplate(java.lang.Integer workflowtemplate) {
+		set("workflowtemplate", workflowtemplate);
+	}
+
+	public java.lang.Integer getWorkflowtemplate() {
+		return get("workflowtemplate");
+	}
+
 }

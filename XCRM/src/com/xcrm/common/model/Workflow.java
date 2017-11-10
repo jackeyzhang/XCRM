@@ -25,6 +25,20 @@ public class Workflow extends BaseWorkflow<Workflow> {
    */
   public List<Workflow> getRelatedWorkflows( ){
     int bookitemid = this.getBookitem();
-    return dao.find( "select * from workflow where bookitem=?", bookitemid );
+    return dao.find( "select wf.*,wft.name name,bi.*,prd.name prdname,prd.id prdid "
+        + "from workflow wf "
+        + "join workflowtemplate wft on wft.id=wf.workflowtemplate "
+        + "join bookitem bi on bi.id=wf.bookitem "
+        + "join product prd on prd.id=bi.product "
+        + "where wf.bookitem=?", bookitemid );
+  }
+  
+  public Bookitem getBookItem( ){
+    return Bookitem.dao.findById( getBookitem() );
+  }
+  
+  public Order getOrder( ){
+    Bookitem bookitem = Bookitem.dao.findById( getBookitem() );
+    return bookitem.getOrder();
   }
 }
