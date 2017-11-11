@@ -55,23 +55,22 @@
 		$('.btn').on('click', function() {
 			searchPrdList(1);
 		});
-
-		$('.pagination a').on('click', function() {
-			if ($(this).html() == '«') {
-				var pageNumber = $('#pageNumber').html();
-				if (pageNumber > 1) {
-					searchPrdList(pageNumber - 1);
-				}
-			} else if ($(this).html() == '»') {
-				var pageNumber = $('#pageNumber').html();
-				if (pageNumber < $('#totalPage').html()) {
-					searchPrdList(pageNumber + 1);
-				}
-			} else {
-				searchPrdList($(this).html());
-			}
-		});
-
+		
+	      $('.pagination a').on('click', function() {
+	          if ($(this).html() == '«') {
+	            var pageNumber = $('#pageNumber').html();
+	            if (pageNumber > 1) {
+	              searchPrdList(pageNumber - 1);
+	            }
+	          } else if ($(this).html() == '»') {
+	            var pageNumber = $('#pageNumber').html();
+	            if (pageNumber < $('#totalPage').html()) {
+	              searchPrdList(pageNumber + 1);
+	            }
+	          } else {
+	            searchPrdList($(this).html());
+	          }
+	        });
 	})
 
 	function searchPrdList(pageNum) {

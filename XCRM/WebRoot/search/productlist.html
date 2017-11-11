@@ -14,6 +14,22 @@
 				 location.href = "/cart?pid="+$(this).siblings('.prd_id').html();
 			}
 		});
+
+        $('.pagination a').on('click', function() {
+            if ($(this).html() == '«') {
+              var pageNumber = $('#pageNumber').html();
+              if (pageNumber > 1) {
+                searchPrdList(pageNumber - 1);
+              }
+            } else if ($(this).html() == '»') {
+              var pageNumber = $('#pageNumber').html();
+              if (pageNumber < $('#totalPage').html()) {
+                searchPrdList(pageNumber + 1);
+              }
+            } else {
+              searchPrdList($(this).html());
+            }
+          });
 	});
 </script>
 <div class="panel panel-primary">
@@ -36,8 +52,9 @@
 		<div class="col-md-12">
 			</#if>
 			<div class="col-md-3 grid_prd" style="text-align: center">
-				<span style="display: none" class="prd_id">${prd.id}</span> <img
-					width="180px" height="240px" class="prd_img" src='${(prd.filename??)?string((prdimg_path+"/"+prd.id+"/"+((prd.filename!"")?split(","))[0]),"/img/placehold.jpg")}' />
+				<span style="display: none" class="prd_id">${prd.id}</span> 
+				<img
+					width="180px" height="240px" class="prd_img" onerror="this.src='/img/default.png'" src='${(prd.filename??)?string((prdimg_path+"/"+prd.id+"/"+((prd.filename!"")?split(","))[0]),"/img/default.png")}' />
 				<div>
 					<a class="prd_name" href="javascript:void(0);">${prd.name}</a>
 				</div>

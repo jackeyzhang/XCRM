@@ -19,11 +19,11 @@
 			   <#list prdimages as prdimg>
 			       <#if x==0>
 						    <div class="active item">
-							     <img onerror="this.src='${prdimg_path}default.png'" alt="没有配图" src="${prdimg_path}${prdimg.productid!}/${prdimg.fielname!}"  class="img-responsive img-thumbnail"/>
+							     <img onerror="this.src='/img/default.png'" alt="没有配图" src="${prdimg_path}${prdimg.productid!}/${prdimg.fielname!}"  class="img-responsive img-thumbnail"/>
 					       </div>
 					   <#else>
 					      <div class="item">
-                  <img onerror="this.src='${prdimg_path}default.png'" alt="没有配图" src="${prdimg_path}${prdimg.productid!}/${prdimg.fielname!}"  class="img-responsive img-thumbnail"/>
+                  <img onerror="this.src='/img/default.png'" alt="没有配图" src="${prdimg_path}${prdimg.productid!}/${prdimg.fielname!}"  class="img-responsive img-thumbnail"/>
                 </div>
 					  </#if>
 					  <#assign x=x+1 />

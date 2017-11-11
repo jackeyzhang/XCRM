@@ -61,6 +61,7 @@ public class SearchController extends AbstractController {
 	public void getPage() {
 		String pageNum = this.getPara("pageNum");
 		this.setAttr("page", search(StringUtils.isEmpty(pageNum) ? 1 : Integer.valueOf(pageNum), PAGE_SIZE));
+		setAttr("count", count());
 		this.render("productlist.html");
 	}
 
