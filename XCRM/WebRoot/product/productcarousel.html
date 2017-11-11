@@ -39,12 +39,12 @@
 			<#assign x=0 />
 			<#list prdimages as prdimg> <#if x==0>
 			<div class="active item" data-slide-number="${x}">
-				<img src="${prdimg_path}/${prdimg.productid}/${prdimg.fielname}"
+				<img src="${prdimg_path}/${prdimg.productid}/${prdimg.fielname}" onerror="this.src='${prdimg_path}default.png'" 
 					class="img-responsive img-thumbnail">
 			</div>
 			<#else>
 			<div class="item" data-slide-number="${x}">
-				<img src="${prdimg_path}/${prdimg.productid}/${prdimg.fielname}"
+				<img src="${prdimg_path}/${prdimg.productid}/${prdimg.fielname}" onerror="this.src='${prdimg_path}default.png'" 
 					class="img-responsive img-thumbnail">
 			</div></#if> <#assign x=x+1 /> </#list>
 		</div>
@@ -53,7 +53,7 @@
 				<#assign y=0 />
 				<#list prdimages as prdimg>
 				<li><a id="carousel-selector-${y}" class="selected"> <img
-						src="${prdimg_path}/${prdimg.productid}/${prdimg.fielname}"
+						src="${prdimg_path}/${prdimg.productid}/${prdimg.fielname}" onerror="this.src='${prdimg_path}default.png'" 
 						class="img-responsive" style="width: 80px;">
 				</a></li>
 				<#assign y=y+1 /> </#list>

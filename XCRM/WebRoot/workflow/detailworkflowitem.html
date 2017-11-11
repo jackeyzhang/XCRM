@@ -1,12 +1,47 @@
 
 <div class="form-group">
 	<div class="row">
-		<div class="col-md-offset-1 col-md-3" style="padding-right: 5px; padding-left: 5px;">
-		    
+	   <div class="col-md-3 column">
+        <#if prdimages?size != 0> 
+          <div class="carousel slide" id="carousel-679408" style="width:100%;padding-right: 5px; padding-left: 5px;">
+		          <ol class="carousel-indicators">
+				       <#assign x=0 />
+		             <#list prdimages as prdimg>
+		              <li data-slide-to="${x}" data-target="#carousel-679408"></li>
+		              <#assign x=x+1 />
+		           </#list>
+	           </ol>
+        </#if>
+    
+			 <#if prdimages?size != 0> 
+			   <div class="carousel-inner">
+			   <#assign x=0 />
+			   <#list prdimages as prdimg>
+			       <#if x==0>
+						    <div class="active item">
+							     <img onerror="this.src='${prdimg_path}default.png'" alt="没有配图" src="${prdimg_path}${prdimg.productid!}/${prdimg.fielname!}"  class="img-responsive img-thumbnail"/>
+					       </div>
+					   <#else>
+					      <div class="item">
+                  <img onerror="this.src='${prdimg_path}default.png'" alt="没有配图" src="${prdimg_path}${prdimg.productid!}/${prdimg.fielname!}"  class="img-responsive img-thumbnail"/>
+                </div>
+					  </#if>
+					  <#assign x=x+1 />
+			    </#list>
+	        </div>
+	        <a rel="nofollow" class="left carousel-control"
+	          href="#carousel-679408" data-slide="prev"><span
+	          class="glyphicon glyphicon-chevron-left"></span></a> <a rel="nofollow"
+	          class="right carousel-control" href="#carousel-679408"
+	          data-slide="next"><span
+	          class="glyphicon glyphicon-chevron-right"></span></a>
+          </div>
+      </#if>
 		</div>
-		<div class="col-md-8" style="padding-left: 5px;">
-			 <label>订单号：${order.orderno!}</label><br>
-       <label>产品名称：${workflowitem.prdname!}</label><br>
+		
+		<div class="col-md-9 column" style="padding-left: 5px;">
+			 <label>订单号：<a href="/orderview?orderno=${order.orderno!}" target="_blank">${order.orderno!}</a></label><br>
+       <label>产品名称：<a href="/product/detail?prdid=${workflowitem.prdid}" target="_blank">${workflowitem.prdname!}</a></label><br>
        <label>产品参数：${workflowitem.prdattrs!}</label><br>
 		   <label>工作流模板：${workflowitem.name!}</label><br> 
 			 <label>数量序号：${workflowitem.index!}</label><br>  

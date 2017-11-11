@@ -1,5 +1,6 @@
 package com.xcrm.common.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.xcrm.common.model.base.BaseWorkflow;
@@ -35,6 +36,15 @@ public class Workflow extends BaseWorkflow<Workflow> {
   
   public Bookitem getBookItem( ){
     return Bookitem.dao.findById( getBookitem() );
+  }
+  
+  public List<Productpic> getPrdPictures( ){
+    Bookitem bookitem = getBookItem();
+    Product product = Product.dao.findById( bookitem.getProduct() ) ;
+    if( product != null ){
+      return product.getPictures();
+    }
+    return new ArrayList<>();
   }
   
   public Order getOrder( ){

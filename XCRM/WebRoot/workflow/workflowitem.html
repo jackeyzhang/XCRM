@@ -6,7 +6,7 @@
 	<div class="form-group">
 	<div class="row">
 		<div class="col-md-4" style="padding-right:5px;padding-left:5px;">
-		  <img src="${prdimg_path}${bi.prdid!}/${bi.fielname!}" class="img-responsive img-thumbnail" style="height:80px;">
+		  <img onerror="this.src='${prdimg_path}default.png'" src="${prdimg_path}${bi.prdid!}/${bi.fielname!}" class="img-responsive img-thumbnail" style="height:80px;">
 		</div>
 		<div class="col-md-8" style="padding-left:5px;">
 		    <label>名称：<a href="/product/detail?prdid=${bi.prdid}" target="_blank">${bi.prdname!}</a></label><br>

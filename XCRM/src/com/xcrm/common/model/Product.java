@@ -26,4 +26,8 @@ public class Product extends BaseProduct<Product> {
             + " join `order` o on o.id = oi.order "
             + " left join workflow wf on wf.bookitem = bi.id " );
   }
+  
+  public List<Productpic> getPictures( ){
+    return Productpic.dao.find( "select * from Productpic where productid=?", getId() );
+  }
 }
