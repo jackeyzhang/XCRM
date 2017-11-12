@@ -6,10 +6,10 @@
 	<div class="form-group">
 	<div class="row">
 		<div class="col-md-4" style="padding-right:5px;padding-left:5px;">
-		  <img onerror="this.src='/img/default.png'" src="${prdimg_path}${bi.prdid!}/${bi.fielname!}" class="img-responsive img-thumbnail" style="height:80px;">
+		  <img onerror="this.src='/img/default.png'" src="${prdimg_path!}${bi.prdid!}/${bi.fielname!}" class="img-responsive img-thumbnail" style="height:80px;">
 		</div>
 		<div class="col-md-8" style="padding-left:5px;">
-		    <label>名称：<a href="/product/detail?prdid=${bi.prdid}" target="_blank">${bi.prdname!}</a></label><br>
+		    <label>名称：<a href="/product/detail?prdid=${bi.prdid!}" target="_blank">${bi.prdname!}</a></label><br>
 		    <label>数量：${bi.num!}</label><br>
 		    <label>属性：${bi.prdattrs!}</label>
 		</div>
@@ -37,7 +37,7 @@
         <#if bi.wfid??>
           <button class="btn btn-default btn-xs" id="viewworkitem" name="viewworkitem" workflow="${bi.wfid}">查看订单项工作流</button>
         <#else>
-          <button class="btn btn-primary btn-xs" id="startworkitem" name="startworkitem" bookitem="${bi.id!}">开始订单项工作流</button>
+          <button class="btn btn-primary btn-xs" id="startworkitem" name="startworkitem" bookitem="${bi.id!}" binum="${bi.num!}">开始订单项工作流</button>
         </#if>
     </div>
   </div>

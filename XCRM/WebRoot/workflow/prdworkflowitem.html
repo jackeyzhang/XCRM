@@ -10,10 +10,10 @@
 			name="workitemtemplate" id="workflow">
 		</select>
 		<label style="height:60px;">产品备注:${bi.comments!}</label> 
-		<#if bi.wfid??>
-		  <button class="btn btn-default btn-xs" id="viewworkitem" name="viewworkitem" workflow="${bi.wfid}">查看订单项工作流</button>
-    <#else>
-      <button class="btn btn-primary btn-xs" id="startworkitem" name="startworkitem" bookitem="${bi.id!}">开始订单项工作流</button>
-    </#if>
+		    <#if bi.wfid??>
+          <button class="btn btn-default btn-xs" id="viewworkitem" name="viewworkitem" workflow="${bi.wfid}">查看订单项工作流</button>
+        <#else>
+          <button class="btn btn-primary btn-xs" id="startworkitem" name="startworkitem" bookitem="${bi.id!}" binum="${bi.num!}">开始订单项工作流</button>
+        </#if>
 	</div>
 </div>

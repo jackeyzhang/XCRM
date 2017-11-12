@@ -15,7 +15,9 @@ import com.xcrm.common.model.Workflow;
 import com.xcrm.common.model.Workflowtemplate;
 import com.xcrm.common.model.Workitem;
 import com.xcrm.common.model.Workitemtemplate;
+import com.xcrm.common.qr2.QRCodeUtil;
 import com.xcrm.common.util.Constant;
+import com.xcrm.common.util.PropUtil;
 import com.xcrm.common.util.StrUtil;
 
 
@@ -57,6 +59,7 @@ public class WorkflowController extends AbstractController {
     Pager pager = new Pager( page.getTotalRow(), page.getList() );
     this.setAttr( "data", pager );
     this.setAttr( "page_header", "产品工作流管理" );
+    setAttr( "prdimg_path", getPrdImgBaseUrl() );
     render( "prdworkflow.html" );
   }
 
@@ -85,6 +88,7 @@ public class WorkflowController extends AbstractController {
     this.setAttr( "prdname", prdname );
     this.setAttr( "customername", customername );
     this.setAttr( "datepick", datepick );
+    setAttr( "prdimg_path", getPrdImgBaseUrl() );
     render( getIndexHtml() );
   }
 
@@ -160,6 +164,7 @@ public class WorkflowController extends AbstractController {
       workflow.setProgress( 0 );
       workflow.setWorkflowtemplate( workflowtemplateid );
       workflow.save();
+      QRCodeUtil.generator( "" + workflow.getId(), "" +  workflow.getId(), getRealPath(), PropUtil.getWorkflowQr2Path());
 
       Workflowtemplate wft = Workflowtemplate.dao.findById( workflowtemplateid );
       List<Workitem> wiList = new ArrayList<>();
@@ -182,12 +187,18 @@ public class WorkflowController extends AbstractController {
     Workflow workflow = Workflow.dao.findById( workflowid );
     if ( workflow != null ) {
       setAttr( "workflows", workflow.getRelatedWorkflows() );
+      List<Workitem> workflowitems = new ArrayList<>();
+      for( Workflow wf : workflow.getRelatedWorkflows()){
+        workflowitems.addAll( wf.getWorkItems() );
+      }
+      this.setAttr( "workflowitems", workflowitems );
       setAttr( "prdimages", workflow.getPrdPictures() );
       setAttr( "prdimg_path", getPrdImgBaseUrl() );
     }
     setAttr( "order", workflow.getOrder() );
     setAttr( "orderdeliverytime", StrUtil.formatDate( workflow.getOrder().getDeliverytime(), "yyyy-MM-dd" ) );
-    setAttr( "page_header", "订单" + workflow.getOrder().getOrderno() + "工作项:" );
+    setAttr( "page_header", "订单工作流如下:" );
+    setAttr( "workflow_qr2_path", getWorkflowQr2BaseUrl() );
     render( "detailworkflow.html" );
   }
 

@@ -259,6 +259,16 @@ public class QRCodeUtil {
     }
   }
   
+  public static void generator(String text,String filename, String basePath, String qr2Path) {
+    String logo = basePath + Constant.SLASH + "qr.png";
+    String barcode = basePath + Constant.SLASH + qr2Path + Constant.SLASH;
+    try {
+      QRCodeUtil.encode(text, logo, barcode, filename, true);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  
   public static void main(String[] args ){
     String[] ss = new String[]{
         "542"

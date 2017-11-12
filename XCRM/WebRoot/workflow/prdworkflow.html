@@ -36,13 +36,19 @@ $(function() {
 		 window.location="/workflow/index";
 	});
 	
-	$("[name='startworkitem']").click(function(){
-		  var bookitemid = $(this).attr("bookitem");
-		  var workflowtemplate = $(this).prev().prev().val();
-		  var index = 0, num = 1;
-		  window.location = "/workflow/startBookItem?bi="+bookitemid+"&wftid=" + workflowtemplate + "&index=" + index + "&num=" + num;
-	});
-	
+	  $("[name='startworkitem']").click(function(){
+	      var bookitemid = $(this).attr("bookitem");
+	      var num = $(this).attr("binum");
+	      var workflowtemplate = $(this).closest("div.row").find("#workflow").val();
+	      var index = 0;
+	      window.location = "/workflow/startBookItem?bi="+bookitemid+"&wftid=" + workflowtemplate + "&index=" + index + "&num=" + num;
+	  });
+	  
+	  
+	  $("[name='viewworkitem']").click(function(){
+	     var workflowid = $(this).attr("workflow");
+	      window.open("/workflow/viewWorkflowDetail?wkid=" + workflowid);
+	  });
 	
 });
 </script>

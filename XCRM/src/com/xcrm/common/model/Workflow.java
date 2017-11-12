@@ -26,7 +26,7 @@ public class Workflow extends BaseWorkflow<Workflow> {
    */
   public List<Workflow> getRelatedWorkflows( ){
     int bookitemid = this.getBookitem();
-    return dao.find( "select wf.*,wft.name name,bi.*,prd.name prdname,prd.id prdid "
+    return dao.find( "select wf.*,wft.name name,prd.name prdname,prd.id prdid,bi.num binum "
         + "from workflow wf "
         + "join workflowtemplate wft on wft.id=wf.workflowtemplate "
         + "join bookitem bi on bi.id=wf.bookitem "
@@ -50,5 +50,9 @@ public class Workflow extends BaseWorkflow<Workflow> {
   public Order getOrder( ){
     Bookitem bookitem = Bookitem.dao.findById( getBookitem() );
     return bookitem.getOrder();
+  }
+  
+  public List<Workitem> getWorkItems( ){
+    return Workitem.dao.find( "select wi.*,dp.name dp from workitem wi join department dp on dp.id=wi.dep  where wi.workflow=?" , this.getId() );
   }
 }

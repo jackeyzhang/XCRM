@@ -36,6 +36,6 @@ public class Order extends BaseOrder<Order> {
         + "from bookitem bi "
         + "join product prd on prd.id= bi.product "
         + "join orderitem oi on oi.bookitem = bi.id and oi.order = " + orderid 
-        + " left join workflow wf on wf.bookitem = bi.id ");
+        + " left join workflow wf on wf.bookitem = bi.id and wf.index=0 ");
   }
 }

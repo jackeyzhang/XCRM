@@ -179,6 +179,10 @@ public abstract class AbstractController extends Controller {
   public String getPrdQr2Path() {
     return this.getRealPath() + PropUtil.getPrdQr2Path() + Constant.SLASH;
   }
+  
+  public String getWorkflowQr2Path(){
+    return this.getRealPath() + PropUtil.getWorkflowQr2Path() + Constant.SLASH;
+  }
 
   public String getPrdImgBaseUrl() {
     return getImgUrl( PropUtil.getPrdImgPath() );
@@ -186,6 +190,10 @@ public abstract class AbstractController extends Controller {
 
   public String getPrdQr2BaseUrl() {
     return getImgUrl( PropUtil.getPrdQr2Path() );
+  }
+  
+  public String getWorkflowQr2BaseUrl() {
+    return getImgUrl( PropUtil.getWorkflowQr2Path() );
   }
 
   public String getImgUrl( String url ) {

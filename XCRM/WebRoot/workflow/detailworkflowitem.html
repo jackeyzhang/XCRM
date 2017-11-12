@@ -39,14 +39,34 @@
       </#if>
 		</div>
 		
-		<div class="col-md-9 column" style="padding-left: 5px;">
+		<div class="col-md-3 column" style="padding-left: 5px;">
 			 <label>订单号：<a href="/orderview?orderno=${order.orderno!}" target="_blank">${order.orderno!}</a></label><br>
-       <label>产品名称：<a href="/product/detail?prdid=${workflowitem.prdid}" target="_blank">${workflowitem.prdname!}</a></label><br>
-       <label>产品参数：${workflowitem.prdattrs!}</label><br>
-		   <label>工作流模板：${workflowitem.name!}</label><br> 
-			 <label>数量序号：${workflowitem.index!}</label><br>  
-			 <label>商品备注：${workflowitem.comments!}</label><br>
+       <label>产品名称：<a href="/product/detail?prdid=${workflow.prdid!}" target="_blank">${workflow.prdname!}</a></label><br>
+       <label>产品参数：${workflow.prdattrs!}</label><br>
+		   <label>工作流模板：${workflow.name!}</label><br> 
+			 <label>数量序号：${workflow.binum! }-${workflow.index+1! }</label><br>  
+			 <label>商品备注：${workflow.comments!}</label><br>
 			 <label>交货日期：${orderdeliverytime!}</label><br>
+	     <label>二维码:</label><img alt="二维码不存在" style="width: 25mm; height: 25mm;" src="${workflow_qr2_path!}/${workflow.id!}.jpg" class="img-responsive img-thumbnail"/><br>
+			 <p></p>
+			 <button class="btn btn-primary"><span class="glyphicon glyphicon-print" aria-hidden="true"></span> 打印二维码</button>
+			 
+			 <button class="btn btn-primary"  data-toggle="tooltip" data-placement="bottom" title="开启工作流之前请先在右侧分配工作人员！">
+			 <span class="glyphicon glyphicon-flag" aria-hidden="true"></span> 开始本工作流</button>
 		</div>
+		
+    <div class="col-md-6 column" style="padding-left: 5px;">
+      
+      <#if workflowitems?size != 0> 
+        <#list workflowitems as workflowitem>
+			      <#if workflow.id==workflowitem.workflow>
+			         <label><span class="label label-warning">序号:${workflowitem.index!}</span></label>
+			         <label> 工作部门:${workflowitem.dp!}</label>
+			         <button class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>添加工作人员</button>
+			         <br>
+			      </#if>
+	      </#list>
+      </#if>
+    </div>
 	</div>
 </div>

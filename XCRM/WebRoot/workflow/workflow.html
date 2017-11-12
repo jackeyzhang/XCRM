@@ -38,8 +38,9 @@ $(function() {
 	
 	$("[name='startworkitem']").click(function(){
 		  var bookitemid = $(this).attr("bookitem");
+		  var num = $(this).attr("binum");
 		  var workflowtemplate = $(this).closest("div.row").find("#workflow").val();
-		  var index = 0, num = 1;
+		  var index = 0;
 		  window.location = "/workflow/startBookItem?bi="+bookitemid+"&wftid=" + workflowtemplate + "&index=" + index + "&num=" + num;
 	});
 	

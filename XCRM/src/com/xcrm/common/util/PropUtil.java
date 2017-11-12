@@ -19,6 +19,10 @@ public class PropUtil {
   public static String getPrdQr2Path() {
     return PropKit.get("product.qr2.path");
   }
+  
+  public static String getWorkflowQr2Path() {
+    return PropKit.get("product.qr2.workflowpath");
+  }
 
   public static boolean isDevMode() {
     return PropKit.getBoolean("devMode");
