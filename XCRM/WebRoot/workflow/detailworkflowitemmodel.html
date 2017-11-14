@@ -1,0 +1,37 @@
+<!-- 增加和编辑用户模态框（Modal） -->
+<div class="modal fade" id="addoreditworker${workflowitem.id!}" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"
+          aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">编辑${workflowitem.dp!}的工作人员</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-inline">
+		        <div class="form-group">
+		         <label>${workflowitem.dp!}工作人员:</label>
+		         <select class="form-control" style="max-width:200px;" id="workerlist">
+		           <option value="1">张三-销售部们的娃啊大家都照顾</option>
+		           <option value="2">李四</option>
+		         </select>
+		         <div class="input-group" style="max-width:150px;">
+                <div class="input-group-addon">百分比</div>
+		            <input type="number" class="form-control" value="100"></input>
+		         </div>
+		         <button type="button" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true" ></span></button>
+		         <button type="button" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-minus-sign" aria-hidden="true" ></span></button>
+		        </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+        </button>
+        <button type="button" class="btn btn-primary">提交更改</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal -->
+</div>

@@ -96,3 +96,13 @@ ALTER TABLE `xcrm`.`workflow`
 ADD COLUMN `workflowtemplate` INT(11) NOT NULL AFTER `progress`;
 
 
+--2017-11-14
+CREATE TABLE `xcrm`.`workitemallocation` (
+  `id` INT NOT NULL,
+  `workitem` INT NOT NULL,
+  `worker` INT NOT NULL,
+  `weight` INT NULL,
+  `spendtime` DOUBLE NULL COMMENT 'hours',
+  `status` INT NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`));
+

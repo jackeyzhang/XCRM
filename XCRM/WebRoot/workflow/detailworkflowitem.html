@@ -63,7 +63,8 @@
 			      <#if workflow.id==workflowitem.workflow>
 			         <label><span class="label label-warning">序号:${workflowitem.index!}</span></label>
 			         <label> 工作部门:${workflowitem.dp!}</label>
-			         <button class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>添加工作人员</button>
+			         <button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#addoreditworker${workflowitem.id!}"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true" ></span>添加工作人员</button>
+			         <#include "detailworkflowitemmodel.html"/>
 			         <br>
 			      </#if>
 	      </#list>
@@ -71,3 +72,5 @@
     </div>
 	</div>
 </div>
+
+
