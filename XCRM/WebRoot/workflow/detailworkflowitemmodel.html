@@ -10,18 +10,18 @@
       </div>
       <div class="modal-body">
         <form class="form-inline">
-		        <div class="form-group">
+		        <div class="form-group" id="workitemform">
 		         <label>${workflowitem.dp!}工作人员:</label>
-		         <select class="form-control" style="max-width:200px;" id="workerlist">
-		           <option value="1">张三-销售部们的娃啊大家都照顾</option>
-		           <option value="2">李四</option>
-		         </select>
+		         <!-- <select class="form-control" style="max-width:200px;" id="workerlist${workflowitem.dep!}" name="workerlist">
+		         </select> -->
+		         <input class="form-control" style="max-width:200px;" id="workerlist" name="workerlist" data-provide="typeahead" data-items="4">
+             </input>
 		         <div class="input-group" style="max-width:150px;">
                 <div class="input-group-addon">百分比</div>
 		            <input type="number" class="form-control" value="100"></input>
 		         </div>
-		         <button type="button" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true" ></span></button>
-		         <button type="button" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-minus-sign" aria-hidden="true" ></span></button>
+		         <button type="button" class="btn btn-sm btn-primary" name="addworkitem" onclick="javascript:addworkitemevent(this);"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
+		         <button type="button" class="btn btn-sm btn-danger" name="delworkitem" onclick="javascript:delworkitemevent(this);"><span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span></button>
 		        </div>
         </form>
       </div>

@@ -1,5 +1,7 @@
 package com.xcrm.user;
 
+import java.util.List;
+
 import com.jfinal.aop.Before;
 import com.xcrm.common.AbstractController;
 import com.xcrm.common.model.User;
@@ -72,5 +74,11 @@ public class UserController extends AbstractController {
     return "username";
   }
   
+  
+  public void listWorkers(){
+//    List<User> allworkers = User.dao.find( "select usr.*,dep.name depname from user usr join department dep on dep.id=usr.department where usr.role=" + User.ROLE_WORKER );
+    List<User> allworkers = User.dao.find( "select usr.*,dep.name depname from user usr join department dep on dep.id=usr.department");
+    this.renderJson(allworkers);
+  }
   
 }

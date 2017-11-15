@@ -5,6 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <#include "../common/js2css.html"/>
+<script src="/js/bootstrap3-typeahead.js"></script>
 <script src="/js/jquery.PrintArea.js"></script>
 <link rel="stylesheet" href="/css/PrintArea.css">
 <style type="text/css" media="print">
@@ -15,32 +16,46 @@
   }
 </style>
 <script type="text/javascript">
+var subjects = new Array(); 
+
 function load(){
 	$.get('/workflowtemplate/list/', function(data){
 		    for( e in data){
 		   	  $("[name='workitemtemplate']").append("<option value='" + data[e].id + "'>" + data[e].name + "</option>");
 		    }
-		    //var selectworkflow = $("#selectworkflowitem").html();
-		    //var selectworkflow = $("[name='workitemtemplate").prev().html();
-		    //$("[name='workitemtemplate']").val( selectworkflow );
 		    $("[name='workitemtemplate").each(function(){
 		    	$(this).val( $(this).prev().html());
 		    });
 	});
 	
-    $("#print").click(function() {
-      $('.printarea').printArea({
-        mode : 'popup',
-        popClose : 'false',
-        extraCss : '',
-        retainAttr : '',
-        extraHead : ''
-      });
-    });
 
+	$.get('/user/listWorkers/', function(data){
+        /* for( e in data){
+          $("[name='workerlist']").append("<option value='" + data[e].id + "'>" + data[e].username + "-" + data[e].depname + "</option>");
+        }
+         */
+        for( d in data){
+          subjects.push( data[d] );
+        }
+  });
+	
 };
 
+
 $(function() {
+	
+	 freshlistWorkers();
+	
+    $("#print").click(function() {
+        $('.printarea').printArea({
+          mode : 'popup',
+          popClose : 'false',
+          extraCss : '',
+          retainAttr : '',
+          extraHead : ''
+        });
+    });
+	
 	$("#searchworkflow").click( function() {
 		 var orderno = $("[name='orderno']").val( );
 		 var prdname = $("[name='prdname']").val( );
@@ -49,7 +64,6 @@ $(function() {
 		 var searchword = "orderno=" + orderno + "&prdname=" + prdname + "&customername=" + customername + "&datepick=" + datepick;
 		 window.location="/workflow/search?" + searchword;
 	});
-	
 	
 	$("#listall").click( function() {
 		 window.location="/workflow/index";
@@ -62,8 +76,34 @@ $(function() {
 		  window.location = "/workflow/startBookItem?bi="+bookitemid+"&wftid=" + workflowtemplate + "&index=" + index + "&num=" + num;
 	});
 	
-	
 });
+
+var addworkitemevent = function( obj ){
+	  var workflowform = $(obj).parent();
+    workflowform.after( workflowform.clone());
+    freshlistWorkers();
+}
+
+
+var delworkitemevent = function( obj ){
+	var workflowform = $(obj).parent();
+	workflowform.remove();
+}
+
+var freshlistWorkers = function(){
+	 $("[name='workerlist").each(function(){
+      $(this).typeahead({
+          source: subjects,
+          afterSelect: function (item) {
+          },
+          displayText: function (item) {
+             return item.username + "-" +item.depname;//返回字符串
+           }
+        }) ;
+    });
+}
+
+
 </script>
 <style type="text/css">
 #workflowitem:hover{
