@@ -53,6 +53,8 @@ public class Workflow extends BaseWorkflow<Workflow> {
   }
   
   public List<Workitem> getWorkItems( ){
-    return Workitem.dao.find( "select wi.*,dp.name dp from workitem wi join department dp on dp.id=wi.dep  where wi.workflow=?" , this.getId() );
+    List<Workitem> items = Workitem.dao.find( "select wi.*,dp.name dp from workitem wi join department dp on dp.id=wi.dep  where wi.workflow=?" , this.getId() );
+    items.stream().forEach( i->i.put( "workitemallocations", i.getWorkitemallocations() ) );
+    return items;
   }
 }

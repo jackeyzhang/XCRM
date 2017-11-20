@@ -98,7 +98,7 @@ ADD COLUMN `workflowtemplate` INT(11) NOT NULL AFTER `progress`;
 
 --2017-11-14
 CREATE TABLE `xcrm`.`workitemallocation` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `workitem` INT NOT NULL,
   `worker` INT NOT NULL,
   `weight` INT NULL,

@@ -16,7 +16,8 @@
   }
 </style>
 <script type="text/javascript">
-var subjects = new Array(); 
+
+var workers = new Array(); 
 
 function load(){
 	$.get('/workflowtemplate/list/', function(data){
@@ -28,23 +29,33 @@ function load(){
 		    });
 	});
 	
-
-	$.get('/user/listWorkers/', function(data){
-        /* for( e in data){
-          $("[name='workerlist']").append("<option value='" + data[e].id + "'>" + data[e].username + "-" + data[e].depname + "</option>");
-        }
-         */
-        for( d in data){
-          subjects.push( data[d] );
-        }
-  });
+	$.fn.serializeObject = function()
+	{
+	  var o = {};
+	  var a = this.serializeArray();
+	  $.each(a, function() {
+	    if (o[this.name] !== undefined) {
+	      if (!o[this.name].push) {
+	        o[this.name] = [o[this.name]];
+	      }
+	      o[this.name].push(this.value || '');
+	    } else {
+	      o[this.name] = this.value || '';
+	    }
+	  });
+	  return o;
+	};
 	
 };
 
 
 $(function() {
-	
-	 freshlistWorkers();
+	 $.get('/user/listWorkers/', function(data){
+	        for( d in data){
+	          workers.push( data[d] );
+	        }
+	        freshlistWorkers();
+	  });
 	
     $("#print").click(function() {
         $('.printarea').printArea({
@@ -76,6 +87,34 @@ $(function() {
 		  window.location = "/workflow/startBookItem?bi="+bookitemid+"&wftid=" + workflowtemplate + "&index=" + index + "&num=" + num;
 	});
 	
+	
+	$("[name='submitworkers']").each( function(){
+		  $(this).click( function(){
+			    //validate the worker is not selected
+			    
+			    // submit data
+			    var form_data = $(this).closest("#workerform").serializeArray();
+			    $.ajax({
+			            type: "post",
+			            url: "/workflow/saveWorkitems",
+			            data: form_data,
+			            contentType : "application/x-www-form-urlencoded; charset=utf-8",
+			            success: function (data, status) {
+			                if (status == "success") {
+			                   window.location.reload();
+			                }
+			            },
+			            error: function () {
+			              alert("编辑失败");
+			            },
+			            complete: function () {
+	
+			            }
+			        });
+			  });
+	});
+
+	
 });
 
 var addworkitemevent = function( obj ){
@@ -92,9 +131,17 @@ var delworkitemevent = function( obj ){
 
 var freshlistWorkers = function(){
 	 $("[name='workerlist").each(function(){
+		  // sort by dep id
+		  var currentdepid = $(this).attr("depid");
+		  var workersclone = workers.concat();
+		  workersclone.sort( function( worker1, worker2 ){
+			  return Math.abs(worker1.department - currentdepid) - Math.abs(worker2.department - currentdepid);
+		  });
       $(this).typeahead({
-          source: subjects,
+          source: workersclone,
           afterSelect: function (item) {
+        	  //设置选中的工人
+        	  this.$element.prev().val(item.id);
           },
           displayText: function (item) {
              return item.username + "-" +item.depname;//返回字符串

@@ -2,6 +2,7 @@ package com.xcrm.work;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
@@ -14,9 +15,11 @@ import com.xcrm.common.model.User;
 import com.xcrm.common.model.Workflow;
 import com.xcrm.common.model.Workflowtemplate;
 import com.xcrm.common.model.Workitem;
+import com.xcrm.common.model.Workitemallocation;
 import com.xcrm.common.model.Workitemtemplate;
 import com.xcrm.common.qr2.QRCodeUtil;
 import com.xcrm.common.util.Constant;
+import com.xcrm.common.util.NumUtil;
 import com.xcrm.common.util.PropUtil;
 import com.xcrm.common.util.StrUtil;
 
@@ -200,6 +203,24 @@ public class WorkflowController extends AbstractController {
     setAttr( "page_header", "订单工作流如下:" );
     setAttr( "workflow_qr2_path", getWorkflowQr2BaseUrl() );
     render( "detailworkflow.html" );
+  }
+  
+  public void saveWorkitems() {
+    Map<String, String[]> form = getParaMap();
+    String[] workers = form.get( "selectworker" );
+    String[] weights = form.get( "weight" );
+    String[] workitemids = form.get( "workitemid" );
+    for ( int index = 0; index < workitemids.length; index++ ) {
+      Integer workitemId = NumUtil.iVal( workitemids[index] );
+      Integer worker = NumUtil.iVal( workers[index] );
+      Integer weight = NumUtil.iVal( weights[index] );
+      Workitemallocation wAloc = new Workitemallocation();
+      wAloc.setWorkitem( workitemId );
+      wAloc.setWorker( worker );
+      wAloc.setWeight( weight );
+      wAloc.save();
+    }
+
   }
 
 }

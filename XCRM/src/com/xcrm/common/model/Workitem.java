@@ -1,5 +1,7 @@
 package com.xcrm.common.model;
 
+import java.util.List;
+
 import com.xcrm.common.model.base.BaseWorkitem;
 
 /**
@@ -8,4 +10,8 @@ import com.xcrm.common.model.base.BaseWorkitem;
 @SuppressWarnings("serial")
 public class Workitem extends BaseWorkitem<Workitem> {
 	public static final Workitem dao = new Workitem();
+	
+	public List<Workitemallocation> getWorkitemallocations( ){
+	  return Workitemallocation.dao.find( "select wia.*,usr.username workername from Workitemallocation wia join user usr on wia.worker= usr.id where wia.workitem=?", this.getId() );
+	}
 }
