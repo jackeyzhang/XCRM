@@ -9,6 +9,7 @@ import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.xcrm.common.AbstractController;
 import com.xcrm.common.Pager;
+import com.xcrm.common.model.Bookitem;
 import com.xcrm.common.model.Order;
 import com.xcrm.common.model.Product;
 import com.xcrm.common.model.User;
@@ -36,10 +37,11 @@ public class WorkflowController extends AbstractController {
         + "left join customer cust on cust.id=bi.customer " + "left join user user on user.id=bi.user " + "where " + getSqlForUserRole() + " and o.status != "
         + Order.STATUS_CANCELLED + " " + this.getSearchStatement( true, "" ) + " group by o.orderno order by o.orderno,p.name desc";
     Page<Record> page = Db.paginate( 1, 30, sql, sqlExcept );
-    page.getList().stream().forEach( p -> {
-      long orderno = p.getLong( "orderno" );
+    page.getList().stream().forEach( o -> {
+      long orderno = o.getLong( "orderno" );
       Order order = Order.dao.findFirst( "select * from `order` where orderno = ?", orderno );
-      p.set( "bi", order.getAllBookitems() );
+      o.set( "bi", order.getAllBookitems() );
+      o.set( "displaystartbtn", order.isStartAllBookitems() ? "no" : "yes" );
     } );
     Pager pager = new Pager( page.getTotalRow(), page.getList() );
     setAttr( "data", pager );
@@ -181,8 +183,48 @@ public class WorkflowController extends AbstractController {
         wiList.add( wi );
       }
       Db.batchSave( wiList, wiList.size() );
-      this.forwardIndex();
     }
+    this.forwardIndex();
+  }
+  
+  public void batchStartBookItem() {
+    String bookitems = this.getPara( "bookitems" );
+    String[] bookitemArray = bookitems.split( ";" );
+    for( String bookitemStr : bookitemArray ){
+      String[] bookitemAndWorktemplate = bookitemStr.split( "," );
+      Integer bookitemId = NumUtil.iVal( bookitemAndWorktemplate[0] );
+      Integer workflowtemplateId = NumUtil.iVal( bookitemAndWorktemplate[1] );
+      Bookitem bookitem = Bookitem.dao.findById( bookitemId );
+      //check work flow item and create one if not existing one.
+      List<Workflow> found = Workflow.dao.find( "select * from workflow where bookitem = " + bookitemId );
+      if ( found.size() > 0 ) {
+        return;
+      }
+      for( int i = 0; i < bookitem.getNum(); i ++ ){
+        Workflow workflow = new Workflow();
+        workflow.setBookitem( bookitemId );
+        workflow.setIndex( i );
+        workflow.setStatus( Workflow.WORK_STATUS_INIT );
+        workflow.setProgress( 0 );
+        workflow.setWorkflowtemplate( workflowtemplateId );
+        workflow.save();
+        QRCodeUtil.generator( "" + workflow.getId(), "" +  workflow.getId(), getRealPath(), PropUtil.getWorkflowQr2Path());
+
+        Workflowtemplate wft = Workflowtemplate.dao.findById( workflowtemplateId );
+        List<Workitem> wiList = new ArrayList<>();
+        for ( Workitemtemplate wit : wft.getWorkitemtemplates() ) {
+          Workitem wi = new Workitem();
+          wi.setIndex( wit.getIndex() );
+          wi.setStatus( wit.getStatus() );
+          wi.setWorkflow( workflow.getId() );
+          wi.setWeight( wit.getWeight() );
+          wi.setDep( wit.getDep() );
+          wiList.add( wi );
+        }
+        Db.batchSave( wiList, wiList.size() );
+      }
+    }
+    this.forwardIndex();
   }
 
   public void viewWorkflowDetail() {
@@ -220,7 +262,6 @@ public class WorkflowController extends AbstractController {
       wAloc.setWeight( weight );
       wAloc.save();
     }
-
   }
 
 }

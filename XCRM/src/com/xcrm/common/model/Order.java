@@ -38,4 +38,10 @@ public class Order extends BaseOrder<Order> {
         + "join orderitem oi on oi.bookitem = bi.id and oi.order = " + orderid 
         + " left join workflow wf on wf.bookitem = bi.id and wf.index=0 ");
   }
+  
+  public boolean isStartAllBookitems( ){
+    return getAllBookitems( ).stream().filter( a->a.get( "wfid" ) != null ).findAny().isPresent();
+  }
+  
+  
 }

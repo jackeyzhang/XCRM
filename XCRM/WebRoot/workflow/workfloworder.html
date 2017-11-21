@@ -1,11 +1,13 @@
-<div class="workfloworder" >
+<div class="workfloworder" id="workfloworder">
     <div class="row" style="margin-top:20px;border:5px solid blue;border-top:8px solid blue;" >
 	    <div class="col-md-offset-2 col-md-10">
 	       <label><span class="badge badge-info">订单号：</span><a href="/orderview?orderno=${row.orderno!}" target="_blank">${row.orderno!}</a></label>
 	       <label><span class="badge badge-info">客户名称：</span>${row.company!}</label>
 	       <label><span class="badge badge-info">交货日期：</span>${row.date!}</label>
 	       <label><span class="badge badge-info">销售人员：</span>${row.saler!}</label>
-	       <button class="btn btn-primary btn-sm" style="margin-left:20px;" name="startorderWorkflow">开始订单工作流</button>
+	       <#if (row.displaystartbtn!"yes") == "yes">
+	         <button class="btn btn-primary btn-sm" style="margin-left:20px;" name="startorderWorkflow">开始订单工作流</button>
+	       </#if>
 	    </div>
 	     <#if row.bi?size != 0>
 			   <#list row.bi as bi>

@@ -11,9 +11,6 @@ function load(){
 		    for( e in data){
 		   	  $("[name='workitemtemplate']").append("<option value='" + data[e].id + "'>" + data[e].name + "</option>");
 		    }
-		    //var selectworkflow = $("#selectworkflowitem").html();
-		    //var selectworkflow = $("[name='workitemtemplate").prev().html();
-		    //$("[name='workitemtemplate']").val( selectworkflow );
 		    $("[name='workitemtemplate").each(function(){
 		    	$(this).val( $(this).prev().html());
 		    });
@@ -49,6 +46,29 @@ $(function() {
 		 var workflowid = $(this).attr("workflow");
 		  window.open("/workflow/viewWorkflowDetail?wkid=" + workflowid);
 	});
+	
+	
+	// startorderWorkflow button click
+	$("[name='startorderWorkflow']").each(function(){
+		$(this).click( function(){
+			var bookitemstostart;
+			$(this).closest("#workfloworder").find("[name='startworkitem']").each(function(){
+				  var bookitem = $(this).attr("bookitem");
+				  var workflowtemplate = $(this).closest("div.row").find("#workflow").val();
+				  if( bookitemstostart ){
+					  bookitemstostart = bookitemstostart + ";" +bookitem + "," + workflowtemplate;
+				  }else{
+					  bookitemstostart = bookitem + "," + workflowtemplate;
+				  }
+			});
+			if(!bookitemstostart){
+				alert("没有可启动的工作项!");
+			}else{
+				window.location = "/workflow/batchStartBookItem?bookitems=" + bookitemstostart;
+			}
+		});
+	});
+	
 	
 });
 </script>
