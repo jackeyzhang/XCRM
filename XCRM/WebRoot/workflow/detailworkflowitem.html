@@ -60,22 +60,28 @@
       
       <#if workflowitems?size != 0> 
         <#list workflowitems as workflowitem>
-			      <#if workflow.id==workflowitem.workflow>
+        
+			      <#if workflow.id==workflowitem.workflow> <!-- start work flow item -->
 			         <label><span class="label label-warning">序号:${workflowitem.index!}</span></label>
 			         <label> 工作部门:${workflowitem.dp!}</label>
-			         
-			         <#if workflowitem.workitemallocations?size != 0> 
-					         <#list workflowitem.workitemallocations as wia>
-					           <label><span class="label label-info">${wia.workername!}</span></label>
-					         </#list>
-					         <button name="editworkitembtn" id="editworkitem${workflowitem.dep!}" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#addoreditworker${workflowitem.id!}"><span class="glyphicon glyphicon-edit" aria-hidden="true" ></span>编辑工作人员</button>
-					         <#include "detailworkflowedititemmodel.html"/>
+					     <#if workflowitem.status! == 2> <!-- 2 means done -->
+					       <label>已完成<span class="glyphicon glyphicon-ok" aria-hidden="true" ></span></label>
 					     <#else>
-                   <button name="addworkitembtn" id="addworkitem${workflowitem.dep!}" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#addoreditworker${workflowitem.id!}"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true" ></span>添加工作人员</button>
-                   <#include "detailworkflowadditemmodel.html"/>
+				           <#if workflowitem.workitemallocations?size != 0> 
+	                 <#list workflowitem.workitemallocations as wia>
+	                   <label><span class="label label-info">${wia.workername!}</span></label>
+	                 </#list>
+	                 <button name="editworkitembtn" id="editworkitem${workflowitem.dep!}" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#addoreditworker${workflowitem.id!}"><span class="glyphicon glyphicon-edit" aria-hidden="true" ></span>编辑工作人员</button>
+	                 <#include "detailworkflowedititemmodel.html"/>
+		               <#else>
+		                   <button name="addworkitembtn" id="addworkitem${workflowitem.dep!}" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#addoreditworker${workflowitem.id!}"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true" ></span>添加工作人员</button>
+		                   <#include "detailworkflowadditemmodel.html"/>
+		               </#if>
+  					       <button name="markcompleteworkitembtn" data-workitemstatus="${workflowitem.status!}" data-workitem="${workflowitem.id!}" class="btn btn-primary btn-xs" ><span class="glyphicon glyphicon-check" aria-hidden="true" ></span>设置已完成</button>
 					     </#if>
 			         <br>
-			      </#if>
+			      </#if> <!--  end work flow item-->
+			      
 	      </#list>
       </#if>
     </div>

@@ -263,5 +263,13 @@ public class WorkflowController extends AbstractController {
       wAloc.save();
     }
   }
+  
+  public void markcompleteworkitem( ){
+    int workitemid = this.getParaToInt( "workitemid" );
+    Workitem workitem = Workitem.dao.findById( workitemid );
+    workitem.setStatus( Workitem.WORKITEM_STATUS_DONE );
+    workitem.update();
+    this.forwardIndex();
+  }
 
 }

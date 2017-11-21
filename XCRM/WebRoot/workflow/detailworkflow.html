@@ -70,6 +70,25 @@ $(function() {
 		  window.location = "/workflow/startBookItem?bi="+bookitemid+"&wftid=" + workflowtemplate + "&index=" + index + "&num=" + num;
 	});
 	
+	 $("[name='markcompleteworkitembtn']").click(function(){
+	      var workitemid = $(this).attr("data-workitem");
+	      $.ajax({
+              type: "get",
+              url: "/workflow/markcompleteworkitem?workitemid="+workitemid,
+              contentType : "application/x-www-form-urlencoded; charset=utf-8",
+              success: function (data, status) {
+                  if (status == "success") {
+                     window.location.reload();
+                  }
+              },
+              error: function () {
+              },
+              complete: function () {
+
+              }
+          });
+	  });
+	
 	
 	$("[name='submitworkers']").each( function(){
 		  $(this).click( function(){
