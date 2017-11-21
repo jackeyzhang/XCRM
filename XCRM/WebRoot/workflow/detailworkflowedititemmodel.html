@@ -1,0 +1,34 @@
+<!-- 增加和编辑用户模态框（Modal） -->
+<div class="modal fade" id="addoreditworker${workflowitem.id!}" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"
+          aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">编辑${workflowitem.dp!}的工作人员</h4>
+      </div>
+        <form class="form-inline" id="workerform">
+          <div class="modal-body">
+		        <div class="form-group" id="workitemform">
+		         <input type="hidden" name="workitemid" value="${workflowitem.id!}"></input>
+		         <label>${workflowitem.dp!}工作人员:</label>
+		         <input type="hidden" name="selectworker" value=""></input>
+		         <input class="form-control" style="max-width:150px;" id="workerlist" name="workerlist" data-provide="typeahead" data-items="4" depid="${workflowitem.dep!}">
+             <label>工作权重百分比:</label>
+             <input type="number" style="max-width:100px;" class="form-control" value="100" name="weight"></input>
+		         <button type="button" class="btn btn-sm btn-primary" name="addworkitem" onclick="javascript:addworkitemevent(this);"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
+		         <button type="button" class="btn btn-sm btn-danger" name="delworkitem" onclick="javascript:delworkitemevent(this);"><span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span></button>
+		        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+        </button>
+        <button type="button" class="btn btn-primary" id="submitworkers" name="submitworkers">提交更改</button>
+      </div>
+       </form>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal -->
+</div>

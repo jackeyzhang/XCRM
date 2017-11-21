@@ -119,7 +119,11 @@ $(function() {
 
 var addworkitemevent = function( obj ){
 	  var workflowform = $(obj).parent();
-    workflowform.after( workflowform.clone());
+	  var cloneworkflowform =  workflowform.clone();
+	  // clear the copy value
+	  cloneworkflowform.children("[name='workerlist']").val("");
+	  cloneworkflowform.children("[name='selectworker']").val("");
+    workflowform.after(cloneworkflowform);
     freshlistWorkers();
 }
 
@@ -158,11 +162,11 @@ var freshlistWorkers = function(){
 }
 
 #workflow{
-  font-size: 12px;
+  font-size: 14px;
 }
 
 label{
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .modal-dialog
