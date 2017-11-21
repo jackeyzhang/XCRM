@@ -247,20 +247,49 @@ public class WorkflowController extends AbstractController {
     render( "detailworkflow.html" );
   }
   
-  public void saveWorkitems() {
+  public void saveorUpdateWorkitemAllocations() {
     Map<String, String[]> form = getParaMap();
     String[] workers = form.get( "selectworker" );
     String[] weights = form.get( "weight" );
     String[] workitemids = form.get( "workitemid" );
+    String[] workitemallocationids = form.get( "workitemallocationid" );
+    
+    if( workitemids == null || workitemids.length == 0 ) return;
+    
+    //delete first
+    Integer workitemID = NumUtil.iVal( workitemids[0] );
+    Workitem workitem = Workitem.dao.findById( workitemID );
+    for( Workitemallocation wia : workitem.getWorkitemallocations()){
+      boolean deletefromUI = true;
+      for( String workitemallId : workitemallocationids ){
+        if( NumUtil.iVal( workitemallId ) == wia.getId() ){
+          deletefromUI = false;
+        }
+      }
+      if( deletefromUI ){
+        wia.setStatus( Workitemallocation.WORKITEM_STATUS_CANCEL );
+        wia.update();
+      }
+    }
+    
+    //update and add then
     for ( int index = 0; index < workitemids.length; index++ ) {
       Integer workitemId = NumUtil.iVal( workitemids[index] );
       Integer worker = NumUtil.iVal( workers[index] );
       Integer weight = NumUtil.iVal( weights[index] );
+      Integer workitemallocation = NumUtil.iVal( workitemallocationids[index] );
       Workitemallocation wAloc = new Workitemallocation();
+      if( workitemallocation > 0){
+        wAloc = Workitemallocation.dao.findById( workitemallocation );//if existing, means update
+      }
       wAloc.setWorkitem( workitemId );
       wAloc.setWorker( worker );
       wAloc.setWeight( weight );
-      wAloc.save();
+      if( workitemallocation > 0 ){
+        wAloc.update();
+      }else{
+        wAloc.save();
+      }
     }
   }
   

@@ -98,7 +98,7 @@ $(function() {
 			    var form_data = $(this).closest("#workerform").serializeArray();
 			    $.ajax({
 			            type: "post",
-			            url: "/workflow/saveWorkitems",
+			            url: "/workflow/saveorUpdateWorkitemAllocations",
 			            data: form_data,
 			            contentType : "application/x-www-form-urlencoded; charset=utf-8",
 			            success: function (data, status) {
@@ -123,6 +123,7 @@ var addworkitemevent = function( obj ){
 	  var workflowform = $(obj).parent();
 	  var cloneworkflowform =  workflowform.clone();
 	  // clear the copy value
+	  cloneworkflowform.children("[name='workitemallocationid']").val("");
 	  cloneworkflowform.children("[name='workerlist']").val("");
 	  cloneworkflowform.children("[name='selectworker']").val("");
     workflowform.after(cloneworkflowform);

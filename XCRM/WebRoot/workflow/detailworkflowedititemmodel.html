@@ -10,16 +10,22 @@
       </div>
         <form class="form-inline" id="workerform">
           <div class="modal-body">
+          
+          <#list workflowitem.workitemallocations as wia>
+            <!-- work item ui unit -->
 		        <div class="form-group" id="workitemform">
-		         <input type="hidden" name="workitemid" value="${workflowitem.id!}"></input>
-		         <label>${workflowitem.dp!}工作人员:</label>
-		         <input type="hidden" name="selectworker" value=""></input>
-		         <input class="form-control" style="max-width:150px;" id="workerlist" name="workerlist" data-provide="typeahead" data-items="4" depid="${workflowitem.dep!}">
-             <label>工作权重百分比:</label>
-             <input type="number" style="max-width:100px;" class="form-control" value="100" name="weight"></input>
-		         <button type="button" class="btn btn-sm btn-primary" name="addworkitem" onclick="javascript:addworkitemevent(this);"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
-		         <button type="button" class="btn btn-sm btn-danger" name="delworkitem" onclick="javascript:delworkitemevent(this);"><span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span></button>
+		           <input type="hidden" name="workitemallocationid" value="${wia.id!}"></input>
+			         <input type="hidden" name="workitemid" value="${workflowitem.id!}"></input>
+			         <label>${workflowitem.dp!}工作人员:</label>
+			         <input type="hidden" name="selectworker" value="${wia.worker!}"></input>
+			         <input class="form-control" style="max-width:150px;" id="workerlist" value="${wia.workername!}-${workflowitem.dp!}" name="workerlist" data-provide="typeahead" data-items="4" depid="${workflowitem.dep!}">
+	             <label>工作权重百分比:</label>
+	             <input type="number" style="max-width:100px;" class="form-control" value="${wia.weight!}" name="weight"></input>
+			         <button type="button" class="btn btn-sm btn-primary" name="addworkitem" onclick="javascript:addworkitemevent(this);"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
+			         <button type="button" class="btn btn-sm btn-danger" name="delworkitem" onclick="javascript:delworkitemevent(this);"><span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span></button>
 		        </div>
+		        <!-- work item ui unit -->
+	        </#list>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">关闭
