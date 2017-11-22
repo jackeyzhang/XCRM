@@ -14,9 +14,9 @@ public class Workflow extends BaseWorkflow<Workflow> {
 
   public static final Workflow dao = new Workflow();
 
-  public static final int WORK_STATUS_INIT = 0; //初始态  
-  public static final int WORK_STATUS_START = 1; //开始
-  public static final int WORK_STATUS_DONE = 2; //完成
+  public static final int WORK_STATUS_INIT = 0; //待处理 
+  public static final int WORK_STATUS_START = 1; //进行中
+  public static final int WORK_STATUS_DONE = 2; //已完成
   public static final int WORK_STATUS_CANCEL = 3; //取消
   
   /**

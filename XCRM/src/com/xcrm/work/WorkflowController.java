@@ -277,7 +277,10 @@ public class WorkflowController extends AbstractController {
       Integer workitemId = NumUtil.iVal( workitemids[index] );
       Integer worker = NumUtil.iVal( workers[index] );
       Integer weight = NumUtil.iVal( weights[index] );
-      Integer workitemallocation = NumUtil.iVal( workitemallocationids[index] );
+      Integer workitemallocation = 0;
+      if( workitemallocationids != null ) {
+        workitemallocation = NumUtil.iVal( workitemallocationids[index] );
+      }
       Workitemallocation wAloc = new Workitemallocation();
       if( workitemallocation > 0){
         wAloc = Workitemallocation.dao.findById( workitemallocation );//if existing, means update
@@ -299,6 +302,24 @@ public class WorkflowController extends AbstractController {
     workitem.setStatus( Workitem.WORKITEM_STATUS_DONE );
     workitem.update();
     this.forwardIndex();
+  }
+  
+  public void restartworkitem( ){
+    int workitemid = this.getParaToInt( "workitemid" );
+    Workitem workitem = Workitem.dao.findById( workitemid );
+    workitem.setStatus( Workitem.WORKITEM_STATUS_INIT );
+    workitem.update();
+    this.forwardIndex();
+  }
+  
+  public void startWorkflow( ){
+    int workflowid = this.getParaToInt( "workflowid" );
+    Workflow workflow = Workflow.dao.findById( workflowid );
+    //TODO: validation the work item and work item allocation
+    
+    //upate status
+    workflow.setStatus( Workflow.WORK_STATUS_START );
+    workflow.update();
   }
 
 }
