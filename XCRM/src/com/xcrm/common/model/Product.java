@@ -19,7 +19,7 @@ public class Product extends BaseProduct<Product> {
 
   public List<Bookitem> getAllBookitems() {
     int prdid = this.getId();
-    return Bookitem.dao.find( "select bi.*,prd.name prdname,prd.workflow,prd.id prdid, wf.id wfid, wf.status wfstatus,o.orderno orderno "
+    return Bookitem.dao.find( "select bi.*,prd.name prdname,IFNULL(wf.workflowtemplate, prd.workflow) workflow,prd.id prdid, wf.id wfid, wf.status wfstatus,o.orderno orderno "
             + " from bookitem bi "
             + " join product prd on prd.id= bi.product "
             + " join orderitem oi on oi.bookitem = bi.id and bi.product=" + prdid
@@ -29,5 +29,9 @@ public class Product extends BaseProduct<Product> {
   
   public List<Productpic> getPictures( ){
     return Productpic.dao.find( "select * from Productpic where productid=?", getId() );
+  }
+  
+  public boolean isStartAllBookitems( ){
+    return getAllBookitems( ).stream().filter( a->a.get( "wfid" ) != null ).findAny().isPresent();
   }
 }

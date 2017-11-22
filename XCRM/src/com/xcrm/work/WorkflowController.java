@@ -60,6 +60,7 @@ public class WorkflowController extends AbstractController {
       int prdid = p.getInt( "prdid" );
       Product product = Product.dao.findFirst( "select * from product where id = ?", prdid );
       p.set( "bi", product.getAllBookitems() );
+      p.set( "displaystartbtn", product.isStartAllBookitems() ? "no" : "yes" );
     } );
     Pager pager = new Pager( page.getTotalRow(), page.getList() );
     this.setAttr( "data", pager );

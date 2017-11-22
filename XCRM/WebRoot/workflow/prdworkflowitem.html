@@ -6,9 +6,15 @@
 	<div class="form-group">
 		<label>工作流模板:</label> 
 		<label id="selectworkflowitem" hidden>${bi.workflow!}</label> 
-		<select class="form-control"
-			name="workitemtemplate" id="workflow">
-		</select>
+		<#if bi.wfid??>
+         <select class="form-control"
+         name="workitemtemplate" id="workflow" disabled="disabled">
+        </select>
+    <#else>
+        <select class="form-control"
+         name="workitemtemplate" id="workflow">
+        </select>
+    </#if>
 		<label style="height:60px;">产品备注:${bi.comments!}</label> 
 		    <#if bi.wfid??>
           <button class="btn btn-default btn-xs" id="viewworkitem" name="viewworkitem" workflow="${bi.wfid}">查看订单项工作流</button>

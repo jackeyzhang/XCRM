@@ -8,15 +8,12 @@
 <script type="text/javascript">
 function load(){
 	$.get('/workflowtemplate/list/', function(data){
-		    for( e in data){
-		   	  $("[name='workitemtemplate']").append("<option value='" + data[e].id + "'>" + data[e].name + "</option>");
-		    }
-		    //var selectworkflow = $("#selectworkflowitem").html();
-		    //var selectworkflow = $("[name='workitemtemplate").prev().html();
-		    //$("[name='workitemtemplate']").val( selectworkflow );
-		    $("[name='workitemtemplate").each(function(){
-		    	$(this).val( $(this).prev().html());
-		    });
+		      for( e in data){
+	          $("[name='workitemtemplate']").append("<option value='" + data[e].id + "'>" + data[e].name + "</option>");
+	        }
+	        $("[name='workitemtemplate").each(function(){
+	          $(this).val( $(this).prev().html());
+	        });
 	});
 
 };
@@ -48,6 +45,41 @@ $(function() {
 	  $("[name='viewworkitem']").click(function(){
 	     var workflowid = $(this).attr("workflow");
 	      window.open("/workflow/viewWorkflowDetail?wkid=" + workflowid);
+	  });
+	  
+	  // startorderWorkflow button click
+	  $("[name='startprdWorkflow']").each(function(){
+	    $(this).click( function(){
+	      var bookitemstostart;
+	      $(this).closest("#workfloworder").find("[name='startworkitem']").each(function(){
+	          var bookitem = $(this).attr("bookitem");
+	          var workflowtemplate = $(this).closest("div.form-group").find("#workflow").val();
+	          if( bookitemstostart ){
+	            bookitemstostart = bookitemstostart + ";" +bookitem + "," + workflowtemplate;
+	          }else{
+	            bookitemstostart = bookitem + "," + workflowtemplate;
+	          }
+	      });
+	      if(!bookitemstostart){
+	        alert("没有可启动的工作项!");
+	      }else{
+	        $.ajax({
+	              type: "get",
+	              url: "/workflow/batchStartBookItem?bookitems=" + bookitemstostart,
+	              contentType : "application/x-www-form-urlencoded; charset=utf-8",
+	              success: function (data, status) {
+	                  if (status == "success") {
+	                     window.location.reload();
+	                  }
+	              },
+	              error: function () {
+	              },
+	              complete: function () {
+
+	              }
+	          });
+	      }
+	    });
 	  });
 	
 });

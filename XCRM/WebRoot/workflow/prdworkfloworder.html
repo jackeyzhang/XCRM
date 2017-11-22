@@ -1,8 +1,10 @@
-<div class="workfloworder" >
+<div class="workfloworder" id="workfloworder">
     <div class="row" style="margin-top:20px;border:5px solid blue;border-top:8px solid blue;" >
 	    <div class="col-md-offset-4 col-md-8">
 	       <label><span class="badge badge-info">产品名称：</span><a href="/product/detail?prdid=${row.prdid!}">${row.name!}</a></label>
-	       <button class="btn btn-primary btn-sm" style="margin-left:20px;" name="startorderWorkflow">开始本产品所有工作流</button>
+	        <#if (row.displaystartbtn!"yes") == "yes">
+	       <button class="btn btn-primary btn-sm" style="margin-left:20px;" name="startprdWorkflow">开始本产品所有工作流</button>
+	       </#if>
 	    </div>
 	     <#if row.bi?size != 0>
 			   <#list row.bi as bi>
