@@ -254,6 +254,7 @@ public class WorkflowController extends AbstractController {
     String[] weights = form.get( "weight" );
     String[] workitemids = form.get( "workitemid" );
     String[] workitemallocationids = form.get( "workitemallocationid" );
+    String[] workitemallocationStatus = form.get( "workitemallocationstatus" );
     
     if( workitemids == null || workitemids.length == 0 ) return;
     
@@ -262,6 +263,7 @@ public class WorkflowController extends AbstractController {
     Workitem workitem = Workitem.dao.findById( workitemID );
     for( Workitemallocation wia : workitem.getWorkitemallocations()){
       boolean deletefromUI = true;
+      
       for( String workitemallId : workitemallocationids ){
         if( NumUtil.iVal( workitemallId ) == wia.getId() ){
           deletefromUI = false;
@@ -278,6 +280,7 @@ public class WorkflowController extends AbstractController {
       Integer workitemId = NumUtil.iVal( workitemids[index] );
       Integer worker = NumUtil.iVal( workers[index] );
       Integer weight = NumUtil.iVal( weights[index] );
+      Integer status = NumUtil.iVal( workitemallocationStatus[index] );
       Integer workitemallocation = 0;
       if( workitemallocationids != null ) {
         workitemallocation = NumUtil.iVal( workitemallocationids[index] );
@@ -289,6 +292,7 @@ public class WorkflowController extends AbstractController {
       wAloc.setWorkitem( workitemId );
       wAloc.setWorker( worker );
       wAloc.setWeight( weight );
+      wAloc.setStatus(status);
       if( workitemallocation > 0 ){
         wAloc.update();
       }else{
