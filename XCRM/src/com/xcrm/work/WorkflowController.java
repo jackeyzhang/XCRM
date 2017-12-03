@@ -280,7 +280,7 @@ public class WorkflowController extends AbstractController {
       Integer workitemId = NumUtil.iVal( workitemids[index] );
       Integer worker = NumUtil.iVal( workers[index] );
       Integer weight = NumUtil.iVal( weights[index] );
-      Integer status = NumUtil.iVal( workitemallocationStatus[index] );
+      Integer status = NumUtil.iVal( workitemallocationStatus == null ? "0" : workitemallocationStatus[index] );
       Integer workitemallocation = 0;
       if( workitemallocationids != null ) {
         workitemallocation = NumUtil.iVal( workitemallocationids[index] );
