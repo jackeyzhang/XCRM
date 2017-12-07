@@ -22,6 +22,7 @@ import com.xcrm.common.qr2.QRCodeUtil;
 import com.xcrm.common.util.Constant;
 import com.xcrm.common.util.NumUtil;
 import com.xcrm.common.util.PropUtil;
+import com.xcrm.common.util.RecordUtil;
 import com.xcrm.common.util.StrUtil;
 
 
@@ -325,6 +326,53 @@ public class WorkflowController extends AbstractController {
     //upate status
     workflow.setStatus( Workflow.WORK_STATUS_START );
     workflow.update();
+  }
+  
+  
+  /**
+   * following is for wx methods
+   */
+  public void wxlistallmytasks( ){
+    int userid = this.getParaToInt( "userid" );
+    String searchWord = this.getPara( "searchword" );
+    List<Workitemallocation> wiaList = new ArrayList<Workitemallocation>();
+    if( !StrUtil.isEmpty( searchWord  )){
+      wiaList = Workitemallocation.dao.getAllWorkitemallocationsNotFinishBySerachWord( userid,searchWord );
+    }else{
+      wiaList = Workitemallocation.dao.getAllWorkitemallocationsNotFinish( userid );
+    }
+    RecordUtil.fillInRowNumber(wiaList);
+    this.renderJson( wiaList );
+  }
+  
+  public void wxlistallmyfinishtasks( ){
+    int userid = this.getParaToInt( "userid" );
+    List<Workitemallocation> wiaList = Workitemallocation.dao.getAllWorkitemallocationsIsFinish( userid );
+    RecordUtil.fillInRowNumber(wiaList);
+    this.renderJson( wiaList );
+  }
+  
+  
+  public void wxstartwia(){
+    int wiaid = this.getParaToInt( "wiaid" );
+    Workitemallocation wia = Workitemallocation.dao.findById( wiaid );
+    wia.setStatus( Workitemallocation.WORKITEM_STATUS_START );
+    wia.update();
+    renderJson(wia);
+  }
+  
+  public void wxfinishwia(){
+    int wiaid = this.getParaToInt( "wiaid" );
+    Workitemallocation wia = Workitemallocation.dao.findById( wiaid );
+    wia.setStatus( Workitemallocation.WORKITEM_STATUS_DONE );
+    wia.update();
+    renderJson(wia);
+  }
+  
+  public void wxgetDepOfWorkflow(){
+    int workflowid = this.getParaToInt( "wfid" );
+    Workflow workflow = Workflow.dao.findById( workflowid );
+    this.renderJson( workflow.getDeps() );
   }
 
 }

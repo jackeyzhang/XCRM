@@ -3,6 +3,8 @@ package com.xcrm.common.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Record;
 import com.xcrm.common.model.base.BaseWorkflow;
 
 
@@ -26,7 +28,7 @@ public class Workflow extends BaseWorkflow<Workflow> {
    */
   public List<Workflow> getRelatedWorkflows( ){
     int bookitemid = this.getBookitem();
-    return dao.find( "select wf.*,wft.name name,prd.name prdname,prd.id prdid,bi.num binum "
+    return dao.find( "select wf.*,wft.name name,prd.name prdname,prd.id prdid,bi.num binum,bi.comments,bi.prdattrs "
         + "from workflow wf "
         + "join workflowtemplate wft on wft.id=wf.workflowtemplate "
         + "join bookitem bi on bi.id=wf.bookitem "
@@ -55,6 +57,11 @@ public class Workflow extends BaseWorkflow<Workflow> {
   public List<Workitem> getWorkItems( ){
     List<Workitem> items = Workitem.dao.find( "select wi.*,dp.name dp from workitem wi join department dp on dp.id=wi.dep  where wi.workflow=?" , this.getId() );
     items.stream().forEach( i->i.put( "workitemallocations", i.getWorkitemallocations() ) );
+    return items;
+  }
+  
+  public List<Record> getDeps( ){
+    List<Record> items = Db.find(  "select dp.name,dp.id from workitem wi join department dp on dp.id=wi.dep  where wi.workflow=" + this.getId() + " order by dp.id "  );
     return items;
   }
 }
