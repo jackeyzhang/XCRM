@@ -60,8 +60,37 @@ public class Workflow extends BaseWorkflow<Workflow> {
     return items;
   }
   
+  public Workitem getWorkitemByDep( int depid ) {
+    Workitem item = Workitem.dao.findFirst( "select wi.*,dp.name dp from workitem wi join department dp on dp.id=wi.dep  where wi.workflow=? and wi.dep=?" , this.getId(), depid );
+    return item;
+  }
+  
   public List<Record> getDeps( ){
     List<Record> items = Db.find(  "select dp.name,dp.id from workitem wi join department dp on dp.id=wi.dep  where wi.workflow=" + this.getId() + " order by dp.id "  );
     return items;
+  }
+  
+  public Record getPrdInfo( ){
+    return Db.findFirst( "select prd.name,bi.comments,bi.prdattrs from bookitem bi join product prd on prd.id=bi.product where bi.id=" + getBookitem() + " limit 1 " );
+  }
+  
+  /**
+   * contains order, prdpictures, prdname, departments
+   * @return
+   */
+  public Workflow getWorkflowDetail( int defaultdep) {
+    this.put( "order", getOrder() );
+    this.put( "prdpictures", getPrdPictures() );
+    this.put( "prd", getPrdInfo() );
+    this.put( "deps", getDeps() );
+    int i = 0;
+    for( Record record : getDeps()){
+      if( record.getInt( "id" ) == defaultdep){
+        this.put( "selectdepidx", i );
+        break;
+      }
+      i++;
+    }
+    return this;
   }
 }

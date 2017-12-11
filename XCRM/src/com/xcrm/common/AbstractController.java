@@ -15,7 +15,9 @@ import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.xcrm.common.model.Attribute;
 import com.xcrm.common.model.Attributevalue;
+import com.xcrm.common.model.User;
 import com.xcrm.common.util.Constant;
+import com.xcrm.common.util.NumUtil;
 import com.xcrm.common.util.PropUtil;
 
 
@@ -310,4 +312,9 @@ public abstract class AbstractController extends Controller {
      Log.getLog( this.getClass() ).error( e.getMessage() );
    }
   
+   
+   public int getDepartmentId( int userid ){
+     User user = User.dao.findById( userid );
+     return NumUtil.iVal( user.getStr( "department" ) );
+   }
 }

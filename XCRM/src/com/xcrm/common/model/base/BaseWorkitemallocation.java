@@ -57,4 +57,20 @@ public abstract class BaseWorkitemallocation<M extends BaseWorkitemallocation<M>
 		return get("status");
 	}
 
+	public void setStarttime(java.util.Date starttime) {
+		set("starttime", starttime);
+	}
+
+	public java.util.Date getStarttime() {
+		return get("starttime");
+	}
+
+	public void setFinishtime(java.util.Date finishtime) {
+		set("finishtime", finishtime);
+	}
+
+	public java.util.Date getFinishtime() {
+		return get("finishtime");
+	}
+
 }

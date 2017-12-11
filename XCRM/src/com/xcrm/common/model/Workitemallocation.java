@@ -62,4 +62,12 @@ public class Workitemallocation extends BaseWorkitemallocation<Workitemallocatio
          + " and ( prd.name like '%" + searchWord + "%' "
          + " or ord.orderno like '%"+ searchWord + "%' ) ");
        }
+	 
+	 public boolean exisitingWorkitemallocation( int workflowid,int userid, int depid ){
+	   return !Workitemallocation.dao.find( "select wia.* "
+	       + "from Workitemallocation wia "
+	       + "join workitem wi on wi.id=wia.workitem "
+	       + "where wi.dep=? and wia.worker=? and wi.workflow=?",
+	       depid, userid, workflowid).isEmpty();
+	 }
 }

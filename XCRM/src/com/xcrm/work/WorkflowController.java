@@ -1,6 +1,7 @@
 package com.xcrm.work;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -357,6 +358,7 @@ public class WorkflowController extends AbstractController {
     int wiaid = this.getParaToInt( "wiaid" );
     Workitemallocation wia = Workitemallocation.dao.findById( wiaid );
     wia.setStatus( Workitemallocation.WORKITEM_STATUS_START );
+    wia.setStarttime( new Date() );
     wia.update();
     renderJson(wia);
   }
@@ -365,14 +367,40 @@ public class WorkflowController extends AbstractController {
     int wiaid = this.getParaToInt( "wiaid" );
     Workitemallocation wia = Workitemallocation.dao.findById( wiaid );
     wia.setStatus( Workitemallocation.WORKITEM_STATUS_DONE );
+    wia.setFinishtime( new Date() );
     wia.update();
     renderJson(wia);
   }
   
-  public void wxgetDepOfWorkflow(){
+  
+  public void wxgetworkflowdetail(){
     int workflowid = this.getParaToInt( "wfid" );
+    int userid = this.getParaToInt( "userid" );
     Workflow workflow = Workflow.dao.findById( workflowid );
-    this.renderJson( workflow.getDeps() );
+    workflow = workflow.getWorkflowDetail( getDepartmentId( userid ) ) ;
+    renderJson(workflow);
+  }
+  
+  
+  public void wxcreateandstartwia(){
+    int workflowid = this.getParaToInt( "wfid" );
+    int userid = this.getParaToInt( "userid" );
+    int depid = this.getParaToInt( "depid" );
+    boolean isexsting = Workitemallocation.dao.exisitingWorkitemallocation( workflowid, userid, depid );
+    if( isexsting ){
+      this.renderJson( false );
+    }else{
+      Workflow workflow = Workflow.dao.findById( workflowid );
+      Workitem workitem = workflow.getWorkitemByDep( depid );
+      Workitemallocation wia = new Workitemallocation();
+      wia.setWorker( userid );
+      wia.setWorkitem( workitem.getId() );
+      wia.setStatus( Workitemallocation.WORKITEM_STATUS_START );
+      wia.setStarttime( new Date() );
+      wia.save();
+      this.renderJson( true );
+    }
+
   }
 
 }

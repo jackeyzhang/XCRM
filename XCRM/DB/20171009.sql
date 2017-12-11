@@ -105,4 +105,10 @@ CREATE TABLE `xcrm`.`workitemallocation` (
   `spendtime` DOUBLE NULL COMMENT 'hours',
   `status` INT NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`));
+  
+--2017-12-10
+ALTER TABLE `xcrm`.`workitemallocation` 
+ADD COLUMN `starttime` DATETIME NULL AFTER `status`,
+ADD COLUMN `finishtime` DATETIME NULL AFTER `starttime`;
+
 
