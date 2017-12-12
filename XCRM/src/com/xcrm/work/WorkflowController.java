@@ -1,6 +1,7 @@
 package com.xcrm.work;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -348,7 +349,17 @@ public class WorkflowController extends AbstractController {
   
   public void wxlistallmyfinishtasks( ){
     int userid = this.getParaToInt( "userid" );
-    List<Workitemallocation> wiaList = Workitemallocation.dao.getAllWorkitemallocationsIsFinish( userid );
+    String startDate = this.getPara( "date" );
+    Calendar nextMonth = Calendar.getInstance();
+    if( StrUtil.isEmpty( startDate )){
+      startDate = Calendar.getInstance().get( Calendar.YEAR ) + "-" + (Calendar.getInstance().get( Calendar.MONTH ) + 1) ;
+      nextMonth.add(  Calendar.MONTH , 1 );
+    }else{
+      nextMonth.set(  Calendar.YEAR , NumUtil.iVal( startDate.split( "-" )[0]  ));
+      nextMonth.set(  Calendar.MONTH , NumUtil.iVal( startDate.split( "-" )[1]  ));
+    }
+    String endDate = nextMonth.get( Calendar.YEAR ) + "-" + (nextMonth.get( Calendar.MONTH ) + 1) ;
+    List<Workitemallocation> wiaList = Workitemallocation.dao.getAllWorkitemallocationsIsFinish( userid, startDate, endDate );
     RecordUtil.fillInRowNumber(wiaList);
     this.renderJson( wiaList );
   }

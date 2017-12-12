@@ -3,6 +3,7 @@ package com.xcrm.common.model;
 import java.util.List;
 
 import com.xcrm.common.model.base.BaseWorkitemallocation;
+import com.xcrm.common.util.StrUtil;
 
 @SuppressWarnings("serial")
 public class Workitemallocation extends BaseWorkitemallocation<Workitemallocation> {
@@ -19,7 +20,7 @@ public class Workitemallocation extends BaseWorkitemallocation<Workitemallocatio
 	}
 	
 	public List<Workitemallocation> getAllWorkitemallocationsNotFinish( int userid ){
-	  return Workitemallocation.dao.find( "select wia.*,bi.prdattrs prdattr,bi.comments bicomments, prd.name prdname,ord.orderno orderno,wf.index wfindex,"
+	  return Workitemallocation.dao.find( "select wia.*,bi.prdattrs prdattr,bi.comments bicomments, prd.name prdname,ord.orderno orderno,date_format(ord.deliverytime,'%Y-%m-%d') deliverytime,wf.index wfindex,"
 	      + "(select ppic.fielname from productpic ppic where ppic.productid = prd.id limit 1) filename,prd.id prdid,bi.num,dep.name depname "
 	      + "from Workitemallocation wia "
 	      + "left join workitem wi on wi.id=wia.workitem "
@@ -29,11 +30,11 @@ public class Workitemallocation extends BaseWorkitemallocation<Workitemallocatio
 	      + "left join `order` ord on ord.id=oi.order "
 	      + "left join product prd on prd.id=bi.product "
 	      + "left join department dep on dep.id=wi.dep "
-	      + " where wia.worker=? and wia.status != 2", userid );
+	      + " where wia.worker=? and wia.status != 2 order by ord.deliverytime", userid );
 	}
 	
-	public List<Workitemallocation> getAllWorkitemallocationsIsFinish( int userid ){
-	      return Workitemallocation.dao.find( "select wia.*,bi.prdattrs prdattr,bi.comments bicomments, prd.name prdname,ord.orderno orderno,wf.index wfindex,"
+	public List<Workitemallocation> getAllWorkitemallocationsIsFinish( int userid, String startDate, String endDate ){
+	      return Workitemallocation.dao.find( "select wia.*,bi.prdattrs prdattr,bi.comments bicomments, prd.name prdname,ord.orderno orderno,date_format(ord.deliverytime,'%Y-%m-%d') deliverytime,wf.index wfindex,"
 	          + "(select ppic.fielname from productpic ppic where ppic.productid = prd.id limit 1) filename,prd.id prdid,bi.num,dep.name depname "
 	          + "from Workitemallocation wia "
 	          + "left join workitem wi on wi.id=wia.workitem "
@@ -43,11 +44,14 @@ public class Workitemallocation extends BaseWorkitemallocation<Workitemallocatio
 	          + "left join `order` ord on ord.id=oi.order "
 	          + "left join product prd on prd.id=bi.product "
 	          + "left join department dep on dep.id=wi.dep "
-	          + " where wia.worker=? and wia.status = 2", userid );
+	          + " where wia.worker=? and wia.status = 2 "
+	          + ( StrUtil.isEmpty( startDate ) ? "" : " and wia.finishtime >= str_to_date('" + startDate + "','%Y-%m')")
+	          + ( StrUtil.isEmpty( endDate ) ? "" : " and wia.finishtime < str_to_date('" + endDate + "','%Y-%m')")
+	          + " order by wia.finishtime desc ", userid );
 	    }
 	   
 	 public List<Workitemallocation> getAllWorkitemallocationsNotFinishBySerachWord( int userid, String searchWord ){
-       return Workitemallocation.dao.find( "select wia.*,bi.prdattrs prdattr,bi.comments bicomments, prd.name prdname,ord.orderno orderno,wf.index wfindex,"
+       return Workitemallocation.dao.find( "select wia.*,bi.prdattrs prdattr,bi.comments bicomments, prd.name prdname,ord.orderno orderno,date_format(ord.deliverytime,'%Y-%m-%d') deliverytime,wf.index wfindex,"
          + "(select ppic.fielname from productpic ppic where ppic.productid = prd.id limit 1) filename,prd.id prdid,bi.num,dep.name depname "
          + "from Workitemallocation wia "
          + "left join workitem wi on wi.id=wia.workitem "
@@ -60,7 +64,7 @@ public class Workitemallocation extends BaseWorkitemallocation<Workitemallocatio
          + " where wia.worker = " + userid
          + " and wia.status != 2 "
          + " and ( prd.name like '%" + searchWord + "%' "
-         + " or ord.orderno like '%"+ searchWord + "%' ) ");
+         + " or ord.orderno like '%"+ searchWord + "%' ) order by ord.deliverytime");
        }
 	 
 	 public boolean exisitingWorkitemallocation( int workflowid,int userid, int depid ){
