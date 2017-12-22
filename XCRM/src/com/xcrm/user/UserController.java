@@ -81,4 +81,10 @@ public class UserController extends AbstractController {
     this.renderJson(allworkers);
   }
   
+  public void wxgetuserinfo( ){
+    int userid= this.getParaToInt( "userid" );
+    User user = User.dao.findFirst( "select usr.*,dep.name depname from user usr join department dep on dep.id= usr.department where usr.id=" + userid );
+    this.renderJson( user );
+  }
+  
 }

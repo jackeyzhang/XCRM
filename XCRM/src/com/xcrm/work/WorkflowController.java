@@ -351,14 +351,21 @@ public class WorkflowController extends AbstractController {
     int userid = this.getParaToInt( "userid" );
     String startDate = this.getPara( "date" );
     Calendar nextMonth = Calendar.getInstance();
-    if( StrUtil.isEmpty( startDate )){
+    boolean isbyyear = false;
+    if( StrUtil.isEmpty( startDate )){//default get current month data
       startDate = Calendar.getInstance().get( Calendar.YEAR ) + "-" + (Calendar.getInstance().get( Calendar.MONTH ) + 1) ;
       nextMonth.add(  Calendar.MONTH , 1 );
     }else{
-      nextMonth.set(  Calendar.YEAR , NumUtil.iVal( startDate.split( "-" )[0]  ));
-      nextMonth.set(  Calendar.MONTH , NumUtil.iVal( startDate.split( "-" )[1]  ));
+      String[] yearandmonth = startDate.split( "-" );
+      nextMonth.set(  Calendar.YEAR , NumUtil.iVal( yearandmonth[0]  ));
+      if( yearandmonth.length > 1 ){
+        nextMonth.set(  Calendar.MONTH , NumUtil.iVal( yearandmonth[1]  ));
+      }else{
+        startDate += "-01";//今年的一月一号
+        isbyyear = true;
+      }
     }
-    String endDate = nextMonth.get( Calendar.YEAR ) + "-" + (nextMonth.get( Calendar.MONTH ) + 1) ;
+    String endDate = isbyyear? nextMonth.get( Calendar.YEAR )+1 + "-1": nextMonth.get( Calendar.YEAR ) + "-" + (nextMonth.get( Calendar.MONTH ) + 1) ;
     List<Workitemallocation> wiaList = Workitemallocation.dao.getAllWorkitemallocationsIsFinish( userid, startDate, endDate );
     RecordUtil.fillInRowNumber(wiaList);
     this.renderJson( wiaList );
@@ -380,6 +387,7 @@ public class WorkflowController extends AbstractController {
     wia.setStatus( Workitemallocation.WORKITEM_STATUS_DONE );
     wia.setFinishtime( new Date() );
     wia.update();
+    WorkflowUtil.autoCloseWorkflow( wiaid );
     renderJson(wia);
   }
   
@@ -411,7 +419,6 @@ public class WorkflowController extends AbstractController {
       wia.save();
       this.renderJson( true );
     }
-
   }
 
 }

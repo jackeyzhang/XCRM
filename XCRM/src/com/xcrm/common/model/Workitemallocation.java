@@ -30,7 +30,7 @@ public class Workitemallocation extends BaseWorkitemallocation<Workitemallocatio
 	      + "left join `order` ord on ord.id=oi.order "
 	      + "left join product prd on prd.id=bi.product "
 	      + "left join department dep on dep.id=wi.dep "
-	      + " where wia.worker=? and wia.status != 2 order by ord.deliverytime", userid );
+	      + " where wia.worker=? and wia.status != 2 order by ord.deliverytime asc,wia.starttime desc", userid );
 	}
 	
 	public List<Workitemallocation> getAllWorkitemallocationsIsFinish( int userid, String startDate, String endDate ){
@@ -64,7 +64,7 @@ public class Workitemallocation extends BaseWorkitemallocation<Workitemallocatio
          + " where wia.worker = " + userid
          + " and wia.status != 2 "
          + " and ( prd.name like '%" + searchWord + "%' "
-         + " or ord.orderno like '%"+ searchWord + "%' ) order by ord.deliverytime");
+         + " or ord.orderno like '%"+ searchWord + "%' ) order by ord.deliverytime asc,wia.starttime desc");
        }
 	 
 	 public boolean exisitingWorkitemallocation( int workflowid,int userid, int depid ){

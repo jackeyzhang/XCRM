@@ -18,4 +18,8 @@ public class Workitem extends BaseWorkitem<Workitem> {
 	  return Workitemallocation.dao.find( "select wia.*,usr.username workername from Workitemallocation wia join user usr on wia.worker= usr.id where wia.status <> 3 and wia.workitem=?", this.getId() );
 	}
 	
+	public Workflow getWorkflowObj( ){
+	  return Workflow.dao.findById( this.getWorkflow() );
+	}
+	
 }
