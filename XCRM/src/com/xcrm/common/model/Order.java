@@ -31,16 +31,19 @@ public class Order extends BaseOrder<Order> {
   
   public List<Bookitem> getAllBookitems( ){
     int orderid = this.getId();
-    return Bookitem.dao.find(
+    List<Bookitem> result = Bookitem.dao.find(
         "select bi.*,prd.name prdname,IFNULL(wf.workflowtemplate, prd.workflow) workflow,prd.id prdid, wf.id wfid, wf.status wfstatus,(select ppic.fielname from productpic ppic where ppic.productid = prd.id limit 1) fielname "
         + "from bookitem bi "
         + "join product prd on prd.id= bi.product "
         + "join orderitem oi on oi.bookitem = bi.id and oi.order = " + orderid 
-        + " left join workflow wf on wf.bookitem = bi.id and wf.index=0 ");
+        + " left join workflow wf on wf.bookitem = bi.id ");//and wf.index=0
+    List<Workflowtemplate> workflowtemplates = Workflowtemplate.dao.find( "select * from Workflowtemplate" );
+    result.stream().forEach( r->r.put( "worktemplates", workflowtemplates ) );
+    return result;
   }
   
   public boolean isStartAllBookitems( ){
-    return getAllBookitems( ).stream().filter( a->a.get( "wfid" ) != null ).findAny().isPresent();
+    return !getAllBookitems( ).stream().filter( a->a.get( "wfid" ) == null ).findAny().isPresent();
   }
   
   

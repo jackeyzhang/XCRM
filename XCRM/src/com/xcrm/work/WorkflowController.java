@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
@@ -34,18 +35,7 @@ public class WorkflowController extends AbstractController {
 
   public void index() {
     //price是原价  deal price是成交价  
-    String sql = "select concat(cust.name, '-' , cust.company) company, " + "GROUP_CONCAT(p.name) name," + "o.orderno orderno," + "sum(bi.num) num,"
-        + "date_format(o.deliverytime,'%Y-%m-%d') date," + "o.status," + "user.username saler," + "GROUP_CONCAT(bi.comments) comments";
-    String sqlExcept = " from `order` o  " + "left join orderitem oi on o.id=oi.order " + "left join bookitem bi on oi.bookitem=bi.id " + "left join product p on bi.product=p.id "
-        + "left join customer cust on cust.id=bi.customer " + "left join user user on user.id=bi.user " + "where " + getSqlForUserRole() + " and o.status != "
-        + Order.STATUS_CANCELLED + " " + this.getSearchStatement( true, "" ) + " group by o.orderno order by o.orderno,p.name desc";
-    Page<Record> page = Db.paginate( 1, 30, sql, sqlExcept );
-    page.getList().stream().forEach( o -> {
-      long orderno = o.getLong( "orderno" );
-      Order order = Order.dao.findFirst( "select * from `order` where orderno = ?", orderno );
-      o.set( "bi", order.getAllBookitems() );
-      o.set( "displaystartbtn", order.isStartAllBookitems() ? "no" : "yes" );
-    } );
+    Page<Record> page = getOrderToStartList( getSqlForUserRole() );
     Pager pager = new Pager( page.getTotalRow(), page.getList() );
     setAttr( "data", pager );
     setAttr( "page_header", "订单工作流管理" );
@@ -90,6 +80,7 @@ public class WorkflowController extends AbstractController {
       long ordernum = p.getLong( "orderno" );
       Order order = Order.dao.findFirst( "select * from `order` where orderno = ?", ordernum );
       p.set( "bi", order.getAllBookitems() );
+      p.set( "displaystartbtn", order.isStartAllBookitems() ? "no" : "yes" );
     } );
     Pager pager = new Pager( page.getTotalRow(), page.getList() );
     this.setAttr( "data", pager );
@@ -153,41 +144,7 @@ public class WorkflowController extends AbstractController {
   }
 
   public void startBookItem() {
-    int bookitemid = this.getParaToInt( "bi" );
-    int workflowtemplateid = this.getParaToInt( "wftid" );
-
-    //index and num, index 1 num 1 means the sencond
-    int index = this.getParaToInt( "index" );
-    int num = this.getParaToInt( "num" );
-
-    //check work flow item and create one if not existing one.
-    List<Workflow> found = Workflow.dao.find( "select * from workflow where bookitem = " + bookitemid );
-    if ( found.size() > 0 ) {
-      return;
-    }
-    for ( int i = 0; i < num; i++ ) {
-      Workflow workflow = new Workflow();
-      workflow.setBookitem( bookitemid );
-      workflow.setIndex( index + i );
-      workflow.setStatus( Workflow.WORK_STATUS_INIT );
-      workflow.setProgress( 0 );
-      workflow.setWorkflowtemplate( workflowtemplateid );
-      workflow.save();
-      QRCodeUtil.generator( "" + workflow.getId(), "" +  workflow.getId(), getRealPath(), PropUtil.getWorkflowQr2Path());
-
-      Workflowtemplate wft = Workflowtemplate.dao.findById( workflowtemplateid );
-      List<Workitem> wiList = new ArrayList<>();
-      for ( Workitemtemplate wit : wft.getWorkitemtemplates() ) {
-        Workitem wi = new Workitem();
-        wi.setIndex( wit.getIndex() );
-        wi.setStatus( wit.getStatus() );
-        wi.setWorkflow( workflow.getId() );
-        wi.setWeight( wit.getWeight() );
-        wi.setDep( wit.getDep() );
-        wiList.add( wi );
-      }
-      Db.batchSave( wiList, wiList.size() );
-    }
+    wxStartBookItem();
     this.forwardIndex();
   }
   
@@ -331,6 +288,42 @@ public class WorkflowController extends AbstractController {
   }
   
   
+  public  Page<Record> getOrderToStartList( String sqlForUserRole){
+    return getOrderToStartList(sqlForUserRole, null, 1 );
+  }
+  
+  /**
+   * 
+   * @param sqlForUserRole
+   * @param searchOrderNo
+   * @return
+   */
+  private  Page<Record> getOrderToStartList( String sqlForUserRole, String searchOrderNo, int isUnstartOrAll ){
+  //price是原价  deal price是成交价  
+    String sql = "select concat(cust.name, '-' , cust.company) company, " + "GROUP_CONCAT(p.name) name," + "o.orderno orderno," + "sum(bi.num) num,"
+        + "date_format(o.deliverytime,'%Y-%m-%d') date," + "o.status," + "user.username saler," + "GROUP_CONCAT(bi.comments) comments";
+    String sqlExcept = " from `order` o  " + "left join orderitem oi on o.id=oi.order " + "left join bookitem bi on oi.bookitem=bi.id " + "left join product p on bi.product=p.id "
+        + "left join customer cust on cust.id=bi.customer " + "left join user user on user.id=bi.user " + "where " + sqlForUserRole + " and o.status != "
+        + Order.STATUS_CANCELLED + " " + this.getSearchStatement( true, "" ) 
+        + ( searchOrderNo == null ? "" : " and o.orderno like '%"+ searchOrderNo +"%'")
+        + " group by o.orderno order by o.orderno,p.name desc";
+    Page<Record> page = Db.paginate( 1, 30, sql, sqlExcept );
+    page.getList().stream().forEach( o -> {
+      long orderno = o.getLong( "orderno" );
+      Order order = Order.dao.findFirst( "select * from `order` where orderno = ?", orderno );
+      o.set( "bi", order.getAllBookitems() );
+      o.set( "displaystartbtn", order.isStartAllBookitems() ? "no" : "yes" );
+    } );
+    if( isUnstartOrAll == 0 ){
+      List<Record> list= page.getList().stream().filter( o ->{
+        return o.get( "displaystartbtn" ).equals( "yes" );
+      }).collect( Collectors.toList() );
+      page = new Page<Record>( list, 1, list.size(), 1, list.size()  );
+    }
+    return page;
+  }
+  
+  
   /**
    * following is for wx methods
    */
@@ -347,6 +340,9 @@ public class WorkflowController extends AbstractController {
     this.renderJson( wiaList );
   }
   
+  /**
+   * 获取所有完成任务
+   */
   public void wxlistallmyfinishtasks( ){
     int userid = this.getParaToInt( "userid" );
     String startDate = this.getPara( "date" );
@@ -372,6 +368,9 @@ public class WorkflowController extends AbstractController {
   }
   
   
+  /**
+   * 开始一个工作分配项
+   */
   public void wxstartwia(){
     int wiaid = this.getParaToInt( "wiaid" );
     Workitemallocation wia = Workitemallocation.dao.findById( wiaid );
@@ -381,6 +380,9 @@ public class WorkflowController extends AbstractController {
     renderJson(wia);
   }
   
+  /**
+   * 完成一个工作分配项
+   */
   public void wxfinishwia(){
     int wiaid = this.getParaToInt( "wiaid" );
     Workitemallocation wia = Workitemallocation.dao.findById( wiaid );
@@ -392,6 +394,9 @@ public class WorkflowController extends AbstractController {
   }
   
   
+  /**
+   * 获取工作流详情
+   */
   public void wxgetworkflowdetail(){
     int workflowid = this.getParaToInt( "wfid" );
     int userid = this.getParaToInt( "userid" );
@@ -401,6 +406,9 @@ public class WorkflowController extends AbstractController {
   }
   
   
+  /**
+   * 员工视图： 开始工作分配项
+   */
   public void wxcreateandstartwia(){
     int workflowid = this.getParaToInt( "wfid" );
     int userid = this.getParaToInt( "userid" );
@@ -420,5 +428,119 @@ public class WorkflowController extends AbstractController {
       this.renderJson( true );
     }
   }
+  
+  
+  /**
+   * 获取订单开始数据
+   * 
+   * 支持按照订单号查询
+   */
+  public void wxgetOrderToStartList( ){
+    String userid = this.getPara( "userid" );
+    String searchWord = this.getPara( "wxsearchword" );
+    int userselection = 1;// 0 unstart only, 1 all
+    if( !StrUtil.isEmpty( getPara( "userselection" ) )){
+      userselection = this.getParaToInt( "userselection" ); 
+    }
+    this.renderJson(RecordUtil.fillRowNumber( getOrderToStartList( " bi.user is not null ", searchWord, userselection ).getList() ));
+  }
+  
+  
+  /**
+   * 开始一个订单项
+   */
+  public void wxStartBookItem( ){
+    int bookitemid = this.getParaToInt( "bi" );
+    int workflowtemplateid = this.getParaToInt( "wftid" );
+    //index and num, index 1 num 1 means the second
+    int index = this.getParaToInt( "index" );
+    int num = this.getParaToInt( "num" );
+
+    //check work flow item and create one if not existing one.
+    List<Workflow> found = Workflow.dao.find( "select * from workflow where bookitem = " + bookitemid );
+    if ( found.size() > 0 ) {
+      this.renderJson( "已启动！" );
+      return;
+    }
+    for ( int i = 0; i < num; i++ ) {
+      Workflow workflow = new Workflow();
+      workflow.setBookitem( bookitemid );
+      workflow.setIndex( index + i );
+      workflow.setStatus( Workflow.WORK_STATUS_INIT );
+      workflow.setProgress( 0 );
+      workflow.setWorkflowtemplate( workflowtemplateid );
+      workflow.save();
+      QRCodeUtil.generator( "" + workflow.getId(), "" +  workflow.getId(), getRealPath(), PropUtil.getWorkflowQr2Path());
+
+      Workflowtemplate wft = Workflowtemplate.dao.findById( workflowtemplateid );
+      List<Workitem> wiList = new ArrayList<>();
+      for ( Workitemtemplate wit : wft.getWorkitemtemplates() ) {
+        Workitem wi = new Workitem();
+        wi.setIndex( wit.getIndex() );
+        wi.setStatus( wit.getStatus() );
+        wi.setWorkflow( workflow.getId() );
+        wi.setWeight( wit.getWeight() );
+        wi.setDep( wit.getDep() );
+        wiList.add( wi );
+      }
+      Db.batchSave( wiList, wiList.size() );
+    }
+    this.renderJson( true );
+  }
+  
+  /**
+   * 微信端启动整个order下所有未启动订单项
+   */
+  public void wxStartOrder( ){
+    String bookitemsStr = this.getPara( "bis" );
+    String bookitemwfsStr = this.getPara( "wfts" );
+    List<String> bookitems = StrUtil.split( bookitemsStr, "," );
+    List<String> bookitemwfs = StrUtil.split( bookitemwfsStr, "," );
+    for( int index = 0; index < bookitems.size(); index ++ ){
+      String bookitemid = bookitems.get( index );
+      Workflow found = Workflow.dao.findFirst( "select * from workflow where bookitem = " + bookitemid );
+      if ( found!= null ) {
+        //已启动
+        continue;
+      }
+      int workflowtemplateid = NumUtil.iVal( bookitemwfs.get( index ) );
+      Bookitem bi = Bookitem.dao.findById( bookitemid );
+      for ( int i = 0; i < bi.getNum(); i++ ) {
+        Workflow workflow = new Workflow();
+        workflow.setBookitem( NumUtil.iVal( bookitemid ) );
+        workflow.setIndex( index + i );
+        workflow.setStatus( Workflow.WORK_STATUS_INIT );
+        workflow.setProgress( 0 );
+        workflow.setWorkflowtemplate( workflowtemplateid );
+        workflow.save();
+        QRCodeUtil.generator( "" + workflow.getId(), "" +  workflow.getId(), getRealPath(), PropUtil.getWorkflowQr2Path());
+        Workflowtemplate wft = Workflowtemplate.dao.findById( workflowtemplateid );
+        List<Workitem> wiList = new ArrayList<>();
+        for ( Workitemtemplate wit : wft.getWorkitemtemplates() ) {
+          Workitem wi = new Workitem();
+          wi.setIndex( wit.getIndex() );
+          wi.setStatus( wit.getStatus() );
+          wi.setWorkflow( workflow.getId() );
+          wi.setWeight( wit.getWeight() );
+          wi.setDep( wit.getDep() );
+          wiList.add( wi );
+        }
+        Db.batchSave( wiList, wiList.size() );
+      }
+    }
+    this.renderJson( true );
+  }
+  
+  /**
+   * 获取工作流详情
+   * 同时获取同订单下其他工作流
+   * 
+   */
+  public void wxGetWorkflowDetail( ){
+      int workflowid = this.getParaToInt( "wfid" );
+      Workflow workflow = Workflow.dao.findById( workflowid );
+      this.renderJson( workflow.getRelatedWorkflows() );
+  }
+  
 
 }

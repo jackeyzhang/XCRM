@@ -85,4 +85,8 @@ public class WorkflowtemplateController extends AbstractController {
     this.render( "addworkflowtemplate.html" );
   }
   
+  
+  public void wxGetAllWorkTemplates(){
+    this.renderJson( Workflowtemplate.dao.find( "select * from Workflowtemplate" ) );
+  }
 }

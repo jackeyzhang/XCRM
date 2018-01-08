@@ -93,4 +93,21 @@ public class Workflow extends BaseWorkflow<Workflow> {
     }
     return this;
   }
+  
+  /**
+   * 获取all workflow及其详情
+   * 
+   * @param status
+   * @return
+   */
+  public static List<Record> listAllWorkflowDetails( int status ){
+    return Db.find( "select wf.id,wf.status,wftmp.name,bi.prdattrs, bi.comments,bi.id, wf.index,prd.name prdname,"
+                    +"(select ord.orderno from `order` ord, orderitem oi where oi.bookitem = bi.id and oi.order= ord.id) orderno"
+                    +" from workflow wf "
+                    +" join bookitem bi on bi.id = wf.bookitem "
+                    +" join workflowtemplate wftmp on wftmp.id = wf.workflowtemplate "
+                    +" join product prd on prd.id= bi.product "
+                    +" where wf.status = ? "
+                    +" order by bi.id,wf.index limit 30 ", status );
+  }
 }
