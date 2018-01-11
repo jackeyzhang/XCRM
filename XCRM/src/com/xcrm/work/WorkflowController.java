@@ -147,11 +147,11 @@ public class WorkflowController extends AbstractController {
     wxStartBookItem();
     this.forwardIndex();
   }
-  
+
   public void batchStartBookItem() {
     String bookitems = this.getPara( "bookitems" );
     String[] bookitemArray = bookitems.split( ";" );
-    for( String bookitemStr : bookitemArray ){
+    for ( String bookitemStr : bookitemArray ) {
       String[] bookitemAndWorktemplate = bookitemStr.split( "," );
       Integer bookitemId = NumUtil.iVal( bookitemAndWorktemplate[0] );
       Integer workflowtemplateId = NumUtil.iVal( bookitemAndWorktemplate[1] );
@@ -161,7 +161,7 @@ public class WorkflowController extends AbstractController {
       if ( found.size() > 0 ) {
         return;
       }
-      for( int i = 0; i < bookitem.getNum(); i ++ ){
+      for ( int i = 0; i < bookitem.getNum(); i++ ) {
         Workflow workflow = new Workflow();
         workflow.setBookitem( bookitemId );
         workflow.setIndex( i );
@@ -169,7 +169,7 @@ public class WorkflowController extends AbstractController {
         workflow.setProgress( 0 );
         workflow.setWorkflowtemplate( workflowtemplateId );
         workflow.save();
-        QRCodeUtil.generator( "" + workflow.getId(), "" +  workflow.getId(), getRealPath(), PropUtil.getWorkflowQr2Path());
+        QRCodeUtil.generator( "" + workflow.getId(), "" + workflow.getId(), getRealPath(), PropUtil.getWorkflowQr2Path() );
 
         Workflowtemplate wft = Workflowtemplate.dao.findById( workflowtemplateId );
         List<Workitem> wiList = new ArrayList<>();
@@ -194,7 +194,7 @@ public class WorkflowController extends AbstractController {
     if ( workflow != null ) {
       setAttr( "workflows", workflow.getRelatedWorkflows() );
       List<Workitem> workflowitems = new ArrayList<>();
-      for( Workflow wf : workflow.getRelatedWorkflows()){
+      for ( Workflow wf : workflow.getRelatedWorkflows() ) {
         workflowitems.addAll( wf.getWorkItems() );
       }
       this.setAttr( "workflowitems", workflowitems );
@@ -207,7 +207,7 @@ public class WorkflowController extends AbstractController {
     setAttr( "workflow_qr2_path", getWorkflowQr2BaseUrl() );
     render( "detailworkflow.html" );
   }
-  
+
   public void saveorUpdateWorkitemAllocations() {
     Map<String, String[]> form = getParaMap();
     String[] workers = form.get( "selectworker" );
@@ -215,26 +215,27 @@ public class WorkflowController extends AbstractController {
     String[] workitemids = form.get( "workitemid" );
     String[] workitemallocationids = form.get( "workitemallocationid" );
     String[] workitemallocationStatus = form.get( "workitemallocationstatus" );
-    
-    if( workitemids == null || workitemids.length == 0 ) return;
-    
+
+    if ( workitemids == null || workitemids.length == 0 )
+      return;
+
     //delete first
     Integer workitemID = NumUtil.iVal( workitemids[0] );
     Workitem workitem = Workitem.dao.findById( workitemID );
-    for( Workitemallocation wia : workitem.getWorkitemallocations()){
+    for ( Workitemallocation wia : workitem.getWorkitemallocations() ) {
       boolean deletefromUI = true;
-      
-      for( String workitemallId : workitemallocationids ){
-        if( NumUtil.iVal( workitemallId ) == wia.getId() ){
+
+      for ( String workitemallId : workitemallocationids ) {
+        if ( NumUtil.iVal( workitemallId ) == wia.getId() ) {
           deletefromUI = false;
         }
       }
-      if( deletefromUI ){
+      if ( deletefromUI ) {
         wia.setStatus( Workitemallocation.WORKITEM_STATUS_CANCEL );
         wia.update();
       }
     }
-    
+
     //update and add then
     for ( int index = 0; index < workitemids.length; index++ ) {
       Integer workitemId = NumUtil.iVal( workitemids[index] );
@@ -242,70 +243,69 @@ public class WorkflowController extends AbstractController {
       Integer weight = NumUtil.iVal( weights[index] );
       Integer status = NumUtil.iVal( workitemallocationStatus == null ? "0" : workitemallocationStatus[index] );
       Integer workitemallocation = 0;
-      if( workitemallocationids != null ) {
+      if ( workitemallocationids != null ) {
         workitemallocation = NumUtil.iVal( workitemallocationids[index] );
       }
       Workitemallocation wAloc = new Workitemallocation();
-      if( workitemallocation > 0){
+      if ( workitemallocation > 0 ) {
         wAloc = Workitemallocation.dao.findById( workitemallocation );//if existing, means update
       }
       wAloc.setWorkitem( workitemId );
       wAloc.setWorker( worker );
       wAloc.setWeight( weight );
-      wAloc.setStatus(status);
-      if( workitemallocation > 0 ){
+      wAloc.setStatus( status );
+      if ( workitemallocation > 0 ) {
         wAloc.update();
-      }else{
+      }
+      else {
         wAloc.save();
       }
     }
   }
-  
-  public void markcompleteworkitem( ){
+
+  public void markcompleteworkitem() {
     int workitemid = this.getParaToInt( "workitemid" );
     Workitem workitem = Workitem.dao.findById( workitemid );
     workitem.setStatus( Workitem.WORKITEM_STATUS_DONE );
     workitem.update();
     this.forwardIndex();
   }
-  
-  public void restartworkitem( ){
+
+  public void restartworkitem() {
     int workitemid = this.getParaToInt( "workitemid" );
     Workitem workitem = Workitem.dao.findById( workitemid );
     workitem.setStatus( Workitem.WORKITEM_STATUS_INIT );
     workitem.update();
     this.forwardIndex();
   }
-  
-  public void startWorkflow( ){
+
+  public void startWorkflow() {
     int workflowid = this.getParaToInt( "workflowid" );
     Workflow workflow = Workflow.dao.findById( workflowid );
     //TODO: validation the work item and work item allocation
-    
+
     //upate status
     workflow.setStatus( Workflow.WORK_STATUS_START );
     workflow.update();
   }
-  
-  
-  public  Page<Record> getOrderToStartList( String sqlForUserRole){
-    return getOrderToStartList(sqlForUserRole, null, 1 );
+
+  public Page<Record> getOrderToStartList( String sqlForUserRole ) {
+    return getOrderToStartList( sqlForUserRole, null, 1 );
   }
-  
+
   /**
    * 
    * @param sqlForUserRole
    * @param searchOrderNo
    * @return
    */
-  private  Page<Record> getOrderToStartList( String sqlForUserRole, String searchOrderNo, int isUnstartOrAll ){
-  //price是原价  deal price是成交价  
+  private Page<Record> getOrderToStartList( String sqlForUserRole, String searchOrderNo, int isUnstartOrAll ) {
+    //price是原价  deal price是成交价  
     String sql = "select concat(cust.name, '-' , cust.company) company, " + "GROUP_CONCAT(p.name) name," + "o.orderno orderno," + "sum(bi.num) num,"
         + "date_format(o.deliverytime,'%Y-%m-%d') date," + "o.status," + "user.username saler," + "GROUP_CONCAT(bi.comments) comments";
     String sqlExcept = " from `order` o  " + "left join orderitem oi on o.id=oi.order " + "left join bookitem bi on oi.bookitem=bi.id " + "left join product p on bi.product=p.id "
-        + "left join customer cust on cust.id=bi.customer " + "left join user user on user.id=bi.user " + "where " + sqlForUserRole + " and o.status != "
-        + Order.STATUS_CANCELLED + " " + this.getSearchStatement( true, "" ) 
-        + ( searchOrderNo == null ? "" : " and o.orderno like '%"+ searchOrderNo +"%'")
+        + "left join customer cust on cust.id=bi.customer " + "left join user user on user.id=bi.user " + "where " + sqlForUserRole + " and o.status != " + Order.STATUS_CANCELLED
+        + " " + this.getSearchStatement( true, "" ) + ( searchOrderNo == null ? "" : " and o.orderno like '%" + searchOrderNo + "%'" )
         + " group by o.orderno order by o.orderno,p.name desc";
     Page<Record> page = Db.paginate( 1, 30, sql, sqlExcept );
     page.getList().stream().forEach( o -> {
@@ -314,109 +314,109 @@ public class WorkflowController extends AbstractController {
       o.set( "bi", order.getAllBookitems() );
       o.set( "displaystartbtn", order.isStartAllBookitems() ? "no" : "yes" );
     } );
-    if( isUnstartOrAll == 0 ){
-      List<Record> list= page.getList().stream().filter( o ->{
+    if ( isUnstartOrAll == 0 ) {
+      List<Record> list = page.getList().stream().filter( o -> {
         return o.get( "displaystartbtn" ).equals( "yes" );
-      }).collect( Collectors.toList() );
-      page = new Page<Record>( list, 1, list.size(), 1, list.size()  );
+      } ).collect( Collectors.toList() );
+      page = new Page<Record>( list, 1, list.size(), 1, list.size() );
     }
     return page;
   }
-  
-  
+
   /**
    * following is for wx methods
    */
-  public void wxlistallmytasks( ){
+  public void wxlistallmytasks() {
     int userid = this.getParaToInt( "userid" );
     String searchWord = this.getPara( "searchword" );
     List<Workitemallocation> wiaList = new ArrayList<Workitemallocation>();
-    if( !StrUtil.isEmpty( searchWord  )){
-      wiaList = Workitemallocation.dao.getAllWorkitemallocationsNotFinishBySerachWord( userid,searchWord );
-    }else{
+    if ( !StrUtil.isEmpty( searchWord ) ) {
+      wiaList = Workitemallocation.dao.getAllWorkitemallocationsNotFinishBySerachWord( userid, searchWord );
+    }
+    else {
       wiaList = Workitemallocation.dao.getAllWorkitemallocationsNotFinish( userid );
     }
-    RecordUtil.fillInRowNumber(wiaList);
+    RecordUtil.fillInRowNumber( wiaList );
     this.renderJson( wiaList );
   }
-  
+
   /**
    * 获取所有完成任务
    */
-  public void wxlistallmyfinishtasks( ){
+  public void wxlistallmyfinishtasks() {
     int userid = this.getParaToInt( "userid" );
     String startDate = this.getPara( "date" );
     Calendar nextMonth = Calendar.getInstance();
     boolean isbyyear = false;
-    if( StrUtil.isEmpty( startDate )){//default get current month data
-      startDate = Calendar.getInstance().get( Calendar.YEAR ) + "-" + (Calendar.getInstance().get( Calendar.MONTH ) + 1) ;
-      nextMonth.add(  Calendar.MONTH , 1 );
-    }else{
+    if ( StrUtil.isEmpty( startDate ) ) {//default get current month data
+      startDate = Calendar.getInstance().get( Calendar.YEAR ) + "-" + ( Calendar.getInstance().get( Calendar.MONTH ) + 1 );
+      nextMonth.add( Calendar.MONTH, 1 );
+    }
+    else {
       String[] yearandmonth = startDate.split( "-" );
-      nextMonth.set(  Calendar.YEAR , NumUtil.iVal( yearandmonth[0]  ));
-      if( yearandmonth.length > 1 ){
-        nextMonth.set(  Calendar.MONTH , NumUtil.iVal( yearandmonth[1]  ));
-      }else{
+      nextMonth.set( Calendar.YEAR, NumUtil.iVal( yearandmonth[0] ) );
+      if ( yearandmonth.length > 1 ) {
+        nextMonth.set( Calendar.MONTH, NumUtil.iVal( yearandmonth[1] ) );
+      }
+      else {
         startDate += "-01";//今年的一月一号
         isbyyear = true;
       }
     }
-    String endDate = isbyyear? nextMonth.get( Calendar.YEAR )+1 + "-1": nextMonth.get( Calendar.YEAR ) + "-" + (nextMonth.get( Calendar.MONTH ) + 1) ;
+    String endDate = isbyyear ? nextMonth.get( Calendar.YEAR ) + 1 + "-1" : nextMonth.get( Calendar.YEAR ) + "-" + ( nextMonth.get( Calendar.MONTH ) + 1 );
     List<Workitemallocation> wiaList = Workitemallocation.dao.getAllWorkitemallocationsIsFinish( userid, startDate, endDate );
-    RecordUtil.fillInRowNumber(wiaList);
+    RecordUtil.fillInRowNumber( wiaList );
     this.renderJson( wiaList );
   }
-  
-  
+
   /**
    * 开始一个工作分配项
    */
-  public void wxstartwia(){
+  public void wxstartwia() {
     int wiaid = this.getParaToInt( "wiaid" );
     Workitemallocation wia = Workitemallocation.dao.findById( wiaid );
     wia.setStatus( Workitemallocation.WORKITEM_STATUS_START );
     wia.setStarttime( new Date() );
     wia.update();
-    renderJson(wia);
+    renderJson( wia );
   }
-  
+
   /**
    * 完成一个工作分配项
    */
-  public void wxfinishwia(){
+  public void wxfinishwia() {
     int wiaid = this.getParaToInt( "wiaid" );
     Workitemallocation wia = Workitemallocation.dao.findById( wiaid );
     wia.setStatus( Workitemallocation.WORKITEM_STATUS_DONE );
     wia.setFinishtime( new Date() );
     wia.update();
     WorkflowUtil.autoCloseWorkflow( wiaid );
-    renderJson(wia);
+    renderJson( wia );
   }
-  
-  
+
   /**
    * 获取工作流详情
    */
-  public void wxgetworkflowdetail(){
+  public void wxgetworkflowdetail() {
     int workflowid = this.getParaToInt( "wfid" );
     int userid = this.getParaToInt( "userid" );
     Workflow workflow = Workflow.dao.findById( workflowid );
-    workflow = workflow.getWorkflowDetail( getDepartmentId( userid ) ) ;
-    renderJson(workflow);
+    workflow = workflow.getWorkflowDetail( getDepartmentId( userid ) );
+    renderJson( workflow );
   }
-  
-  
+
   /**
    * 员工视图： 开始工作分配项
    */
-  public void wxcreateandstartwia(){
+  public void wxcreateandstartwia() {
     int workflowid = this.getParaToInt( "wfid" );
     int userid = this.getParaToInt( "userid" );
     int depid = this.getParaToInt( "depid" );
     boolean isexsting = Workitemallocation.dao.exisitingWorkitemallocation( workflowid, userid, depid );
-    if( isexsting ){
+    if ( isexsting ) {
       this.renderJson( false );
-    }else{
+    }
+    else {
       Workflow workflow = Workflow.dao.findById( workflowid );
       Workitem workitem = workflow.getWorkitemByDep( depid );
       Workitemallocation wia = new Workitemallocation();
@@ -428,28 +428,26 @@ public class WorkflowController extends AbstractController {
       this.renderJson( true );
     }
   }
-  
-  
+
   /**
    * 获取订单开始数据
    * 
    * 支持按照订单号查询
    */
-  public void wxgetOrderToStartList( ){
+  public void wxgetOrderToStartList() {
     String userid = this.getPara( "userid" );
     String searchWord = this.getPara( "wxsearchword" );
     int userselection = 1;// 0 unstart only, 1 all
-    if( !StrUtil.isEmpty( getPara( "userselection" ) )){
-      userselection = this.getParaToInt( "userselection" ); 
+    if ( !StrUtil.isEmpty( getPara( "userselection" ) ) ) {
+      userselection = this.getParaToInt( "userselection" );
     }
-    this.renderJson(RecordUtil.fillRowNumber( getOrderToStartList( " bi.user is not null ", searchWord, userselection ).getList() ));
+    this.renderJson( RecordUtil.fillRowNumber( getOrderToStartList( " bi.user is not null ", searchWord, userselection ).getList() ) );
   }
-  
-  
+
   /**
    * 开始一个订单项
    */
-  public void wxStartBookItem( ){
+  public void wxStartBookItem() {
     int bookitemid = this.getParaToInt( "bi" );
     int workflowtemplateid = this.getParaToInt( "wftid" );
     //index and num, index 1 num 1 means the second
@@ -470,7 +468,7 @@ public class WorkflowController extends AbstractController {
       workflow.setProgress( 0 );
       workflow.setWorkflowtemplate( workflowtemplateid );
       workflow.save();
-      QRCodeUtil.generator( "" + workflow.getId(), "" +  workflow.getId(), getRealPath(), PropUtil.getWorkflowQr2Path());
+      QRCodeUtil.generator( "" + workflow.getId(), "" + workflow.getId(), getRealPath(), PropUtil.getWorkflowQr2Path() );
 
       Workflowtemplate wft = Workflowtemplate.dao.findById( workflowtemplateid );
       List<Workitem> wiList = new ArrayList<>();
@@ -487,19 +485,19 @@ public class WorkflowController extends AbstractController {
     }
     this.renderJson( true );
   }
-  
+
   /**
    * 微信端启动整个order下所有未启动订单项
    */
-  public void wxStartOrder( ){
+  public void wxStartOrder() {
     String bookitemsStr = this.getPara( "bis" );
     String bookitemwfsStr = this.getPara( "wfts" );
     List<String> bookitems = StrUtil.split( bookitemsStr, "," );
     List<String> bookitemwfs = StrUtil.split( bookitemwfsStr, "," );
-    for( int index = 0; index < bookitems.size(); index ++ ){
+    for ( int index = 0; index < bookitems.size(); index++ ) {
       String bookitemid = bookitems.get( index );
       Workflow found = Workflow.dao.findFirst( "select * from workflow where bookitem = " + bookitemid );
-      if ( found!= null ) {
+      if ( found != null ) {
         //已启动
         continue;
       }
@@ -513,7 +511,7 @@ public class WorkflowController extends AbstractController {
         workflow.setProgress( 0 );
         workflow.setWorkflowtemplate( workflowtemplateid );
         workflow.save();
-        QRCodeUtil.generator( "" + workflow.getId(), "" +  workflow.getId(), getRealPath(), PropUtil.getWorkflowQr2Path());
+        QRCodeUtil.generator( "" + workflow.getId(), "" + workflow.getId(), getRealPath(), PropUtil.getWorkflowQr2Path() );
         Workflowtemplate wft = Workflowtemplate.dao.findById( workflowtemplateid );
         List<Workitem> wiList = new ArrayList<>();
         for ( Workitemtemplate wit : wft.getWorkitemtemplates() ) {
@@ -530,17 +528,72 @@ public class WorkflowController extends AbstractController {
     }
     this.renderJson( true );
   }
-  
+
   /**
    * 获取工作流详情
    * 同时获取同订单下其他工作流
    * 
    */
-  public void wxGetWorkflowDetail( ){
-      int workflowid = this.getParaToInt( "wfid" );
-      Workflow workflow = Workflow.dao.findById( workflowid );
-      this.renderJson( workflow.getRelatedWorkflows() );
+  public void wxGetWorkflowDetail() {
+    int workflowid = this.getParaToInt( "wfid" );
+    Workflow workflow = Workflow.dao.findById( workflowid );
+    List<Workflow> workflows = workflow.getRelatedWorkflows();
+    workflows.stream().forEach( wf -> {
+      wf.put( "workitems", wf.getWorkItems() );
+    } );
+    this.renderJson( workflows );
   }
-  
+
+  public void wxRemoveWia() {
+    int wiaid = this.getParaToInt( "wiaid" );
+    Workitemallocation wia = Workitemallocation.dao.findById( wiaid );
+    if ( wia != null ) {
+      wia.setStatus( Workitemallocation.WORKITEM_STATUS_CANCEL );
+      this.renderJson( wia.update() );
+    }
+    else {
+      this.renderJson( false );
+    }
+  }
+
+  /**
+   * 员工视图： 开始工作分配项
+   */
+  public void wxcreatewia() {
+    int workflowid = this.getParaToInt( "wfid" );
+    int userid = this.getParaToInt( "userid" );
+    int depid = this.getParaToInt( "depid" );
+    int weight = this.getParaToInt( "weight" );
+    boolean isexsting = Workitemallocation.dao.exisitingWorkitemallocation( workflowid, userid, depid );
+    if ( isexsting ) {
+      this.renderJson( false );
+    }
+    else {
+      Workflow workflow = Workflow.dao.findById( workflowid );
+      Workitem workitem = workflow.getWorkitemByDep( depid );
+      Workitemallocation wia = new Workitemallocation();
+      wia.setWorker( userid );
+      wia.setWorkitem( workitem.getId() );
+      wia.setStatus( Workitemallocation.WORKITEM_STATUS_INIT );
+      wia.setWeight( weight );
+      wia.setStarttime( new Date() );
+      wia.save();
+      this.renderJson( true );
+    }
+  }
+
+  /**
+   * 开始一个工作分配项
+   */
+  public void wxupdatewia() {
+    int wiaid = this.getParaToInt( "wiaid" );
+    int weight = this.getParaToInt( "weight" );
+    Workitemallocation wia = Workitemallocation.dao.findById( wiaid );
+    if ( wia != null ) {
+      wia.setWeight( weight );
+      this.renderJson( wia.update() );
+    }
+    this.renderJson( false );
+  }
 
 }

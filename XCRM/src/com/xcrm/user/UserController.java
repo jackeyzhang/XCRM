@@ -6,20 +6,20 @@ import com.jfinal.aop.Before;
 import com.xcrm.common.AbstractController;
 import com.xcrm.common.model.User;
 import com.xcrm.common.util.Constant;
+import com.xcrm.common.util.StrUtil;
 
 
 @Before(UserInterceptor.class)
 public class UserController extends AbstractController {
 
-
   public void save() {
-    User user = this.getModel( User.class, "" , true);
+    User user = this.getModel( User.class, "", true );
     user.save();
-    forwardIndex(user);
+    forwardIndex( user );
   }
 
   public void update() {
-    this.getModel( User.class, "" , true).update();
+    this.getModel( User.class, "", true ).update();
     forwardIndex();
   }
 
@@ -63,7 +63,7 @@ public class UserController extends AbstractController {
   public String getIndexHtml() {
     return "user.html";
   }
-  
+
   @Override
   public int getCategory() {
     return Constant.CATEGORY_USER;
@@ -73,18 +73,22 @@ public class UserController extends AbstractController {
   protected String searchWord() {
     return "username";
   }
-  
-  
-  public void listWorkers(){
-//    List<User> allworkers = User.dao.find( "select usr.*,dep.name depname from user usr join department dep on dep.id=usr.department where usr.role=" + User.ROLE_WORKER );
-    List<User> allworkers = User.dao.find( "select usr.*,dep.name depname from user usr join department dep on dep.id=usr.department");
-    this.renderJson(allworkers);
+
+  public void listWorkers() {
+    wxlistWorkers();
   }
-  
-  public void wxgetuserinfo( ){
-    int userid= this.getParaToInt( "userid" );
+
+  public void wxgetuserinfo() {
+    int userid = this.getParaToInt( "userid" );
     User user = User.dao.findFirst( "select usr.*,dep.name depname from user usr join department dep on dep.id= usr.department where usr.id=" + userid );
     this.renderJson( user );
   }
-  
+
+  public void wxlistWorkers() {
+    String searchword = this.getPara( "searchword" );
+    List<User> allworkers = User.dao.find( "select usr.*,dep.name depname from user usr join department dep on dep.id=usr.department" 
+    + (StrUtil.isEmpty( searchword ) ? "" : " where dep.name like '%" + searchword + "%' or usr.username like '%" + searchword + "%' ") );
+    this.renderJson( allworkers );
+  }
+
 }

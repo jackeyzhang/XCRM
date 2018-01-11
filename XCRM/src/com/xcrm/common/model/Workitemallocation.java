@@ -71,7 +71,20 @@ public class Workitemallocation extends BaseWorkitemallocation<Workitemallocatio
 	   return !Workitemallocation.dao.find( "select wia.* "
 	       + "from Workitemallocation wia "
 	       + "join workitem wi on wi.id=wia.workitem "
-	       + "where wi.dep=? and wia.worker=? and wi.workflow=?",
+	       + "where wi.dep=? and wia.worker=? and wi.workflow=? and wia.status!=3 ",
 	       depid, userid, workflowid).isEmpty();
+	 }
+	 
+	 public Workitemallocation getWorkitemDetail( int wiaid ){
+	   return Workitemallocation.dao.findFirst( "select wia.*,dep.name depname,ord.orderno "
+           + "from Workitemallocation wia "
+           + "left join workitem wi on wi.id=wia.workitem "
+           + "left join workflow wf on wi.workflow=wf.id "
+           + "left join bookitem bi on bi.id=wf.bookitem "
+           + "left join orderitem oi on wf.bookitem=oi.bookitem "
+           + "left join `order` ord on ord.id=oi.order "
+           + "left join department dep on dep.id=wi.dep "
+           + "where wia.id=? ",
+           wiaid);
 	 }
 }
