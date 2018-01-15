@@ -41,14 +41,6 @@ public abstract class BaseWorkitemallocation<M extends BaseWorkitemallocation<M>
 		return get("weight");
 	}
 
-	public void setSpendtime(java.lang.Double spendtime) {
-		set("spendtime", spendtime);
-	}
-
-	public java.lang.Double getSpendtime() {
-		return get("spendtime");
-	}
-
 	public void setStatus(java.lang.Integer status) {
 		set("status", status);
 	}

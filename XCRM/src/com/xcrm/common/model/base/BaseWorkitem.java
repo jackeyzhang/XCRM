@@ -49,20 +49,28 @@ public abstract class BaseWorkitem<M extends BaseWorkitem<M>> extends Model<M> i
 		return get("status");
 	}
 
-	public void setSpendtime(java.lang.Integer spendtime) {
-		set("spendtime", spendtime);
-	}
-
-	public java.lang.Integer getSpendtime() {
-		return get("spendtime");
-	}
-
 	public void setWorkflow(java.lang.Integer workflow) {
 		set("workflow", workflow);
 	}
 
 	public java.lang.Integer getWorkflow() {
 		return get("workflow");
+	}
+
+	public void setStarttime(java.util.Date starttime) {
+		set("starttime", starttime);
+	}
+
+	public java.util.Date getStarttime() {
+		return get("starttime");
+	}
+
+	public void setFinishtime(java.util.Date finishtime) {
+		set("finishtime", finishtime);
+	}
+
+	public java.util.Date getFinishtime() {
+		return get("finishtime");
 	}
 
 }

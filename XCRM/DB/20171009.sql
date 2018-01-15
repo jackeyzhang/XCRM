@@ -112,3 +112,17 @@ ADD COLUMN `starttime` DATETIME NULL AFTER `status`,
 ADD COLUMN `finishtime` DATETIME NULL AFTER `starttime`;
 
 
+--2018-1-15
+ALTER TABLE `xcrm`.`workflow` 
+ADD COLUMN `starttime` DATETIME NULL DEFAULT NULL AFTER `workflowtemplate`,
+ADD COLUMN `finishtime` DATETIME NULL DEFAULT NULL AFTER `starttime`;
+
+ALTER TABLE `xcrm`.`workitemallocation` 
+DROP COLUMN `spendtime`;
+
+ALTER TABLE `xcrm`.`workitem` 
+DROP COLUMN `spendtime`,
+ADD COLUMN `starttime` DATETIME NULL DEFAULT NULL AFTER `workflow`,
+ADD COLUMN `finishtime` DATETIME NULL DEFAULT NULL AFTER `starttime`;
+
+

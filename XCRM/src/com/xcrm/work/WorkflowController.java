@@ -265,9 +265,7 @@ public class WorkflowController extends AbstractController {
 
   public void markcompleteworkitem() {
     int workitemid = this.getParaToInt( "workitemid" );
-    Workitem workitem = Workitem.dao.findById( workitemid );
-    workitem.setStatus( Workitem.WORKITEM_STATUS_DONE );
-    workitem.update();
+    WorkflowUtil.autoFinishWorkflowByWorkitem( workitemid );
     this.forwardIndex();
   }
 
@@ -329,12 +327,24 @@ public class WorkflowController extends AbstractController {
   public void wxlistallmytasks() {
     int userid = this.getParaToInt( "userid" );
     String searchWord = this.getPara( "searchword" );
-    List<Workitemallocation> wiaList = new ArrayList<Workitemallocation>();
+    boolean isall = false;
+    if( this.getPara( "alltask" ) != null ){
+      isall = this.getParaToBoolean( "alltask" );
+    }
+    List<Workitemallocation> wiaList = new ArrayList<>();
     if ( !StrUtil.isEmpty( searchWord ) ) {
-      wiaList = Workitemallocation.dao.getAllWorkitemallocationsNotFinishBySerachWord( userid, searchWord );
+      if( isall ){
+        wiaList = Workitemallocation.dao.getAllWorkitemallocationsBySerachWord( userid, searchWord );
+      }else{
+        wiaList = Workitemallocation.dao.getAllWorkitemallocationsNotFinishBySerachWord( userid, searchWord );
+      }
     }
     else {
-      wiaList = Workitemallocation.dao.getAllWorkitemallocationsNotFinish( userid );
+      if( isall ){
+        wiaList = Workitemallocation.dao.getAllWorkitemallocations( userid );
+      }else{
+        wiaList = Workitemallocation.dao.getAllWorkitemallocationsNotFinish( userid );
+      }
     }
     RecordUtil.fillInRowNumber( wiaList );
     this.renderJson( wiaList );
@@ -378,6 +388,7 @@ public class WorkflowController extends AbstractController {
     wia.setStatus( Workitemallocation.WORKITEM_STATUS_START );
     wia.setStarttime( new Date() );
     wia.update();
+    WorkflowUtil.autoStartWorkflow( wiaid );
     renderJson( wia );
   }
 
@@ -390,7 +401,7 @@ public class WorkflowController extends AbstractController {
     wia.setStatus( Workitemallocation.WORKITEM_STATUS_DONE );
     wia.setFinishtime( new Date() );
     wia.update();
-    WorkflowUtil.autoCloseWorkflow( wiaid );
+    WorkflowUtil.autoFinishWorkflow( wiaid );
     renderJson( wia );
   }
 
@@ -425,6 +436,7 @@ public class WorkflowController extends AbstractController {
       wia.setStatus( Workitemallocation.WORKITEM_STATUS_START );
       wia.setStarttime( new Date() );
       wia.save();
+      WorkflowUtil.autoStartWorkflow( wia.getId() );
       this.renderJson( true );
     }
   }
@@ -445,7 +457,8 @@ public class WorkflowController extends AbstractController {
   }
 
   /**
-   * 开始一个订单项
+   * 开始一个订单项下的所有工作流
+   * 
    */
   public void wxStartBookItem() {
     int bookitemid = this.getParaToInt( "bi" );
@@ -475,7 +488,7 @@ public class WorkflowController extends AbstractController {
       for ( Workitemtemplate wit : wft.getWorkitemtemplates() ) {
         Workitem wi = new Workitem();
         wi.setIndex( wit.getIndex() );
-        wi.setStatus( wit.getStatus() );
+        wi.setStatus( Workitem.WORKITEM_STATUS_INIT );
         wi.setWorkflow( workflow.getId() );
         wi.setWeight( wit.getWeight() );
         wi.setDep( wit.getDep() );
@@ -517,7 +530,7 @@ public class WorkflowController extends AbstractController {
         for ( Workitemtemplate wit : wft.getWorkitemtemplates() ) {
           Workitem wi = new Workitem();
           wi.setIndex( wit.getIndex() );
-          wi.setStatus( wit.getStatus() );
+          wi.setStatus( Workitem.WORKITEM_STATUS_INIT );
           wi.setWorkflow( workflow.getId() );
           wi.setWeight( wit.getWeight() );
           wi.setDep( wit.getDep() );
@@ -594,6 +607,16 @@ public class WorkflowController extends AbstractController {
       this.renderJson( wia.update() );
     }
     this.renderJson( false );
+  }
+  
+  public void wxlistallworkflows( ){
+    String userid = this.getPara( "userid" );
+    String searchWord = this.getPara( "searchword" );
+    List<Workflow> workflows = Workflow.dao.listAllWorkflowDetails( searchWord );
+    workflows.stream().forEach( wf -> {
+      wf.put( "workitems", wf.getWorkItems() );
+    } );
+    this.renderJson( workflows );
   }
 
 }
