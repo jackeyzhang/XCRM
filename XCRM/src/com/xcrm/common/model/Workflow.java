@@ -53,13 +53,13 @@ public class Workflow extends BaseWorkflow<Workflow> {
   }
 
   public List<Workitem> getWorkItems() {
-    List<Workitem> items = Workitem.dao.find( "select wi.*,dp.name dp, (case when wi.status=0 then 'lightblue' when wi.status=1 then 'orange' when wi.status=2 then 'green' else 'red' end) statuscolor from workitem wi join department dp on dp.id=wi.dep  where wi.workflow=?", this.getId() );
+    List<Workitem> items = Workitem.dao.find( "select wi.*,dp.name dp, (case when wi.status=0 then 'lightblue' when wi.status=1 then 'blue' when wi.status=2 then 'green' else 'red' end) statuscolor from workitem wi join department dp on dp.id=wi.dep  where wi.workflow=?", this.getId() );
     items.stream().forEach( i -> i.put( "workitemallocations", i.getWorkitemallocations() ) );
     return items;
   }
   
   public List<Workitem> getWorkItems( int userid ) {
-    List<Workitem> items = Workitem.dao.find( "select wi.*,dp.name dp, (case when wi.status=0 then 'lightblue' when wi.status=1 then 'orange' when wi.status=2 then 'green' else 'red' end) statuscolor from workitem wi join department dp on dp.id=wi.dep join user usr on dp.id=usr.department where wi.workflow=? and usr.id=?", this.getId(), userid );
+    List<Workitem> items = Workitem.dao.find( "select wi.*,dp.name dp, (case when wi.status=0 then 'lightblue' when wi.status=1 then 'blue' when wi.status=2 then 'green' else 'red' end) statuscolor from workitem wi join department dp on dp.id=wi.dep join user usr on dp.id=usr.department where wi.workflow=? and usr.id=?", this.getId(), userid );
     items.stream().forEach( i -> i.put( "workitemallocations", i.getWorkitemallocations() ) );
     return items;
   }
