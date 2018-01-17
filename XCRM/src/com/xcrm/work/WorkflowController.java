@@ -549,10 +549,12 @@ public class WorkflowController extends AbstractController {
    */
   public void wxGetWorkflowDetail() {
     int workflowid = this.getParaToInt( "wfid" );
+    int userid = this.getParaToInt( "userid" );
+    User user = User.dao.findById( userid );
     Workflow workflow = Workflow.dao.findById( workflowid );
     List<Workflow> workflows = workflow.getRelatedWorkflows();
     workflows.stream().forEach( wf -> {
-      wf.put( "workitems", wf.getWorkItems() );
+      wf.put( "workitems", user.isDepManager() ? wf.getWorkItems( userid ) : wf.getWorkItems( ) ); //dep or root
     } );
     this.renderJson( workflows );
   }

@@ -18,10 +18,11 @@ public class User extends Model<User> {
 
   private static final long serialVersionUID = 1946424759277934855L;
 
-  public static final int ROLE_MANAGER = 0;//主管：看所有订单 分配工作任务
+  public static final int ROLE_ROOT= -1;//管理层：看自己分配任务
+  public static final int ROLE_DEP_MANAGER = 0;//部门主管：看所有订单 分配工作任务
+  
   public static final int ROLE_SALER = 1;//销售员：看自己订单 看分配任务
   public static final int ROLE_WORKER = 2;//工厂工人：看自己分配任务
-  public static final int ROLE_ROOT= -1;//管理层：看自己分配任务
 
   public static User dao = new User();
 
@@ -36,12 +37,12 @@ public class User extends Model<User> {
   }
 
   /**
-   * 主管
+   * 部门主管
    * @return
    */
-  public boolean isManager() {
+  public boolean isDepManager() {
     Integer role = Integer.parseInt( getAttrs().get( "role" ).toString() );
-    return role == ROLE_MANAGER;
+    return role == ROLE_DEP_MANAGER;
   }
   
   /**
@@ -63,11 +64,19 @@ public class User extends Model<User> {
   }
   
   /**
-   * 主管
+   * 管理层
    * @return
    */
   public boolean isRoot() {
     Integer role = Integer.parseInt( getAttrs().get( "role" ).toString() );
     return role == ROLE_ROOT;
+  }
+  
+  /**
+   * 销售和管理层允许登录到web
+   * @return
+   */
+  public boolean canLoginToWeb(){
+    return isRoot() || isSaler();
   }
 }
