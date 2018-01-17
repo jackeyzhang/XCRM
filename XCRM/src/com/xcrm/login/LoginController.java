@@ -24,7 +24,7 @@ public class LoginController extends Controller {
         this.setAttr( "login_error", "用户名或密码错误,请重新输入!" );
       }
       else {
-        this.setAttr( "login_error", "工厂员工和部门主管不能登录该系统，请通过手机端操作或者联系管理员改变权限!" );
+        this.setAttr( "login_error", "您的权限尚不能登录该系统，请通过手机端进行操作或者联系管理员改变权限!" );
       }
       this.setAttr( "model", "login" );
       render( "/index/index.html" );

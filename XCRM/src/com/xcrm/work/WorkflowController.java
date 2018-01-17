@@ -143,11 +143,17 @@ public class WorkflowController extends AbstractController {
     }
   }
 
+  /**
+   * 创建bookitem
+   */
   public void startBookItem() {
     wxStartBookItem();
     this.forwardIndex();
   }
 
+  /**
+   * 批量创建bookitems
+   */
   public void batchStartBookItem() {
     String bookitems = this.getPara( "bookitems" );
     String[] bookitemArray = bookitems.split( ";" );
@@ -271,17 +277,14 @@ public class WorkflowController extends AbstractController {
 
   public void restartworkitem() {
     int workitemid = this.getParaToInt( "workitemid" );
-    Workitem workitem = Workitem.dao.findById( workitemid );
-    workitem.setStatus( Workitem.WORKITEM_STATUS_INIT );
-    workitem.update();
+    WorkflowUtil.autoRestartWorkflowByWorkitem( workitemid );
     this.forwardIndex();
   }
 
+  @Deprecated
   public void startWorkflow() {
     int workflowid = this.getParaToInt( "workflowid" );
     Workflow workflow = Workflow.dao.findById( workflowid );
-    //TODO: validation the work item and work item allocation
-
     //upate status
     workflow.setStatus( Workflow.WORK_STATUS_START );
     workflow.update();
@@ -388,7 +391,7 @@ public class WorkflowController extends AbstractController {
     wia.setStatus( Workitemallocation.WORKITEM_STATUS_START );
     wia.setStarttime( new Date() );
     wia.update();
-    WorkflowUtil.autoStartWorkflow( wiaid );
+    WorkflowUtil.autoStartWorkflowByWia( wiaid );
     renderJson( wia );
   }
 
@@ -401,7 +404,7 @@ public class WorkflowController extends AbstractController {
     wia.setStatus( Workitemallocation.WORKITEM_STATUS_DONE );
     wia.setFinishtime( new Date() );
     wia.update();
-    WorkflowUtil.autoFinishWorkflow( wiaid );
+    WorkflowUtil.autoFinishWorkflowByWia( wiaid );
     renderJson( wia );
   }
 
@@ -436,7 +439,7 @@ public class WorkflowController extends AbstractController {
       wia.setStatus( Workitemallocation.WORKITEM_STATUS_START );
       wia.setStarttime( new Date() );
       wia.save();
-      WorkflowUtil.autoStartWorkflow( wia.getId() );
+      WorkflowUtil.autoStartWorkflowByWia( wia.getId() );
       this.renderJson( true );
     }
   }
