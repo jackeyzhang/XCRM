@@ -18,7 +18,7 @@
 					<li><a href="/price/">产品价格</a></li>
 				</ul></li>
 
-
+      <#if role! == -1> <!-- 只有管理层才能查看设置 工单 和报表-->
 			<li class="active dropdown"><a href="#"
 				class="active dropdown-toggle" data-toggle="dropdown">设置管理 <span
 					class="active caret"></span></a>
@@ -32,10 +32,10 @@
 					<li><a href="/attribute/">属性值设置</a></li>
 					<li><a href="/salesseason/">上市年份设置</a></li>
 				</ul></li>
-			
+
 			<li class="active dropdown"><a href="/workflowtemplate/"
         class="active dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-fire" aria-hidden="true" style="color:red;"></span>
-        工单管理 <span
+        工单管理<span
           class="active caret"></span></a>
         <ul class="active dropdown-menu" role="menu">
           <li><a href="/workflowtemplate/"><span class="glyphicon glyphicon-fire" aria-hidden="true" style="color:red;"></span>工单模板管理</a></li>
@@ -44,6 +44,7 @@
         </ul></li>
 	
 			<li class="active"><a href="/report/productsalereport">报表统计</a></li>
+			</#if> 
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
 			<li class="active"><a href="/order/" >我的订单</a></li>

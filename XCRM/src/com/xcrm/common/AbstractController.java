@@ -43,6 +43,7 @@ public abstract class AbstractController extends Controller {
 
   protected void setAttribute() {
     setAttr( "model", getModalName() );
+    setAttr( "role", getCurrentRoleId() );
     setAttr( "page_header", getPageHeader() );
     setAttr( "toolbar_create", getToolBarAddButtonTitle() );
     if ( getModalName().equalsIgnoreCase( "price" ) ) {
@@ -160,6 +161,12 @@ public abstract class AbstractController extends Controller {
     Object user = getSessionAttr( Constant.CUR_USER );
     int storeid = (Integer) ( (HashMap)user ).get( "storeid" );
     return storeid;
+  }
+  
+  public int getCurrentRoleId() {
+    Object user = getSessionAttr( Constant.CUR_USER );
+    int roleId = (Integer) ( (HashMap)user ).get( "role" );
+    return roleId;
   }
 
   public String getRealPath() {
