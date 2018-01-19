@@ -82,6 +82,7 @@ public class WorkflowtemplateController extends AbstractController {
   
   public void add( ){
     this.setAttr( "page_header", "创建新的工单模板");
+    setAttr( "role", getCurrentRoleId() );
     this.render( "addworkflowtemplate.html" );
   }
   
