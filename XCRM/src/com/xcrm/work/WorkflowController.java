@@ -38,6 +38,7 @@ public class WorkflowController extends AbstractController {
     Page<Record> page = getOrderToStartList( getSqlForUserRole() );
     Pager pager = new Pager( page.getTotalRow(), page.getList() );
     setAttr( "data", pager );
+    setAttr( "role", getCurrentRoleId() );
     setAttr( "page_header", "订单工作流管理" );
     setAttr( "prdimg_path", getPrdImgBaseUrl() );
     render( getIndexHtml() );
@@ -58,6 +59,7 @@ public class WorkflowController extends AbstractController {
     Pager pager = new Pager( page.getTotalRow(), page.getList() );
     this.setAttr( "data", pager );
     this.setAttr( "page_header", "产品工作流管理" );
+    setAttr( "role", getCurrentRoleId() );
     setAttr( "prdimg_path", getPrdImgBaseUrl() );
     render( "prdworkflow.html" );
   }
