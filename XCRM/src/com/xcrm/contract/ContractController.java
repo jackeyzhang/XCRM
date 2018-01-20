@@ -205,13 +205,13 @@ class ContractPrintInfo {
       }
       sb
           .append( "<tr>" )
-          .append( getTD( 150, record.getStr( "pname" ) ) )
-          .append( getTD( 150, formatAttr( record.getStr( "prdattrs" ) ) ) )
-          .append( getTD( 80, StrUtil.formatInt( record.getNumber( "num" ) ) ) )
-          .append( getTD( 120, StrUtil.formatPrice( record.getNumber( "oprice" ) ) ) )//产品原价
-          .append( getTD( 120, StrUtil.formatPrice( record.getNumber( "price" ) ) ) )//订单项金额小计
-          .append( getTD( 120, StrUtil.formatPrice( record.getNumber( "afee" ) ) ) )//订单项定制费
-          .append( getTD( 300, record.getStr( "comments" ) == null ? "" : record.getStr( "comments" ) ) )//订单项备注
+          .append( getTD( 120, record.getStr( "pname" ), false ) )
+          .append( getTD( 180, formatAttr( record.getStr( "prdattrs" ) ) , false) )
+          .append( getTD( 80, StrUtil.formatInt( record.getNumber( "num" ) ) , true) )
+          .append( getTD( 120, StrUtil.formatPrice( record.getNumber( "oprice" ) ) , false) )//产品原价
+          .append( getTD( 120, StrUtil.formatPrice( record.getNumber( "price" ) ) , false) )//订单项金额小计
+          .append( getTD( 120, StrUtil.formatPrice( record.getNumber( "afee" ) ), false ) )//订单项定制费
+          .append( getTD( 300, record.getStr( "comments" ) == null ? "" : record.getStr( "comments" ) , false) )//订单项备注
           .append( "</tr>" );
     }
     this.setOrderinfo( sb.toString() );
@@ -344,7 +344,10 @@ class ContractPrintInfo {
   //    return tr.toString();
   //  }
   //  
-  public String getTD( int width, String text ) {
+  public String getTD( int width, String text, boolean center ) {
+    if( center ){
+      return "<td width=\"" + width + "\" valign=\"top\" style=\"word-break: break-all;text-align:center;\">" + text + "</td>";
+    }
     return "<td width=\"" + width + "\" valign=\"top\" style=\"word-break: break-all;\">" + text + "</td>";
   }
 
