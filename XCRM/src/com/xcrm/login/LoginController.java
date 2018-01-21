@@ -47,15 +47,19 @@ public class LoginController extends Controller {
       else if ( role == User.ROLE_DEP_MANAGER ) { //登录主管系统，不允许工人和销售
         if ( dbUser.isWorker() || dbUser.isSaler() ) {
           this.renderJson( false );
-        }else{
+        }
+        else {
           this.renderJson( dbUser );
         }
       }
       else if ( role == User.ROLE_WORKER && dbUser.isSaler() ) { //登录工人系统，不允许销售
         this.renderJson( false );
       }
-      else {
+      else if ( role == User.ROLE_SALER && ( dbUser.isSaler() || dbUser.isRoot() ) ) {//登录销售系统，不允许工人和部门主管
         this.renderJson( dbUser );
+      }
+      else {
+        this.renderJson( false );
       }
     }
     else {
