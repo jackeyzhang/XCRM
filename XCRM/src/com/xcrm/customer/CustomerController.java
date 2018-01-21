@@ -87,7 +87,7 @@ public class CustomerController extends AbstractController {
     customer.set( "custAddr", mailaddress );
     customer.set( "phone", phone );
     customer.save();
-    this.renderJson( true );
+    this.renderJson( customer );
   }
   
   public void wxgetcustomer(){
