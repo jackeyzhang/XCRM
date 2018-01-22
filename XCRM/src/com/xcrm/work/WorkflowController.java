@@ -440,6 +440,7 @@ public class WorkflowController extends AbstractController {
       wia.setWorkitem( workitem.getId() );
       wia.setStatus( Workitemallocation.WORKITEM_STATUS_START );
       wia.setStarttime( new Date() );
+      wia.setWeight( 100 );//default set to 100
       wia.save();
       WorkflowUtil.autoStartWorkflowByWia( wia.getId() );
       this.renderJson( true );
@@ -452,7 +453,6 @@ public class WorkflowController extends AbstractController {
    * 支持按照订单号查询
    */
   public void wxgetOrderToStartList() {
-    String userid = this.getPara( "userid" );
     String searchWord = this.getPara( "wxsearchword" );
     int userselection = 1;// 0 unstart only, 1 all
     if ( !StrUtil.isEmpty( getPara( "userselection" ) ) ) {
@@ -617,9 +617,8 @@ public class WorkflowController extends AbstractController {
   }
   
   public void wxlistallworkflows( ){
-    String userid = this.getPara( "userid" );
     String searchWord = this.getPara( "searchword" );
-    List<Workflow> workflows = Workflow.dao.listAllWorkflowDetails( searchWord );
+    List<Workflow> workflows = Workflow.listAllWorkflowDetails( searchWord );
     workflows.stream().forEach( wf -> {
       wf.put( "workitems", wf.getWorkItems() );
     } );
