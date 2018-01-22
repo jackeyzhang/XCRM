@@ -213,6 +213,7 @@ public class WorkflowController extends AbstractController {
     setAttr( "orderdeliverytime", StrUtil.formatDate( workflow.getOrder().getDeliverytime(), "yyyy-MM-dd" ) );
     setAttr( "page_header", "订单工作流如下:" );
     setAttr( "workflow_qr2_path", getWorkflowQr2BaseUrl() );
+    setAttr( "role", getCurrentRoleId() );
     render( "detailworkflow.html" );
   }
 
