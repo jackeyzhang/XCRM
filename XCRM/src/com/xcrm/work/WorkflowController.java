@@ -23,6 +23,7 @@ import com.xcrm.common.model.Workitemallocation;
 import com.xcrm.common.model.Workitemtemplate;
 import com.xcrm.common.qr2.QRCodeUtil;
 import com.xcrm.common.util.Constant;
+import com.xcrm.common.util.DateUtil;
 import com.xcrm.common.util.NumUtil;
 import com.xcrm.common.util.PropUtil;
 import com.xcrm.common.util.RecordUtil;
@@ -47,8 +48,15 @@ public class WorkflowController extends AbstractController {
   public void indexOfProduct() {
     //price是原价  deal price是成交价  
     String sql = "select p.name name, p.id prdid";
-    String sqlExcept = " from `order` o  " + "left join orderitem oi on o.id=oi.order " + "left join bookitem bi on oi.bookitem=bi.id " + "left join product p on bi.product=p.id "
-        + "where " + getSqlForUserRole() + " and o.status != " + Order.STATUS_CANCELLED + " " + this.getSearchStatement( true, "" ) + " group by p.name order by p.name desc";
+    String sqlExcept = " from `order` o  " 
+        + "left join orderitem oi on o.id=oi.order " 
+        + "left join bookitem bi on oi.bookitem=bi.id " 
+        + "left join product p on bi.product=p.id "
+        + "where " + getSqlForUserRole() 
+        + " and o.status != " + Order.STATUS_CANCELLED 
+        + " and o.date >= str_to_date('"+ DateUtil.getBeforeOneMonthDateStr() +"', '%Y-%m-%d')"
+        + " " + this.getSearchStatement( true, "" ) 
+        + " group by p.name order by p.name desc";
     Page<Record> page = Db.paginate( 1, 30, sql, sqlExcept );
     page.getList().stream().forEach( p -> {
       int prdid = p.getInt( "prdid" );
@@ -57,42 +65,87 @@ public class WorkflowController extends AbstractController {
       p.set( "displaystartbtn", product.isStartAllBookitems() ? "no" : "yes" );
     } );
     Pager pager = new Pager( page.getTotalRow(), page.getList() );
-    this.setAttr( "data", pager );
-    this.setAttr( "page_header", "产品工作流管理" );
+    setAttr( "data", pager );
     setAttr( "role", getCurrentRoleId() );
+    setAttr( "page_header", "产品工作流管理" );
     setAttr( "prdimg_path", getPrdImgBaseUrl() );
     render( "prdworkflow.html" );
   }
 
   public void search() {
+    searchWorkflowFromIndexPageAndSetPageAttr( );
+    render( getIndexHtml() );
+  }
+  
+  public void indexproductsearch(){
+    searchWorkflowFromProductIndexPageAndSetPageAttr( );
+    render( "prdworkflow.html" );
+  }
+  
+  private void searchWorkflowFromIndexPageAndSetPageAttr( ){
     String orderno = this.getPara( "orderno" );
     String prdname = this.getPara( "prdname" );
     String customername = this.getPara( "customername" );
     String datepick = this.getPara( "datepick" );
+    int month = getMonthsFromWorkflowSearchPage( datepick );
+    Date startDate = DateUtil.getFirstDateOfMonth( new Date(), month-1 );
+    String startDateStr = StrUtil.formatDate( startDate, "yyyy-MM-dd" );
     //price是原价  deal price是成交价  
-    String sql = "select concat(cust.name, '-' , cust.company) company, " + "GROUP_CONCAT(p.name) name," + "o.orderno orderno," + "sum(bi.num) num," + "oi.date date," + "o.status,"
+    String sql = "select concat(cust.name, '-' , cust.company) company, " + "GROUP_CONCAT(p.name) name," + "o.orderno orderno," + "sum(bi.num) num," + "o.deliverytime date," + "o.status,p.id prdid,"
         + "GROUP_CONCAT(bi.comments) comments";
     String sqlExcept = " from `order` o  " + "left join orderitem oi on o.id=oi.order " + "left join bookitem bi on oi.bookitem=bi.id " + "join product p on bi.product=p.id "
         + ( StrUtil.isEmpty( prdname ) ? "" : "and p.name like '%" + prdname.trim() + "%'" ) + "join customer cust on cust.id=bi.customer "
         + ( StrUtil.isEmpty( customername ) ? "" : "and cust.name like '%" + customername.trim() + "%'" ) + "where 1=1 "
         + ( StrUtil.isEmpty( orderno ) ? "" : "and o.orderno like '%" + orderno.trim() + "%'" ) + " and o.status != " + Order.STATUS_CANCELLED + " "
+        + ( month > 0 ? " and o.date >= str_to_date('"+ startDateStr +"', '%Y-%m-%d')" : "")
         + this.getSearchStatement( true, "" ) + " group by o.orderno order by o.orderno,p.name desc";
     Page<Record> page = Db.paginate( 1, 30, sql, sqlExcept );
-    page.getList().stream().forEach( p -> {
-      long ordernum = p.getLong( "orderno" );
-      Order order = Order.dao.findFirst( "select * from `order` where orderno = ?", ordernum );
-      p.set( "bi", order.getAllBookitems() );
-      p.set( "displaystartbtn", order.isStartAllBookitems() ? "no" : "yes" );
-    } );
     Pager pager = new Pager( page.getTotalRow(), page.getList() );
-    this.setAttr( "data", pager );
-    this.setAttr( "orderno", orderno );
-    this.setAttr( "prdname", prdname );
-    this.setAttr( "customername", customername );
-    this.setAttr( "datepick", datepick );
+    setAttr( "data", pager );
+    setAttr( "orderno", orderno );
+    setAttr( "prdname", prdname );
+    setAttr( "customername", customername );
+    setAttr( "datepicker", datepick );
     setAttr( "prdimg_path", getPrdImgBaseUrl() );
     setAttr( "role", getCurrentRoleId() );
-    render( getIndexHtml() );
+  }
+  
+  private void searchWorkflowFromProductIndexPageAndSetPageAttr( ){
+    String orderno = this.getPara( "orderno" );
+    String prdname = this.getPara( "prdname" );
+    String customername = this.getPara( "customername" );
+    String datepick = this.getPara( "datepick" );
+    int month = getMonthsFromWorkflowSearchPage( datepick );
+    Date startDate = DateUtil.getFirstDateOfMonth( new Date(), month-1 );
+    String startDateStr = StrUtil.formatDate( startDate, "yyyy-MM-dd" );
+    //price是原价  deal price是成交价  
+    String sql = "select p.name name, p.id prdid";
+    String sqlExcept = " from `order` o  " 
+        + "left join orderitem oi on o.id=oi.order " 
+        + "left join bookitem bi on oi.bookitem=bi.id " 
+        + "left join product p on bi.product=p.id "
+        + ( StrUtil.isEmpty( prdname ) ? "" : "and p.name like '%" + prdname.trim() + "%'" ) + "join customer cust on cust.id=bi.customer "
+        + ( StrUtil.isEmpty( customername ) ? "" : "and cust.name like '%" + customername.trim() + "%'" ) 
+        + " where " + getSqlForUserRole() 
+        + ( StrUtil.isEmpty( orderno ) ? "" : " and o.orderno like '%" + orderno.trim() + "%'" ) + " and o.status != " + Order.STATUS_CANCELLED + " "
+        + ( month > 0 ? " and o.date >= str_to_date('"+ startDateStr +"', '%Y-%m-%d')" : "")
+        + " " + this.getSearchStatement( true, "" ) 
+        + " group by p.name order by p.name desc";
+    Page<Record> page = Db.paginate( 1, 30, sql, sqlExcept );
+    page.getList().stream().forEach( p -> {
+      int prdid = p.getInt( "prdid" );
+      Product product = Product.dao.findFirst( "select * from product where id = ?", prdid );
+      p.set( "bi", product.getAllBookitems() );
+      p.set( "displaystartbtn", product.isStartAllBookitems() ? "no" : "yes" );
+    } );
+    Pager pager = new Pager( page.getTotalRow(), page.getList() );
+    setAttr( "data", pager );
+    setAttr( "orderno", orderno );
+    setAttr( "prdname", prdname );
+    setAttr( "customername", customername );
+    setAttr( "datepicker", datepick );
+    setAttr( "prdimg_path", getPrdImgBaseUrl() );
+    setAttr( "role", getCurrentRoleId() );
   }
 
   public void save() {
@@ -311,6 +364,7 @@ public class WorkflowController extends AbstractController {
     String sqlExcept = " from `order` o  " + "left join orderitem oi on o.id=oi.order " + "left join bookitem bi on oi.bookitem=bi.id " + "left join product p on bi.product=p.id "
         + "left join customer cust on cust.id=bi.customer " + "left join user user on user.id=bi.user " + "where " + sqlForUserRole + " and o.status != " + Order.STATUS_CANCELLED
         + " " + this.getSearchStatement( true, "" ) + ( searchOrderNo == null ? "" : " and o.orderno like '%" + searchOrderNo + "%'" )
+        + " and o.date >= str_to_date('"+ DateUtil.getBeforeOneMonthDateStr() +"', '%Y-%m-%d')"
         + " group by o.orderno order by o.orderno,p.name desc";
     Page<Record> page = Db.paginate( 1, 30, sql, sqlExcept );
     page.getList().stream().forEach( o -> {
@@ -627,4 +681,17 @@ public class WorkflowController extends AbstractController {
     this.renderJson( workflows );
   }
 
+  
+  private int getMonthsFromWorkflowSearchPage( String selectindex ){
+    if( selectindex.equals( "1" )){
+      return 1;
+    }else if( selectindex.equals( "2" )){
+      return 3;
+    }else if( selectindex.equals( "3" )){
+      return 6;
+    }else if( selectindex.equals( "4" )){
+      return 12;
+    }
+    return -1;
+  }
 }
