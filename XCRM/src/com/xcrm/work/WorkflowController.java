@@ -91,6 +91,7 @@ public class WorkflowController extends AbstractController {
     this.setAttr( "customername", customername );
     this.setAttr( "datepick", datepick );
     setAttr( "prdimg_path", getPrdImgBaseUrl() );
+    setAttr( "role", getCurrentRoleId() );
     render( getIndexHtml() );
   }
 
