@@ -18,7 +18,7 @@ public class EditOrderController extends AbstractController {
     List<Record> list = Db.find(
             "select bi.discount, bi.status,bi.id, bi.num num,bi.price price,bi.additionfee afee,bi.product pid,p.name name,bi.prdattrs attrs,bi.comments comments,GROUP_CONCAT(pic.fielname) filename "
             + "from bookitem bi "
-            + "left join product p on bi.product=p.id "
+            + "join product p on bi.product=p.id "
             + "left join productpic pic on pic.productid=p.id "
             + "left join orderitem oi on oi.bookitem=bi.id "
             + "left join `order` ord on ord.id=oi.order " 
