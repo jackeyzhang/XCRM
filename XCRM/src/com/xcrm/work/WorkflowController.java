@@ -99,7 +99,13 @@ public class WorkflowController extends AbstractController {
         + ( StrUtil.isEmpty( orderno ) ? "" : "and o.orderno like '%" + orderno.trim() + "%'" ) + " and o.status != " + Order.STATUS_CANCELLED + " "
         + ( month > 0 ? " and o.date >= str_to_date('"+ startDateStr +"', '%Y-%m-%d')" : "")
         + this.getSearchStatement( true, "" ) + " group by o.orderno order by o.orderno,p.name desc";
-    Page<Record> page = Db.paginate( 1, 30, sql, sqlExcept );
+    Page<Record> page = Db.paginate( 1, 3000, sql, sqlExcept );
+    page.getList().stream().forEach( p -> {
+      long ordernum = p.getLong( "orderno" );
+      Order order = Order.dao.findFirst( "select * from `order` where orderno = ?", ordernum );
+      p.set( "bi", order.getAllBookitems() );
+      p.set( "displaystartbtn", order.isStartAllBookitems() ? "no" : "yes" );
+    } );
     Pager pager = new Pager( page.getTotalRow(), page.getList() );
     setAttr( "data", pager );
     setAttr( "orderno", orderno );
@@ -131,7 +137,7 @@ public class WorkflowController extends AbstractController {
         + ( month > 0 ? " and o.date >= str_to_date('"+ startDateStr +"', '%Y-%m-%d')" : "")
         + " " + this.getSearchStatement( true, "" ) 
         + " group by p.name order by p.name desc";
-    Page<Record> page = Db.paginate( 1, 30, sql, sqlExcept );
+    Page<Record> page = Db.paginate( 1, 3000, sql, sqlExcept );
     page.getList().stream().forEach( p -> {
       int prdid = p.getInt( "prdid" );
       Product product = Product.dao.findFirst( "select * from product where id = ?", prdid );
@@ -197,6 +203,20 @@ public class WorkflowController extends AbstractController {
     else {
       return " bi.user=" + this.getCurrentUserId() + " ";
     }
+  }
+  
+  
+  private int getMonthsFromWorkflowSearchPage( String selectindex ){
+    if( selectindex.equals( "1" )){
+      return 1;
+    }else if( selectindex.equals( "2" )){
+      return 3;
+    }else if( selectindex.equals( "3" )){
+      return 6;
+    }else if( selectindex.equals( "4" )){
+      return 12;
+    }
+    return -1;
   }
 
   /**
@@ -680,18 +700,5 @@ public class WorkflowController extends AbstractController {
     } );
     this.renderJson( workflows );
   }
-
-  
-  private int getMonthsFromWorkflowSearchPage( String selectindex ){
-    if( selectindex.equals( "1" )){
-      return 1;
-    }else if( selectindex.equals( "2" )){
-      return 3;
-    }else if( selectindex.equals( "3" )){
-      return 6;
-    }else if( selectindex.equals( "4" )){
-      return 12;
-    }
-    return -1;
-  }
+ 
 }
