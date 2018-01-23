@@ -19,6 +19,7 @@ import com.xcrm.common.AttributeID;
 import com.xcrm.common.Pager;
 import com.xcrm.common.model.Attribute;
 import com.xcrm.common.model.Attributevalue;
+import com.xcrm.common.model.Bookitem;
 import com.xcrm.common.model.Price;
 import com.xcrm.common.model.Priceinventoryvalue;
 import com.xcrm.common.model.Product;
@@ -241,6 +242,10 @@ public class ProductController extends AbstractController {
   @Override
   public void remove() {
     Integer prdid =this.getParaToInt(0);
+    Bookitem bookitem = Bookitem.dao.findFirst( "select * from bookitem where product = " + prdid  );
+    if( bookitem != null){
+      forwardIndex();
+    }
     Product.dao.deleteById(prdid);
     Price price = Price.dao.findFirst( "select * from price where product=" + prdid );
     if( price != null) {
