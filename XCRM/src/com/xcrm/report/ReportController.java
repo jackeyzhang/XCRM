@@ -143,7 +143,7 @@ public class ReportController extends AbstractController {
         + "o.status orderstatus,"
         + "user.username saler"
         + " from orderitem oi " 
-        + "left join bookitem bi on oi.bookitem=bi.id and bi.status == 1 " 
+        + "join bookitem bi on oi.bookitem=bi.id and bi.status = 1 " 
         + "left join `order` o on o.id=oi.order " 
         + "left join product p on bi.product=p.id "
         + "left join contract contract on bi.contract=contract.id "
