@@ -11,6 +11,16 @@ function productnameformmater( value, row ){
 	return value;
 }
 
+function actionFormatter( value, row ) {
+	 if(row['buytimes'] > 0){
+		   return [ '<a class="update" href="javascript:" title="编辑">编辑</a>'].join('   ');
+	 }else{
+	      return [ '<a class="update" href="javascript:" title="编辑">编辑</a>',
+	                 '<a class="remove" href="javascript:" title="删除">删除</a>']
+	                 .join('   ');
+	 }
+}
+
 var toplevellist;
 $.get('/productcategory/listtoplevel/', function(data) {
   toplevellist = data;

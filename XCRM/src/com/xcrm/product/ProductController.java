@@ -46,7 +46,7 @@ public class ProductController extends AbstractController {
       if ( searchword == null ) {
         searchword = "";
       }
-      Page<Record> page = Db.paginate( pagenumber, pagesize, "select prd.*,(select count(*) from productpic pic where pic.productid=prd.id) piccount,(select ss.id from salesseason ss where ss.id=prd.salesseason) salesseason ", " from product prd where 1=1 " + ( level1 > 0 ? " and level1category= " + level1 : "" )
+      Page<Record> page = Db.paginate( pagenumber, pagesize, "select prd.*,(select count(*) from productpic pic where pic.productid=prd.id) piccount,(select count(*) from bookitem bi where bi.product=prd.id) buytimes,(select ss.id from salesseason ss where ss.id=prd.salesseason) salesseason ", " from product prd where 1=1 " + ( level1 > 0 ? " and level1category= " + level1 : "" )
           + ( level2 > 0 ? " and level2category= " + level2 : "" ) 
           + ( salesseason > 0 ? " and salesseason= " + salesseason : "" ) 
           + ( searchword.isEmpty() ? "" : " and name like '%" + searchword + "%'" ) );
