@@ -61,7 +61,7 @@ public class WorkflowController extends AbstractController {
     page.getList().stream().forEach( p -> {
       int prdid = p.getInt( "prdid" );
       Product product = Product.dao.findFirst( "select * from product where id = ?", prdid );
-      p.set( "bi", product.getAllBookitems() );
+      p.set( "bi", product.getBookitems( 1 ) );
       p.set( "displaystartbtn", product.isStartAllBookitems() ? "no" : "yes" );
     } );
     Pager pager = new Pager( page.getTotalRow(), page.getList() );
@@ -141,7 +141,7 @@ public class WorkflowController extends AbstractController {
     page.getList().stream().forEach( p -> {
       int prdid = p.getInt( "prdid" );
       Product product = Product.dao.findFirst( "select * from product where id = ?", prdid );
-      p.set( "bi", product.getAllBookitems() );
+      p.set( "bi", product.getBookitems( month ) );
       p.set( "displaystartbtn", product.isStartAllBookitems() ? "no" : "yes" );
     } );
     Pager pager = new Pager( page.getTotalRow(), page.getList() );

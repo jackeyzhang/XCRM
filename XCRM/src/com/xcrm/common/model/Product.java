@@ -1,8 +1,11 @@
 package com.xcrm.common.model;
 
+import java.util.Date;
 import java.util.List;
 
 import com.xcrm.common.model.base.BaseProduct;
+import com.xcrm.common.util.DateUtil;
+import com.xcrm.common.util.StrUtil;
 
 
 /**
@@ -27,11 +30,24 @@ public class Product extends BaseProduct<Product> {
             + " left join workflow wf on wf.bookitem = bi.id " );
   }
   
+  public List<Bookitem> getBookitems( int monthes) {
+    int prdid = this.getId();
+    Date startDate = DateUtil.getFirstDateOfMonth( new Date(), monthes - 1 );
+    String startDateStr = StrUtil.formatDate( startDate, "yyyy-MM-dd" );
+    return Bookitem.dao.find( "select bi.*,prd.name prdname,IFNULL(wf.workflowtemplate, prd.workflow) workflow,prd.id prdid, wf.id wfid, wf.status wfstatus,o.orderno orderno "
+            + " from bookitem bi "
+            + " join product prd on prd.id= bi.product "
+            + " join orderitem oi on oi.bookitem = bi.id and bi.product=" + prdid
+            + " join `order` o on o.id = oi.order "
+            + " left join workflow wf on wf.bookitem = bi.id "
+            + ( monthes > 0 ? " and o.date >= str_to_date('"+ startDateStr +"', '%Y-%m-%d')" : ""));
+  }
+  
   public List<Productpic> getPictures( ){
     return Productpic.dao.find( "select * from Productpic where productid=?", getId() );
   }
   
   public boolean isStartAllBookitems( ){
-    return getAllBookitems( ).stream().filter( a->a.get( "wfid" ) != null ).findAny().isPresent();
+    return !getAllBookitems( ).stream().filter( a->a.get( "wfid" ) == null ).findAny().isPresent();
   }
 }
