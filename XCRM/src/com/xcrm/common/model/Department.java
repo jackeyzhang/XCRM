@@ -2,6 +2,7 @@ package com.xcrm.common.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.xcrm.common.model.base.BaseDepartment;
 
@@ -25,5 +26,14 @@ public class Department extends BaseDepartment<Department> {
   
   public static void reloadAll( ){
     allDepartments = dao.find( "select * from Department" );
+  }
+  
+  public static List<Integer> getAllDepartmentIDs(){
+    if( allDepartments.isEmpty() ){
+      reloadAll();
+    }
+    List<Integer> result = allDepartments.stream().map( d->d.getId() ).collect( Collectors.toList() );
+    result.sort( (i,j)->{ return i-j;} );
+    return result;
   }
 }

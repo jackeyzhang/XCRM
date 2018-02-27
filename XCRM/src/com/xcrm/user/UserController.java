@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.jfinal.aop.Before;
 import com.xcrm.common.AbstractController;
+import com.xcrm.common.model.Department;
 import com.xcrm.common.model.User;
 import com.xcrm.common.util.Constant;
 import com.xcrm.common.util.StrUtil;
@@ -86,8 +87,20 @@ public class UserController extends AbstractController {
 
   public void wxlistWorkers() {
     String searchword = this.getPara( "searchword" );
+    String orderbydepid = this.getPara( "orderbydepid" );
+    String sortString = "";
+    if( !StrUtil.isEmpty( orderbydepid )){
+      int orderbyDep = Integer.parseInt( orderbydepid );
+      for( Integer depid : Department.getAllDepartmentIDs()){
+        if(depid != orderbyDep)
+        sortString += ( depid + "," );
+      }
+      sortString = orderbyDep + "," +sortString;
+      sortString = sortString.substring( 0, sortString.length()-1 );
+    }
     List<User> allworkers = User.dao.find( "select usr.*,dep.name depname from user usr join department dep on dep.id=usr.department" 
-    + (StrUtil.isEmpty( searchword ) ? "" : " where dep.name like '%" + searchword + "%' or usr.username like '%" + searchword + "%' ") );
+    + (StrUtil.isEmpty( searchword ) ? "" : " where dep.name like '%" + searchword + "%' or usr.username like '%" + searchword + "%' ")
+    + (StrUtil.isEmpty( orderbydepid ) ? "" : " order by field(dep.id," + sortString + " ) "));
     this.renderJson( allworkers );
   }
 
