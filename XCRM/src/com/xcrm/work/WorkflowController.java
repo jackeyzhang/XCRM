@@ -336,6 +336,11 @@ public class WorkflowController extends AbstractController {
       wAloc.setWorkitem( workitemId );
       wAloc.setWorker( worker );
       wAloc.setWeight( weight );
+      if( status == Workitemallocation.WORKITEM_STATUS_START 
+          && ( wAloc.getStatus() == Workitemallocation.WORKITEM_STATUS_HOLD 
+          || wAloc.getStatus() == Workitemallocation.WORKITEM_STATUS_CANCEL ) ){
+        wAloc.setFinishtime( null );
+      }
       wAloc.setStatus( status );
       if ( workitemallocation > 0 ) {
         wAloc.update();
