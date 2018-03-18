@@ -170,6 +170,30 @@ var delworkitemevent = function( obj ){
 	workflowform.remove();
 }
 
+var completedworkitemevent = function( obj ){
+	  var workflowform = $(obj).parent();
+	  workflowform.children("[name='workitemallocationstatus']").val(2);//2 已完成
+	  // submit data
+	  var form_data = workflowform.closest("#workerform").serializeArray();
+	  $.ajax({
+	          type: "post",
+	          url: "/workflow/saveorUpdateWorkitemAllocations",
+	          data: form_data,
+	          contentType : "application/x-www-form-urlencoded; charset=utf-8",
+	          success: function (data, status) {
+	              if (status == "success") {
+	                 window.location.reload();
+	              }
+	          },
+	          error: function () {
+	            alert("编辑失败");
+	          },
+	          complete: function () {
+
+	          }
+	      });
+	}
+
 var holdworkitemevent = function( obj ){
   var workflowform = $(obj).parent();
   workflowform.children("[name='workitemallocationstatus']").val(4);//4 已暂停

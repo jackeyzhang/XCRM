@@ -309,7 +309,7 @@ public class WorkflowController extends AbstractController {
       boolean deletefromUI = true;
 
       for ( String workitemallId : workitemallocationids ) {
-        if ( NumUtil.iVal( workitemallId ) == wia.getId() ) {
+        if ( NumUtil.iVal( workitemallId ).equals( wia.getId() )  ) {
           deletefromUI = false;
         }
       }
@@ -340,7 +340,13 @@ public class WorkflowController extends AbstractController {
           && ( wAloc.getStatus() == Workitemallocation.WORKITEM_STATUS_HOLD 
           || wAloc.getStatus() == Workitemallocation.WORKITEM_STATUS_CANCEL ) ){
         wAloc.setFinishtime( null );
+        WorkflowUtil.autoStartWorkflowByWia( wAloc.getId() );
       }
+      
+      if( status == Workitemallocation.WORKITEM_STATUS_DONE ){
+        WorkflowUtil.autoFinishWorkflowByWia( wAloc.getId() );
+      }
+          
       wAloc.setStatus( status );
       if ( workitemallocation > 0 ) {
         wAloc.update();

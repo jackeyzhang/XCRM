@@ -67,6 +67,7 @@ public class WorkflowUtil {
    */
   public static boolean autoFinishWorkflowByWia( int wiaid ) {
     Workitemallocation wia = Workitemallocation.dao.findById( wiaid );
+    if( wia == null ) return false;
     Workitem workitem = wia.getWorkItem();
     for ( Workitemallocation wiaa : workitem.getWorkitemallocations() ) {
       if ( wiaa.getId() != wiaid && wiaa.getStatus() != Workitemallocation.WORKITEM_STATUS_DONE ) {
