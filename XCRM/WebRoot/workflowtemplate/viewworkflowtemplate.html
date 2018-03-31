@@ -34,7 +34,7 @@
 		<div class="form-group">
 			<#if workitemtemplates?size != 0> <#list workitemtemplates as item>
 			<div class="row" style="padding-bottom:10px;">
-				<div class="col-sm-offset-2 col-sm-2">
+				<div class="col-sm-offset-2 col-sm-4">
 					<span class="badge" name="workitemindex"
 						style="background-color: #f0ad4e; font-size: 15px;">${item.index+1}</span>
 						<span class="label label-default" style="font-size: 15px;">部门名称:${item.department}
@@ -42,7 +42,7 @@
 				</div>
 				<div class="col-sm-2">
 					<span class="label label-default"
-						style="font-size: 15px;">所占百分比:<b style="color:yellow">${item.weight!}</b>
+						style="font-size: 15px;">所占百分比:<b style="color:yellow">${item.weight!'未设置'}</b>
 					</span>
 				</div>
 			</div>
