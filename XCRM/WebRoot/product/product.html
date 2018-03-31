@@ -33,7 +33,7 @@ $.get('/salesseason/list/', function(data){
     }
  });
 
-$.get('/workflowtemplate/list/', function(data){
+$.get('/workflowtemplate/listactive/', function(data){
    for( e in data){
       $('#workflow').append("<option value='" + data[e].id + "'>" + data[e].name + "</option>");
     }

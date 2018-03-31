@@ -2,9 +2,9 @@
 
 function userenabelformatter(value, row){
   if(value){
-    return '<a href="javascript:logout('+row['id']+')" title="注销"><i class="glyphicon glyphicon-tree" style="color:green"></i>使用中</a>';
+    return '<a href="/workflowtemplate/inactive?id='+ row['id'] +'" title="点击注销"><i class="glyphicon glyphicon-tree" style="color:green"></i>使用中</a>';
   }else{
-    return '<a href="javascript:active('+row['id']+')" title="激活"><i class="glyphicon glyphicon-tree" style="color:gray"></i>停止使用</a>';
+    return '<a href="/workflowtemplate/active?id='+ row['id'] +'" title="点击激活"><i class="glyphicon glyphicon-tree" style="color:gray"></i>停止使用</a>';
   }
 }
 

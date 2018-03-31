@@ -1,5 +1,8 @@
 package com.xcrm.work;
 
+import java.util.List;
+
+import com.jfinal.plugin.activerecord.Record;
 import com.xcrm.common.AbstractController;
 import com.xcrm.common.model.Workflowanditemtemplate;
 import com.xcrm.common.model.Workflowtemplate;
@@ -9,6 +12,12 @@ import com.xcrm.common.util.Constant;
 
 public class WorkflowtemplateController extends AbstractController {
 
+  public void listactive( ){
+    List<Record> records = Workflowtemplate.dao.listAllActive();
+    this.renderJson( records );
+  }
+  
+  
   public void save() {
     Workflowtemplate workflowtemplate = this.getModel( Workflowtemplate.class, "" , true);
     workflowtemplate.save();
@@ -80,6 +89,30 @@ public class WorkflowtemplateController extends AbstractController {
       this.setAttr( "workitemtemplates",  template.getWorkitemtemplateRecords() );
       this.render( "viewworkflowtemplate.html" );
     }
+  }
+  
+  public void inactive(){
+    String templateid = this.getPara( "id" );
+    Workflowtemplate template = Workflowtemplate.dao.findById( templateid );
+    if( template != null ){
+      if(template.isUsing()){
+        this.setAttr( "error", "不能注销'"+ template.getName()+"'，该模板正在使用中!" );
+      }else{
+        template.setEnable( 0 );
+        template.update();
+      }
+    }
+    this.forwardIndex();
+  }
+  
+  public void active(){
+    String templateid = this.getPara( "id" );
+    Workflowtemplate template = Workflowtemplate.dao.findById( templateid );
+    if( template != null ){
+      template.setEnable( 1 );
+      template.update();
+    }
+    this.forwardIndex();
   }
   
   public void add( ){

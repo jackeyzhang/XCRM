@@ -25,4 +25,13 @@ public class Workflowtemplate extends BaseWorkflowtemplate<Workflowtemplate> {
           + "left join Department de on de.id=item.dep "
           + " where ra.workflowtemplate = "  + this.getId() );
     }
+	
+	public List<Record> listAllActive(){
+	  return  Db.find( "select id,name from workflowtemplate where enable = 1" );
+	}
+	
+	public boolean isUsing(){
+	  Record p = Db.findFirst( "select * from product where workflow=" + this.getId() );
+	  return p != null;
+	}
 }
