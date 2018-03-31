@@ -19,7 +19,9 @@ public class WorkflowtemplateController extends AbstractController {
     for( int i=0;i < departmentArray.length; i ++){
       Workitemtemplate workitemtemplate = new Workitemtemplate();
       workitemtemplate.setDep( Integer.parseInt( departmentArray[i] ) );
-      workitemtemplate.setWeight( Integer.parseInt( weightArray[i] ) );
+      if(weightArray.length >= departmentArray.length ){
+        workitemtemplate.setWeight( Integer.parseInt( weightArray[i] ) );
+      }
       workitemtemplate.setIndex( i );
       workitemtemplate.setUserid( getCurrentUserId() );
       workitemtemplate.save();
