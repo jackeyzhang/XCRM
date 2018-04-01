@@ -395,7 +395,7 @@ public class WorkflowController extends AbstractController {
     String sqlExcept = " from `order` o  " + "left join orderitem oi on o.id=oi.order " + "left join bookitem bi on oi.bookitem=bi.id " + "left join product p on bi.product=p.id "
         + "left join customer cust on cust.id=bi.customer " + "left join user user on user.id=bi.user " + "where " + sqlForUserRole + " and o.status != " + Order.STATUS_CANCELLED
         + " " + this.getSearchStatement( true, "" ) + ( searchOrderNo == null ? "" : " and o.orderno like '%" + searchOrderNo + "%'" )
-        + " and o.date >= str_to_date('"+ DateUtil.getBeforeOneMonthDateStr() +"', '%Y-%m-%d')"
+//        + " and o.date >= str_to_date('"+ DateUtil.getBeforeOneMonthDateStr() +"', '%Y-%m-%d')"
         + " group by o.orderno order by o.orderno,p.name desc";
     Page<Record> page = Db.paginate( 1, 30, sql, sqlExcept );
     page.getList().stream().forEach( o -> {
