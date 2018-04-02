@@ -27,7 +27,7 @@ public class LoginController extends Controller {
         this.setAttr( "login_error", "您的权限尚不能登录该系统，请通过手机端进行操作或者联系管理员改变权限!" );
       }
       this.setAttr( "model", "login" );
-      this.setAttr( "role", dbUser.getAttrs().get( "role" ) );
+//      this.setAttr( "role", dbUser.getAttrs().get( "role" ) );
       render( "/index/index.html" );
     }
   }
