@@ -36,6 +36,7 @@ public class DepartmentController extends AbstractController {
     if( dep != null ){
       dep.setStatus( 0 );
       dep.update();
+      Department.reloadAll();
     }
     this.forwardIndex();
   }
@@ -46,6 +47,7 @@ public class DepartmentController extends AbstractController {
     if( dep != null ){
       dep.setStatus( 1 );
       dep.update();
+      Department.reloadAll();
     }
     this.forwardIndex();
   }

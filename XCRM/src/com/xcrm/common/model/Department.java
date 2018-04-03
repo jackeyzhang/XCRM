@@ -25,7 +25,7 @@ public class Department extends BaseDepartment<Department> {
   }
   
   public static void reloadAll( ){
-    allDepartments = dao.find( "select * from Department" );
+    allDepartments = dao.find( "select * from Department where status=1 " );
   }
   
   public static List<Integer> getAllDepartmentIDs(){
