@@ -25,4 +25,12 @@ public abstract class BaseDepartment<M extends BaseDepartment<M>> extends Model<
 		return get("name");
 	}
 
+	public void setStatus(java.lang.Integer status) {
+		set("status", status);
+	}
+
+	public java.lang.Integer getStatus() {
+		return get("status");
+	}
+
 }

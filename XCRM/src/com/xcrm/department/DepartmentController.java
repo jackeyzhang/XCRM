@@ -29,6 +29,26 @@ public class DepartmentController extends AbstractController {
     Department.reloadAll();
     this.forwardIndex();
   }
+  
+  public void inactive(){
+    String templateid = this.getPara( "id" );
+    Department dep = Department.dao.findById( templateid );
+    if( dep != null ){
+      dep.setStatus( 0 );
+      dep.update();
+    }
+    this.forwardIndex();
+  }
+  
+  public void active(){
+    String templateid = this.getPara( "id" );
+    Department dep = Department.dao.findById( templateid );
+    if( dep != null ){
+      dep.setStatus( 1 );
+      dep.update();
+    }
+    this.forwardIndex();
+  }
 
   @Override
   public String getModalName() {
