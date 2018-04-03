@@ -55,12 +55,12 @@ public class WorkflowtemplateController extends AbstractController {
 
   @Override
   public String getPageHeader() {
-    return "工单模板管理";
+    return "工作流模板管理";
   }
 
   @Override
   public String getToolBarAddButtonTitle() {
-    return "创建工单模板";
+    return "创建工作流模板";
   }
 
   @Override
@@ -116,7 +116,7 @@ public class WorkflowtemplateController extends AbstractController {
   }
   
   public void add( ){
-    this.setAttr( "page_header", "创建新的工单模板");
+    this.setAttr( "page_header", "创建新的工作流模板");
     setAttr( "role", getCurrentRoleId() );
     this.render( "addworkflowtemplate.html" );
   }
