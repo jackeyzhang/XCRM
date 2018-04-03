@@ -22,7 +22,8 @@ public class UserController extends AbstractController {
     String sql = "select usr.* ";
     String sqlExcept = " from user usr  " 
         + " left join department dep on dep.id=usr.department "
-        + " where 1=1 " +  getSearchStatement( true, "" );
+        + " where 1=1 " +  getSearchStatement( true, "" )
+        + "  ORDER BY usr.username ";
     int pagenumber = Integer.parseInt( this.getPara( "pageNumber" ) );
     int pagesize = Integer.parseInt( this.getPara( "pageSize" ) );
     Page<Record> page = Db.paginate( pagenumber, pagesize, sql, sqlExcept );
