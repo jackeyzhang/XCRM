@@ -3,7 +3,11 @@ package com.xcrm.user;
 import java.util.List;
 
 import com.jfinal.aop.Before;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.Record;
 import com.xcrm.common.AbstractController;
+import com.xcrm.common.Pager;
 import com.xcrm.common.model.Department;
 import com.xcrm.common.model.User;
 import com.xcrm.common.util.Constant;
@@ -12,6 +16,20 @@ import com.xcrm.common.util.StrUtil;
 
 @Before(UserInterceptor.class)
 public class UserController extends AbstractController {
+  
+  public void list() {
+    //price是原价  deal price是成交价  
+    String sql = "select usr.* ";
+    String sqlExcept = " from user usr  " 
+        + " left join department dep on dep.id=usr.department "
+        + " where 1=1 " +  getSearchStatement( true, "" );
+    int pagenumber = Integer.parseInt( this.getPara( "pageNumber" ) );
+    int pagesize = Integer.parseInt( this.getPara( "pageSize" ) );
+    Page<Record> page = Db.paginate( pagenumber, pagesize, sql, sqlExcept );
+    Pager pager = new Pager( page.getTotalRow(), page.getList() );
+    this.renderJson( pager );
+
+  }
 
   public void save() {
     User user = this.getModel( User.class, "", true );
@@ -72,7 +90,7 @@ public class UserController extends AbstractController {
 
   @Override
   protected String searchWord() {
-    return "username";
+    return "usr.username,dep.name";
   }
 
   public void listWorkers() {
