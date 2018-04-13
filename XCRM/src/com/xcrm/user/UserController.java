@@ -123,4 +123,15 @@ public class UserController extends AbstractController {
     this.renderJson( allworkers );
   }
 
+  public void wxchangepassword(){
+    int userid = this.getParaToInt( "userid" );
+    User user = User.dao.findById( userid );
+    String password1 = this.getPara( "password1" );
+    if( user== null){
+      this.renderJson( false );
+    }else{
+      user.set( "password", password1 );
+      this.renderJson( user.update() );
+    }
+  }
 }
