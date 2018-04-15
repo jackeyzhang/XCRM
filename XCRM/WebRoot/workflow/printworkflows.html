@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>贝可曼尼信息系统</title> <#include "../common/js2css.html"/>
+<script src="/js/jquery.PrintArea.js"></script>
+<link rel="stylesheet" href="/css/PrintArea.css">
+<script>
+	$(function() {
+		$("#print").click(function() {
+			$('.printarea').printArea({
+				mode : 'popup',
+				popClose : 'false',
+				extraCss : '',
+				retainAttr : '',
+				extraHead : ''
+			});
+		});
+
+	});
+</script>
+<style>
+.printlayout{
+  width:40mm
+}
+</style>
+<style type="text/css" media="print">
+	.printarea {
+	  width: 40mm; 
+	  height: 30mm; 
+	  text-align: center;
+	}
+</style>
+</head>
+<body>
+	<div class="container">
+		<#include "../common/menu.html"/> 
+		<#if workflows?size !=0>
+		<button id="print" style="width: 40mm" type="button"
+			class="btn btn-primary btn-xs">打印</button>
+			
+		<div >
+					<#list workflows as workflow> 
+							<div style="width: 40mm; height: 35mm; text-align: center;" class="printarea">
+								<img alt="二维码不存在" style="width: 25mm; height: 25mm;margin-left:8px;"
+									src="${product_qr2_path}/${workflow.id}.jpg" />
+									<div style="font-size: 10px;">${workflow.prd.name!}</div>
+									<div style="font-size: 10px;">${workflow.order.orderno!}</div>
+							</div>
+				</#list>
+			</div>
+			
+			</#if>
+	</div>
+</body>
+</html>

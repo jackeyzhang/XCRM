@@ -356,6 +356,21 @@ public class WorkflowController extends AbstractController {
       }
     }
   }
+  
+  public void printworkflowlist() {
+    String printlist = this.getPara( "printlist" );
+    String[] printlistArray = printlist.split( "," );
+    List<Workflow> workflows = new ArrayList<>();
+    for( String workflowid : printlistArray ){
+      Workflow workflow = Workflow.dao.findById( workflowid );
+      workflows.add( workflow.getWorkflowWithPrdAndOrder() );
+    }
+    setAttr( "workflows", workflows );
+    setAttr( "prdimg_path", getPrdImgBaseUrl() );
+    setAttr( "product_qr2_path", getPrdQr2BaseUrl() );
+    setAttr( "role", getCurrentRoleId() );
+    render( "printworkflows.html" );
+  }
 
   public void markcompleteworkitem() {
     int workitemid = this.getParaToInt( "workitemid" );

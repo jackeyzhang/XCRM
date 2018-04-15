@@ -70,6 +70,26 @@ $(function() {
 	});
 	
 	
+	 // printworkitemlist button click
+	  $("[name='printworkitemlist']").each(function(){
+	    $(this).click( function(){
+	      var printlist;
+	      $(this).closest("#workfloworder").find("[name='viewworkitem']").each(function(){
+	          var workflow = $(this).attr("workflow");
+	          if( printlist ){
+	        	  printlist = printlist + "," + workflow;
+	          }else{
+	        	  printlist = workflow;
+	          }
+	      });
+	      if(!printlist){
+	        alert("没有可启动的工作项!");
+	      }else{
+	        window.location = "/workflow/printworkflowlist?printlist=" + printlist;
+	      }
+	    });
+	  });
+	
 });
 </script>
 <style type="text/css">

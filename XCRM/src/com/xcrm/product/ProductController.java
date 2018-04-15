@@ -112,6 +112,7 @@ public class ProductController extends AbstractController {
     setAttr("products", products);
     setAttr("prdimg_path", getPrdImgBaseUrl());
     setAttr("product_qr2_path", getPrdQr2BaseUrl());
+    setAttr( "role", getCurrentRoleId() );
     render("printproducts.html");
   }
 

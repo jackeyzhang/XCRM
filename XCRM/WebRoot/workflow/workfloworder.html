@@ -7,6 +7,8 @@
 	       <label><span class="badge badge-info">销售人员：</span>${row.saler!}</label>
 	       <#if (row.displaystartbtn!"yes") == "yes">
 	         <button class="btn btn-primary btn-sm" style="margin-left:20px;" name="startorderWorkflow">开始订单工作流</button>
+	       <#else>
+	         <button class="btn btn-primary btn-sm" style="margin-left:20px;" name="printworkitemlist">批量打印工作标签</button>
 	       </#if>
 	    </div>
 	     <#if row.bi?size != 0>

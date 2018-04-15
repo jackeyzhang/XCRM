@@ -8,24 +8,45 @@
 		</div>
 		<ul class="nav navbar-nav">
 			<li class="active"><a href="/customer/">客户管理</a></li>
-			<li class="active"><a href="/search/">产品订购</a></li>
+			<li class="active"><a href="/search/">产品订购</a></li> 
 			
+			<#if role! == 1>      <!-- 销售部才能查看设置 工单 和报表-->
+			     <li class="active dropdown"><a href="/workflowtemplate/"
+        class="active dropdown-toggle" data-toggle="dropdown"><span
+          class="glyphicon glyphicon-fire" aria-hidden="true"
+          style="color: red;"></span> 工作流管理<span class="active caret"></span></a>
+        <ul class="active dropdown-menu" role="menu">
+          <li><a href="/workflowtemplate/"><span
+              class="glyphicon glyphicon-fire" aria-hidden="true"
+              style="color: red;"></span>工作流模板管理</a></li>
+          <li><a href="/workflow/"><span
+              class="glyphicon glyphicon-fire" aria-hidden="true"
+              style="color: red;"></span>订单工作流管理</a></li>
+          <li><a href="/workflow/indexOfProduct"><span
+              class="glyphicon glyphicon-fire" aria-hidden="true"
+              style="color: red;"></span>产品工作流管理</a></li>
+        </ul></li>
+
+      <li class="active"><a href="/report/productsalereport">报表统计</a></li>
+			</#if>
+			
+			<#if role! == -1> 
+			<!-- 只有管理层才能查看设置 工单 和报表-->
 			<li class="active dropdown"><a href="/product/"
 				class="active dropdown-toggle" data-toggle="dropdown">产品管理 <span
 					class="active caret"></span></a>
 				<ul class="active dropdown-menu" role="menu">
-				  <li><a href="/product/">产品列表</a></li>
+					<li><a href="/product/">产品列表</a></li>
 					<li><a href="/price/">产品价格</a></li>
 				</ul></li>
 
-      <#if role! == -1> <!-- 只有管理层才能查看设置 工单 和报表-->
 			<li class="active dropdown"><a href="#"
 				class="active dropdown-toggle" data-toggle="dropdown">设置管理 <span
 					class="active caret"></span></a>
 				<ul class="active dropdown-menu" role="menu">
-				  <li><a href="/user/">用户管理</a></li>
-				  <li><a href="/department/">部门管理</a></li>
-          <li><a href="/store/">门店管理</a></li>
+					<li><a href="/user/">用户管理</a></li>
+					<li><a href="/department/">部门管理</a></li>
+					<li><a href="/store/">门店管理</a></li>
 					<li><a href="/contract/">合同管理</a></li>
 					<li><a href="/productcategory/">产品分类</a></li>
 					<li><a href="/attributeid/">属性模板设置</a></li>
@@ -34,20 +55,26 @@
 				</ul></li>
 
 			<li class="active dropdown"><a href="/workflowtemplate/"
-        class="active dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-fire" aria-hidden="true" style="color:red;"></span>
-        工作流管理<span
-          class="active caret"></span></a>
-        <ul class="active dropdown-menu" role="menu">
-          <li><a href="/workflowtemplate/"><span class="glyphicon glyphicon-fire" aria-hidden="true" style="color:red;"></span>工作流模板管理</a></li>
-          <li><a href="/workflow/"><span class="glyphicon glyphicon-fire" aria-hidden="true" style="color:red;"></span>订单工作流管理</a></li>
-          <li><a href="/workflow/indexOfProduct"><span class="glyphicon glyphicon-fire" aria-hidden="true" style="color:red;"></span>产品工作流管理</a></li>
-        </ul></li>
-	
+				class="active dropdown-toggle" data-toggle="dropdown"><span
+					class="glyphicon glyphicon-fire" aria-hidden="true"
+					style="color: red;"></span> 工作流管理<span class="active caret"></span></a>
+				<ul class="active dropdown-menu" role="menu">
+					<li><a href="/workflowtemplate/"><span
+							class="glyphicon glyphicon-fire" aria-hidden="true"
+							style="color: red;"></span>工作流模板管理</a></li>
+					<li><a href="/workflow/"><span
+							class="glyphicon glyphicon-fire" aria-hidden="true"
+							style="color: red;"></span>订单工作流管理</a></li>
+					<li><a href="/workflow/indexOfProduct"><span
+							class="glyphicon glyphicon-fire" aria-hidden="true"
+							style="color: red;"></span>产品工作流管理</a></li>
+				</ul></li>
+
 			<li class="active"><a href="/report/productsalereport">报表统计</a></li>
-			</#if> 
+			</#if>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
-			<li class="active"><a href="/order/" >我的订单</a></li>
+			<li class="active"><a href="/order/">我的订单</a></li>
 			<!-- <li><a href="#" id="storename">${storename}</a></li> -->
 			<li><a href="#" id="userinfo">Hi,${user.username}</a></li>
 			<li class="active"><a href="/logout">注销</a></li>

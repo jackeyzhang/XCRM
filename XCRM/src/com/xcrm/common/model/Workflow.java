@@ -97,6 +97,14 @@ public class Workflow extends BaseWorkflow<Workflow> {
     }
     return this;
   }
+  
+  public Workflow getWorkflowWithPrdAndOrder( ){
+    this.put( "order", getOrder() );
+    this.put( "prdpictures", getPrdPictures() );
+    this.put( "prd", getPrdInfo() );
+    this.put( "deps", getDeps() );
+    return this;
+  }
 
   /**
    * 获取all workflow及其详情
