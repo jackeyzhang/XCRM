@@ -74,6 +74,9 @@ public class CartController extends AbstractController {
         bookitem.setUser( getCurrentUserId() );
         bookitem.setStatus( Bookitem.STATUS_ACTIVE );
         bookitem.setDate( new Date() );
+        if(bookitem.getDiscount() == null){
+          bookitem.setDiscount( 100 );
+        }
         bookitem.save();
 
         orderitem.setBookitem( bookitem.getId() );
@@ -86,6 +89,9 @@ public class CartController extends AbstractController {
       bookitem.setUser( getCurrentUserId() );
       bookitem.setStatus( Bookitem.STATUS_INIT );
       bookitem.setDate( new Date() );
+      if(bookitem.getDiscount() == null){
+        bookitem.setDiscount( 100 );
+      }
       bookitem.save();
       this.redirect( "/cartlist/" );
     }
