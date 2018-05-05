@@ -250,6 +250,9 @@ public class OrderController extends AbstractController {
         + " and o.status != " + Order.STATUS_CANCELLED + " "
         + " group by o.orderno order by o.orderno desc";
     Page<Record> page = Db.paginate( 1, 100, sql, sqlExcept );
+    for( Record r : page.getList() ){
+      r.set( "dep", getWorkingDepForOrder(r.getLong( "orderno" )) );
+    }
     Pager pager = new Pager( page.getTotalRow(), page.getList() );
     this.renderJson( pager );
   }
@@ -304,4 +307,25 @@ public class OrderController extends AbstractController {
     this.renderJson( Db.find( sql ));
   }
 
+  
+  private String getWorkingDepForOrder( long orderno ){
+      String sql = "select dep.name from workitem wi "
+          + "join workflow wf on wf.id=wi.workflow "
+          + "join orderitem oi on oi.bookitem=wf.bookitem "
+          + "join `order` oo on oo.id=oi.order "
+          + "join department dep on dep.id=wi.dep "
+          + "where oo.orderno= " + orderno + " and wi.status<>2 "
+          + "order by wi.status desc";
+      List<Record> records = Db.find( sql );
+      if( records == null || records.isEmpty()) return "已完成";
+      String result = "";
+      int i = 0;
+      for( Record r : records){
+        result += r.getStr( "name" );
+        result += ",";
+        i++;
+        if( i == 2 ) break;
+       }
+      return result.substring( 0, result.length()-1 );
+  }
 }
