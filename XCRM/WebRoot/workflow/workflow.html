@@ -7,7 +7,7 @@
 <#include "../common/js2css.html"/>
 <script type="text/javascript">
 function load(){
-	$.get('/workflowtemplate/list/', function(data){
+	$.get('/workflowtemplate/listactive/', function(data){
 		    for( e in data){
 		   	  $("[name='workitemtemplate']").append("<option value='" + data[e].id + "'>" + data[e].name + "</option>");
 		    }
