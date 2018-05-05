@@ -1,9 +1,9 @@
 <script>
 function statusformatter(value, row){
 	  if(value){
-	    return '<a href="/department/inactive?id='+ row['id'] +'" title="注销"><i class="glyphicon glyphicon-user" style="color:green"></i>注销</a>';
+	    return '<a href="/department/inactive?id='+ row['id'] +'" title="注销"><i class="glyphicon glyphicon-user" style="color:green"></i> 点击注销</a>';
 	  }else{
-	    return '<a href="/department/active?id='+ row['id'] +'" title="激活"><i class="glyphicon glyphicon-user" style="color:gray"></i>激活</a>';
+	    return '<a href="/department/active?id='+ row['id'] +'" title="激活"><i class="glyphicon glyphicon-user" style="color:gray"></i> 点击激活</a>';
 	  }
 	}
 

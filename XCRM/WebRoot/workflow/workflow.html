@@ -85,7 +85,7 @@ $(function() {
 	      if(!printlist){
 	        alert("没有可启动的工作项!");
 	      }else{
-	        window.location = "/workflow/printworkflowlist?printlist=" + printlist;
+	        window.open( "/workflow/printworkflowlist?printlist=" + printlist, '_blank');
 	      }
 	    });
 	  });
