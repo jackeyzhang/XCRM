@@ -54,7 +54,7 @@ public class WorkflowController extends AbstractController {
         + "left join product p on bi.product=p.id "
         + "where " + getSqlForUserRole() 
         + " and o.status != " + Order.STATUS_CANCELLED 
-        + " and o.date >= str_to_date('"+ DateUtil.getBeforeOneMonthDateStr() +"', '%Y-%m-%d')"
+        + " and o.deliverytime <= str_to_date('"+ DateUtil.getFurtureDay( 30 ) +"', '%Y-%m-%d')"
         + " " + this.getSearchStatement( true, "" ) 
         + " group by p.name order by p.name desc";
     Page<Record> page = Db.paginate( 1, 30, sql, sqlExcept );
@@ -88,8 +88,7 @@ public class WorkflowController extends AbstractController {
     String customername = this.getPara( "customername" );
     String datepick = this.getPara( "datepick" );
     int month = getMonthsFromWorkflowSearchPage( datepick );
-    Date startDate = DateUtil.getFirstDateOfMonth( new Date(), month-1 );
-    String startDateStr = StrUtil.formatDate( startDate, "yyyy-MM-dd" );
+    String startDateStr = DateUtil.getFurtureDayByMonth( month );
     //price是原价  deal price是成交价  
     String sql = "select concat(cust.name, '-' , cust.company) company, " + "GROUP_CONCAT(p.name) name," + "o.orderno orderno," + "sum(bi.num) num," + "o.deliverytime date," + "o.status,p.id prdid,"
         + "GROUP_CONCAT(bi.comments) comments";
@@ -97,8 +96,8 @@ public class WorkflowController extends AbstractController {
         + ( StrUtil.isEmpty( prdname ) ? "" : "and p.name like '%" + prdname.trim() + "%'" ) + "join customer cust on cust.id=bi.customer "
         + ( StrUtil.isEmpty( customername ) ? "" : "and cust.name like '%" + customername.trim() + "%'" ) + "where 1=1 "
         + ( StrUtil.isEmpty( orderno ) ? "" : "and o.orderno like '%" + orderno.trim() + "%'" ) + " and o.status != " + Order.STATUS_CANCELLED + " "
-        + ( month > 0 ? " and o.date >= str_to_date('"+ startDateStr +"', '%Y-%m-%d')" : "")
-        + this.getSearchStatement( true, "" ) + " group by o.orderno order by o.orderno,p.name desc";
+        + ( month > 0 ? " and o.deliverytime <= str_to_date('"+ startDateStr +"', '%Y-%m-%d')" : "")
+        + this.getSearchStatement( true, "" ) + " group by o.orderno order by o.orderno desc";
     Page<Record> page = Db.paginate( 1, 3000, sql, sqlExcept );
     page.getList().stream().forEach( p -> {
       long ordernum = p.getLong( "orderno" );
@@ -122,8 +121,7 @@ public class WorkflowController extends AbstractController {
     String customername = this.getPara( "customername" );
     String datepick = this.getPara( "datepick" );
     int month = getMonthsFromWorkflowSearchPage( datepick );
-    Date startDate = DateUtil.getFirstDateOfMonth( new Date(), month-1 );
-    String startDateStr = StrUtil.formatDate( startDate, "yyyy-MM-dd" );
+    String startDateStr = DateUtil.getFurtureDayByMonth( month );
     //price是原价  deal price是成交价  
     String sql = "select p.name name, p.id prdid";
     String sqlExcept = " from `order` o  " 
@@ -134,7 +132,7 @@ public class WorkflowController extends AbstractController {
         + ( StrUtil.isEmpty( customername ) ? "" : "and cust.name like '%" + customername.trim() + "%'" ) 
         + " where " + getSqlForUserRole() 
         + ( StrUtil.isEmpty( orderno ) ? "" : " and o.orderno like '%" + orderno.trim() + "%'" ) + " and o.status != " + Order.STATUS_CANCELLED + " "
-        + ( month > 0 ? " and o.date >= str_to_date('"+ startDateStr +"', '%Y-%m-%d')" : "")
+        + ( month > 0 ? " and o.deliverytime <= str_to_date('"+ startDateStr +"', '%Y-%m-%d')" : "")
         + " " + this.getSearchStatement( true, "" ) 
         + " group by p.name order by p.name desc";
     Page<Record> page = Db.paginate( 1, 3000, sql, sqlExcept );
@@ -410,8 +408,8 @@ public class WorkflowController extends AbstractController {
     String sqlExcept = " from `order` o  " + "left join orderitem oi on o.id=oi.order " + "left join bookitem bi on oi.bookitem=bi.id " + "left join product p on bi.product=p.id "
         + "left join customer cust on cust.id=bi.customer " + "left join user user on user.id=bi.user " + "where " + sqlForUserRole + " and o.status != " + Order.STATUS_CANCELLED
         + " " + this.getSearchStatement( true, "" ) + ( searchOrderNo == null ? "" : " and o.orderno like '%" + searchOrderNo + "%'" )
-        + " and o.date >= str_to_date('"+ DateUtil.getBeforeOneMonthDateStr() +"', '%Y-%m-%d')"
-        + " group by o.orderno order by o.orderno,p.name desc";
+        + " and o.deliverytime <= str_to_date('"+ DateUtil.getFurtureDay(30) +"', '%Y-%m-%d')"
+        + " group by o.orderno order by o.orderno desc";
     Page<Record> page = Db.paginate( 1, 30, sql, sqlExcept );
     page.getList().stream().forEach( o -> {
       long orderno = o.getLong( "orderno" );

@@ -8,16 +8,16 @@
   <div class="col-md-2" style="margin-top: 10px;">
     <input type="text" class="form-control" name="customername" placeholder="客户名称"  data-provide="typeahead" value="${customername!}"/>
   </div>
-  <div class="col-md-2" style="margin-top: 10px;">
+  <div class="col-md-3" style="margin-top: 10px;">
     <select class="form-control selector" name="datepicker" id="datepicker">
-            <option value="1" <#if (((datepicker)!'') == '1')>selected="selected"</#if>>最近一个月</option>
-            <option value="2" <#if (((datepicker)!'') == '2')>selected="selected"</#if>>最近三个月</option>
-            <option value="3" <#if (((datepicker)!'') == '3')>selected="selected"</#if>>最近半年</option>
-            <option value="4" <#if (((datepicker)!'') == '4')>selected="selected"</#if>>最近一年</option>
+            <option value="1" <#if (((datepicker)!'') == '1')>selected="selected"</#if>>未来一个月</option>
+            <option value="2" <#if (((datepicker)!'') == '2')>selected="selected"</#if>>未来三个月</option>
+            <option value="3" <#if (((datepicker)!'') == '3')>selected="selected"</#if>>未来半年</option>
+            <option value="4" <#if (((datepicker)!'') == '4')>selected="selected"</#if>>未来一年</option>
             <option value="0" <#if (((datepicker)!'') == '0')>selected="selected"</#if>>全部</option>
      </select>
   </div>
-   <div class="col-md-2" style="margin-top: 10px;">
+   <div class="col-md-1" style="margin-top: 10px;">
     <button class="form-control btn btn-primary" id="searchworkflow">查找</button> 
   </div>
   <div class="col-md-2" style="margin-top: 10px;">

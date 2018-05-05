@@ -36,9 +36,17 @@ public class DateUtil {
     return calender.getTime();
   }
   
-  public static String getBeforeOneMonthDateStr( ){
-    Date startDate = DateUtil.getFirstDateOfMonth( new Date(), null );
-    String startDateStr = StrUtil.formatDate( startDate, "yyyy-MM-dd" );
+  public static String getFurtureDay( int day ){
+    Calendar currentdate = Calendar.getInstance();
+    currentdate.add( Calendar.DAY_OF_MONTH, day );
+    String startDateStr = StrUtil.formatDate( currentdate.getTime(), "yyyy-MM-dd" );
+    return startDateStr;
+  }
+  
+  public static String getFurtureDayByMonth( int month ){
+    Calendar currentdate = Calendar.getInstance();
+    currentdate.add( Calendar.MONTH, month );
+    String startDateStr = StrUtil.formatDate( currentdate.getTime(), "yyyy-MM-dd" );
     return startDateStr;
   }
   
