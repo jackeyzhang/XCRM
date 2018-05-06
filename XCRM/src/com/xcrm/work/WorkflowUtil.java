@@ -103,6 +103,7 @@ public class WorkflowUtil {
       workitem.setStatus( Workitem.WORKITEM_STATUS_START );
       workitem.setStarttime( new Date() );
       workitem.update();
+      return true;
     }
     
     Workflow workflow = workitem.getWorkflowObj();
