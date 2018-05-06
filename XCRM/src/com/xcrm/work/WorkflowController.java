@@ -398,16 +398,17 @@ public class WorkflowController extends AbstractController {
   /**
    * 
    * @param sqlForUserRole
-   * @param searchOrderNo
+   * @param searchOrderNoOrCompanyName
    * @return
    */
-  private Page<Record> getOrderToStartList( String sqlForUserRole, String searchOrderNo, int isUnstartOrAll ) {
+  private Page<Record> getOrderToStartList( String sqlForUserRole, String searchOrderNoOrCompanyName, int isUnstartOrAll ) {
     //price是原价  deal price是成交价  
     String sql = "select concat(cust.name, '-' , cust.company) company, " + "GROUP_CONCAT(p.name) name," + "o.orderno orderno," + "sum(bi.num) num,"
         + "date_format(o.deliverytime,'%Y-%m-%d') date," + "o.status," + "user.username saler," + "GROUP_CONCAT(bi.comments) comments";
     String sqlExcept = " from `order` o  " + "left join orderitem oi on o.id=oi.order " + "left join bookitem bi on oi.bookitem=bi.id " + "left join product p on bi.product=p.id "
         + "left join customer cust on cust.id=bi.customer " + "left join user user on user.id=bi.user " + "where " + sqlForUserRole + " and o.status != " + Order.STATUS_CANCELLED
-        + " " + this.getSearchStatement( true, "" ) + ( searchOrderNo == null ? "" : " and o.orderno like '%" + searchOrderNo + "%'" )
+        + " " + this.getSearchStatement( true, "" ) 
+        + ( searchOrderNoOrCompanyName == null ? "" : " and ( o.orderno like '%" + searchOrderNoOrCompanyName + "%'  or cust.company like '%" + searchOrderNoOrCompanyName + "%' )" )
         + " and o.deliverytime <= str_to_date('"+ DateUtil.getFurtureDay(30) +"', '%Y-%m-%d')"
         + " group by o.orderno order by o.orderno desc";
     Page<Record> page = Db.paginate( 1, 30, sql, sqlExcept );
