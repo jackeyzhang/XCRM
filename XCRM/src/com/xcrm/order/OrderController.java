@@ -21,6 +21,8 @@ import com.xcrm.common.model.Order;
 import com.xcrm.common.model.Orderitem;
 import com.xcrm.common.model.Payment;
 import com.xcrm.common.model.User;
+import com.xcrm.common.model.Workflow;
+import com.xcrm.common.model.Workitem;
 import com.xcrm.common.util.Constant;
 
 
@@ -309,18 +311,27 @@ public class OrderController extends AbstractController {
 
   
   private String getWorkingDepForOrder( long orderno ){
-      String sql = "select dep.name from workitem wi "
+      String sql = "select dep.name,wi.status wistatus,wf.status wfstatus from workitem wi "
           + "join workflow wf on wf.id=wi.workflow "
           + "join orderitem oi on oi.bookitem=wf.bookitem "
           + "join `order` oo on oo.id=oi.order "
           + "join department dep on dep.id=wi.dep "
-          + "where oo.orderno= " + orderno + " and wi.status<>2 "
-          + "order by wi.status desc";
+          + "where oo.orderno= " + orderno;
       List<Record> records = Db.find( sql );
-      if( records == null || records.isEmpty()) return "已完成";
+      if( records == null || records.isEmpty()) {
+        return "尚未开始";
+      }
+      for(Record record : records){
+        int wfstatus = record.getInt( "wfstatus" );
+        if( wfstatus == Workflow.WORK_STATUS_DONE ){
+          return "已完成";
+        }
+      }
       String result = "";
       int i = 0;
       for( Record r : records){
+        int wistatus = r.getInt( "wistatus" );
+        if( wistatus == Workitem.WORKITEM_STATUS_DONE ) continue;
         result += r.getStr( "name" );
         result += ",";
         i++;
