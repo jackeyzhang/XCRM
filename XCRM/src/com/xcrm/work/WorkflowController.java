@@ -392,7 +392,7 @@ public class WorkflowController extends AbstractController {
   }
 
   public Page<Record> getOrderToStartList( String sqlForUserRole ) {
-    return getOrderToStartList( sqlForUserRole, null, 1 );
+    return getOrderToStartList( sqlForUserRole, null, 1, getCurrentUserId() );
   }
 
   /**
@@ -401,7 +401,7 @@ public class WorkflowController extends AbstractController {
    * @param searchOrderNoOrCompanyName
    * @return
    */
-  private Page<Record> getOrderToStartList( String sqlForUserRole, String searchOrderNoOrCompanyName, int isUnstartOrAll ) {
+  private Page<Record> getOrderToStartList( String sqlForUserRole, String searchOrderNoOrCompanyName, int isUnstartOrAll, int userid ) {
     //price是原价  deal price是成交价  
     String sql = "select concat(cust.name, '-' , cust.company) company, " + "GROUP_CONCAT(p.name) name," + "o.orderno orderno," + "sum(bi.num) num,"
         + "date_format(o.deliverytime,'%Y-%m-%d') date," + "o.status," + "user.username saler," + "GROUP_CONCAT(bi.comments) comments";
@@ -412,11 +412,13 @@ public class WorkflowController extends AbstractController {
         + " and o.deliverytime <= str_to_date('"+ DateUtil.getFurtureDay(30) +"', '%Y-%m-%d')"
         + " group by o.orderno order by o.orderno desc";
     Page<Record> page = Db.paginate( 1, 30, sql, sqlExcept );
+    User user = User.dao.findById( userid );
     page.getList().stream().forEach( o -> {
       long orderno = o.getLong( "orderno" );
       Order order = Order.dao.findFirst( "select * from `order` where orderno = ?", orderno );
       o.set( "bi", order.getAllBookitems() );
       o.set( "displaystartbtn", order.isStartAllBookitems() ? "no" : "yes" );
+      o.set( "role", user == null ? -1 : user.getInt( "role" ) );
     } );
     if ( isUnstartOrAll == 0 ) {
       List<Record> list = page.getList().stream().filter( o -> {
@@ -556,10 +558,14 @@ public class WorkflowController extends AbstractController {
   public void wxgetOrderToStartList() {
     String searchWord = this.getPara( "wxsearchword" );
     int userselection = 1;// 0 unstart only, 1 all
+    int userid = 0;// 0 unstart only, 1 all
     if ( !StrUtil.isEmpty( getPara( "userselection" ) ) ) {
       userselection = this.getParaToInt( "userselection" );
     }
-    this.renderJson( RecordUtil.fillRowNumber( getOrderToStartList( " bi.user is not null ", searchWord, userselection ).getList() ) );
+    if ( !StrUtil.isEmpty( getPara( "userid" ) ) ) {
+      userid = this.getParaToInt( "userid" );
+    }
+    this.renderJson( RecordUtil.fillRowNumber( getOrderToStartList( " bi.user is not null ", searchWord, userselection, userid ).getList() ) );
   }
 
   /**

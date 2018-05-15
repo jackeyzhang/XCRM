@@ -23,6 +23,7 @@ public class User extends Model<User> {
   
   public static final int ROLE_SALER = 1;//销售员：看自己订单 看分配任务
   public static final int ROLE_WORKER = 2;//工厂工人：看自己分配任务
+  public static final int ROLE_SALER_MANAGER = 3;//销售主管：
 
   public static User dao = new User();
 
@@ -73,10 +74,19 @@ public class User extends Model<User> {
   }
   
   /**
+   * 销售主管
+   * @return
+   */
+  public boolean isSalerManager() {
+    Integer role = Integer.parseInt( getAttrs().get( "role" ).toString() );
+    return role == ROLE_SALER_MANAGER;
+  }
+  
+  /**
    * 销售和管理层允许登录到web
    * @return
    */
   public boolean canLoginToWeb(){
-    return isRoot() || isSaler();
+    return isRoot() || isSaler() || isSalerManager();
   }
 }

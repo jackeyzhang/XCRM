@@ -51,10 +51,10 @@ public class LoginController extends Controller {
           this.renderJson( dbUser );
         }
       }
-      else if ( role == User.ROLE_WORKER && dbUser.isSaler() ) { //登录工人系统，不允许销售
+      else if ( role == User.ROLE_WORKER && (dbUser.isSaler() || dbUser.isSalerManager()) ) { //登录工人系统，不允许销售
         this.renderJson( false );
       }
-      else if ( role == User.ROLE_SALER && ( dbUser.isSaler() || dbUser.isRoot() ) ) {//登录销售系统，不允许工人和部门主管
+      else if ( role == User.ROLE_SALER && ( dbUser.isSaler() || dbUser.isRoot() || dbUser.isSalerManager() ) ) {//登录销售系统，不允许工人和部门主管
         this.renderJson( dbUser );
       }
       else {
