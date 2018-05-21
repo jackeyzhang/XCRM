@@ -24,17 +24,21 @@ public class SingePaymentController extends AbstractController {
     this.setSessionAttr( "customerid", record.getInt( "customerid" ) );
     this.setAttr( "customer", record.getStr( "customer" ) );
     
-    BigDecimal discount =  null, price = null;
+    BigDecimal discount =  null, price = null, taxrate = null;
     if( getSession().getAttribute( "totaldiscount" ) != null ){
       discount = new BigDecimal ( Float.parseFloat( getSession().getAttribute( "totaldiscount" ).toString()));
     }
     if(getSession().getAttribute( "price" ) != null ){
       price =  new BigDecimal ( Float.parseFloat( getSession().getAttribute( "price" ).toString()));
     }
+    if(getSession().getAttribute( "taxrate" ) != null ){
+      taxrate =  new BigDecimal ( Float.parseFloat( getSession().getAttribute( "taxrate" ).toString()));
+    }
     Order ord = Order.dao.findFirst( "select * from `order` where orderno=?", Long.parseLong( orderno )  );
     if( ord != null && discount != null && price!= null ){
       ord.setPrice( price );
       ord.setTotaldiscount( discount );
+      ord.setTaxrate( taxrate );
       ord.update();
       BigDecimal paid =  new BigDecimal ( Float.parseFloat( getSession().getAttribute( "paid" ).toString()));
       this.setSessionAttr( "due", price.compareTo( paid ) > 0 ? price.subtract( paid ) : 0);

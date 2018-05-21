@@ -22,7 +22,8 @@ $(function() {
 						amount : $(".amount").html(),
 						price : $("#price").val(),
 						ordercomments : $("#ordercomments").val(),
-						totaldiscount : $("#discount").val()
+						totaldiscount : $("#discount").val(),
+						taxrate : $("#taxrate").val()
 					},
 					success : function(indata, status) {
 						if (status == "success") {
@@ -51,7 +52,8 @@ $(function() {
 						amount : $(".amount").html(),
 						price : $("#price").val(),
 						ordercomments : $("#ordercomments").val(),
-						totaldiscount : $("#discount").val()
+						totaldiscount : $("#discount").val(),
+						taxrate : $("#taxrate").val()
 					},
 					success : function(indata, status) {
 						if (status == "success") {

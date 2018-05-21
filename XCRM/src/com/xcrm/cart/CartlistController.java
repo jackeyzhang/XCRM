@@ -30,6 +30,7 @@ public class CartlistController extends AbstractController {
 	  this.setSessionAttr( "totaldiscount", this.getPara( "totaldiscount" ) );//总折扣
 	  this.setSessionAttr( "amount", this.getPara( "amount" ) );//原价
 	  this.setSessionAttr( "price", this.getPara( "price" ) ); //成交价
+	  this.setSessionAttr( "taxrate", this.getPara( "taxrate" ) ); //税率
 	  this.renderNull();
 	}
 	

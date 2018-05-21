@@ -73,15 +73,24 @@
       }
 			
 			var discount =$('#discount').val();
+			var taxrate = $('#taxrate').val();
 			if(discount<=0 || discount > 100){
 				showAlert("输入的折扣值不能大于100小于0!!!");
 				$('#discount').val(100);
 				$('#price').val(amount*100/100);
 				return;
 			}
+			if( taxrate<0 || taxrate > 100){
+        showAlert("输入的税率值不能大于100小于0!!!");
+        $('#discount').val(100);
+        $('#taxrate').val(0);
+        $('#price').val(amount*100/100);
+        return;
+      }
 			if(!discount) discount = 100;
+			if(!taxrate) taxrate = 0;
 			//$('#price').val( (amount*discount/100).toFixed(2));
-			$('#price').val( (amountwithoutafee*discount/100 + afee).toFixed(2));
+			$('#price').val( ( (amountwithoutafee*discount/100 + afee) * (1 + taxrate/100 )).toFixed(2));
 		};
 		
 		// calculte item amount
@@ -100,6 +109,10 @@
 		$("#discount").on('input',function(e){  
 			calc_amount();
 		});  
+		
+    $("#taxrate").on('input',function(e){  
+       calc_amount();
+     }); 
 		
 		$(".itemdiscount").on('input',function(e){
 			  var that = $(this);
@@ -273,8 +286,13 @@ table {
 		<span>输入折扣(百分比):</span> <input type="number" class="form-control"
 			id="discount" value="100" min="1" max="100" name="totaldiscount" />
 	</div>
+	
+	 <div class="col-md-2" style="float: left; font-weight: bold">
+    <span>输入税率(百分比):</span> <input type="number" class="form-control"
+      id="taxrate" value="0" min="0" max="100" name="taxrate" />
+  </div>
 
-	<div class="col-md-3 col-md-offset-5"
+	<div class="col-md-3 col-md-offset-3"
 		style="text-align: right; font-weight: bold">
 		<div>
 			<span>总价:</span> <span class="amount"

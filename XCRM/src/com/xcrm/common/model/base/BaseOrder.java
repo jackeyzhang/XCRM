@@ -113,4 +113,12 @@ public abstract class BaseOrder<M extends BaseOrder<M>> extends Model<M> impleme
 		return get("workstatus");
 	}
 
+	public void setTaxrate(java.math.BigDecimal taxrate) {
+		set("taxrate", taxrate);
+	}
+
+	public java.math.BigDecimal getTaxrate() {
+		return get("taxrate");
+	}
+
 }

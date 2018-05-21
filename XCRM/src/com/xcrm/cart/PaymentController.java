@@ -86,7 +86,11 @@ public class PaymentController extends AbstractController {
     if ( totaldiscount != null && !totaldiscount.isEmpty() ) {
       order.setTotaldiscount(  new BigDecimal( Float.parseFloat( totaldiscount ) )  );
     }
-    
+    // tax rate 税率
+    String tax = this.getSessionAttr( "taxrate" );
+    if ( tax != null && !tax.isEmpty() ) {
+      order.setTaxrate( new BigDecimal( Float.parseFloat( tax ) ) );
+    }
     
     //persist payment
     if(paid.floatValue() > 0){
