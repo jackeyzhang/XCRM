@@ -25,9 +25,10 @@ public class OrderViewController extends AbstractController {
     this.setSessionAttr( "orderno", orderno );
     this.setAttr( "orderno", orderno );
 
-    Record record = Db.findFirst( "select o.comments,o.paymentcomments,o.price,o.totaldiscount from `order` o where o.orderno=" + orderno );
+    Record record = Db.findFirst( "select o.comments,o.paymentcomments,o.price,o.totaldiscount,o.taxrate from `order` o where o.orderno=" + orderno );
     BigDecimal dealPrice = record.getBigDecimal( "price" );
     BigDecimal totaldiscount = record.getBigDecimal( "totaldiscount" );
+    BigDecimal taxrate = record.getBigDecimal( "taxrate" );
     Record paymentrecord = Db.findFirst( "select sum(paid) paid, customerid customer from payment where orderno=" + orderno + " group by orderno" );
     BigDecimal paid = paymentrecord == null ? new BigDecimal(0) : paymentrecord.getBigDecimal( "paid" );
     Record customerrecord = Db.findFirst( "select bi.customer from bookitem bi left join orderitem oi on oi.bookitem = bi.id left join `order` ord on oi.order = ord.id where ord.orderno = " + orderno );
@@ -38,6 +39,7 @@ public class OrderViewController extends AbstractController {
     this.setAttr( "dealprice", StrUtil.formatPrice( dealPrice ) );
     this.setAttr( "paid", StrUtil.formatPrice( paid ) );
     this.setAttr( "totaldiscount", StrUtil.formatNum(totaldiscount) );
+    this.setAttr( "taxrate", StrUtil.formatNum(taxrate) );
     BigDecimal due = dealPrice.subtract( paid );
     String dues = StrUtil.formatPrice( due );
     if ( due.floatValue() > 0.001 )
