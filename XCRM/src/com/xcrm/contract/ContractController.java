@@ -127,6 +127,7 @@ public class ContractController extends AbstractController {
     this.setAttr( "numcount" , info.getNumcount( ) );
     this.setAttr( "amount", info.getAmount() );
     this.setAttr( "afee", info.getAfee() );//afee
+    this.setAttr( "tax", info.getTax() );
     this.setAttr( "paid", info.getDue() );
     
     this.setAttr( "haspaid", info.getHaspaid() );
@@ -160,13 +161,14 @@ class ContractPrintInfo {
   private String discount;
   private String afee;
   private String due;
+  private String tax;
   
   private String haspaid;
   private String notpaid;
 
   public void loaddata( Long orderno ) {
     String sql = "select cust.name cname, cust.shiptoAddr, cust.company, cust.phone, cust.contact, prd.name pname,"
-        + "o.price due, bi.price*bi.num*(bi.discount/100)*(o.totaldiscount/100) price, o.totalprice, o.price/o.totalprice*100 discount,"
+        + "o.price due,o.taxrate tax, bi.price*bi.num*(bi.discount/100)*(o.totaldiscount/100) price, o.totalprice, o.price/o.totalprice*100 discount,"
         + "bi.additionfee afee, bi.num, bi.comments, bi.prdattrs, bi.price oprice,"
         + "(select round(sum(paid),2) from payment where orderno= o.orderno) paid,"
         + "(select round(o.price-ifnull(sum(paid),0), 2) from payment where orderno= o.orderno) notpaid"
@@ -183,6 +185,7 @@ class ContractPrintInfo {
     StringBuilder sb = new StringBuilder();
     BigDecimal afeetotal = new BigDecimal( 0 );
     BigDecimal amounttotal = new BigDecimal( 0 );
+    BigDecimal tax = new BigDecimal( 0 );
     int numcountTotal = 0;
     for ( int i = 0; i < records.size(); i++ ) {
       Record record = records.get( i );
@@ -197,11 +200,13 @@ class ContractPrintInfo {
       }
       afeetotal = afeetotal.add( record.getBigDecimal( "afee" ) );
       amounttotal = amounttotal.add( record.getBigDecimal( "price" ) );
+      tax = tax.add( record.getBigDecimal( "tax" ) );
       numcountTotal +=  record.getInt( "num" );
       if ( i == records.size() - 1 ) {
         setAmount( "" + StrUtil.formatPrice( amounttotal ) );//商品小计
         setAfee( "" + StrUtil.formatPrice( afeetotal ) );//定制费
         setNumcount( "" + StrUtil.formatInt( numcountTotal ) );//数量小计
+        setTax( "" + StrUtil.formatPercentage( tax.toString() ) );//税率
       }
       sb
           .append( "<tr>" )
@@ -294,6 +299,14 @@ class ContractPrintInfo {
   public void setDiscount( String discount ) {
     this.discount = discount;
   }
+  
+  public String getTax(){
+    return tax;
+  }
+  
+  public void setTax( String tax ){
+    this.tax = tax;
+  }
 
   public String getAfee() {
     return afee;
@@ -331,6 +344,8 @@ class ContractPrintInfo {
   public void setNotpaid( String notpaid ) {
     this.notpaid = notpaid;
   }
+  
+  
 
   //  public String getTR( ){
   //    StringBuilder tr = new StringBuilder();
