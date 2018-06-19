@@ -12,6 +12,6 @@ public class UserValidator extends Validator {
 	}
 	
 	protected void handleError(Controller controller) {
-	  
+	  //some comments
 	}
 }
