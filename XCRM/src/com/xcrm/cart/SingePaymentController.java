@@ -41,8 +41,8 @@ public class SingePaymentController extends AbstractController {
       ord.setTaxrate( taxrate );
       ord.update();
       BigDecimal paid =  new BigDecimal ( Float.parseFloat( getSession().getAttribute( "paid" ).toString()));
-      this.setSessionAttr( "due", price.compareTo( paid ) > 0 ? price.subtract( paid ) : 0);
-      this.setAttr( "due", price.compareTo( paid ) > 0 ? price.subtract( paid ) : 0 );
+      this.setSessionAttr( "due", price.compareTo( paid ) > 0 ? price.subtract( paid ) : new BigDecimal(0.0));
+      this.setAttr( "due", price.compareTo( paid ) > 0 ? price.subtract( paid ) : new BigDecimal(0.0) );
     }else{
       this.setSessionAttr( "due", record.getBigDecimal( "due" ) );
       this.setAttr( "due", record.getBigDecimal( "due" )  );
