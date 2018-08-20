@@ -16,6 +16,7 @@ import com.jfinal.render.FreeMarkerRender;
 import com.xcrm.attribute.AttributeController;
 import com.xcrm.attribute.AttributeInterceptor;
 import com.xcrm.attribute.AttributeidController;
+import com.xcrm.bonus.BonusController;
 import com.xcrm.cart.CartController;
 import com.xcrm.cart.CartlistController;
 import com.xcrm.cart.PaymentController;
@@ -36,6 +37,7 @@ import com.xcrm.product.PriceController;
 import com.xcrm.product.ProductController;
 import com.xcrm.product.ProductcategoryController;
 import com.xcrm.report.ReportController;
+import com.xcrm.salary.SalaryController;
 import com.xcrm.salesseason.SalesSeasonController;
 import com.xcrm.schedule.ScheduleController;
 import com.xcrm.search.SearchController;
@@ -91,6 +93,8 @@ public class XCRMConfig extends JFinalConfig {
     me.add("/department", DepartmentController.class);
     me.add("/workflow", WorkflowController.class);
     me.add("/workflowtemplate", WorkflowtemplateController.class);
+    me.add("/salary", SalaryController.class);
+    me.add("/bonus", BonusController.class);
   }
 
   public static C3p0Plugin createC3p0Plugin() {

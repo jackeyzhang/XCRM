@@ -10,6 +10,7 @@ $(function() {
 			queryParams: queryParams,
 			queryParamsType: "limit",
 			pageNumber: 1,
+			pageSize: 100,
 			pageList: [10, 25, 50, 100],
 			clickToSelect:true,
 			showExport: true,

@@ -1,0 +1,94 @@
+<div class="form-group">
+	<label>用户名</label> <input type="text" class="form-control"
+		name="username" placeholder="用户名" data-required-error="用户名不能为空" required>
+	<div class="help-block with-errors"></div>
+</div>
+<div class="form-group">
+	<label>电子邮箱</label> <input type="email" class="form-control"
+		name="email" placeholder="sample@sina.com" data-required-error="邮箱不能为空" data-error="邮箱格式不对" required>
+	<div class="help-block with-errors"></div>
+</div>
+<div class="form-group">
+  <label>联系方式</label> <input type="textarea" class="form-control"
+    name="contact" placeholder="电话或手机">
+</div>
+
+<script>
+$(function() {
+	// get store list
+	$.get('/store/list/', function(data){
+	  storeList = data;
+	  // get store list
+	  for( d in storeList){
+	    $('#storeselect').append("<option value='" + storeList[d].id + "'>" + storeList[d].name + "</option>");
+	  }
+	});
+	
+	 // get department list
+	  $.get('/department/getall/', function(data){
+	    for( d in data){
+	      $('#departmentselect').append("<option value='" + data[d].id + "'>" + data[d].name + "</option>");
+	    }
+	  });
+
+});
+</script>
+
+<div class="form-group">
+<label>权限类别</label>
+</br>
+<div class="radio-inline">
+  <label>
+    <input type="radio" name="role" id="optionsRadios0" value="-1">
+    公司管理层
+  </label>
+</div>
+<div class="radio-inline">
+  <label>
+    <input type="radio" name="role" id="optionsRadios1" value="0">
+    部门主管
+  </label>
+</div>
+<div class="radio-inline">
+  <label>
+    <input type="radio" name="role" id="optionsRadios4" value="3">
+    销售主管
+  </label>
+</div>
+<div class="radio-inline">
+  <label>
+    <input type="radio" name="role" id="optionsRadios2" value="1">
+    销售员工
+  </label>
+</div>
+<div class="radio-inline">
+  <label>
+    <input type="radio" name="role" id="optionsRadios3" value="2">
+    工厂员工
+  </label>
+</div>
+</div>
+
+
+<div class="form-group">
+  <label>所在门店</label> 
+    <select class="form-control selector" name="storeid" id="storeselect">
+       <option value="">请选择...</option>
+   </select>
+</div>
+
+<div class="form-group">
+  <label>所在部门</label> 
+    <select class="form-control selector" name="department" id="departmentselect">
+       <option value="">请选择...</option>
+   </select>
+</div>
+
+<div class="form-group">
+	<label>职位</label> <input type="text" class="form-control" name="title"
+		placeholder="职位">
+</div>
+<div class="form-group">
+	<label>密码</label> <input type="password" class="form-control"
+		name="password" placeholder="password">
+</div>
