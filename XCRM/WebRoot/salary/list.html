@@ -1,24 +1,31 @@
 <script>
-var storeList;
-// get store list
-$.get('/store/list/', function(data){
-	storeList = data;
-});
-
-var departmentList;
-//get departmentList
-$.get('/department/getall/', function(data){
-	departmentList = data;
-});
-
 function opformatter(value, row){
-  if(value){
-    return '<a href="javascript:logout('+row['id']+')" title="注销"><i class="glyphicon glyphicon-star" style="color:green"></i>编辑</a>';
+  if(value == null){
+    return '<a href="javascript:startsalary('+row['prdid'] + ',' +row['wftid'] +')" title="激活"><i class="glyphicon glyphicon-star-empty" style="color:gray"></i>开始</a>';
   }else{
-    return '<a href="javascript:active('+row['id']+')" title="激活"><i class="glyphicon glyphicon-star-empty" style="color:gray"></i>开始</a>';
+	  return '<a href="javascript:startsalary('+row['prdid'] + ',' +row['wftid'] +')" title="激活"><i class="glyphicon glyphicon-star" style="color:green"></i>编辑</a>';
   }
 }
 
+function startsalary(prdid, wftid){
+	 $.ajax({
+         type: "get",
+         url: "start?prdid=" + prdid + "&wftid=" + wftid,
+         success: function (data, status) {
+             if (status == "success") {
+               showAlert("操作成功");
+               var pn = $('#table').bootstrapTable('getOptions').pageNumber;
+           	   $("#table").bootstrapTable('refreshOptions',{pageNumber : pn});
+             }
+         },
+         error: function () {
+           showAlert("编辑失败");
+         },
+         complete: function () {
+
+         }
+     });
+}
 
 function statusformatter(value, row ){
 	 if(value == null){

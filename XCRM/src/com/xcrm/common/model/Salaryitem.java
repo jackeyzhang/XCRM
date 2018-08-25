@@ -8,4 +8,8 @@ import com.xcrm.common.model.base.BaseSalaryitem;
 @SuppressWarnings("serial")
 public class Salaryitem extends BaseSalaryitem<Salaryitem> {
 	public static final Salaryitem dao = new Salaryitem();
+	
+	public static final int STATUS_INIT=0;
+	public static final int STATUS_STARTED=1;
+	public static final int STATUS_CANCELLED=2;
 }

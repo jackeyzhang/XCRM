@@ -6,6 +6,10 @@ import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.xcrm.common.AbstractController;
 import com.xcrm.common.Pager;
+import com.xcrm.common.model.Salary;
+import com.xcrm.common.model.Salaryitem;
+import com.xcrm.common.model.Workflowtemplate;
+import com.xcrm.common.model.Workitemtemplate;
 import com.xcrm.common.util.Constant;
 
 
@@ -21,7 +25,7 @@ public class SalaryController extends AbstractController {
                       + "join department dep on dep.id = wit.dep "
                       + "left join salary sa on sa.product=prd.id and sa.workflowtemplateid=wft.id "
                       + "group by prd.id,wft.id "
-                      + "order by dep.id " ;
+                      + "order by prd.id " ;
     int pagenumber = Integer.parseInt( this.getPara( "pageNumber" ) );
     int pagesize = Integer.parseInt( this.getPara( "pageSize" ) );
     Page<Record> page = Db.paginate( pagenumber, pagesize, sql, sqlExcept );
@@ -30,7 +34,24 @@ public class SalaryController extends AbstractController {
   }
 
   public void start() {
+    int prdid = this.getParaToInt( "prdid" );
+    int workflowtemplateid = this.getParaToInt( "wftid" );
+    Salary salary = new Salary();
+    salary.setProduct( prdid );
+    salary.setWorkflowtemplateid( workflowtemplateid );
+    salary.setStatus( Salary.STATUS_INIT );
+    salary.save();
     
+    Workflowtemplate wft = Workflowtemplate.dao.findById( workflowtemplateid );
+    for( Workitemtemplate wfi : wft.getWorkitemtemplates( ) ){
+      Salaryitem salaryitem = new Salaryitem();
+      salaryitem.setStatus( Salaryitem.STATUS_INIT );
+      salaryitem.setDep( wfi.getDep() );
+      salaryitem.setSalaryid( salary.getId() );
+      salaryitem.save();
+    }
+    
+    this.renderJson( true);
   }
 
   public void update() {

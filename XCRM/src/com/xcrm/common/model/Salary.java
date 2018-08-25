@@ -8,4 +8,8 @@ import com.xcrm.common.model.base.BaseSalary;
 @SuppressWarnings("serial")
 public class Salary extends BaseSalary<Salary> {
 	public static final Salary dao = new Salary();
+	
+	public static final int STATUS_INIT=0;
+	public static final int STATUS_STARTED=1;
+	public static final int STATUS_CANCELLED=2;
 }
