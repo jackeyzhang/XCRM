@@ -3,7 +3,7 @@ function opformatter(value, row){
   if(value == null){
     return '<a href="javascript:startsalary('+row['prdid'] + ',' +row['wftid'] +')" title="激活"><i class="glyphicon glyphicon-star-empty" style="color:gray"></i>开始</a>';
   }else{
-	  return '<a href="javascript:startsalary('+row['prdid'] + ',' +row['wftid'] +')" title="激活"><i class="glyphicon glyphicon-star" style="color:green"></i>编辑</a>';
+	  return '<a href="gotoedit?prdid='+row['prdid'] + '&wftid=' +row['wftid'] +'" target="view_window" title="编辑"><i class="glyphicon glyphicon-star" style="color:green"></i>编辑</a>';
   }
 }
 

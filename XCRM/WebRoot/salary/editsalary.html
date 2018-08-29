@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<#include "../common/js2css.html"/>
+
+<script>
+	$(function() {
+		var itemindex = 1;
+		$("#addworkitem").click(function() {
+			var workitemhtml = $("[name=workitemtemplate]:first").clone(true);
+			itemindex++;
+			workitemhtml.attr("id","workitem" + itemindex );
+			$(".form-group:last").after( workitemhtml );
+			freshWorkitemIndex(1);
+		});
+
+		$("#deleteworkitem").click(function() {
+			$(this).closest(".form-group").remove();
+			freshWorkitemIndex(1);
+		});
+		
+		$("#insertworkitem").click(function() {
+			var workitemhtml = $("[name=workitemtemplate]:first").clone(true);
+      itemindex++;
+      workitemhtml.attr("id","workitem" + itemindex );
+      $(this).closest(".form-group").after( workitemhtml );
+      freshWorkitemIndex(1);
+		});
+		
+		
+    function freshWorkitemIndex( index ){
+			$("[name=workitemindex]").each(function(){  
+			  $(this).html( index++ ); 
+			}); 
+		};
+		
+		
+		 $('#submit').click( function() {
+			 var depids ='',amounts='',siids='';
+			 var prdid = $('#prdid').html();
+			 var wftid = $('#wftid').html();
+       var salaryitems = $('#editsalaryform').find('[name=salaryitem]'); // 获取所有文本框
+       for (var i = 0; i < salaryitems.length; i++) {
+    	   var salaryitem = salaryitems.eq(i);
+    	   var depid = salaryitem.find( '#depid' ).val();
+    	   var siid = salaryitem.find( '#siid' ).val();
+    	   var amount = salaryitem.find( '#amount' ).val();
+    	   if( !amount ){
+              alert('金额不能为空！');
+              return;
+           }
+    	   depids += (depid+",");
+   		   amounts += (amount + "," );
+   		   siids += (siid+",");
+       }
+			 
+       //组织数据
+       var templatedata = {
+          "depids" : depids,
+          "amounts" : amounts,
+          "siids" : siids,
+       };
+       
+			 $.ajax({
+            type: "post",
+            url: "/salary/update?prdid=" + prdid + "&wftid=" + wftid,
+            data: templatedata,
+            success: function (data, status) {
+            },
+            error: function () {
+            },
+            complete: function () {
+            	closeCurrentPage();
+            }
+        });
+			 
+		 });
+    
+
+	});
+	
+	function closeCurrentPage() {
+	    var userAgent = navigator.userAgent;
+	    if (userAgent.indexOf("Firefox") != -1 || userAgent.indexOf("Chrome") !=-1) {
+	        window.location.href="about:blank";
+	        window.close();
+	    } else {
+	        window.opener = null;
+	        window.open("", "_self");
+	        window.close();
+	    }
+	} 
+</script>
+
+</head>
+<body>
+	<div class="container">
+		<#include "../common/menu.html"/> 
+		<#include "../common/pageheader.html"/>
+
+		<div class="form-horizontal" role="form" id="editsalaryform">
+			<div class="form-group">
+			  <label id="prdid" class="hidden">${prdid!}</label>
+			  <label id="wftid" class="hidden">${wftid!}</label>
+				<label for="firstname" class="col-sm-offset-1 col-sm-4 control-label">产品名称 (工作模板) :  ${title!}</label>
+			</div>
+
+			<div class="form-group">
+				<div class="col-sm-offset-1 col-sm-12">
+					<h4>
+						<span class="label label-success" style="width:100%">设置工价如下:</span>
+					</h4>
+				</div>
+			</div>
+
+			<div class="form-group" id="workitem1" style="margin-bottom:5px;">
+			 <#if salaryitems?size != 0>
+        <#list salaryitems as s>
+        <div  name="salaryitem">
+				  <div class="col-sm-offset-2 col-sm-1"  style="margin-top:10px;">
+				   <span class="badge" name="workitemindex" style="background-color:green;font-size:30px;">${s_index+1!}</span>
+				   <input type="number"
+              class="form-control hidden" id="depid" value="${s.depid!}">
+                     <input type="number"
+              class="form-control hidden" id="siid" value="${s.siid!}">
+				  </div>
+					<div class="col-sm-2">
+						<span class="label label-success">${s.depname!}</span> 
+						<input type="number"
+							class="form-control" id="amount" placeholder="钱数" value="${s.amount!}">
+					</div>
+					</div>
+        </#list>
+      </#if>
+			</div>
+      <button class="btn btn-large btn-primary pull-right" id="submit">提交模板</button>
+		</div>
+
+	<#include "../common/footer.html"/>
+	</div>
+</body>
+</html>

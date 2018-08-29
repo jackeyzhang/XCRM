@@ -1,5 +1,9 @@
 package com.xcrm.common.model;
 
+import java.util.List;
+
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Record;
 import com.xcrm.common.model.base.BaseSalary;
 
 /**
@@ -12,4 +16,23 @@ public class Salary extends BaseSalary<Salary> {
 	public static final int STATUS_INIT=0;
 	public static final int STATUS_STARTED=1;
 	public static final int STATUS_CANCELLED=2;
+	
+	public Salary getSalary( int prdid, int workflowtemplateid ){
+	  List<Salary> ss = dao.find( "select * from salary where product=" + prdid + " and workflowtemplateid=" + workflowtemplateid );
+	  return ss.size() == 0 ? null : ss.get( 0 );
+	}
+	
+	public String toString(){
+	  Product product = Product.dao.findById( getProduct() );
+	  Workflowtemplate wft = Workflowtemplate.dao.findById( getWorkflowtemplateid() );
+	  return product.getName() + " (" + wft.getName() + ")";
+	}
+	
+	public List<Record> getSalaryItems(){
+	  List<Record> salaryitems = Db.find( "select dep.name depname,dep.id depid,si.amount amount,si.id siid "
+	      + " from salaryitem si "
+	      + " join department dep on si.dep=dep.id "
+	      + " where salaryid=" + this.getId() );
+	  return salaryitems;
+	}
 }

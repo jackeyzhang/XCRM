@@ -1,5 +1,7 @@
 package com.xcrm.salary;
 
+import java.math.BigDecimal;
+
 import com.jfinal.aop.Before;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
@@ -54,8 +56,34 @@ public class SalaryController extends AbstractController {
     this.renderJson( true);
   }
 
-  public void update() {
-    
+  public void gotoedit() {
+    int prdid = this.getParaToInt( "prdid" );
+    int workflowtemplateid = this.getParaToInt( "wftid" );
+    Salary salary = Salary.dao.getSalary( prdid, workflowtemplateid );
+    setAttr( "role", getCurrentRoleId() );
+    setAttr( "title", salary.toString() );
+    setAttr( "prdid", prdid);
+    setAttr( "wftid", workflowtemplateid);
+    setAttr( "salaryitems", salary.getSalaryItems());
+    render( "editsalary.html" );
+  }
+  
+  public void update(){
+    int prdid = this.getParaToInt( "prdid" );
+    int workflowtemplateid = this.getParaToInt( "wftid" );
+    String departments =this.getParaMap().get( "depids" )[0];
+    String amounts = this.getParaMap().get( "amounts" )[0];
+    String siids = this.getParaMap().get( "siids" )[0];
+    String[] departmentArray = departments.split( "," );
+    String[] amount = amounts.split( "," );
+    String[] salaryitemIds = siids.split( "," );
+    for(int i = 0; i < salaryitemIds.length; i++ ){
+      Salaryitem si = Salaryitem.dao.findById( salaryitemIds[i] );
+      BigDecimal b = new BigDecimal( amount[i] );
+      si.setAmount(  b );
+      si.update();
+    }
+    this.forwardIndex();
   }
 
 
