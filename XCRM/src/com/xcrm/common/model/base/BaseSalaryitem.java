@@ -33,11 +33,11 @@ public abstract class BaseSalaryitem<M extends BaseSalaryitem<M>> extends Model<
 		return get("dep");
 	}
 
-	public void setAmount(java.math.BigDecimal amount) {
+	public void setAmount(java.lang.Double amount) {
 		set("amount", amount);
 	}
 
-	public java.math.BigDecimal getAmount() {
+	public java.lang.Double getAmount() {
 		return get("amount");
 	}
 

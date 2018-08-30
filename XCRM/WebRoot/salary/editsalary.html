@@ -105,37 +105,45 @@
 			<div class="form-group">
 			  <label id="prdid" class="hidden">${prdid!}</label>
 			  <label id="wftid" class="hidden">${wftid!}</label>
-				<label for="firstname" class="col-sm-offset-1 col-sm-4 control-label">产品名称 (工作模板) :  ${title!}</label>
+				<label for="firstname" class="col-sm-4 control-label">产品名称 (工作模板) :  ${title!}</label>
 			</div>
-
+			
 			<div class="form-group">
-				<div class="col-sm-offset-1 col-sm-12">
-					<h4>
-						<span class="label label-success" style="width:100%">设置工价如下:</span>
-					</h4>
-				</div>
-			</div>
+			   <div class="row">
+			       <div class="col-md-offset-2 col-md-2" style="padding-right:5px;padding-left:5px;">
+			          <img onerror="this.src='/img/default.png'" src="${prdimg_path!}${prdid!}/${fielname!}" class="img-responsive img-thumbnail" style="height:280px;">
+			       </div>
+	       
+	       
+        <div class="col-md-8">
+          <h4>
+            <span class="label label-success" style="width:100%">设置工价如下:</span>
+          </h4>
+        </div>
+		      <div id="workitem1" style="margin-bottom:5px;">
+		       <#if salaryitems?size != 0>
+		        <#list salaryitems as s>
+		        <div  name="salaryitem">
+		          <div class="col-sm-1">
+		           <span class="badge" name="workitemindex" style="background-color:green;font-size:30px;">${s_index+1!}</span>
+		           <input type="number"
+		              class="form-control hidden" id="depid" value="${s.depid!}">
+		                     <input type="number"
+		              class="form-control hidden" id="siid" value="${s.siid!}">
+		          </div>
+		          <div class="col-sm-3">
+		            <span class="label label-success">${s.depname!}</span> 
+		            <input type="number"
+		              class="form-control" id="amount" placeholder="钱数" value="${s.amount!}">
+		          </div>
+		          </div>
+		        </#list>
+		      </#if>
+		      </div>
+	       </div>
+      </div>
+      
 
-			<div class="form-group" id="workitem1" style="margin-bottom:5px;">
-			 <#if salaryitems?size != 0>
-        <#list salaryitems as s>
-        <div  name="salaryitem">
-				  <div class="col-sm-offset-2 col-sm-1"  style="margin-top:10px;">
-				   <span class="badge" name="workitemindex" style="background-color:green;font-size:30px;">${s_index+1!}</span>
-				   <input type="number"
-              class="form-control hidden" id="depid" value="${s.depid!}">
-                     <input type="number"
-              class="form-control hidden" id="siid" value="${s.siid!}">
-				  </div>
-					<div class="col-sm-2">
-						<span class="label label-success">${s.depname!}</span> 
-						<input type="number"
-							class="form-control" id="amount" placeholder="钱数" value="${s.amount!}">
-					</div>
-					</div>
-        </#list>
-      </#if>
-			</div>
       <button class="btn btn-large btn-primary pull-right" id="submit">提交模板</button>
 		</div>
 

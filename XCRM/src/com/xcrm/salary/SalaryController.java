@@ -1,7 +1,5 @@
 package com.xcrm.salary;
 
-import java.math.BigDecimal;
-
 import com.jfinal.aop.Before;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
@@ -59,12 +57,15 @@ public class SalaryController extends AbstractController {
   public void gotoedit() {
     int prdid = this.getParaToInt( "prdid" );
     int workflowtemplateid = this.getParaToInt( "wftid" );
+    Record record = Db.findFirst( "select ppic.fielname from productpic ppic where ppic.productid = " +prdid+" limit 1" );
     Salary salary = Salary.dao.getSalary( prdid, workflowtemplateid );
     setAttr( "role", getCurrentRoleId() );
     setAttr( "title", salary.toString() );
     setAttr( "prdid", prdid);
+    setAttr( "fielname", record.getStr( "fielname" ));
     setAttr( "wftid", workflowtemplateid);
     setAttr( "salaryitems", salary.getSalaryItems());
+    setAttr( "prdimg_path", getPrdImgBaseUrl() );
     render( "editsalary.html" );
   }
   
@@ -79,7 +80,7 @@ public class SalaryController extends AbstractController {
     String[] salaryitemIds = siids.split( "," );
     for(int i = 0; i < salaryitemIds.length; i++ ){
       Salaryitem si = Salaryitem.dao.findById( salaryitemIds[i] );
-      BigDecimal b = new BigDecimal( amount[i] );
+      Double b = new Double( amount[i] );
       si.setAmount(  b );
       si.update();
     }

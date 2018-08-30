@@ -14,7 +14,7 @@ CREATE TABLE `xcrm`.`salaryitem` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `salaryid` INT NOT NULL,
   `dep` INT NOT NULL,
-  `amount` DECIMAL(2) NULL,
+  `amount` double DEFAULT NULL,
   `status` INT NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   INDEX `salaryitem-fk_idx` (`salaryid` ASC),
