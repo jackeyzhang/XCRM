@@ -41,6 +41,11 @@ public class SalaryController extends AbstractController {
   public void start() {
     int prdid = this.getParaToInt( "prdid" );
     int workflowtemplateid = this.getParaToInt( "wftid" );
+    initSalary(prdid,workflowtemplateid);
+    this.renderJson( true);
+  }
+  
+  private void initSalary(int prdid, int workflowtemplateid){
     Salary salary = new Salary();
     salary.setProduct( prdid );
     salary.setWorkflowtemplateid( workflowtemplateid );
@@ -55,13 +60,15 @@ public class SalaryController extends AbstractController {
       salaryitem.setSalaryid( salary.getId() );
       salaryitem.save();
     }
-    
-    this.renderJson( true);
   }
 
   public void gotoedit() {
     int prdid = this.getParaToInt( "prdid" );
     int workflowtemplateid = this.getParaToInt( "wftid" );
+    String start = this.getPara( "start" );
+    if( start != null && start.equals( "yes" )){
+      initSalary( prdid, workflowtemplateid );
+    }
     List<Productpic> pics =
         Productpic.dao.find("select * from productpic where productid=?", prdid);
     Salary salary = Salary.dao.getSalary( prdid, workflowtemplateid );
