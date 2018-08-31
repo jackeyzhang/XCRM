@@ -66,12 +66,12 @@ public class SalaryController extends AbstractController {
     int prdid = this.getParaToInt( "prdid" );
     int workflowtemplateid = this.getParaToInt( "wftid" );
     String start = this.getPara( "start" );
-    if( start != null && start.equals( "yes" )){
+    Salary salary = Salary.dao.getSalary( prdid, workflowtemplateid );
+    if( start != null && start.equals( "yes" ) && salary == null){
       initSalary( prdid, workflowtemplateid );
     }
     List<Productpic> pics =
         Productpic.dao.find("select * from productpic where productid=?", prdid);
-    Salary salary = Salary.dao.getSalary( prdid, workflowtemplateid );
     setAttr( "role", getCurrentRoleId() );
     setAttr( "title", salary.toString() );
     setAttr( "prdid", prdid);
