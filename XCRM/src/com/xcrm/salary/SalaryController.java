@@ -1,11 +1,14 @@
 package com.xcrm.salary;
 
+import java.util.List;
+
 import com.jfinal.aop.Before;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.xcrm.common.AbstractController;
 import com.xcrm.common.Pager;
+import com.xcrm.common.model.Productpic;
 import com.xcrm.common.model.Salary;
 import com.xcrm.common.model.Salaryitem;
 import com.xcrm.common.model.Workflowtemplate;
@@ -17,6 +20,7 @@ import com.xcrm.common.util.Constant;
 public class SalaryController extends AbstractController {
   
   public void list() {
+    String searchword = this.getPara( "searchword" );
     String sql = "select prd.name prdname,wft.name wftname,sa.status, GROUP_CONCAT(dep.name order by dep.id) depname,prd.id prdid,wft.id wftid";
     String sqlExcept = "from product prd "
                       + "join workflowtemplate wft on wft.id = prd.workflow "
@@ -24,6 +28,7 @@ public class SalaryController extends AbstractController {
                       + "join workitemtemplate wit on wit.id = wfit.workitemtemplate "
                       + "join department dep on dep.id = wit.dep "
                       + "left join salary sa on sa.product=prd.id and sa.workflowtemplateid=wft.id "
+                      + ( searchword == null || searchword.isEmpty()  ? "" :" where prd.name like '%" + searchword + "%'")
                       + "group by prd.id,wft.id "
                       + "order by prd.id " ;
     int pagenumber = Integer.parseInt( this.getPara( "pageNumber" ) );
@@ -57,15 +62,17 @@ public class SalaryController extends AbstractController {
   public void gotoedit() {
     int prdid = this.getParaToInt( "prdid" );
     int workflowtemplateid = this.getParaToInt( "wftid" );
-    Record record = Db.findFirst( "select ppic.fielname from productpic ppic where ppic.productid = " +prdid+" limit 1" );
+    List<Productpic> pics =
+        Productpic.dao.find("select * from productpic where productid=?", prdid);
     Salary salary = Salary.dao.getSalary( prdid, workflowtemplateid );
     setAttr( "role", getCurrentRoleId() );
     setAttr( "title", salary.toString() );
     setAttr( "prdid", prdid);
-    setAttr( "fielname", record.getStr( "fielname" ));
     setAttr( "wftid", workflowtemplateid);
     setAttr( "salaryitems", salary.getSalaryItems());
+    setAttr( "prdimages", pics);
     setAttr( "prdimg_path", getPrdImgBaseUrl() );
+    setAttr( "page_header", getPageHeader() );
     render( "editsalary.html" );
   }
   

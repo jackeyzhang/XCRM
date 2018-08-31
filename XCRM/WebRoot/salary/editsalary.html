@@ -5,9 +5,29 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <#include "../common/js2css.html"/>
-
 <script>
 	$(function() {
+		
+		$('#productCarousel').carousel({
+		      interval : 5000
+		    });
+
+    $('[id^=carousel-selector-]').click(function() {
+      var id_selector = $(this).attr("id");
+      var id = id_selector.substr(id_selector.length - 1);
+      id = parseInt(id);
+      $('#productCarousel').carousel(id);
+      $('[id^=carousel-selector-]').removeClass('selected');
+      $(this).addClass('selected');
+    });
+
+    $('#productCarousel').on('slid', function(e) {
+      var id = $('.item.active').data('slide-number');
+      id = parseInt(id);
+      $('[id^=carousel-selector-]').removeClass('selected');
+      $('[id=carousel-selector-' + id + ']').addClass('selected');
+    });
+		
 		var itemindex = 1;
 		$("#addworkitem").click(function() {
 			var workitemhtml = $("[name=workitemtemplate]:first").clone(true);
@@ -110,41 +130,72 @@
 			
 			<div class="form-group">
 			   <div class="row">
-			       <div class="col-md-offset-2 col-md-2" style="padding-right:5px;padding-left:5px;">
-			          <img onerror="this.src='/img/default.png'" src="${prdimg_path!}${prdid!}/${fielname!}" class="img-responsive img-thumbnail" style="height:280px;">
+			   
+		       <div id="productCarousel" class="carousel slide col-md-4">
+				    <#if prdimages?size !=0>
+				    <div class="carousel-inner">
+				      <#assign x=0 />
+				      <#list prdimages as prdimg> <#if x==0>
+				      <div class="active item" data-slide-number="${x}">
+				        <img src="${prdimg_path}/${prdimg.productid}/${prdimg.fielname}" onerror="this.src='${prdimg_path}default.png'" 
+				          class="img-responsive img-thumbnail">
+				      </div>
+				      <#else>
+				      <div class="item" data-slide-number="${x}">
+				        <img src="${prdimg_path}/${prdimg.productid}/${prdimg.fielname}" onerror="this.src='${prdimg_path}default.png'" 
+				          class="img-responsive img-thumbnail">
+				      </div></#if> <#assign x=x+1 /> </#list>
+				    </div>
+				    <div class="hidden-sm hidden-xs" id="slider-thumbs">
+				      <ul class="list-inline">
+				        <#assign y=0 />
+				        <#list prdimages as prdimg>
+				        <li><a id="carousel-selector-${y}" class="selected"> <img
+				            src="${prdimg_path}/${prdimg.productid}/${prdimg.fielname}" onerror="this.src='${prdimg_path}default.png'" 
+				            class="img-responsive" style="width: 80px;">
+				        </a></li>
+				        <#assign y=y+1 /> </#list>
+				      </ul>
+				    </#if>
+				    </div>
+			    </div>
+	       
+		       <div class="col-md-8">
+		         <h4>
+		           <span class="label label-success" style="width:100%">设置工价如下:</span>
+		         </h4>
+		       </div>
+		       
+			      <div id="workitem1">
+			        <#if salaryitems?size != 0>
+				        <#list salaryitems as s>
+				        <div  name="salaryitem">
+				          <div class="col-sm-1" style="margin-top:15px;">
+				           <span class="badge" name="workitemindex" style="background-color:green;font-size:30px;">${s_index+1!}</span>
+				           <input type="number"
+				              class="form-control hidden" id="depid" value="${s.depid!}">
+				                     <input type="number"
+				              class="form-control hidden" id="siid" value="${s.siid!}">
+				          </div>
+				          
+				          <div class="col-sm-7">
+				            <span class="label label-success">${s.depname!}</span> 
+				            <input type="number"
+				              class="form-control" id="amount" placeholder="钱数" value="${s.amount!}">
+				          </div>
+				          </div>
+				        </#list>
+			        </#if>
+			      </div>
+			      
+			      <div class="col-md-5" style="margin-top:15px;">
+			         <button class="btn btn-large btn-primary pull-right" id="submit">提交模板</button>
 			       </div>
-	       
-	       
-        <div class="col-md-8">
-          <h4>
-            <span class="label label-success" style="width:100%">设置工价如下:</span>
-          </h4>
-        </div>
-		      <div id="workitem1" style="margin-bottom:5px;">
-		       <#if salaryitems?size != 0>
-		        <#list salaryitems as s>
-		        <div  name="salaryitem">
-		          <div class="col-sm-1">
-		           <span class="badge" name="workitemindex" style="background-color:green;font-size:30px;">${s_index+1!}</span>
-		           <input type="number"
-		              class="form-control hidden" id="depid" value="${s.depid!}">
-		                     <input type="number"
-		              class="form-control hidden" id="siid" value="${s.siid!}">
-		          </div>
-		          <div class="col-sm-3">
-		            <span class="label label-success">${s.depname!}</span> 
-		            <input type="number"
-		              class="form-control" id="amount" placeholder="钱数" value="${s.amount!}">
-		          </div>
-		          </div>
-		        </#list>
-		      </#if>
-		      </div>
 	       </div>
       </div>
       
 
-      <button class="btn btn-large btn-primary pull-right" id="submit">提交模板</button>
+     
 		</div>
 
 	<#include "../common/footer.html"/>
