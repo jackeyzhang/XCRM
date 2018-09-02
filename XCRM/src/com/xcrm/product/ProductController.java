@@ -65,9 +65,9 @@ public class ProductController extends AbstractController {
           continue;
         record.set( "attribute-" + getCategory() + "-" + av.getAttributeid(), av.getValue() );
       }
+      record.set( "roleid", getCurrentRoleId() );
     }
     this.renderJson( pager );
-
   }
 
   public void detail() {

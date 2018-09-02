@@ -12,15 +12,26 @@ function productnameformmater( value, row ){
 }
 
 function actionFormatter( value, row ) {
-	 if(row['buytimes'] > 0){
-		   return [ '<a class="update" href="javascript:" title="编辑">编辑</a>',
-		            '<a href="/salary/gotoedit?start=yes&prdid='+row['id'] + '&wftid=' +row['workflow'] +'" target="view_window" title="编辑">工价设置</a>'].join('   ');
+	 if(row['roleid'] == -1 ){
+		 if(row['buytimes'] > 0){
+		       return [ '<a class="update" href="javascript:" title="编辑">编辑</a>',
+		                '<a href="/salary/gotoedit?start=yes&prdid='+row['id'] + '&wftid=' +row['workflow'] +'" target="view_window" title="编辑">工价设置</a>'].join('   ');
+		   }else{
+		        return [ '<a class="update" href="javascript:" title="编辑">编辑</a>',
+		                   '<a class="remove" href="javascript:" title="删除">删除</a>',
+		                   '<a href="/salary/gotoedit?start=yes&prdid='+row['id'] + '&wftid=' +row['workflow'] +'" target="view_window" title="编辑">工价设置</a>']
+		                   .join('   ');
+		   }
 	 }else{
-	      return [ '<a class="update" href="javascript:" title="编辑">编辑</a>',
-	                 '<a class="remove" href="javascript:" title="删除">删除</a>',
-	                 '<a href="/salary/gotoedit?start=yes&prdid='+row['id'] + '&wftid=' +row['workflow'] +'" target="view_window" title="编辑">工价设置</a>']
-	                 .join('   ');
+		 if(row['buytimes'] > 0){
+	           return [ '<a class="update" href="javascript:" title="编辑">编辑</a>'].join('   ');
+	       }else{
+	            return [ '<a class="update" href="javascript:" title="编辑">编辑</a>',
+	                       '<a class="remove" href="javascript:" title="删除">删除</a>']
+	                       .join('   ');
+	       }
 	 }
+	 
 }
 
 var toplevellist;
