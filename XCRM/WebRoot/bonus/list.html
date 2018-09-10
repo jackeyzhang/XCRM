@@ -1,68 +1,61 @@
 <script>
-var storeList;
-// get store list
-$.get('/store/list/', function(data){
-	storeList = data;
-});
-
-var departmentList;
-//get departmentList
-$.get('/department/getall/', function(data){
-	departmentList = data;
-});
-
-function userenabelformatter(value, row){
+function contractnameformatter(value, row){
   if(value){
-    return '<a href="javascript:logout('+row['id']+')" title="注销"><i class="glyphicon glyphicon-user" style="color:green"></i>注销</a>';
+    return '<a href="/contract/view?id='+ row['contractid'] +'&orderno='+row['orderno']+'"  target="_blank" title="'+ value + '">'+value+'</a>';
   }else{
-    return '<a href="javascript:active('+row['id']+')" title="激活"><i class="glyphicon glyphicon-user" style="color:gray"></i>激活</a>';
+    return '';
   }
 }
 
-function userdepartmentformatter(value, row ){
-	for( d in departmentList){
-	      if(departmentList[d].id == value)
-	          return departmentList[d].name;
-	    }
-	    return "未指定";
-}
-
-function userstoreidformatter( value, row ){
-    for( d in storeList){
-    	if(storeList[d].id == value)
-    		  return storeList[d].name;
+function paidformatter(value, row){
+    if(value == 0 || value == null){
+      return 0;
+    }else{
+      return value;
     }
-    return "未指定";
-}
-
-function userattributesformatter( value, row ){
-    for( d in storeList){
-      if(storeList[d].id == value)
-          return storeList[d].name;
+  }
+  
+function ordernoformatter(value, row){
+    if(value){
+      return '<a href="/orderview?orderno='+ row['orderno'] + '">'+value+'</a>';
+    }else{
+      return value;
     }
-    return "未指定";
-}
-
-function roleformatter(value, row ){
-	 if(value == "-1"){
-	      return "公司管理层";
-	  }else if(value == "0"){
-	    return "部门主管";
-	  }else if(value == "1"){
-	    return "销售员工";
-	  }else if(value == "2"){
-	    return "工厂员工";
-	  }else if(value == "3"){
-      return "销售主管";
+  }
+  
+function dueformatter(value, row){
+    if(value == 0 || value == null){
+      return '<a href="/spayment?orderno='+ row['orderno'] + '">'+0+'</a>';
+    }else{
+      return '<a href="/spayment?orderno='+ row['orderno'] + '">'+value+'</a>';
     }
-	  return "未定义";	
+  }
+  
+function opformatter(value, row){
+     if( row['status'] != 4 ){
+        return '<a href="/cancelorder?orderno='+ row['orderno'] + '">'+ '取消' +'</a> ' +
+        '<a href="/editorder?orderno='+ row['orderno'] + '">'+ '编辑' +'</a>';
+     }else{
+       return "";
+     }
 }
-
+  
+function statusformatter(value, row){
+   if(value == 1){
+        return '已下订单';
+   }else if(value == 2){
+        return '已付定金';
+   }else if(value == 3){
+          return '已付全款';
+   }else if(value == 4){
+        return '已经取消';
+   }
+}
 </script>
-<th data-field="username"><b style="color:blue">用户名</b></th>
-<th data-field="department" data-formatter="userdepartmentformatter"><b style="color:blue">部门</b></th>
-<th data-field="email" data-editable="true">邮箱</th>
-<th data-field="title">职位</th>
-<th data-field="role" data-formatter="roleformatter">权限类别</th>
-<th data-field="storeid" data-formatter="userstoreidformatter">所属门店</th>
-<th data-field="isenable" data-formatter="userenabelformatter" data-align="center">状态</th>
+<th data-field="orderno" data-formatter="ordernoformatter"><b style="color:blue">订单号</b></th>
+<th data-field="prdname">产品名称</th>
+<th data-field="index">序号</th>
+<th data-field="weight">权重</th>
+<th data-field="username">工作人员</th>
+<th data-field="starttime">开始时间</th>
+<th data-field="finishtime">完成时间</th>

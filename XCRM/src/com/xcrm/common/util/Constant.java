@@ -32,4 +32,5 @@ public class Constant {
 	public static final int CATEGORY_WORK = 14;
 	public static final int CATEGORY_WORKFLOW = 15;
 	public static final int CATEGORY_SALARY = 16;
+	public static final int CATEGORY_BONUS = 17;
 }
