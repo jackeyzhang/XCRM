@@ -24,4 +24,6 @@ CREATE TABLE `xcrm`.`salaryitem` (
     ON DELETE CASCADE
     ON UPDATE CASCADE);
 
+ALTER TABLE `xcrm`.`workitemallocation` 
+ADD COLUMN `bonus` DECIMAL(10,2) NULL DEFAULT 0 AFTER `finishtime`;
 

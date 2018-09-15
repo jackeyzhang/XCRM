@@ -65,4 +65,12 @@ public abstract class BaseWorkitemallocation<M extends BaseWorkitemallocation<M>
 		return get("finishtime");
 	}
 
+	public void setBonus(java.math.BigDecimal bonus) {
+		set("bonus", bonus);
+	}
+
+	public java.math.BigDecimal getBonus() {
+		return get("bonus");
+	}
+
 }

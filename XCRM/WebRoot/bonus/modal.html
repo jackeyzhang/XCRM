@@ -1,0 +1,30 @@
+
+<div id="modal" class="modal fade">
+	<div id="${model}" class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title"></h4>
+			</div>
+			<div class="modal-body">
+				<form role="form" id="modal-form">
+					<div class="form-group hidden">
+						<label>ID</label> <input type="text" class="form-control"
+							name="id" placeholder="id">
+					</div>
+					<#include "../${model}/form.html"/>
+				</form>
+			</div>
+			<div class="modal-footer first-clear">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				<button type="button" class="btn btn-primary submitworkitemallocation">提交</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

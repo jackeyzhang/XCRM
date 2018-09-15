@@ -141,6 +141,57 @@ $(function() {
 					}
 				});
 			});
+
+	xcpage.$modal.find('.submitworkitemallocation').click(																									
+			function() {
+				if(xcpage.presubmit){
+					xcpage.presubmit(xcpage.presubmit.args);
+				}
+				var row = {};
+				// get input value to row
+				xcpage.$modal.find('input[name]').each(function() {
+					if($(this).attr('type') == "radio"){
+						if($(this).is(":checked")){
+							row[$(this).attr('name')] = $(this).val();
+						}
+					}else{
+						row[$(this).attr('name')] = $(this).val();
+					}
+				});
+				// get select value to row
+				xcpage.$modal.find('select[name]').each(function() {
+					if($(this).val() instanceof Array){
+						row[$(this).attr('name')] = $(this).val().join(',');
+					}else{
+						row[$(this).attr('name')] = $(this).val();
+					}
+				});
+				// submit row
+				$.ajax({
+					url : xcpage.$modal.data('id') == "" ? ADD_API_URL
+							: UPDATE_API_URL,
+					type : 'post',
+					data : row,
+					success : function() {
+						xcpage.$modal.modal('hide');
+						xcpage.$table.bootstrapTable('refresh');
+						if(xcpage.fileinput){
+							$(xcpage.fileinput).fileinput('clear');
+						}
+						showAlert((xcpage.$modal.data('id') ? '更新'
+								: '创建')
+								+ '成功', 'success');
+					},
+					error : function(data) {
+						if(data.status == 522){
+							alert("产品名字不能重复!");
+						}
+						showAlert((xcpage.$modal.data('id') ? '更新'
+								: '创建')
+								+ '失败!', 'danger');
+					}
+				});
+			});
 	
 });
 function queryParams(params) {

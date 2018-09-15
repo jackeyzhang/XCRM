@@ -6,11 +6,6 @@
 	<thead>
 		<tr>
 			<#include "../${model}/list.html"/>
-			<#if attriutes?size != 0>
-				<#list attriutes as e>
-				  <th data-field="attribute-${e.category}-${e.attributeid}" data-align="center">${e.displayname}</th>
-				</#list>
-			</#if>
 		</tr>
 	</thead>
 </table>

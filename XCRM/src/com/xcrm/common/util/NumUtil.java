@@ -16,5 +16,11 @@ public class NumUtil {
     return ival;
   }
   
+  public static Double dVal( String val ){
+    if( val == null || val.isEmpty() ) return 0d;
+    Double dval = Double.parseDouble( val );
+    return dval;
+  }
+  
   
 }
