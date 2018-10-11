@@ -58,7 +58,7 @@ function workerformatter(value, row){
 		var display = "";
 		for( let index in workers ){
 			var worker = workers[index];
-			var infos = worker.split('-');
+			var infos = worker.split('&');
 			display += ( "<a href='javascript:setwia("+infos[0] +",\""  + infos[1] +"\",\""  + infos[2] + "\",\""  + infos[3]+ "\",\"" + infos[4] +"\")' target='_blank'>"+infos[1] + " - "+ infos[2] + " (￥" + infos[3] +  " )</a><br>");
 		}
 		return display;

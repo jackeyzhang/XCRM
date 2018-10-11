@@ -73,4 +73,12 @@ public abstract class BaseWorkitemallocation<M extends BaseWorkitemallocation<M>
 		return get("bonus");
 	}
 
+	public void setComment(java.lang.String comment) {
+		set("comment", comment);
+	}
+
+	public java.lang.String getComment() {
+		return get("comment");
+	}
+
 }

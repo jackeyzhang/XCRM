@@ -67,4 +67,9 @@ public class StrUtil {
     String[] strArray = inStr.split( splitCode );
     return Arrays.asList( strArray );
   }
+  
+  public static String getStrByKey(String value ,String key ){
+    List<String> values = StrUtil.split( value, "&" );
+    return values.stream().filter( v->v.startsWith( key + "=" ) ).map( s->s.substring( s.indexOf( "=" ) + 1 ) ).findFirst().orElse( "" );
+  }
 }

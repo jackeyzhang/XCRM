@@ -21,9 +21,10 @@ import com.xcrm.common.util.StrUtil;
 public class BonusController extends AbstractController {
   
   public void list() {
+    String searchword = this.getPara( "searchword" );
     //price是原价  deal price是成交价  
     String sql = "select wf.id,o.orderno,prd.name prdname,(wf.index+1) wfindex,wf.status,"
-        + "group_concat('' + wia.id, '-', dep.name,'-',usr.username,'-', ''+wia.bonus order by dep.name) worker";
+        + "group_concat('' + wia.id, '&', dep.name,'&',usr.username,'&', ''+wia.bonus order by dep.name) worker";
     String sqlExcept = " from workflow wf "
          +" JOIN bookitem bi ON bi.id = wf.bookitem "
          +" JOIN product prd ON prd.id = bi.product "
@@ -33,6 +34,7 @@ public class BonusController extends AbstractController {
          +" left JOIN workitemallocation wia ON wia.workitem = wi.id "
          +" left JOIN user usr ON usr.id = wia.worker "
          +" left JOIN department dep ON dep.id = wi.dep "
+         + ( searchword == null || searchword.isEmpty()  ? "" :" where o.orderno like '%" + searchword + "%'")
          +" group by wf.id "
          +" order by o.orderno,wf.index";
     int pagenumber = Integer.parseInt( this.getPara( "pageNumber" ) );
@@ -52,13 +54,13 @@ public class BonusController extends AbstractController {
     String postData=HttpKit.readData(this.getRequest());
     List<String> values = StrUtil.split( postData, "&" );
     if(values.isEmpty() || values.size() < 2) return;
-    List<String> idList = StrUtil.split( values.get( 0 ), "=" );
-    int wiaid = NumUtil.iVal( idList.get( 1 ) );
-    List<String> bonusList = StrUtil.split( values.get( 1 ), "=" );
-    double bonus = NumUtil.dVal(  bonusList.get( 1 )  );
+    int wiaid = NumUtil.iVal( StrUtil.getStrByKey( postData, "id" ) );
+    double bonus = NumUtil.dVal( StrUtil.getStrByKey( postData, "bonus" ) );
+    String comment =  StrUtil.getStrByKey( postData, "comment" ) ;
     Workitemallocation wia = Workitemallocation.dao.findById( wiaid );
     if(wia == null) return;
     wia.setBonus( new BigDecimal( bonus ) );
+    wia.setComment( comment );
     wia.update();
   }
 
