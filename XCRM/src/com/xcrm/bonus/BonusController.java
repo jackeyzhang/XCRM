@@ -24,7 +24,7 @@ public class BonusController extends AbstractController {
     String searchword = this.getPara( "searchword" );
     //price是原价  deal price是成交价  
     String sql = "select wf.id,o.orderno,prd.name prdname,(wf.index+1) wfindex,wf.status,"
-        + "group_concat('' + wia.id, '&', dep.name,'&',usr.username,'&', ''+wia.bonus order by dep.name) worker";
+        + "group_concat('' + wia.id, '&', dep.name,'&',usr.username,'&', ''+wia.bonus,'&', ifnull(wia.comment,'') order by dep.name) worker";
     String sqlExcept = " from workflow wf "
          +" JOIN bookitem bi ON bi.id = wf.bookitem "
          +" JOIN product prd ON prd.id = bi.product "
