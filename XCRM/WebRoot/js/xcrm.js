@@ -10,7 +10,7 @@ $(function() {
 			queryParams: queryParams,
 			queryParamsType: "limit",
 			pageNumber: 1,
-			pageSize: 100,
+			pageSize: ( typeof(SPECIFIED_PAGE_SIZE) == "undefined"? PAGE_SIZE : SPECIFIED_PAGE_SIZE ),
 			pageList: [10, 25, 50, 100],
 			clickToSelect:true,
 			showExport: true,
