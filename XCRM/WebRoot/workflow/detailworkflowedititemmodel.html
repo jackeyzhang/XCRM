@@ -17,7 +17,7 @@
 		           <input type="hidden" name="workitemallocationid" value="${wia.id!}"></input>
 			         <input type="hidden" name="workitemid" value="${workflowitem.id!}"></input>
 			         <input type="hidden" name="workitemallocationstatus" value="${wia.status!}"></input>
-			         <label>${workflowitem.dp!}工作人员:</label>
+			         <label>${workflowitem.dp!}:</label>
 		           <#if wia.status! == 4 >
 		             <input type="hidden" name="selectworker" value="${wia.worker!}"></input>
 		             <input class="form-control" style="max-width:120px;" id="workerlist" value="${wia.workername!}-${workflowitem.dp!}" name="workerlist" data-provide="typeahead" data-items="4" depid="${workflowitem.dep!}" readonly>
