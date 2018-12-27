@@ -297,7 +297,7 @@ public class WorkflowController extends AbstractController {
     String[] workitemallocationids = form.get( "workitemallocationid" );
     String[] workitemallocationStatus = form.get( "workitemallocationstatus" );
     
-    int workitemid = this.getParaToInt( "wiid" );
+    int workitemid = this.getParaToInt( "wiid", 0 );
 
     if ( workitemids == null || workitemids.length == 0 ){
       Workitem workitem = Workitem.dao.findById( workitemid );
