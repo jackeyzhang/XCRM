@@ -94,7 +94,7 @@ public class WorkflowController extends AbstractController {
         + "GROUP_CONCAT(bi.comments) comments";
     String sqlExcept = " from `order` o  " + "left join orderitem oi on o.id=oi.order " + "left join bookitem bi on oi.bookitem=bi.id " + "join product p on bi.product=p.id "
         + ( StrUtil.isEmpty( prdname ) ? "" : "and p.name like '%" + prdname.trim() + "%'" ) + "join customer cust on cust.id=bi.customer "
-        + ( StrUtil.isEmpty( customername ) ? "" : "and cust.name like '%" + customername.trim() + "%'" ) + "where 1=1 "
+        + ( StrUtil.isEmpty( customername ) ? "" : "and ( cust.name like '%" + customername.trim() + "%' or cust.company like '%"+ customername.trim() + "%')" ) + "where 1=1 "
         + ( StrUtil.isEmpty( orderno ) ? "" : "and o.orderno like '%" + orderno.trim() + "%'" ) + " and o.status != " + Order.STATUS_CANCELLED + " "
         + ( month > 0 ? " and o.deliverytime <= str_to_date('"+ startDateStr +"', '%Y-%m-%d')" : "")
         + this.getSearchStatement( true, "" ) + " group by o.orderno order by o.orderno desc";
