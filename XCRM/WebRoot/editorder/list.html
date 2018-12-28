@@ -117,6 +117,10 @@
 			auto_calc_amount();
 		}); 
 		
+    $("#taxrate").on('input',function(e){  
+    	auto_calc_amount();
+    }); 
+		
     $(".itemdiscount").on('input',function(e){
         var that = $(this);
         var id = that.attr('data');
