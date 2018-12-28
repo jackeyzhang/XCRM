@@ -74,6 +74,9 @@ public class CartController extends AbstractController {
         bookitem.setUser( getCurrentUserId() );
         bookitem.setStatus( Bookitem.STATUS_ACTIVE );
         bookitem.setDate( new Date() );
+        if( order.getAllBookitems().size() > 0 ){
+          bookitem.setContract(order.getAllBookitems().get( 0 ).getContract() );
+        }
         if(bookitem.getDiscount() == null){
           bookitem.setDiscount( 100 );
         }
