@@ -186,6 +186,7 @@ class ContractPrintInfo {
     BigDecimal afeetotal = new BigDecimal( 0 );
     BigDecimal amounttotal = new BigDecimal( 0 );
     BigDecimal tax = new BigDecimal( 0 );
+    BigDecimal percentage =  new BigDecimal( 0.01 );
     int numcountTotal = 0;
     for ( int i = 0; i < records.size(); i++ ) {
       Record record = records.get( i );
@@ -206,7 +207,7 @@ class ContractPrintInfo {
         setAmount( "" + StrUtil.formatPrice( amounttotal ) );//商品小计
         setAfee( "" + StrUtil.formatPrice( afeetotal ) );//定制费
         setNumcount( "" + StrUtil.formatInt( numcountTotal ) );//数量小计
-        setTax( "" + StrUtil.formatPercentage( tax.toString() ) );//税率
+        setTax( "" + StrUtil.formatPrice( amounttotal.multiply( tax ).multiply( percentage ) ) );//税率
       }
       sb
           .append( "<tr>" )
