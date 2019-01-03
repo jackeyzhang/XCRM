@@ -21,6 +21,11 @@ public class CartlistController extends AbstractController {
 		fillProductAttributesInOrderCart(list, "attrs");
 		setAttr("list", list);
 		setAttr("prdimg_path", getPrdImgBaseUrl());
+		if(this.getSessionAttr( "totaldiscount" ) != null){
+		  setAttr("discount", this.getSessionAttr( "totaldiscount" ));
+		}else{
+		  setAttr("discount", 100);
+		}
 	}
 	
 	public void gotoPayment(){
@@ -40,6 +45,11 @@ public class CartlistController extends AbstractController {
 	  bi.update();
       renderNull();
 	}
+	
+	public void totaldiscount(){
+	  this.setSessionAttr( "totaldiscount", this.getPara( "discount" ) );//总折扣
+      renderNull();
+    }
 	
   public void changebookitemprice() {
     Bookitem bi = Bookitem.dao.findById( this.getPara( "id" ) );

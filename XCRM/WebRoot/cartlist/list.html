@@ -106,8 +106,18 @@
         $('#itemamount' + id ).val(itemprice );
       };
 		
-		$("#discount").on('input',function(e){  
+		$("#discount").on('input',function(e){ 
+		  var discountval = e.target.value;
 			calc_amount();
+		      $.ajax({
+             type : "get",
+             url : '/cartlist/totaldiscount?discount=' + discountval,
+             success : function(data, status) {
+               if (status == "success") {
+                    calc_amount();
+               }
+             }
+           });
 		});  
 		
     $("#taxrate").on('input',function(e){  
@@ -284,7 +294,7 @@ table {
 
 	<div class="col-md-2" style="float: left; font-weight: bold">
 		<span>输入折扣(百分比):</span> <input type="number" class="form-control"
-			id="discount" value="100" min="1" max="100" name="totaldiscount" />
+			id="discount" value="${discount}" min="1" max="100" name="totaldiscount" />
 	</div>
 	
 	 <div class="col-md-2" style="float: left; font-weight: bold">
