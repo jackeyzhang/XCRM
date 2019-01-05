@@ -50,6 +50,13 @@
       freshWorkitemIndex(1);
 		});
 		
+		$("#baseamount").on("input",function(){
+			var baseamount = $(this).val();
+			$("[id=amount]").each(function(){  
+		        $(this).val(baseamount); 
+       }); 
+		});
+		
 		
     function freshWorkitemIndex( index ){
 			$("[name=workitemindex]").each(function(){  
@@ -59,7 +66,7 @@
 		
 		
 		 $('#submit').click( function() {
-			 var depids ='',amounts='',siids='';
+			 var depids ='',amounts='',siids='',comments='';
 			 var prdid = $('#prdid').html();
 			 var wftid = $('#wftid').html();
        var salaryitems = $('#editsalaryform').find('[name=salaryitem]'); // 获取所有文本框
@@ -68,6 +75,7 @@
     	   var depid = salaryitem.find( '#depid' ).val();
     	   var siid = salaryitem.find( '#siid' ).val();
     	   var amount = salaryitem.find( '#amount' ).val();
+    	   var comment = salaryitem.find( '#comment' ).val();
     	   if( !amount ){
               alert('金额不能为空！');
               return;
@@ -75,6 +83,7 @@
     	   depids += (depid+",");
    		   amounts += (amount + "," );
    		   siids += (siid+",");
+   	     comments += (comment+" ,");
        }
 			 
        //组织数据
@@ -82,6 +91,7 @@
           "depids" : depids,
           "amounts" : amounts,
           "siids" : siids,
+          "comments" : comments,
        };
        
 			 $.ajax({
@@ -161,6 +171,11 @@
 			    </div>
 	       
 		       <div class="col-md-8">
+	           <div class="input-group">
+                 <span class="label label-success">工时单价</span> 
+                 <input type="number"
+                   class="form-control" id="baseamount" placeholder="标准工时" value="标准工时">
+               </div>
 		         <h4>
 		           <span class="label label-success" style="width:100%">设置工价如下:</span>
 		         </h4>
@@ -179,9 +194,18 @@
 				          </div>
 				          
 				          <div class="col-sm-7 input-group">
-				            <span class="label label-success">${s.depname!}</span> 
-				            <input type="number"
-				              class="form-control" id="amount" placeholder="钱数" value="${s.amount!}">
+						          <div class="form-inline">
+											    <div class="col-sm-3 form-group">
+											       <span class="label label-success">${s.depname!}</span> 
+				                     <input type="number"
+				                      class="form-control" id="amount" placeholder="标准工时" value="${s.amount!}">
+											    </div>
+											    <div class="col-sm-9 form-group">
+											        <span class="label label-success">工时备注</span> 
+                              <input type="text"
+                              class="form-control" id="comment" placeholder="工时备注" value="${s.comment!}">
+											    </div>
+											</div>
 				          </div>
 				          </div>
 				        </#list>

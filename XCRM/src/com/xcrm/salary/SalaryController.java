@@ -21,7 +21,7 @@ public class SalaryController extends AbstractController {
   
   public void list() {
     String searchword = this.getPara( "searchword" );
-    String sql = "select prd.name prdname,wft.name wftname,sa.status, GROUP_CONCAT(dep.name order by dep.id) depname,prd.id prdid,wft.id wftid";
+    String sql = "select prd.name prdname,wft.name wftname,sa.status,GROUP_CONCAT(dep.name order by dep.id) depname,prd.id prdid,wft.id wftid";
     String sqlExcept = "from product prd "
                       + "join workflowtemplate wft on wft.id = prd.workflow "
                       + "join workflowanditemtemplate wfit on wft.id=wfit.workflowtemplate  "
@@ -90,13 +90,16 @@ public class SalaryController extends AbstractController {
     String departments =this.getParaMap().get( "depids" )[0];
     String amounts = this.getParaMap().get( "amounts" )[0];
     String siids = this.getParaMap().get( "siids" )[0];
+    String comments = this.getParaMap().get( "comments" )[0];
     String[] departmentArray = departments.split( "," );
     String[] amount = amounts.split( "," );
     String[] salaryitemIds = siids.split( "," );
+    String[] commentArray = comments.split( "," );
     for(int i = 0; i < salaryitemIds.length; i++ ){
       Salaryitem si = Salaryitem.dao.findById( salaryitemIds[i] );
       Double b = new Double( amount[i] );
       si.setAmount(  b );
+      si.setComment( commentArray[i] );
       si.update();
     }
     this.forwardIndex();

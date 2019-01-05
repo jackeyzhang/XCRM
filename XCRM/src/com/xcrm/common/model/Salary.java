@@ -29,7 +29,7 @@ public class Salary extends BaseSalary<Salary> {
 	}
 	
 	public List<Record> getSalaryItems(){
-	  List<Record> salaryitems = Db.find( "select dep.name depname,dep.id depid,si.amount amount,si.id siid "
+	  List<Record> salaryitems = Db.find( "select dep.name depname,dep.id depid,si.amount amount,si.id siid,si.comment comment "
 	      + " from salaryitem si "
 	      + " join department dep on si.dep=dep.id "
 	      + " where salaryid=" + this.getId() );

@@ -49,4 +49,12 @@ public abstract class BaseSalaryitem<M extends BaseSalaryitem<M>> extends Model<
 		return get("status");
 	}
 
+	public void setComment(java.lang.String comment) {
+		set("comment", comment);
+	}
+
+	public java.lang.String getComment() {
+		return get("comment");
+	}
+
 }
