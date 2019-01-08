@@ -21,22 +21,22 @@
 		           <#if wia.status! == 4 >
 		             <input type="hidden" name="selectworker" value="${wia.worker!}"></input>
 		             <input class="form-control" style="max-width:120px;" id="workerlist" value="${wia.workername!}-${workflowitem.dp!}" name="workerlist" data-provide="typeahead" data-items="4" depid="${workflowitem.dep!}" readonly>
-                 <label>权重百分比:</label>
-                 <input type="number" style="max-width:80px;" class="form-control" value="${wia.weight!}" name="weight" readonly></input>
+                 <label>工时:</label>
+                 <input type="number" style="max-width:100px;" class="form-control" value="${wia.weight!}" name="weight" readonly></input>
 		             <button type="button" class="btn btn-sm btn-warning" name="resumeworkitem" onclick="javascript:resumeworkitemevent(this);" data-toggle="tooltip" data-placement="bottom" title="恢复该任务项"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
 		             <label>已挂起</label>
                 <#elseif wia.status! == 2 >
                  <input type="hidden" name="selectworker" value="${wia.worker!}"></input>
                  <input class="form-control" style="max-width:120px;" id="workerlist" value="${wia.workername!}-${workflowitem.dp!}" name="workerlist" data-provide="typeahead" data-items="4" depid="${workflowitem.dep!}" readonly>
-                 <label>权重百分比:</label>
-                 <input type="number" style="max-width:80px;" class="form-control" value="${wia.weight!}" name="weight" readonly></input>
+                 <label>工时:</label>
+                 <input type="number" style="max-width:100px;" class="form-control" value="${wia.weight!}" name="weight" readonly></input>
                  <button type="button" class="btn btn-sm btn-warning" name="resumeworkitem" onclick="javascript:resumeworkitemevent(this);" data-toggle="tooltip" data-placement="bottom" title="恢复该任务项"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
                  <label>已完成</label>
 		           <#else>
 				         <input type="hidden" name="selectworker" value="${wia.worker!}"></input>
 				         <input class="form-control" style="max-width:120px;" id="workerlist" value="${wia.workername!}-${workflowitem.dp!}" name="workerlist" data-provide="typeahead" data-items="4" depid="${workflowitem.dep!}">
-		             <label>权重百分比:</label>
-		             <input type="number" style="max-width:80px;" class="form-control" value="${wia.weight!}" name="weight"></input>
+		             <label>工时:</label>
+		             <input type="number" style="max-width:100px;" class="form-control" value="${wia.weight!}" name="weight"></input>
 				         <button type="button" class="btn btn-sm btn-primary" name="addworkitem" onclick="javascript:addworkitemevent(this);" data-toggle="tooltip" data-placement="bottom" title="新增任务项"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
 				         <button type="button" class="btn btn-sm btn-danger" name="delworkitem" onclick="javascript:delworkitemevent(this);" data-toggle="tooltip" data-placement="bottom" title="删除任务项"><span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span></button>
 				         <button type="button" class="btn btn-sm btn-info" name="completeworkitem" onclick="javascript:completedworkitemevent(this);" data-toggle="tooltip" data-placement="bottom" title="完成该任务项"><span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span></button>

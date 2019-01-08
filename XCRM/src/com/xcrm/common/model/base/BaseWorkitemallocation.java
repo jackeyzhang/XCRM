@@ -33,11 +33,11 @@ public abstract class BaseWorkitemallocation<M extends BaseWorkitemallocation<M>
 		return get("worker");
 	}
 
-	public void setWeight(java.lang.Integer weight) {
+	public void setWeight(java.lang.Double weight) {
 		set("weight", weight);
 	}
 
-	public java.lang.Integer getWeight() {
+	public java.lang.Double getWeight() {
 		return get("weight");
 	}
 

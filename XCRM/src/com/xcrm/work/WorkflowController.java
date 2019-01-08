@@ -329,7 +329,7 @@ public class WorkflowController extends AbstractController {
     for ( int index = 0; index < workitemids.length; index++ ) {
       Integer workitemId = NumUtil.iVal( workitemids[index] );
       Integer worker = NumUtil.iVal( workers[index] );
-      Integer weight = NumUtil.iVal( weights[index] );
+      Double weight = NumUtil.dVal( weights[index] );
       Integer status = NumUtil.iVal( workitemallocationStatus == null ? "0" : workitemallocationStatus[index] );
       Integer workitemallocation = 0;
       if ( workitemallocationids != null ) {
@@ -551,7 +551,7 @@ public class WorkflowController extends AbstractController {
       wia.setWorkitem( workitem.getId() );
       wia.setStatus( Workitemallocation.WORKITEM_STATUS_START );
       wia.setStarttime( new Date() );
-      wia.setWeight( 100 );//default set to 100
+      wia.setWeight( 0d );//default set to 0
       wia.save();
       WorkflowUtil.autoStartWorkflowByWia( wia.getId() );
       this.renderJson( true );
@@ -698,7 +698,7 @@ public class WorkflowController extends AbstractController {
     int workflowid = this.getParaToInt( "wfid" );
     int userid = this.getParaToInt( "userid" );
     int depid = this.getParaToInt( "depid" );
-    int weight = this.getParaToInt( "weight" );
+    double weight = NumUtil.dVal( this.getPara( "weight" ) );
     boolean isexsting = Workitemallocation.dao.exisitingWorkitemallocation( workflowid, userid, depid );
     if ( isexsting ) {
       this.renderJson( false );
@@ -722,7 +722,7 @@ public class WorkflowController extends AbstractController {
    */
   public void wxupdatewia() {
     int wiaid = this.getParaToInt( "wiaid" );
-    int weight = this.getParaToInt( "weight" );
+    double weight = NumUtil.dVal( this.getPara( "weight" ) );
     Workitemallocation wia = Workitemallocation.dao.findById( wiaid );
     if ( wia != null ) {
       wia.setWeight( weight );
