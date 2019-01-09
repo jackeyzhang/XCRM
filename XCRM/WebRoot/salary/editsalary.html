@@ -50,12 +50,12 @@
       freshWorkitemIndex(1);
 		});
 		
-		$("#baseamount").on("input",function(){
+/* 		$("#baseamount").on("input",function(){
 			var baseamount = $(this).val();
 			$("[id=amount]").each(function(){  
 		        $(this).val(baseamount); 
        }); 
-		});
+		}); */
 		
 		
     function freshWorkitemIndex( index ){
@@ -68,6 +68,7 @@
 		 $('#submit').click( function() {
 			 var depids ='',amounts='',siids='',comments='';
 			 var prdid = $('#prdid').html();
+			 var baseamount = $('#baseamount').val();
 			 var wftid = $('#wftid').html();
        var salaryitems = $('#editsalaryform').find('[name=salaryitem]'); // 获取所有文本框
        for (var i = 0; i < salaryitems.length; i++) {
@@ -96,7 +97,7 @@
        
 			 $.ajax({
             type: "post",
-            url: "/salary/update?prdid=" + prdid + "&wftid=" + wftid,
+            url: "/salary/update?prdid=" + prdid + "&wftid=" + wftid + "&baseamount=" +baseamount,
             data: templatedata,
             success: function (data, status) {
             },
@@ -174,7 +175,7 @@
 	           <div class="input-group">
                  <span class="label label-success">工时单价</span> 
                  <input type="number"
-                   class="form-control" id="baseamount" placeholder="标准工时" value="标准工时">
+                   class="form-control" id="baseamount" placeholder="工时单价" value="${baseamount!}" name="baseamount">
                </div>
 		         <h4>
 		           <span class="label label-success" style="width:100%">设置工价如下:</span>

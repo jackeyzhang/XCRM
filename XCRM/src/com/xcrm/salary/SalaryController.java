@@ -14,6 +14,7 @@ import com.xcrm.common.model.Salaryitem;
 import com.xcrm.common.model.Workflowtemplate;
 import com.xcrm.common.model.Workitemtemplate;
 import com.xcrm.common.util.Constant;
+import com.xcrm.common.util.NumUtil;
 
 
 @Before(SalaryInterceptor.class)
@@ -21,7 +22,7 @@ public class SalaryController extends AbstractController {
   
   public void list() {
     String searchword = this.getPara( "searchword" );
-    String sql = "select prd.name prdname,wft.name wftname,sa.status,GROUP_CONCAT(dep.name order by dep.id) depname,prd.id prdid,wft.id wftid";
+    String sql = "select prd.name prdname,wft.name wftname,sa.status,sa.baseamount baseamount,GROUP_CONCAT(dep.name order by dep.id) depname,prd.id prdid,wft.id wftid";
     String sqlExcept = "from product prd "
                       + "join workflowtemplate wft on wft.id = prd.workflow "
                       + "join workflowanditemtemplate wfit on wft.id=wfit.workflowtemplate  "
@@ -76,6 +77,7 @@ public class SalaryController extends AbstractController {
     setAttr( "role", getCurrentRoleId() );
     setAttr( "title", salary.toString() );
     setAttr( "prdid", prdid);
+    setAttr( "baseamount", salary.getBaseamount());
     setAttr( "wftid", workflowtemplateid);
     setAttr( "salaryitems", salary.getSalaryItems());
     setAttr( "prdimages", pics);
@@ -87,6 +89,7 @@ public class SalaryController extends AbstractController {
   public void update(){
     int prdid = this.getParaToInt( "prdid" );
     int workflowtemplateid = this.getParaToInt( "wftid" );
+    double baseamount = NumUtil.dVal( getPara( "baseamount" ));
     String departments =this.getParaMap().get( "depids" )[0];
     String amounts = this.getParaMap().get( "amounts" )[0];
     String siids = this.getParaMap().get( "siids" )[0];
@@ -95,6 +98,9 @@ public class SalaryController extends AbstractController {
     String[] amount = amounts.split( "," );
     String[] salaryitemIds = siids.split( "," );
     String[] commentArray = comments.split( "," );
+    Salary salary = Salary.dao.getSalary( prdid, workflowtemplateid );
+    salary.setBaseamount( baseamount );
+    salary.update();
     for(int i = 0; i < salaryitemIds.length; i++ ){
       Salaryitem si = Salaryitem.dao.findById( salaryitemIds[i] );
       Double b = new Double( amount[i] );

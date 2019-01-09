@@ -41,4 +41,12 @@ public abstract class BaseSalary<M extends BaseSalary<M>> extends Model<M> imple
 		return get("status");
 	}
 
+	public void setBaseamount(java.lang.Double baseamount) {
+		set("baseamount", baseamount);
+	}
+
+	public java.lang.Double getBaseamount() {
+		return get("baseamount");
+	}
+
 }
