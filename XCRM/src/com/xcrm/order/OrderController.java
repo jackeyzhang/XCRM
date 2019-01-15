@@ -49,7 +49,7 @@ public class OrderController extends AbstractController {
         + "left join contract contract on bi.contract=contract.id " 
         + "left join customer cust on cust.id=bi.customer left join user ur on bi.user=ur.id " 
         + "where " + getSqlForUserRole()
-        + " and o.status != " + Order.STATUS_CANCELLED + " "
+        + " and o.status != " + Order.STATUS_CANCELLED + " and bi.status != " + Bookitem.STATUS_CANCELLED + " "
         + this.getSearchStatement( true, "" ) + " group by o.orderno order by o.orderno desc";
     int pagenumber = Integer.parseInt( this.getPara( "pageNumber" ) );
     int pagesize = Integer.parseInt( this.getPara( "pageSize" ) );
