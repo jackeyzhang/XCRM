@@ -110,6 +110,7 @@ public class ContractController extends AbstractController {
     ContractPrintInfo info = new ContractPrintInfo();
     info.loaddata( orderno );
 
+    this.setAttr( "orderdate", info.getOrderDate());
     this.setAttr( "Acontract", info.getContract() );
     this.setAttr( "Acontact", info.getContact() );
     this.setAttr( "Atelephone", info.getTelephone() );
@@ -165,10 +166,11 @@ class ContractPrintInfo {
   
   private String haspaid;
   private String notpaid;
+  private String orderDate;
 
   public void loaddata( Long orderno ) {
     String sql = "select cust.name cname, cust.shiptoAddr, cust.company, cust.phone, cust.contact, prd.name pname,"
-        + "o.price due,o.taxrate tax, bi.price*bi.num*(bi.discount/100)*(o.totaldiscount/100) price, o.totalprice, o.price/o.totalprice*100 discount,"
+        + "o.price due,o.taxrate tax, bi.price*bi.num*(bi.discount/100)*(o.totaldiscount/100) price, o.totalprice, o.price/o.totalprice*100 discount,o.date orderdate,"
         + "bi.additionfee afee, bi.num, bi.comments, bi.prdattrs, bi.price oprice,"
         + "(select round(sum(paid),2) from payment where orderno= o.orderno) paid,"
         + "(select round(o.price-ifnull(sum(paid),0), 2) from payment where orderno= o.orderno) notpaid"
@@ -198,6 +200,7 @@ class ContractPrintInfo {
         setDue( "" + StrUtil.formatPrice( record.getBigDecimal( "due" ) ) );//应该支付
         setHaspaid( "" + StrUtil.formatPrice( record.getBigDecimal( "paid" ) )  );
         setNotpaid( "" + StrUtil.formatPrice( record.getBigDecimal( "notpaid" ) ) );
+        setOrderDate( StrUtil.formatDate( record.getDate( "orderdate" ), "yyyy年MM月dd日" ));
       }
       afeetotal = afeetotal.add( record.getBigDecimal( "afee" ) );
       amounttotal = amounttotal.add( record.getBigDecimal( "price" ) );
@@ -267,6 +270,16 @@ class ContractPrintInfo {
 
   public void setTelephone( String telephone ) {
     this.telephone = telephone;
+  }
+  
+  
+  public String getOrderDate() {
+    return orderDate;
+  }
+
+  
+  public void setOrderDate( String orderDate ) {
+    this.orderDate = orderDate;
   }
 
   public String getAddress() {
