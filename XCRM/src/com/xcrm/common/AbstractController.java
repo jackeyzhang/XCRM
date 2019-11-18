@@ -148,6 +148,10 @@ public abstract class AbstractController extends Controller {
     this.setSessionAttr( Constant.CUR_OBJ, model );
     this.forwardAction( "/" + getModalName() + "/index" );
   }
+  
+  public void failed( String msg ){
+    this.renderJson( "failed", msg );
+  }
 
   @SuppressWarnings("rawtypes")
   public int getCurrentUserId() {

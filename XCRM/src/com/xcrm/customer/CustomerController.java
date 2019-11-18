@@ -30,8 +30,14 @@ public class CustomerController extends AbstractController {
   }
 
   public void remove(){
-    Customer.dao.deleteById( this.getParaToInt( 0 ) );
-    forwardIndex();
+    int customerId =  this.getParaToInt( 0 );
+    List<Record> bookitems = Db.find( "select * from Bookitem where customer=" + customerId );
+    if( bookitems == null || bookitems.isEmpty() ){
+      Customer.dao.deleteById( customerId );    
+      forwardIndex();
+    }else{
+      failed( "该客户信息不允许被删除!" );
+    }
   }
 
   @Override
@@ -98,8 +104,13 @@ public class CustomerController extends AbstractController {
   
   public void wxdeletecustomer(){
     String id = this.getPara( "id" );
-    boolean deleted = Db.deleteById( "customer", id );
-    this.renderJson( deleted );
+    List<Record> bookitems = Db.find( "select * from Bookitem where customer=" + id );
+    if( bookitems == null || bookitems.isEmpty()){
+      boolean deleted = Db.deleteById( "customer", id );
+      this.renderJson( deleted );
+    }else{
+      this.renderJson( false );//customer cannot be delete if puchased some bookitem
+    }
   }
   
   public void wxupdatecustomer( ){

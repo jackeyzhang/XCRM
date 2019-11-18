@@ -216,9 +216,13 @@ window.actionEvents = {
 			$.ajax({
 				url : REMOVE_API_URL + row.id,
 				type : 'delete',
-				success : function() {
-					xcpage.$table.bootstrapTable('refresh');
-					showAlert('删除成功!', 'success');
+				success : function( msg ) {
+					if(msg.failed){
+						showAlert(msg.failed, 'danger');
+					}else{
+						xcpage.$table.bootstrapTable('refresh');
+						showAlert('删除成功!' + msg, 'success');
+					}
 				},
 				error : function() {
 					showAlert('删除失败!', 'danger');
