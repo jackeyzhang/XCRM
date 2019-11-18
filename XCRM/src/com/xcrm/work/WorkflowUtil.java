@@ -80,7 +80,7 @@ public class WorkflowUtil {
     
     Workflow workflow = workitem.getWorkflowObj();
     for ( Workitem wi : workflow.getWorkItems() ) {
-      if ( wi.getStatus() != Workitem.WORKITEM_STATUS_DONE ) { //有一个workitem没done 就返回
+      if ( wi.getStatus() != Workitem.WORKITEM_STATUS_DONE ) { //有一个work item没done 就返回
           return false;
       }
     }
