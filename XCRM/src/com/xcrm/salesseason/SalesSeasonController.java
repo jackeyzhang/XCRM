@@ -10,6 +10,7 @@ public class SalesSeasonController extends AbstractController {
   public void save(){
     Salesseason Salesseason =  this.getModel( Salesseason.class, "" );
     Salesseason.save();
+    
     this.forwardIndex(Salesseason);
     
   }
